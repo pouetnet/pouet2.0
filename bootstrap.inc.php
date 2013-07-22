@@ -1,0 +1,57 @@
+<?
+define(POUET_ROOT_LOCAL,dirname(__FILE__));
+include_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-party.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
+
+$lifetime = 60 * 60 * 24 * 365;
+ini_set('session.cookie_lifetime', $lifetime);
+
+session_name("POUETSESSION");
+session_set_cookie_params($lifetime,POUET_ROOT_PATH);
+@session_start();
+
+$sceneID = null;
+if (class_exists("SceneId"))
+  $sceneID = SceneId::Factory(SCENEID_USER, SCENEID_PASS, SCENEID_URL);
+
+$currentUser = NULL;
+if (get_login_id())
+{
+  $id = get_login_id();
+
+  $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+  if ($host!==".")
+  {  
+    SQLLib::Query(sprintf_esc("update users set lastip='%s', lasthost='%s', lastlogin='%s' where id=%d",
+        $_SERVER["REMOTE_ADDR"],$host,date("Y-m-d H:i:s"),$id));
+    $currentUser = PouetUser::Spawn( $id );
+  }
+}
+
+if ($currentUser && $currentUser->IsBanned())
+{
+  $_SESSION = $currentUser = NULL;
+}
+
+$_SESSION["keepalive"] = str_pad("",rand(1,10),"x") . rand(1,10000);
+
+$timer["page"]["start"] = microtime_float();
+
+if (!$_SESSION["settings"]) 
+{
+  include_once("include_pouet/default_usersettings.php"); 
+  $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
+}
+?>
