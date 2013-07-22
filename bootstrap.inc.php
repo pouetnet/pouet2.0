@@ -1,5 +1,9 @@
 <?
 define(POUET_ROOT_LOCAL,dirname(__FILE__));
+if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
+  die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
+  
+include_once( POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");

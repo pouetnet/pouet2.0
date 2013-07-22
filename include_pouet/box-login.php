@@ -50,7 +50,7 @@ $("loginpassword").observe("focus",loginResetFields);
       global $currentUser;
       echo "<div class='content r1 center'>\n";
       echo "you are logged in as<br/>\n";
-      echo "<a href='user.php?who=".$currentUser->id."'><img src='avatars/"._html($currentUser->avatar)."' alt='"._html($currentUser->nickname)."'></a>\n";
+      echo "<a href='user.php?who=".$currentUser->id."'><img src='".POUET_CONTENT_URL."avatars/"._html($currentUser->avatar)."' alt='"._html($currentUser->nickname)."'></a>\n";
       echo "<a href='user.php?who=".$currentUser->id."'><b>"._html($currentUser->nickname)."</b></a>\n";
       echo "</div>\n";
       echo "<div class='foot'>\n";

@@ -4,7 +4,7 @@ include_once("include_generic/recaptchalib.php");
 include_once("include_pouet/box-modalmessage.php");
 include_once("include_pouet/default_usersettings.php");
 
-$avatars = glob("avatars/*.gif");
+$avatars = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
 
 $success = null;
 
@@ -326,7 +326,7 @@ class PouetBoxAccount extends PouetBox
       $sql[$k] = trim($data[$k]);
     }
 
-    if (!file_exists("avatars/".$sql["avatar"]))
+    if (!file_exists(POUET_CONTENT_LOCAL."avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
 
     SQLLib::UpdateRow("users",$sql,"id=".(int)get_login_id());

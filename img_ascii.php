@@ -1,4 +1,5 @@
 <?
+include_once("include_generic/credentials.inc.php");
 include_once("include_generic/functions.inc.php");
 
 $ts=microtime();
@@ -70,10 +71,10 @@ else
 //foreach($txt as &$v) $v = wordwrap($v,100,"\n",1);
 
 $f = (int)$_GET["font"];
-if(!file_exists("gfx/fnt".$f.".png")) $f=1;
+if(!file_exists(POUET_CONTENT_LOCAL."gfx/fnt".$f.".png")) $f=1;
 
 $txt[count($txt)-1].=chr(13).chr(10);
-$fnt=imagecreatefrompng("gfx/fnt".(int)$f.".png");
+$fnt=imagecreatefrompng(POUET_CONTENT_LOCAL."gfx/fnt".(int)$f.".png");
 $c_w=imagesx($fnt)/16;
 $c_h=imagesy($fnt)/16;
 $fc1=imagecolorexact($fnt,0,0,0);
@@ -117,7 +118,7 @@ for($i=0;$i<$nbr;$i++)
 function write($txt,$a,$b,$br,$bg,$bb)
 {
   global $im;
-  $fnt=imagecreatefrompng("gfx/font.png");
+  $fnt=imagecreatefrompng(POUET_CONTENT_LOCAL."gfx/font.png");
   $c_w=imagesx($fnt)/16;
   $c_h=imagesy($fnt)/16;
   $f1=imagecolorexact($fnt,0,0,0);

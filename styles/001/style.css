@@ -388,7 +388,7 @@ td.date {
   vertical-align: middle;
   overflow: hidden;
   line-height: 100px;
-  background-image: url("../../gfx/types.png");
+  background-image: url("http://content.pouet.net/gfx/types.png");
 }
 .platformi {
   float: right;
@@ -404,7 +404,7 @@ td.date {
   vertical-align: middle;
   overflow: hidden;
   line-height: 100px;
-  background-image: url("../../gfx/types.png");
+  background-image: url("http://content.pouet.net/gfx/types.png");
 }
 .typei {
   float: left;
@@ -414,7 +414,7 @@ td.date {
 }
 
 .user.online {
-  background: url("../../gfx/online.gif") no-repeat scroll left 4px transparent;
+  background: url("http://content.pouet.net/gfx/online.gif") no-repeat scroll left 4px transparent;
   padding-left: 10px;
 }
 
@@ -1276,7 +1276,7 @@ input[type="url"] {
 
 input.autocompleteSearch {
   width: 200px !important;
-  background: white url('../../gfx/autocomplete.png') center right no-repeat;
+  background: white url('http://content.pouet.net/gfx/autocomplete.png') center right no-repeat;
 }
 
 

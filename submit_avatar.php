@@ -27,7 +27,7 @@ class PouetBoxAvatarGallery extends PouetBox
 
     $width = 15;
 
-    $g = glob("avatars/*.gif");
+    $g = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
     shuffle($g);
     $g = array_slice($g,0,$width * $width);
     
@@ -95,7 +95,7 @@ class PouetBoxSubmitAvatar extends PouetBox
   {
     $filename = strtolower( basename( $_FILES["avatar"]["name"] ) );
   
-    move_uploaded_file( $_FILES["avatar"]["tmp_name"], "avatars/".$filename );
+    move_uploaded_file( $_FILES["avatar"]["tmp_name"], POUET_CONTENT_LOCAL . "avatars/".$filename );
     
     return array();
   }
@@ -128,7 +128,7 @@ class PouetBoxSubmitAvatar extends PouetBox
     echo "<br>";
     echo "then your avatar will be available with the others.<br>";
     echo "<br>";
-    echo "<input type='file' name='avatar'/>";    
+    echo "<input type='file' name='avatar' accept='image/gif'/>";    
     
     echo "  </div>\n";
     echo "  <div class='foot'><input name='submit' type='submit' value='Submit' /></div>";

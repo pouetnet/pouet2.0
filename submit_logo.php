@@ -59,7 +59,7 @@ class PouetBoxSubmitLogo extends PouetBox
     
     $filename = strtolower( basename( $_FILES["logo"]["name"] ) );
   
-    move_uploaded_file( $_FILES["logo"]["tmp_name"], POUET_ROOT_LOCAL . "/gfx/logos/".$filename );
+    move_uploaded_file( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/gfx/logos/".$filename );
     
     $a = array();
     $a["author1"] = $currentUser->id;
@@ -91,7 +91,7 @@ class PouetBoxSubmitLogo extends PouetBox
     echo "<p>The pou&euml;t background color is <b>#3A6EA5</b>.</p>\n";
 		echo "<p>Before being displayed, your logo will be voted up or down by the whole Pouet community.</p>\n";
 		echo "<p>Don't blame us for not displaying it if it's lame, the scene is rude, and that's why we like it !</p>\n";
-    echo "<input type='file' name='logo'/>";  
+    echo "<input type='file' name='logo' accept='image/*'/>";  
     
     echo "  </div>\n";
     echo "  <div class='foot'><input name='submit' type='submit' value='Submit' /></div>";

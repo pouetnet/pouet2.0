@@ -85,17 +85,11 @@ class PouetBoxProdMain extends PouetBox {
   }
 
   function RenderScreenshot() { 
-    $ext = array(".jpg",".gif",".png");
-    $shotpath = "";
-    foreach ($ext as $e) {
-      $p = "screenshots/".(int)$this->prod->id.$e;
-      if(file_exists($p)) 
-        $shotpath = $p;
-    }
+    $shotpath = find_screenshot($this->prod->id);
     if ($shotpath)
     {
       $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
-      return "<img src='".$shotpath."' alt='".$title."' title='".$title."'/>\n";
+      return "<img src='".POUET_CONTENT_URL.$shotpath."' alt='".$title."' title='".$title."'/>\n";
     }
     else
     {

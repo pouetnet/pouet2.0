@@ -4,7 +4,7 @@ class PouetUser extends BM_Class {
   static function getFields() { return array("id","nickname","level","avatar","glops","quand","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","lastip","lasthost"); }
   function PrintLinkedAvatar() {
-    return sprintf("<a href='user.php?who=%d' class='usera' title=\"%s\"><img src='avatars/%s' alt=\"%s\" class='avatar'/></a>",
+    return sprintf("<a href='user.php?who=%d' class='usera' title=\"%s\"><img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/></a>",
       $this->id,_html($this->nickname),rawurlencode($this->avatar),_html($this->nickname));
   }
   function PrintLinkedName() {

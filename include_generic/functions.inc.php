@@ -211,7 +211,7 @@ function find_screenshot( $id )
   $ext = array(".jpg",".gif",".png");
   foreach ($ext as $e) {
     $p = "screenshots/".(int)$id.$e;
-    if(file_exists(POUET_ROOT_LOCAL . "/" . $p)) 
+    if(file_exists(POUET_CONTENT_LOCAL . "/" . $p)) 
       return $p;
   }
   return NULL;
@@ -219,22 +219,22 @@ function find_screenshot( $id )
 
 function get_local_screenshot_path( $id, $ext )
 {
-  return sprintf("screenshots/%d.%s",$id,$ext);
+  return sprintf(POUET_CONTENT_LOCAL . "screenshots/%d.%s",$id,$ext);
 }
 
 function get_local_nfo_path( $id )
 {
-  return sprintf("nfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_LOCAL . "nfo/%d.nfo",$id);
 }
 
 function get_local_partyresult_path( $id, $year )
 {
-  return sprintf("results/%d_%02d.txt",$id,$year%100);
+  return sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
 }
 
 function get_local_bbsnfo_path( $id )
 {
-  return sprintf("othernfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_LOCAL . "othernfo/%d.nfo",$id);
 }
 
 define("NO_PARTY_ID",1024);
