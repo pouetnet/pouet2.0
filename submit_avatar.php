@@ -83,7 +83,7 @@ class PouetBoxSubmitAvatar extends PouetBox
     if(!preg_match("/^[a-z0-9_-]{1,32}\.gif$/",$filename)) 
       $errormessage[]="please give a senseful filename devoid of dumb characters, kthx? (nothing but alphanumerics, dash and underscore is allowed, 32 chars max)";
     
-    if(file_exists("avatars/".$filename)) 
+    if(file_exists(POUET_CONTENT_LOCAL."avatars/".$filename)) 
       $errormessage[]="this filename already exists on the server";
     
     if (count($errormessage))
