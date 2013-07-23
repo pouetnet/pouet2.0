@@ -81,7 +81,9 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
   if ($_POST["partial"]==1)
   {
     $s = clone $sel;
-    $s->AddWhere(sprintf_esc("logos.id not in (%s)",$_POST["logos"]));
+    $visibleLogos = $_POST["visibleLogos"];
+    foreach($visibleLogos as $k=>$v) $visibleLogos[$k] = (int)$v;
+    $s->AddWhere(sprintf_esc("logos.id not in (%s)",implode(",",$visibleLogos)));
     $s->SetLimit(1);
     $logo = SQLLib::SelectRow($s->GetQuery());
     
@@ -144,7 +146,7 @@ function InstrumentForm(form)
     var values = $H(Form.serialize(form,true));
     values.set("submit",form.select("input[type=submit][clicked=true]").first().value);
     values.set("partial",1);
-    values.set("logos",visibleLogos.join(","));    
+    values.set("visibleLogos[]",visibleLogos);
     
     new Ajax.Request(form.action,{
       method: form.method,
@@ -155,9 +157,13 @@ function InstrumentForm(form)
         {
           var div = new Element("div").update(transport.responseText);
           InstrumentForm( div.down("form") );
+
+          console.log( $("content").select("div").length );
+          console.log( div.down("#pouetbox_logolama") );
+          
           if (div.down("#pouetbox_logolama"))
           {
-            if ($("content").select("div").length == 0)
+            if ($("content").select("div.logovote").length == 0)
               $("content").insert(div);
           }
           else
