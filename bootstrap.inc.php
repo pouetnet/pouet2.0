@@ -11,6 +11,8 @@ include_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
+include_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
+
 include_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
 include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
 include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
