@@ -291,6 +291,7 @@ document.observe("dom:loaded",function(){
     {
       location.hash = "";
     }
+    fireSuccessOverlay();
   }
 });
 
