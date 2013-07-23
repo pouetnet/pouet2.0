@@ -77,6 +77,10 @@ class PouetBoxBBSPost extends PouetBox {
       if (!$currentUser->CanPostInBBS())
         return;
       echo "<form action='add.php' method='post'>\n";
+
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+
       echo "<div class='content'>\n";
       echo " <input type='hidden' name='which' value='".(int)$this->topic."'>\n";
       echo " <input type='hidden' name='type' value='post'>\n";

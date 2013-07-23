@@ -212,14 +212,13 @@ class PouetBoxSubmitProd extends PouetBox
     $a["invitationyear"] = $data["invitationYear"];
     $a["boardID"] = $data["boardID"];
     
-    global $prodID;
-    $prodID = SQLLib::InsertRow("prods",$a);    
+    $this->prodID = SQLLib::InsertRow("prods",$a);    
     
     $data["platform"] = array_unique($data["platform"]);
     foreach($data["platform"] as $k=>$v)
     {
       $a = array();
-      $a["prod"] = $prodID;
+      $a["prod"] = $this->prodID;
       $a["platform"] = $v;
       SQLLib::InsertRow("prods_platforms",$a);    
     }
@@ -233,20 +232,20 @@ class PouetBoxSubmitProd extends PouetBox
         case 2:$extension="jpg";break;
         case 3:$extension="png";break;
       } 
-      move_uploaded_file( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( $prodID, $extension ) );
+      move_uploaded_file( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( $this->prodID, $extension ) );
 
       $a = array();
-      $a["prod"] = $prodID;
+      $a["prod"] = $this->prodID;
       $a["user"] = get_login_id();
       $a["added"] = date("Y-m-d H:i:s");
       SQLLib::InsertRow("screenshots",$a);    
     }    
     if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
     {
-      move_uploaded_file( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( $prodID ) );
+      move_uploaded_file( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( $this->prodID ) );
 
       $a = array();
-      $a["prod"] = $prodID;
+      $a["prod"] = $this->prodID;
       $a["user"] = get_login_id();
       $a["added"] = date("Y-m-d H:i:s");
       SQLLib::InsertRow("nfos",$a);    
@@ -258,6 +257,12 @@ class PouetBoxSubmitProd extends PouetBox
     
     return array();
   }
+  
+  function GetInsertionID()
+  {
+    return $this->prodID;
+  }
+    
   function LoadFromDB()
   {
     global $PLATFORMS;

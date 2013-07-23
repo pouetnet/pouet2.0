@@ -66,6 +66,10 @@ class PouetBoxBBSOpen extends PouetBox {
         
       global $THREAD_CATEGORIES;
       echo "<form action='add.php' method='post'>\n";
+
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+
       echo "<div class='content'>\n";
       echo " <input type='hidden' name='type' value='bbs'>\n";
 

@@ -29,11 +29,22 @@ class PouetFormProcessor
     $this->errors = array();
     if ($_POST[ self::fieldName ] && $this->objects[$_POST[ self::fieldName ]])
     {
-      $this->errors = $this->objects[$_POST[ self::fieldName ]]->ParsePostMessage( $_POST );
-      if (!$this->errors && $this->redirectOnSuccess)
+      $csrf = new CSRFProtect();
+      if (!$csrf->ValidateToken())
       {
-        redirect($this->successURL."#success");
-        exit();
+        $this->errors = array("who are you and where did you come from ?");
+        return;
+      }   
+      
+      $this->errors = $this->objects[$_POST[ self::fieldName ]]->ParsePostMessage( $_POST );
+      if (!$this->errors)
+      {
+        $this->successURL = str_replace("{%NEWID%}",rawurlencode($this->objects[$_POST[ self::fieldName ]]->GetInsertionID()),$this->successURL);
+        if ($this->redirectOnSuccess)
+        {
+          redirect($this->successURL."#success");
+          exit();
+        }
       }
     }
   }
@@ -69,7 +80,11 @@ class PouetFormProcessor
       {
         $object->Load();
         printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
-        printf("  <input type='hidden' name='%s' value='%s'>\n",self::fieldName,_html($key));
+
+        $csrf = new CSRFProtect();
+        $csrf->PrintToken();
+
+        printf("  <input type='hidden' name='%s' value='%s'/>\n",self::fieldName,_html($key));
         $object->Render();
         printf("</form>");
       }

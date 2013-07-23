@@ -11,37 +11,23 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 $TITLE = "submit a group";
 
-$box = new PouetBoxSubmitGroup();
-$errors = array();
-if ($_POST && $currentUser && $currentUser->CanSubmitItems())
-{
-  $errors = $box->ParsePostMessage( $_POST );
-  if (!count($errors))
-  {
-    redirect("groups.php?which=".(int)$groupID);
-  }
-}
+$form = new PouetFormProcessor();
+
+$form->SetSuccessURL( "groups.php?which={%NEWID%}", true );
+
+$form->Add( "group", new PouetBoxSubmitGroup() );
+
+if ($currentUser && $currentUser->CanSubmitItems())
+  $form->Process();
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-if ($currentUser)
+if (get_login_id())
 {
-  if (count($errors))
-  {
-    $msg = new PouetBoxModalMessage( true );
-    $msg->classes[] = "errorbox";
-    $msg->title = "An error has occured:";
-    $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-    $msg->Render();
-  }
-
-  $box->Load();
-  printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
-  $box->Render();
-  printf("</form>");
+  $form->Display();
 
 ?>
 <script type="text/javascript">

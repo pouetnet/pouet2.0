@@ -36,7 +36,6 @@ class PouetBoxSubmitPartyEdition extends PouetBox
   }
   function Commit( $data )
   {
-    global $partyID;
     $a = array();
     $a["download"] = trim($data["download"]);
     $a["csdb"] = $data["csdbID"];

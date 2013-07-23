@@ -24,46 +24,59 @@ if (!$_SESSION["user"]) {
 } else {
 
   switch ($_POST["type"]) {
-  	case "oneliner":
-  	  {
-  	    $box = new PouetBoxLatestOneliner();
+    case "oneliner":
+      {
+        $box = new PouetBoxLatestOneliner();
         $thing = "oneline";
         $data = $_POST["message"];
-  	  } break;
-  	case "post":
-  	  {
-  	    $box = new PouetBoxBBSPost($_POST["which"]);
+        $message->returnPage = "index.php";
+      } break;
+    case "post":
+      {
+        $box = new PouetBoxBBSPost($_POST["which"]);
         $thing = "BBS post";
         $data = $_POST["message"];
-  	  } break;
-  	case "comment":
-  	  {
-  	    $box = new PouetBoxProdPost($_POST["which"]);
+        $message->returnPage = "topic.php?which=".(int)$_POST["which"];
+      } break;
+    case "comment":
+      {
+        $box = new PouetBoxProdPost($_POST["which"]);
         $thing = "comment";
         $data = $_POST["comment"];
-  	  } break;
-  	case "bbs":
-  	  {
-  	    $box = new PouetBoxBBSOpen();
+        $message->returnPage = "prod.php?which=".(int)$_POST["which"];
+      } break;
+    case "bbs":
+      {
+        $box = new PouetBoxBBSOpen();
         $thing = "bbs";
         $data = $_POST["message"];
-  	  } break;
-  	default:
-  	  {
+        $message->returnPage = "index.php";
+      } break;
+    default:
+      {
         $message->message = "not implemented!";
-  	  } break;
+      } break;
   }
 }
 if ($box) {
-  $errormessage = $box->ParsePostMessage($_POST);
-  if (!$errormessage) {
-    $message->title = "You've successfully added the following ".$thing.":";
-    $message->message = $data;
-    if ($box instanceof PouetBoxCachable)
-      $box->ForceCacheUpdate();
-  } else {
+  $csrf = new CSRFProtect();
+  if (!$csrf->ValidateToken())
+  {
     $message->classes[] = "errorbox";
-    $message->message = is_array($errormessage) ? implode("<br/>",$errormessage) : $errormessage;
+    $message->message = "who are you and where did you come from ?";
+  } 
+  else
+  {
+    $errormessage = $box->ParsePostMessage($_POST);
+    if (!$errormessage) {
+      $message->title = "You've successfully added the following ".$thing.":";
+      $message->message = $data;
+      if ($box instanceof PouetBoxCachable)
+        $box->ForceCacheUpdate();
+    } else {
+      $message->classes[] = "errorbox";
+      $message->message = is_array($errormessage) ? implode("<br/>",$errormessage) : $errormessage;
+    }
   }
 } else {
   $message->message = "not implemented!";

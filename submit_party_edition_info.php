@@ -97,6 +97,15 @@ if (!$box->party)
 
 $TITLE = sprintf("submit links for a party edition: %s %04d",_html($box->party->name),$box->year);
 
+$form = new PouetFormProcessor();
+
+$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"]."&when=".(int)$_GET["when"], true );
+
+$form->Add( "partyInfo", $box );
+
+if ($currentUser && $currentUser->CanSubmitItems())
+  $form->Process();
+  
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
 
@@ -104,40 +113,7 @@ echo "<div id='content'>\n";
 
 if (get_login_id() && $box->prods)
 {
-  $showBox = true;
-  $errors = array();
-  if ($_POST)
-  {
-    $errors = $box->ParsePostMessage( $_POST );
-    if (count($errors))
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->classes[] = "errorbox";
-      $msg->title = "An error has occured:";
-      $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-      $msg->Render();
-    }
-    else
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->classes[] = "successbox";
-      $msg->title = "Success!";
-      $msg->message = "<a href='party.php?which=".(int)$_GET["which"]."&amp;when=".(int)$_GET["when"]."'>see what you've done</a>";
-      $msg->Render();
-      $showBox = false;
-    }
-  }
-
-  $box->Load();
-  if ($showBox)
-  {
-    printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
-    //printf("  <input type='hidden' name='partyID' value='%d'>\n",$_GET["which"]);
-    //printf("  <input type='hidden' name='partyYear' value='%d'>\n",$_GET["when"]);
-    $box->Render();
-    printf("</form>");
-  }
-
+  $form->Display();
 }
 else if (!$box->prods)
 {

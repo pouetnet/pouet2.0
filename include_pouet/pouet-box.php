@@ -30,6 +30,11 @@ class PouetBox {
     return $this->Commit( $data );
   }
   
+  function GetInsertionID()
+  {
+    return 0;
+  }
+  
   function GetData() // override
   {
     return NULL;

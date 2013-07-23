@@ -11,11 +11,12 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 {
-  function PouetBoxSubmitProdInfo()
+  function PouetBoxSubmitProdInfo( $id )
   {
     parent::__construct();
 
-    $this->prod = PouetProd::Spawn( $_GET["which"] );
+    
+    $this->prod = PouetProd::Spawn( $id );
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
@@ -177,13 +178,23 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
   }
 }
 
-$box = new PouetBoxSubmitProdInfo();
+$box = new PouetBoxSubmitProdInfo( $_GET["which"] );
 
 $TITLE = "submit things for a prod: "._html($box->prod->name);
+
 if (!$box->prod)
 {
   redirect("prodlist.php");
 }
+
+$form = new PouetFormProcessor();
+
+$form->SetSuccessURL( "prod.php?which=".(int)$_GET["which"], true );
+
+$form->Add( "prodInfo", $box );
+
+if ($currentUser && $currentUser->CanSubmitItems())
+  $form->Process();
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
@@ -192,39 +203,7 @@ echo "<div id='content'>\n";
 
 if (get_login_id())
 {
-  $showBox = true;
-  $errors = array();
-  if ($_POST)
-  {
-    $errors = $box->ParsePostMessage( $_POST );
-    if (count($errors))
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->classes[] = "errorbox";
-      $msg->title = "An error has occured:";
-      $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-      $msg->Render();
-    }
-    else
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->classes[] = "successbox";
-      $msg->title = "Success!";
-      $msg->message = "<a href='prod.php?which=".(int)$_GET["which"]."'>see what you've done</a>";
-      $msg->Render();
-      $showBox = false;
-    }
-  }
-
-  $box->Load();
-  if ($showBox)
-  {
-    printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
-    printf("  <input type='hidden' name='prodID' value='%d'>\n",$_GET["which"]);
-    $box->Render();
-    printf("</form>");
-  }
-
+  $form->Display();
 
 ?>
 <script type="text/javascript">

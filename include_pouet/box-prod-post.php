@@ -113,6 +113,10 @@ class PouetBoxProdPost extends PouetBox {
       if (!$currentUser->CanPostInProdComments())
         return;
       echo "<form action='add.php' method='post'>\n";
+
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+
       echo "<div class='content'>\n";
       echo " <input type='hidden' name='which' value='".(int)$this->prod."'>\n";
       echo " <input type='hidden' name='type' value='comment'>\n";

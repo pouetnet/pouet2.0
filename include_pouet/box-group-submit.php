@@ -50,9 +50,13 @@ class PouetBoxSubmitGroup extends PouetBox
     $a["csdb"] = $data["csdbID"];
     $a["zxdemo"] = $data["zxdemoID"];
     $a["quand"] = date("Y-m-d H:i:s");
-    $groupID = SQLLib::InsertRow("groups",$a);
+    $this->groupID = SQLLib::InsertRow("groups",$a);
 
     return array();
+  }
+  function GetInsertionID()
+  {
+    return (int)$this->groupID;
   }
   
   function LoadFromDB()

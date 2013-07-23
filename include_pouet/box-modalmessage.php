@@ -12,6 +12,7 @@ class PouetBoxModalMessage extends PouetBox
     $this->title = "";
     $this->allowHTML = $allowHTML;
     $this->enableFooter = $enableFooter;
+    $this->returnPage = $_SERVER['HTTP_REFERER'];
   }
 
   function RenderContent() {
@@ -20,7 +21,7 @@ class PouetBoxModalMessage extends PouetBox
 
   function RenderFooter() {
     if ($this->enableFooter)
-      echo "  <div class='foot'><a href='".$_SERVER['HTTP_REFERER']."'>get back</a></div>\n";
+      echo "  <div class='foot'><a href='"._html($this->returnPage)."'>get back</a></div>\n";
     echo "</div>\n";
   }
 };

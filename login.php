@@ -2,6 +2,10 @@
 include_once("bootstrap.inc.php");
 include_once("include_pouet/pouet-user.php");
 
+$csrf = new CSRFProtect();
+if (!$csrf->ValidateToken())
+  redirect("error.php?e=".rawurlencode("Who are you and where did you come from ?"));
+  
 $_SESSION = array();
 
 $rv =
