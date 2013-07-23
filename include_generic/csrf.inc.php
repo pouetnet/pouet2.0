@@ -20,10 +20,9 @@ class CSRFProtect
   }
   public function PrintToken()
   {
-    do
-    {
-      $name  = "Protect".sprintf("%04d",rand(0,9999));
-    } while (isset($_SESSION["CSRFProtect"][$name]));
+    //do {
+      $name  = "Protect".sprintf("%06d",rand(0,999999));
+    //} while (isset($_SESSION["CSRFProtect"][$name]));
     
     $token = sha1(time() . rand(0,9999));
     printf("<input type='hidden' name='ProtName' value='%s'/>\n",_html($name));
