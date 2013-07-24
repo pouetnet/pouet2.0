@@ -458,9 +458,11 @@ class PouetBoxProdComments extends PouetBox {
         echo "<span class='vote cdc'>cdc</span>";
         unset($main->userCDCs[$c->user->id]);
       }
-    
-      echo "added on the <a href='#c".$c->id."'>".$c->quand."</a> by ".
-        $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar()."</div>\n";
+  
+      echo "added on the <a href='#c".$c->id."'>".$c->quand."</a> by ";
+      echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
+      
+      echo "</div>\n";
     }
     if ($this->numPages > 1)
     {

@@ -4,6 +4,7 @@ class PouetUser extends BM_Class {
   static function getFields() { return array("id","nickname","level","avatar","glops","quand","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","lastip","lasthost"); }
   function PrintLinkedAvatar() {
+//    return "<a href='user.php?who=".$this->id."' class='usera' title=\""._html($this->nickname)."\"><img src='".POUET_CONTENT_URL."avatars/".rawurlencode($this->avatar)."' alt=\""._html($this->nickname)."\" class='avatar'/></a>";
     return sprintf("<a href='user.php?who=%d' class='usera' title=\"%s\"><img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/></a>",
       $this->id,_html($this->nickname),rawurlencode($this->avatar),_html($this->nickname));
   }
@@ -11,6 +12,7 @@ class PouetUser extends BM_Class {
     $classes = array("user");
     if ((time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
     if ($this->level == "banned") $classes[] = "banned";
+    //return "<a href='user.php?who=".(int)$this->id."' class='".implode(" ",$classes)."'>"._html($this->nickname)."</a>";
     return sprintf("<a href='user.php?who=%d' class='%s'>%s</a>",$this->id,implode(" ",$classes),_html($this->nickname));
   }
   function Create() {
