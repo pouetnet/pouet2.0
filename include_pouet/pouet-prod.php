@@ -121,6 +121,20 @@ class PouetProd extends BM_Class {
   function RenderLinkTruncated() {
     return sprintf("<a href='prod.php?which=%d'>%s</a>",$this->id,_html(shortify_cut($this->name,40)));
   }
+  function RenderSingleRow() {
+    $s = "<span class='prod'>".$this->RenderLink()."</span>";
+    if ($this->groups)
+    {
+      $s .= " by ";
+      $a = array();
+      foreach($this->groups as $g) if ($g) {
+        $a[] = $g->RenderFull();
+      }
+      $s .= implode(" & ",$a);
+    }
+    return $s;
+  }
+  
   function RenderReleaseDate() {
     if (!$this->date || $this->date{0}=="0") return "";
     if (substr($this->date,5,2)=="00")
@@ -134,12 +148,14 @@ class PouetProd extends BM_Class {
     return strtolower(date("F Y",strtotime($this->quand)));
   }
   function RenderAsEntry() {
+    echo "<div class='prodentry'>";
     if (get_setting("indextype"))
       echo $this->RenderTypeIcons();
     if (get_setting("indexplatform"))
       echo $this->RenderPlatformIcons();
     echo "<span class='prod'>".$this->RenderLinkTruncated()."</span>\n";
     echo "<span class='group'>".$this->RenderGroupsShort()."</span>\n";
+    echo "</div>";
   }
 };
 

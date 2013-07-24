@@ -291,9 +291,10 @@ td.date {
 .prod {
   font-weight: bold;
   text-transform: lowercase;
+}
+.prodentry .prod {
   vertical-align: middle;
 }
-
 #pouetbox_latestoneliner h2 {
   padding-left: 22px;
   padding-bottom: 2px;
@@ -1498,4 +1499,8 @@ input.autocompleteSearch {
 #pouetbox_listsmain .foot {
   margin-top: 1px;
   font-weight: normal;
+}
+
+.logovote .content {
+  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
 }

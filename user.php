@@ -327,7 +327,7 @@ class PouetBoxUserMain extends PouetBox
           echo "<li>";
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
-          echo "<span class='prod'>".$p->RenderLink()."</span>\n";
+          echo $p->RenderSingleRow();
           echo $p->RenderAwards();
           echo "</li>";
         }
@@ -381,7 +381,7 @@ class PouetBoxUserMain extends PouetBox
           echo "<li>";
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
-          echo "<span class='prod'>".$p->RenderLink()."</span>\n";
+          echo $p->RenderSingleRow();
           echo $p->RenderAwards();
           echo "</li>";
         }
@@ -401,7 +401,7 @@ class PouetBoxUserMain extends PouetBox
           echo "<li>";
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
-          echo "<span class='prod'>".$p->RenderLink()."</span>\n";
+          echo $p->RenderSingleRow();
           echo $p->RenderAwards();
           echo "</li>";
         }
@@ -425,14 +425,13 @@ class PouetBoxUserMain extends PouetBox
           echo "<span class='vote ".$rating."'>".$rating."</span>";
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
-          echo "<span class='prod'>".$p->RenderLink()."</span>\n";
+          echo $p->RenderSingleRow();
           echo $p->RenderAwards();
           echo "</li>";
         }
         echo "</ul>";
       }
     }
-    global $THREAD_CATEGORIES;
     if (!$_GET["show"] || $_GET["show"]=="topics")
     {
       $topics = $this->GetBBSTopics( $_GET["show"]=="topics" ? null : get_setting("usercomments") );
@@ -443,7 +442,7 @@ class PouetBoxUserMain extends PouetBox
         foreach($topics as $t)
         {
           echo "<li>";
-          echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> (".$THREAD_CATEGORIES[$t->category].")";
+          echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> ("._html($t->category).")";
           echo "</li>";
         }
         echo "</ul>";
@@ -459,7 +458,7 @@ class PouetBoxUserMain extends PouetBox
         foreach($posts as $p)
         {
           echo "<li>";
-          echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> (".$THREAD_CATEGORIES[$p->category].")";
+          echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
           echo "</li>";
         }
         echo "</ul>";
