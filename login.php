@@ -8,11 +8,11 @@ if (!$csrf->ValidateToken())
   
 $_SESSION = array();
 
-$rv =
-  $sceneID->login(
-    $_POST["login"],
-    $_POST["password"],
-    $_POST["permanent"]=="on")->asAssoc();
+$rv = null;
+try
+{
+  $rv = $sceneID->login( $_POST["login"], $_POST["password"], $_POST["permanent"]=="on")->asAssoc();
+} catch(SceneIdException $e) {}
 
 switch( (int)$rv["returnCode"] )
 {
