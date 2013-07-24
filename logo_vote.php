@@ -42,6 +42,7 @@ class PouetBoxLogoLama extends PouetBox {
       'logos-dalai-lama.jpg',
       'logos-lamerbus.jpg',
       'logos-lamerst-by-charlie.jpg',
+      'logos-lamercream.jpg',
     );  
     
     echo "<img src='".POUET_CONTENT_URL."gfx/".$lama_pictures[array_rand($lama_pictures)]."' alt='Lamer picture'/>";
