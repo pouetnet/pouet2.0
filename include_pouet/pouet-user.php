@@ -61,7 +61,14 @@ class PouetUser extends BM_Class {
       }
     }
     global $sceneID;
-    $rv = $sceneID->getUserInfoById( $this->id )->asAssoc();
+    try 
+    {
+      $rv = $sceneID->getUserInfoById( $this->id )->asAssoc();
+    } 
+    catch(SceneIdException $e)
+    {
+      return NULL;
+    }
 
     if ((int)$rv["returnCode"] == 10)
     {
@@ -76,7 +83,7 @@ class PouetUser extends BM_Class {
     }
     else
     {
-      return null;
+      return NULL;
     }
   }
   
