@@ -9,10 +9,13 @@ if (!$csrf->ValidateToken())
 $_SESSION = array();
 
 $rv = null;
+$err = "";
 try
 {
   $rv = $sceneID->login( $_POST["login"], $_POST["password"], $_POST["permanent"]=="on")->asAssoc();
-} catch(SceneIdException $e) {}
+} catch(SceneIdException $e) {
+  $err = "[SceneID error] ".$e->GetMessage();
+}
 
 switch( (int)$rv["returnCode"] )
 {
@@ -60,7 +63,7 @@ switch( (int)$rv["returnCode"] )
 	case NULL:
 	case FALSE:
 	case -1: {
-		redirect("error.php?e=".rawurlencode("Couldn't connect SceneID. :("));
+		redirect("error.php?e=".rawurlencode($err ? $err : "Couldn't connect SceneID. :("));
 	} break;
 
 	default: {
