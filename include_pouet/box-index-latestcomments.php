@@ -29,7 +29,10 @@ class PouetBoxLatestComments extends PouetBoxCachable {
     $s->AddField("c.id as commentID");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
-    //PouetCollectPlatforms($this->data);
+    
+    $a = array();
+    foreach($this->data as $p) $a[] = &$p->prod;
+    PouetCollectPlatforms($a);
   }
  
   function RenderBody() {
