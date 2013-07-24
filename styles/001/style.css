@@ -359,7 +359,7 @@ td.date {
 }
 
 .content li {
-  margin-left: 20px;
+  margin-left: 40px;
   /*clear: both;*/
 }
 .pouetbox_news .content p {
@@ -497,6 +497,11 @@ td.date {
   border: 1px solid black;
   border-collapse: separate;
   border-spacing: 1px;
+}
+
+#pouetbox_prodmain #alltimerank {
+    font-size: 80%;
+    margin: 5px;
 }
 
 #pouetbox_prodmain #nfo {
