@@ -98,7 +98,7 @@ class PouetBoxBBSView extends PouetBox {
     global $currentUser;
 
     echo "<div class='threadcategory'>";
-    echo "<b>category:</b> ".$THREAD_CATEGORIES[$this->topic->category];
+    echo "<b>category:</b> "._html($this->topic->category);
     if ($currentUser && $currentUser->CanEditBBS())
     {
       printf(" [<a href='admin_topic_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);

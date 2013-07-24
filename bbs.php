@@ -100,7 +100,7 @@ class PouetBoxBBSTopicList extends PouetBox
       echo $p->firstuser->PrintLinkedName();
       echo "</td>\n";
 
-      echo " <td>".$THREAD_CATEGORIES[$p->category]."</td>\n";
+      echo " <td>"._html($p->category)."</td>\n";
       
       echo " <td class='topic'>";
       echo "<a href='topic.php?which=".(int)$p->id."'>"._html($p->topic)."</a>";

@@ -37,10 +37,12 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     $n = 0;
     foreach ($this->data as $r) {
       if (get_setting("indexbbsnoresidue"))
-        if ($r->category == 1) continue;
+      {
+        if ($r->category == "residue") continue;
+      }
       echo "<tr>\n";
       echo "  <td class='avatar'>".$r->firstuser->PrintLinkedAvatar()."</td>\n";
-      echo "  <td class='category'>".$THREAD_CATEGORIES[$r->category]."</td>\n";
+      echo "  <td class='category'>"._html($r->category)."</td>\n";
       echo "  <td class='topic'><a href='topic.php?which=".(int)$r->id."'>"._html($r->topic)."</a></td>\n";
       echo "  <td class='count' title='last post "._html(dateDiffReadable(time(),$r->lastpost))." ago - "._html($r->lastpost)."'>".$r->count."</td>\n";
       echo "  <td class='avatar'>".$r->lastuser->PrintLinkedAvatar()."</td>\n";

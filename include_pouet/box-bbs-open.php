@@ -5,6 +5,10 @@ class PouetBoxBBSOpen extends PouetBox {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbsopen";
     $this->title = "open a new bbs thread";
+
+    $row = SQLLib::selectRow("DESC bbs_topics category");
+    preg_match_all("/'([^']+)'/",$row->Type,$m);
+    $this->categories = $m[1];
   }
 
   function ParsePostMessage($post) 
@@ -30,7 +34,7 @@ class PouetBoxBBSOpen extends PouetBox {
 
   	$a = array();
   	$a["topic"] = $title;
-  	$a["category"] = max(min($post["category"],6),0);
+  	$a["category"] = $post["category"];
   	$a["userfirstpost"] = $a["userlastpost"] = get_login_id();
   	$a["firstpost"] = $a["lastpost"] = date("Y-m-d H:i:s");
 
@@ -64,7 +68,6 @@ class PouetBoxBBSOpen extends PouetBox {
       if (!$currentUser->CanPostInBBS())
         return;
         
-      global $THREAD_CATEGORIES;
       echo "<form action='add.php' method='post'>\n";
 
       $csrf = new CSRFProtect();
@@ -78,8 +81,8 @@ class PouetBoxBBSOpen extends PouetBox {
 
       echo " <label for='category'>category:</label>\n";
       echo " <select name='category' id='category'>\n";
-      foreach($THREAD_CATEGORIES as $k=>$v)
-        printf("<option value='%d'>%s</option>",$k,$v);
+      foreach($this->categories as $v)
+        printf("<option value='%s'>%s</option>",_html($v),_html($v));
       echo " </select>\n";
 
       echo " <label for='message'>message:</label>\n";
