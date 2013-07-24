@@ -83,7 +83,10 @@ class PouetBox {
   
   function Load()
   {
+    global $timer;
+    $timer[$this->uniqueID." load"]["start"] = microtime_float();
     $this->LoadFromDB();
+    $timer[$this->uniqueID." load"]["end"] = microtime_float();
   } 
 }
 
