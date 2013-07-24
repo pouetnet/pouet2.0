@@ -17,7 +17,8 @@ class PouetBoxUserMain extends PouetBox
     $s->AddExtendedFields();
 //    foreach(PouetUser::getExtendedFields() as $v)
 //      $s->AddField("users.".$v);
-    $this->user = reset($s->perform());
+    $this->user = $s->perform();
+    $this->user = reset($this->user);
     if (!$this->user) return;
 
     $this->user->UpdateGlops();
