@@ -337,7 +337,7 @@ else
 {
   $p = new PouetBoxBoardMain($boardID);
   $p->Load();
-  $TITLE = _html($p->board->name);
+  $TITLE = $p->board->name;
 }
 
 include("include_pouet/header.php");

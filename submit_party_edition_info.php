@@ -95,7 +95,7 @@ if (!$box->party)
   redirect("parties.php");
 }
 
-$TITLE = sprintf("submit links for a party edition: %s %04d",_html($box->party->name),$box->year);
+$TITLE = sprintf("submit links for a party edition: %s %04d",$box->party->name,$box->year);
 
 $form = new PouetFormProcessor();
 

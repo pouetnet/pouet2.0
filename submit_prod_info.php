@@ -180,7 +180,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 
 $box = new PouetBoxSubmitProdInfo( $_GET["which"] );
 
-$TITLE = "submit things for a prod: "._html($box->prod->name);
+$TITLE = "submit things for a prod: ".$box->prod->name;
 
 if (!$box->prod)
 {

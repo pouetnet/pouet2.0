@@ -837,7 +837,7 @@ if ($currentUser && $currentUser->CanDeleteItems())
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
-$TITLE = "edit a prod: "._html($box->prod->name);
+$TITLE = "edit a prod: ".$box->prod->name;
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

@@ -82,7 +82,7 @@ $form->Add( "partyyear", $box );
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
-$TITLE = sprintf("edit a party edition: %s %04d",_html($box->party->name),$box->year);
+$TITLE = sprintf("edit a party edition: %s %04d",$box->party->name,$box->year);
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

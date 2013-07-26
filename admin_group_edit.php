@@ -61,7 +61,7 @@ $form->Add( "group", $box );
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
-$TITLE = "edit a group: "._html($box->group->name);
+$TITLE = "edit a group: ".$box->group->name;
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

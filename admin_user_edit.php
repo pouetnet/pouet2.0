@@ -170,7 +170,7 @@ else if ($_GET["ip"])
 if ($currentUser && $currentUser->IsAdministrator())
   $form->Process();
 
-$TITLE = "edit this user: "._html( $box->user->nickname );
+$TITLE = "edit this user: ".$box->user->nickname;
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

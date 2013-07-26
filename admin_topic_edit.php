@@ -118,7 +118,7 @@ $form->Add( "topic", $box );
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
-$TITLE = "edit a topic: "._html($box->topic->topic);
+$TITLE = "edit a topic: ".$box->topic->topic;
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

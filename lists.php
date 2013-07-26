@@ -230,7 +230,7 @@ else
 {
   $p = new PouetBoxListsMain($boardID);
   $p->Load();
-  $TITLE = _html($p->list->name);
+  $TITLE = $p->list->name;
 }
 
 include("include_pouet/header.php");

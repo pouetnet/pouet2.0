@@ -54,7 +54,7 @@ $form->Add( "party", $box );
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
-$TITLE = "edit a party: "._html( $box->party->name );
+$TITLE = "edit a party: ".$box->party->name;
 
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");

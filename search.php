@@ -524,7 +524,7 @@ class PouetBoxSearchBBS extends PouetBox
 
 $TITLE = "search";
 if ($_GET["what"])
-  $TITLE .= ": "._html($_GET["what"]);
+  $TITLE .= ": ".$_GET["what"];
   
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
