@@ -195,6 +195,13 @@ class PouetBoxUserMain extends PouetBox
     $s->AddOrder("bbs_topics.firstpost desc");
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->topicCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from bbs_topics where bbs_topics.userfirstpost = %d",$this->id) )->c;
+
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=topics", $this->topicCount, 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     
     $data = $s->perform();
 
@@ -208,10 +215,19 @@ class PouetBoxUserMain extends PouetBox
     $s->AddField("bbs_topics.topic");
     $s->AddField("bbs_topics.category");
     $s->AddWhere(sprintf("bbs_posts.author = %d",$this->id));
-    $s->AddGroup("bbs_topics.id");
     $s->AddOrder("bbs_posts.added desc");
     if ($limit)
+    {
       $s->SetLimit( $limit );
+      $s->AddGroup("bbs_topics.id");
+    }
+    else
+    {
+      $this->postCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from bbs_posts where bbs_posts.author = %d",$this->id) )->c;
+
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=posts", $this->postCount, 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     
     $data = $s->perform();
 
@@ -355,6 +371,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
 
@@ -372,6 +389,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
 
@@ -392,6 +410,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
 
@@ -412,15 +431,16 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
-    if (!$_GET["show"] || $_GET["show"]=="comments")
+    if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
     {
-      $comments = $this->GetFirstCommentsAdded( $_GET["show"]=="comments" ? null : get_setting("usercomments") );
+      $comments = $this->GetFirstCommentsAdded( /*$_GET["show"]=="comments" ? null :*/ get_setting("usercomments") );
       if ($comments)
       {
         echo "<div class='contribheader'>latest 1st comments <span>".$this->user->stats["comments"]." glöps</span>";
-        echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show all</a>]";
+        //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show all</a>]";
         echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
         echo "</div>\n";
         echo "<ul class='boxlist'>";
@@ -443,7 +463,10 @@ class PouetBoxUserMain extends PouetBox
       $topics = $this->GetBBSTopics( $_GET["show"]=="topics" ? null : get_setting("usercomments") );
       if ($topics)
       {
-        echo "<div class='contribheader'>latest bbs topics [<a href='user.php?who=".$this->id."&amp;show=topics'>show all</a>]</div>\n";
+        echo "<div class='contribheader'>latest bbs topics";
+        if ($this->topicCount)
+          echo " <span>".$this->topicCount." topics</span>";
+        echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show all</a>]</div>\n";
         echo "<ul class='boxlist'>";
         foreach($topics as $t)
         {
@@ -452,6 +475,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
     if (!$_GET["show"] || $_GET["show"]=="posts")
@@ -459,7 +483,10 @@ class PouetBoxUserMain extends PouetBox
       $posts = $this->GetBBSPosts( $_GET["show"]=="posts" ? null : get_setting("usercomments") );
       if ($posts)
       {
-        echo "<div class='contribheader'>latest bbs posts [<a href='user.php?who=".$this->id."&amp;show=posts'>show all</a>]</div>\n";
+        echo "<div class='contribheader'>latest bbs posts";
+        if ($this->postCount)
+          echo " <span>".$this->postCount." posts</span>";
+        echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show all</a>]</div>\n";
         echo "<ul class='boxlist'>";
         foreach($posts as $p)
         {
@@ -468,6 +495,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
     if ($_GET["show"]=="demoblog")
