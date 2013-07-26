@@ -380,6 +380,8 @@ class PouetBoxProdComments extends PouetBox {
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
     $this->id = (int)$id;
+    
+    $this->paginator = new PouetPaginator();
   }
 
   function LoadFromDB() {
@@ -392,14 +394,20 @@ class PouetBoxProdComments extends PouetBox {
     $s->AddTable("comments");
     $s->AddOrder("comments.quand");
     $s->AddWhere("comments.which=".$this->id);
-    $this->perPage = get_setting("prodcomments");
-    if (get_setting("prodcomments") != -1)
+    $perPage = get_setting("prodcomments");
+    if ($perPage != -1)
     {
       $sc = new SQLSelect();
       $sc->AddField("count(*) as c");
       $sc->AddWhere("comments.which=".$this->id);
       $sc->AddTable("comments");
-      $this->commentCount = SQLLib::SelectRow($sc->GetQuery())->c;
+      
+      $commentCount = SQLLib::SelectRow($sc->GetQuery())->c;
+      
+      $this->paginator->SetData( "prod.php?which=".$this->id, $commentCount, $perPage, $_GET["page"] );
+      $this->paginator->SetLimitOnQuery( $s );
+      /*
+      $this->commentCount = 
 
       $this->numPages = (int)ceil($this->commentCount / $this->perPage);
       if (!isset($_GET["page"]))
@@ -412,31 +420,10 @@ class PouetBoxProdComments extends PouetBox {
 
       if ($this->numPages > 1)
         $s->SetLimit( $this->perPage, (int)(($this->page-1) * $this->perPage) );
+      */
     }
     $r = $s->perform();
     $this->data = $r;
-  }
-
-  function RenderNavbar() {
-    echo "<div class='navbar'>\n";
-    if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='prod.php?which=".$this->id."&amp;page=".($this->page - 1)."'>previous page</a></div>\n";
-    if ($this->page * $this->perPage < $this->commentCount)
-      echo "  <div class='nextpage'><a href='prod.php?which=".$this->id."&amp;page=".($this->page + 1)."'>next page</a></div>\n";
-    echo "  <div class='selector'>";
-    echo "  <form action='prod.php' method='get'>\n";
-    echo "   go to page <select name='page'>\n";
-    
-    for ($x = 1; $x <= $this->numPages; $x++)
-      echo "      <option value='".$x."'".($x==$this->page?" selected='selected'":"").">".$x."</option>\n";
-      
-    echo "   </select> of ".$this->numPages."\n";
-    echo "  <input type='hidden' name='which' value='".$this->id."'/>\n";
-    echo "  <input type='submit' value='Submit'/>\n";
-    echo "  </form>\n";
-    echo "  </div>\n";
-    echo "</div>\n";
-    return $s;
   }
 
   function RenderBody() 
@@ -464,10 +451,7 @@ class PouetBoxProdComments extends PouetBox {
       
       echo "</div>\n";
     }
-    if ($this->numPages > 1)
-    {
-      $this->RenderNavbar();
-    }
+    $this->paginator->RenderNavbar();
   }
   
   function RenderFooter() {

@@ -46,15 +46,6 @@ class PouetBoxBBSView extends PouetBox {
     $s->AddWhere("bbs_posts.topic=".$this->id);
     $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
 
-    $this->numpages = (int)ceil($this->postcount / $POSTS_PER_PAGE);
-    if (!isset($_GET["page"]))
-      $this->page = $this->numpages;
-    else
-      $this->page = (int)$_GET["page"];
-      
-    $this->page = (int)max( $this->page, 1 );
-    $this->page = (int)min( $this->page, $this->numpages );
-    
     $s = new BM_Query();
     $s->AddTable("bbs_posts");
     $s->AddField("bbs_posts.id as id");
@@ -62,36 +53,17 @@ class PouetBoxBBSView extends PouetBox {
     $s->AddField("bbs_posts.added as added");
     $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));    
     $s->AddWhere("bbs_posts.topic=".$this->id);
-    $s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
+    //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
+    
+    $this->paginator = new PouetPaginator();
+    $this->paginator->SetData( "topic.php?which=".$this->id, $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
+    $this->paginator->SetLimitOnQuery( $s );
+    
     $this->posts = $s->perform();
 
     $this->title = _html($this->topic->topic);
   }
 
-  function RenderNavbar() {
-    global $POSTS_PER_PAGE;
-    echo "<div class='navbar'>\n";
-    if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='topic.php?which=".($this->id)."&amp;page=".($this->page - 1)."'>previous page</a></div>\n";
-    if ($this->page * $POSTS_PER_PAGE < $this->postcount)
-      echo "  <div class='nextpage'><a href='topic.php?which=".($this->id)."&amp;page=".($this->page + 1)."'>next page</a></div>\n";
-    echo "  <div class='selector'>";
-    echo "  <form action='topic.php' method='get'>\n";
-    echo "  <input type='hidden' name='which' value='"._html($this->id)."'/>\n";
-    echo "   go to page <select name='page'>\n";
-    
-    $numpages = (int)ceil($this->postcount / $POSTS_PER_PAGE);
-    for ($x = 1; $x <= $numpages; $x++)
-      echo "      <option value='".$x."'".($x==$this->page?" selected='selected'":"").">".$x."</option>\n";
-      
-    echo "   </select> of ".$numpages."\n";
-    echo "  <input type='submit' value='Submit'/>\n";
-    echo "  </form>\n";
-    echo "  </div>\n";
-    echo "</div>\n";
-    return $s;
-  }
-  
   function RenderBody() {
     global $POSTS_PER_PAGE;
     global $THREAD_CATEGORIES;
@@ -109,9 +81,9 @@ class PouetBoxBBSView extends PouetBox {
     echo "</div>\n";
     
     if ($this->postcount > $POSTS_PER_PAGE) {
-      echo $this->RenderNavbar();
+      echo $this->paginator->RenderNavbar();
     } else {
-      echo "<div class='navbar'>&nbsp;</div>\n";
+      echo "<div class='blank'>&nbsp;</div>\n";
     }
 
     foreach ($this->posts as $c) {
@@ -123,7 +95,7 @@ class PouetBoxBBSView extends PouetBox {
     }
 
     if ($this->postcount > $POSTS_PER_PAGE) {
-      echo $this->RenderNavbar();
+      echo $this->paginator->RenderNavbar();
     }
   }
   function RenderFooter() {

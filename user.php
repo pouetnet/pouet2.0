@@ -9,6 +9,8 @@ class PouetBoxUserMain extends PouetBox
     $this->uniqueID = "pouetbox_usermain";
     $this->title = "";
     $this->id = (int)$id;
+
+    $this->paginator = new PouetPaginator();
   }
 
   function LoadFromDB() {
@@ -89,6 +91,11 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("prods.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=prods", $this->user->stats["prods"], 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     $data = $s->perform();
     PouetCollectPlatforms($data);
 
@@ -101,6 +108,11 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("groups.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=groups", $this->user->stats["groups"], 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     $data = $s->perform();
 
     return $data;
@@ -112,6 +124,11 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("parties.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=parties", $this->user->stats["parties"], 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     $data = $s->perform();
 
     return $data;
@@ -124,6 +141,11 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("screenshots.user = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=screenshots", $this->user->stats["screenshots"], 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     $data = $s->perform();
     PouetCollectPlatforms($data);
 
@@ -137,6 +159,11 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("nfos.user = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
+    else
+    {
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=nfos", $this->user->stats["nfos"], 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
     $data = $s->perform();
     PouetCollectPlatforms($data);
 
@@ -190,10 +217,12 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
-  function GetCommentsAdded( $limit, $page = 1 )
+  function GetCommentsAdded( $limit, $page )
   {
-    $this->perPage = $limit;
-    $this->page = $page ? $page : 1;
+    $s = new BM_Query("comments");
+    $s->AddField("count(*) as c");
+    $s->AddWhere(sprintf("comments.who = %d",$this->id));
+    $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
     
     $s = new BM_Query("comments");
     $s->AddField("comments.rating");
@@ -203,39 +232,15 @@ class PouetBoxUserMain extends PouetBox
     //$s->AddJoin("left","comments","prods.id = comments.which");
     $s->Attach(array("comments"=>"which"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("comments.who = %d",$this->id));
-//    $s->SetLimit( $limit, $offset );
-    $s->SetLimit( $this->perPage, (int)(($this->page-1) * $this->perPage) );
-    
-    $data = $s->performWithCalcRows( $this->commentCount );
-    PouetCollectPlatforms($data);
 
-    $this->numPages = (int)ceil($this->commentCount / $this->perPage);
+    $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
+    $this->paginator->SetLimitOnQuery( $s );
+
+    $data = $s->perform();
+    PouetCollectPlatforms($data);
 
     return $data;
   }
-  function RenderNavbar() {
-    echo "<div class='navbar'>\n";
-    if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='user.php?who=".$this->id."&amp;show=demoblog&amp;page=".($this->page - 1)."'>previous page</a></div>\n";
-    if ($this->page * $this->perPage < $this->commentCount)
-      echo "  <div class='nextpage'><a href='user.php?who=".$this->id."&amp;show=demoblog&amp;page=".($this->page + 1)."'>next page</a></div>\n";
-    echo "  <div class='selector'>";
-    echo "  <form action='user.php' method='get'>\n";
-    echo "   go to page <select name='page'>\n";
-    
-    for ($x = 1; $x <= $this->numPages; $x++)
-      echo "      <option value='".$x."'".($x==$this->page?" selected='selected'":"").">".$x."</option>\n";
-      
-    echo "   </select> of ".$this->numPages."\n";
-    echo "  <input type='hidden' name='who' value='".$this->id."'/>\n";
-    echo "  <input type='hidden' name='show' value='demoblog'/>\n";
-    echo "  <input type='submit' value='Submit'/>\n";
-    echo "  </form>\n";
-    echo "  </div>\n";
-    echo "</div>\n";
-    return $s;
-  }
-
 
   function RenderBody() {
     $s = "";
@@ -332,6 +337,7 @@ class PouetBoxUserMain extends PouetBox
           echo "</li>";
         }
         echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
     }
 
@@ -489,7 +495,7 @@ class PouetBoxUserMain extends PouetBox
         }
         echo "</ul>";
       }
-      $this->RenderNavbar();
+      $this->paginator->RenderNavbar();
     }
 
 

@@ -20,6 +20,7 @@ include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");
 include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-party.php");
 include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
 include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
+include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 
 $lifetime = 60 * 60 * 24 * 365;
 ini_set('session.cookie_lifetime', $lifetime);

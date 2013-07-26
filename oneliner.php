@@ -19,46 +19,19 @@ class PouetBoxOnelinerView extends PouetBox {
     $s->AddTable("oneliner");
     $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
 
-    $this->numpages = (int)ceil($this->postcount / $POSTS_PER_PAGE);
-    if (!isset($_GET["page"]))
-      $this->page = $this->numpages;
-    else
-      $this->page = (int)$_GET["page"];
-      
-    $this->page = (int)max( $this->page, 1 );
-    $this->page = (int)min( $this->page, $this->numpages );
-    
     $s = new BM_Query();
     $s->AddTable("oneliner");
     $s->AddField("oneliner.message");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));    
-    $s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
+    //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
+    
+    $this->paginator = new PouetPaginator();
+    $this->paginator->SetData( "oneliner.php", $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
+    $this->paginator->SetLimitOnQuery( $s );
+
     $this->oneliner = $s->perform();
   }
 
-  function RenderNavbar() {
-    global $POSTS_PER_PAGE;
-    echo "<div class='navbar'>\n";
-    if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='oneliner.php?page=".($this->page - 1)."'>previous page</a></div>\n";
-    if ($this->page * $POSTS_PER_PAGE < $this->postcount)
-      echo "  <div class='nextpage'><a href='oneliner.php?page=".($this->page + 1)."'>next page</a></div>\n";
-    echo "  <div class='selector'>";
-    echo "  <form action='oneliner.php' method='get'>\n";
-    echo "   go to page <select name='page'>\n";
-    
-    $numpages = (int)ceil($this->postcount / $POSTS_PER_PAGE);
-    for ($x = 1; $x <= $numpages; $x++)
-      echo "      <option value='".$x."'".($x==$this->page?" selected='selected'":"").">".$x."</option>\n";
-      
-    echo "   </select> of ".$numpages."\n";
-    echo "  <input type='submit' value='Submit'/>\n";
-    echo "  </form>\n";
-    echo "  </div>\n";
-    echo "</div>\n";
-    return $s;
-  }
-  
   function RenderBody() {
     global $POSTS_PER_PAGE;
 
@@ -74,9 +47,7 @@ class PouetBoxOnelinerView extends PouetBox {
     }
     echo "</ul>";
 
-    if ($this->postcount > $POSTS_PER_PAGE) {
-      echo $this->RenderNavbar();
-    }
+    $this->paginator->RenderNavbar();
     ?>
     <script type="text/javascript">
     document.observe("dom:loaded",function(){ Youtubify($("pouetbox_onelinerview")); });

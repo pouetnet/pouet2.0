@@ -678,6 +678,10 @@ td.date {
   height: 22px;
   clear: both;
 }
+#pouetbox_bbsview .blank {
+  background: #224488;
+  height: 16px;
+}
 /*
 #pouetbox_prodcomments 
 */
