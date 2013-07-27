@@ -1101,6 +1101,11 @@ tr.sortable th #sort_thumbdown {
   text-align: center;
 }
 
+#pouetbox_bbslist #categoryFilter {
+  font-size: 80%;
+  margin-left: 5px;
+}
+
 #pouetbox_partyview td.prod, #pouetbox_partyview td.prod * {
   font-weight: normal;
 }

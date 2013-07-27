@@ -10,6 +10,10 @@ class PouetBoxBBSTopicList extends PouetBox
   function PouetBoxBBSTopicList() {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbslist";
+
+    $row = SQLLib::selectRow("DESC bbs_topics category");
+    preg_match_all("/'([^']+)'/",$row->Type,$m);
+    $this->categories = $m[1];
   }
   
   function BuildURL( $param ) {
@@ -55,6 +59,8 @@ class PouetBoxBBSTopicList extends PouetBox
     $s->AddOrder("bbs_topics.lastpost ".$dir);
     $s->SetLimit( $perPage, (int)(($this->page - 1) * $perPage) );
     
+    if ($_GET["category"])
+      $s->AddWhere(sprintf_esc("category='%s'",$_GET["category"]));
     //echo $s->GetQuery();
     
     $this->topics = $s->performWithCalcRows( $this->count );
@@ -64,8 +70,6 @@ class PouetBoxBBSTopicList extends PouetBox
   }
 
   function Render() {
-    global $THREAD_CATEGORIES;
-    
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "firstpost"=>"started",
@@ -80,8 +84,8 @@ class PouetBoxBBSTopicList extends PouetBox
     echo "<tr class='sortable'>\n";
     foreach($headers as $key=>$text)
     {
-      $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text); 
+      $out = sprintf("<th id='th_%s'><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
+        $key,$this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text); 
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -139,6 +143,32 @@ class PouetBoxBBSTopicList extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
+?>
+<script type="text/javascript">
+<!--
+var threadCategories = $A([<?
+foreach($this->categories as $v) echo "'"._js($v)."',";
+?>]);
+document.observe("dom:loaded",function(){
+  var sel = new Element("select",{"id":"categoryFilter"});
+  $("th_category").insert(sel);
+  
+  var q = location.href.toQueryParams();
+  
+  sel.add( new Option("-- filter to","") );
+  threadCategories.each(function(item){
+    sel.add( new Option(item,item) );
+    if (item == q["category"])
+      sel.selectedIndex = sel.options.length - 1;
+  });
+  sel.observe("change",function(){
+    if (sel.selectedIndex == 0) return;
+    location.href = "bbs.php?category=" + sel.options[ sel.selectedIndex ].value;
+  });
+});
+//-->
+</script>
+<?
     return $s;
   }
 };
