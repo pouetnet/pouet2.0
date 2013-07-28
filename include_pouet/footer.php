@@ -13,7 +13,8 @@ if (POUET_TEST)
   foreach($timer as $k=>$v) {
     printf("<!-- %-40s took %f -->\n",$k,$v["end"] - $v["start"]);
   }
-//  echo "<!--\nQUERIES:\n".print_r($SQLLIB_QUERIES,true)."\n-->";
+  if ($_GET["QUERYDEBUG"]==1)
+    echo "<!--\nQUERIES:\n".print_r($SQLLIB_QUERIES,true)."\n-->";
 }
 include_once("footer.bare.php");
 ?>
