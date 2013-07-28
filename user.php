@@ -15,28 +15,13 @@ class PouetBoxUserMain extends PouetBox
 
   function LoadFromDB() {
     $this->user = PouetUser::Spawn( $this->id );
-    /*
-    $s = new BM_Query("users");
-    $s->AddWhere("users.id=".$this->id);
-    $s->AddExtendedFields();
-//    foreach(PouetUser::getExtendedFields() as $v)
-//      $s->AddField("users.".$v);
-    $this->user = $s->perform();
-    $this->user = reset($this->user);
-    */
+
     if (!$this->user) return;
 
     $this->user->UpdateGlops();
 
     $this->sceneID = $this->user->GetSceneIDData();
 
-    /*
-    $this->cdcs = array();
-    $rows = SQLLib::SelectRows(sprintf_esc("select cdc from users_cdcs where user=%d",$this->id));
-    foreach($rows as $r)
-      $this->cdcs[] = $r->cdc;
-    */
-    
     $s = new BM_Query("users_cdcs");
     $s->AddWhere(sprintf_esc("users_cdcs.user = %d",$this->id));
     $s->Attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));
@@ -101,6 +86,18 @@ class PouetBoxUserMain extends PouetBox
     if ($_GET["show"]=="demoblog")
     {
       $this->comments = $this->GetCommentsAdded( 10, $_GET["page"] );
+    }
+    
+    $this->agreeRulez = array();
+    if (!$_GET["show"])
+    {
+      $this->agreeRulez = $this->GetThumbAgreers( 10, 1 );
+    }
+    
+    $this->agreeSucks = array();
+    if (!$_GET["show"])
+    {
+      $this->agreeSucks = $this->GetThumbAgreers( 10, -1 );
     }
   }
 
@@ -244,6 +241,30 @@ class PouetBoxUserMain extends PouetBox
 
     $data = $s->perform();
     PouetCollectPlatforms($data);
+
+    return $data;
+  }
+  function GetThumbAgreers( $limit = null, $thumb = 1 )
+  {
+    $s = new BM_Query("");
+    $s->AddField("count(*) as c");
+    $s->AddTable("comments AS c1");
+    $s->AddTable("comments AS c2");
+    //$s->Attach(array("c1"=>"who"),array("users as u1"=>"id"));
+    $s->Attach(array("c2"=>"who"),array("users as u2"=>"id"));
+    $s->AddWhere(sprintf_esc("c1.rating = %d",$thumb));
+    $s->AddWhere("c1.rating = c2.rating");
+    $s->AddWhere("c1.which = c2.which");
+    $s->AddWhere(sprintf_esc("c1.who = %d",$this->id));
+    $s->AddWhere(sprintf_esc("c2.who != %d",$this->id));
+    $s->AddGroup("c2.who");
+    $s->AddOrder("c DESC");
+    
+    if ($limit)
+      $s->SetLimit( $limit );
+
+    $data = $s->perform();
+    //PouetCollectPlatforms($data);
 
     return $data;
   }
@@ -527,6 +548,38 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
       $this->paginator->RenderNavbar();
     }
+    
+    if ($this->agreeRulez)
+    {
+      echo "<div class='contribheader'>top thumb up agreers";
+      echo "</div>\n";
+      echo "<ul class='boxlist'>";
+      foreach($this->agreeRulez as $p)
+      {
+        echo "<li>";
+        echo $p->u2->PrintLinkedAvatar()." ";
+        echo $p->u2->PrintLinkedName()." ";
+        echo "(".$p->c." prods)";
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
+    
+    if ($this->agreeSucks)
+    {
+      echo "<div class='contribheader'>top thumb down agreers";
+      echo "</div>\n";
+      echo "<ul class='boxlist'>";
+      foreach($this->agreeSucks as $p)
+      {
+        echo "<li>";
+        echo $p->u2->PrintLinkedAvatar()." ";
+        echo $p->u2->PrintLinkedName()." ";
+        echo "(".$p->c." prods)";
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
 
     if ($this->comments)
     {
@@ -560,9 +613,7 @@ class PouetBoxUserMain extends PouetBox
   }
 };
 
-$userid = (int)$_GET["who"];
-
-$p = new PouetBoxUserMain($userid);
+$p = new PouetBoxUserMain( (int)$_GET["who"] );
 $p->Load();
 
 if ($p->user)
