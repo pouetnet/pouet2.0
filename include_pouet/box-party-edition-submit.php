@@ -69,6 +69,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
       ),
       "artcity"=>array(
         "name"=>"artcity tags",
+        "info"=>"normally this is in a \"partyname,partyyear\" format, such as \"chaos constructions,2005\"",
       ),
       "results"=>array(
         "name"=>"results file",
