@@ -91,13 +91,13 @@ class PouetBoxUserMain extends PouetBox
     $this->agreeRulez = array();
     if (!$_GET["show"])
     {
-      $this->agreeRulez = $this->GetThumbAgreers( 10, 1 );
+      $this->agreeRulez = $this->GetThumbAgreers( get_setting("userrulez"), 1 );
     }
     
     $this->agreeSucks = array();
     if (!$_GET["show"])
     {
-      $this->agreeSucks = $this->GetThumbAgreers( 10, -1 );
+      $this->agreeSucks = $this->GetThumbAgreers( get_setting("usersucks"), -1 );
     }
   }
 
@@ -264,7 +264,6 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
 
     $data = $s->perform();
-    //PouetCollectPlatforms($data);
 
     return $data;
   }
