@@ -31,9 +31,10 @@ class PouetBoxSearchBoxMain extends PouetBox
 
 class PouetBoxSearchProd extends PouetBox 
 {
-  function PouetBoxSearchProd() {
+  function PouetBoxSearchProd($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchprod";
+    $this->terms = $terms;
   }
   
   function BuildURL( $param ) {
@@ -53,7 +54,8 @@ class PouetBoxSearchProd extends PouetBox
     $s->AddField("cmts.c as commentCount"); 
     $s->AddJoin("left","(select which, count(*) as c from comments group by which) as cmts","cmts.which = prods.id"); 
     $s->AddOrder("prods.name ASC"); 
-    $s->AddWhere(sprintf_esc("prods.name LIKE '%%%s%%'",addcslashes($_GET["what"],"%_"))); 
+    foreach($this->terms as $term)
+      $s->AddWhere(sprintf_esc("prods.name LIKE '%%%s%%'",addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -145,9 +147,10 @@ class PouetBoxSearchProd extends PouetBox
 
 class PouetBoxSearchGroup extends PouetBox 
 {
-  function PouetBoxSearchGroup() {
+  function PouetBoxSearchGroup($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchgroup";
+    $this->terms = $terms;
   }
   
   function BuildURL( $param ) {
@@ -171,7 +174,8 @@ class PouetBoxSearchGroup extends PouetBox
     $s->AddJoin("left","(select group2, count(*) as c from prods group by group2) as p2","p2.group2 = groups.id"); 
     $s->AddJoin("left","(select group3, count(*) as c from prods group by group3) as p3","p3.group3 = groups.id"); 
     $s->AddOrder("groups.name ASC"); 
-    $s->AddWhere(sprintf_esc("groups.name LIKE '%%%s%%' or groups.acronym LIKE '%%%s%%'",addcslashes($_GET["what"],"%_"),addcslashes($_GET["what"],"%_"))); 
+    foreach($this->terms as $term)
+      $s->AddWhere(sprintf_esc("(groups.name LIKE '%%%s%%' or groups.acronym LIKE '%%%s%%')",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -236,9 +240,10 @@ class PouetBoxSearchGroup extends PouetBox
 
 class PouetBoxSearchParty extends PouetBox 
 {
-  function PouetBoxSearchParty() {
+  function PouetBoxSearchParty($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchparty";
+    $this->terms = $terms;
   }
   
   function BuildURL( $param ) {
@@ -258,7 +263,8 @@ class PouetBoxSearchParty extends PouetBox
     $s->AddField("p.c as prods");
     $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id"); 
     $s->AddOrder("parties.name ASC"); 
-    $s->AddWhere(sprintf_esc("parties.name LIKE '%%%s%%'",addcslashes($_GET["what"],"%_"))); 
+    foreach($this->terms as $term)
+      $s->AddWhere(sprintf_esc("parties.name LIKE '%%%s%%'",addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -323,9 +329,10 @@ class PouetBoxSearchParty extends PouetBox
 
 class PouetBoxSearchUser extends PouetBox 
 {
-  function PouetBoxSearchUser() {
+  function PouetBoxSearchUser($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchuser";
+    $this->terms = $terms;
   }
   
   function BuildURL( $param ) {
@@ -345,7 +352,8 @@ class PouetBoxSearchUser extends PouetBox
 //    $s->AddField("p.c as prods");
 //    $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id"); 
     $s->AddOrder("users.nickname ASC"); 
-    $s->AddWhere(sprintf_esc("users.nickname LIKE '%%%s%%'",addcslashes($_GET["what"],"%_"))); 
+    foreach($this->terms as $term)
+      $s->AddWhere(sprintf_esc("users.nickname LIKE '%%%s%%'",addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -412,9 +420,10 @@ class PouetBoxSearchUser extends PouetBox
 
 class PouetBoxSearchBBS extends PouetBox 
 {
-  function PouetBoxSearchBBS() {
+  function PouetBoxSearchBBS($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchbbs";
+    $this->terms = $terms;
   }
   
   function BuildURL( $param ) {
@@ -439,7 +448,8 @@ class PouetBoxSearchBBS extends PouetBox
     $s->AddJoin("left","bbs_topics","bbs_posts.topic = bbs_topics.id"); 
     $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));    
     $s->AddOrder("bbs_posts.added DESC"); 
-    $s->AddWhere(sprintf_esc("bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%'",addcslashes($_GET["what"],"%_"),addcslashes($_GET["what"],"%_"))); 
+    foreach($this->terms as $term)
+      $s->AddWhere(sprintf_esc("bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%'",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -464,13 +474,11 @@ class PouetBoxSearchBBS extends PouetBox
 
     foreach ($this->posts as $p) {
       echo "<tr class='r2'>\n";
-
-      $a = preg_split("/\s+/",$_GET["what"]);
       
       echo "<td class='name'>";
 
       $s = _html($p->topic);
-      foreach ($a as $v2) {
+      foreach ($this->terms as $v2) {
         $v2 = preg_quote($v2,"/");
         $s = preg_replace("/(".$v2.")/i","<span class='searchhighlight'>$1</span>",$s);
       }    
@@ -488,8 +496,8 @@ class PouetBoxSearchBBS extends PouetBox
 
       $s = strip_tags($p->post);
       $s = preg_replace("/(\s+)/"," ",$s);
-      $s = _html(mb_strcut($s,max(0,stripos($s,$a[0])-50),100,"utf-8"));
-      foreach ($a as $v2) {
+      $s = _html(mb_strcut($s,max(0,stripos($s,$this->terms[0])-50),100,"utf-8"));
+      foreach ($this->terms as $v2) {
         $v2 = preg_quote($v2,"/");
         $s = preg_replace("/(".$v2.")/i","<span class='searchhighlight'>$1</span>",$s);
       }    
@@ -542,30 +550,35 @@ foreach($_GET as $k=>$v)
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
 if ($_GET["what"] && $_GET["type"])
 {
+  preg_match_all('/(\w+)|"([\w\s]*)"/',$_GET["what"],$m);
+  $terms = array();
+  foreach($m[0] as $k=>$v)
+    $terms[] = $m[1][$k] ? $m[1][$k] : $m[2][$k];
+
   switch($_GET["type"])
   {
     case "bbs":
-      $p = new PouetBoxSearchBBS();
+      $p = new PouetBoxSearchBBS($terms);
       $p->Load();
       $p->Render();
       break;
     case "user":
-      $p = new PouetBoxSearchUser();
+      $p = new PouetBoxSearchUser($terms);
       $p->Load();
       $p->Render();
       break;
     case "party":
-      $p = new PouetBoxSearchParty();
+      $p = new PouetBoxSearchParty($terms);
       $p->Load();
       $p->Render();
       break;
     case "group":
-      $p = new PouetBoxSearchGroup();
+      $p = new PouetBoxSearchGroup($terms);
       $p->Load();
       $p->Render();
       break;
     default:
-      $p = new PouetBoxSearchProd();
+      $p = new PouetBoxSearchProd($terms);
       $p->Load();
       $p->Render();
       break;
