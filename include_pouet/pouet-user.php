@@ -35,7 +35,10 @@ class PouetUser extends BM_Class {
     $this->stats["nfos"]        = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM nfos WHERE user=%d",$this->id))->c;
     $this->stats["comments"]    = SQLLib::SelectRow(sprintf_esc("SELECT COUNT(DISTINCT which) AS c  FROM comments WHERE who=%d",$this->id))->c;
     $this->stats["logos"]       = SQLLib::SelectRow(sprintf_esc("SELECT COUNT(*) AS c FROM logos WHERE vote_count > 0 and (author1=%d or author2=%d)",$this->id,$this->id) )->c;
-    $this->stats["ud"]          = (int)round(SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))->points / 1000);
+    if($this->udlogin)
+      $this->stats["ud"] = (int)round(SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))->points / 1000);
+    else
+      $this->stats["ud"] = 0;
 
     $glops +=  2 * $this->stats["prods"];
     $glops +=  1 * $this->stats["groups"];
