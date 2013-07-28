@@ -449,7 +449,7 @@ class PouetBoxSearchBBS extends PouetBox
     $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));    
     $s->AddOrder("bbs_posts.added DESC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%'",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("(bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%')",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
