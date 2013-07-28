@@ -55,7 +55,7 @@ class PouetBoxSearchProd extends PouetBox
     $s->AddJoin("left","(select which, count(*) as c from comments group by which) as cmts","cmts.which = prods.id"); 
     $s->AddOrder("prods.name ASC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("prods.name LIKE '%%%s%%'",addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("prods.name LIKE '%%%s%%'",_like($term))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -175,7 +175,7 @@ class PouetBoxSearchGroup extends PouetBox
     $s->AddJoin("left","(select group3, count(*) as c from prods group by group3) as p3","p3.group3 = groups.id"); 
     $s->AddOrder("groups.name ASC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("(groups.name LIKE '%%%s%%' or groups.acronym LIKE '%%%s%%')",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("(groups.name LIKE '%%%s%%' or groups.acronym LIKE '%%%s%%')",_like($term),_like($term))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -264,7 +264,7 @@ class PouetBoxSearchParty extends PouetBox
     $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id"); 
     $s->AddOrder("parties.name ASC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("parties.name LIKE '%%%s%%'",addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("parties.name LIKE '%%%s%%'",_like($term))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -353,7 +353,7 @@ class PouetBoxSearchUser extends PouetBox
 //    $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id"); 
     $s->AddOrder("users.nickname ASC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("users.nickname LIKE '%%%s%%'",addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("users.nickname LIKE '%%%s%%'",_like($term))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
@@ -449,11 +449,10 @@ class PouetBoxSearchBBS extends PouetBox
     $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));    
     $s->AddOrder("bbs_posts.added DESC"); 
     foreach($this->terms as $term)
-      $s->AddWhere(sprintf_esc("(bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%')",addcslashes($term,"%_"),addcslashes($term,"%_"))); 
+      $s->AddWhere(sprintf_esc("(bbs_posts.post LIKE '%%%s%%'or bbs_topics.topic LIKE '%%%s%%')",_like($term),_like($term))); 
     
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
     
-    //var_dump($s->GetQuery());
     $this->posts = $s->performWithCalcRows( $this->count );
     
   }
@@ -550,7 +549,7 @@ foreach($_GET as $k=>$v)
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
 if ($_GET["what"] && $_GET["type"])
 {
-  preg_match_all('/(\w+)|"([\w\s]*)"/',$_GET["what"],$m);
+  preg_match_all('/([^\s"]+)|"([^\s"]*)"/',$_GET["what"],$m);
   $terms = array();
   foreach($m[0] as $k=>$v)
     $terms[] = $m[1][$k] ? $m[1][$k] : $m[2][$k];
