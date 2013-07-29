@@ -11,87 +11,87 @@
  */
 function bbencode_quote($message)
 {
-	// First things first: If there aren't any "[quote]" strings in the message, we don't
-	// need to process it at all.
-	
-	if (strpos(strtolower($message), "[quote]")===false)
-	{
-		return $message;	
-	}
-	
-	$stack = Array();
-	$curr_pos = 0;
-	while ($curr_pos!==false && ($curr_pos < strlen($message)))
-	{	
-		$curr_pos = strpos($message, "[", $curr_pos);
-	
-		// If not found, $curr_pos will be 0, and the loop will end.
-		if ($curr_pos!==false)
-		{
-			// We found a [. It starts at $curr_pos.
-			// check if it's a starting or ending quote tag.
-			$possible_start = substr($message, $curr_pos, 7);
-			$possible_end = substr($message, $curr_pos, 8);
-			if (strcasecmp("[quote]", $possible_start) == 0)
-			{
-				// We have a starting quote tag.
-				// Push its position on to the stack, and then keep going to the right.
-				array_push($stack, $curr_pos);
-				++$curr_pos;
-			}
-			else if (strcasecmp("[/quote]", $possible_end) == 0)
-			{
-				// We have an ending quote tag.
-				// Check if we've already found a matching starting tag.
-				if (sizeof($stack) > 0)
-				{
-					// There exists a starting tag. 
-					// We need to do 2 replacements now.
-					$start_index = array_pop($stack);
+  // First things first: If there aren't any "[quote]" strings in the message, we don't
+  // need to process it at all.
+  
+  if (strpos(strtolower($message), "[quote]")===false)
+  {
+    return $message;  
+  }
+  
+  $stack = Array();
+  $curr_pos = 0;
+  while ($curr_pos!==false && ($curr_pos < strlen($message)))
+  { 
+    $curr_pos = strpos($message, "[", $curr_pos);
+  
+    // If not found, $curr_pos will be 0, and the loop will end.
+    if ($curr_pos!==false)
+    {
+      // We found a [. It starts at $curr_pos.
+      // check if it's a starting or ending quote tag.
+      $possible_start = substr($message, $curr_pos, 7);
+      $possible_end = substr($message, $curr_pos, 8);
+      if (strcasecmp("[quote]", $possible_start) == 0)
+      {
+        // We have a starting quote tag.
+        // Push its position on to the stack, and then keep going to the right.
+        array_push($stack, $curr_pos);
+        ++$curr_pos;
+      }
+      else if (strcasecmp("[/quote]", $possible_end) == 0)
+      {
+        // We have an ending quote tag.
+        // Check if we've already found a matching starting tag.
+        if (sizeof($stack) > 0)
+        {
+          // There exists a starting tag. 
+          // We need to do 2 replacements now.
+          $start_index = array_pop($stack);
 
-					// everything before the [quote] tag.
-					$before_start_tag = substr($message, 0, $start_index);
+          // everything before the [quote] tag.
+          $before_start_tag = substr($message, 0, $start_index);
 
-					// everything after the [quote] tag, but before the [/quote] tag.
-					$between_tags = substr($message, $start_index + 7, $curr_pos - $start_index - 7);
+          // everything after the [quote] tag, but before the [/quote] tag.
+          $between_tags = substr($message, $start_index + 7, $curr_pos - $start_index - 7);
 
-					// everything after the [/quote] tag.
-					$after_end_tag = substr($message, $curr_pos + 8);
+          // everything after the [/quote] tag.
+          $after_end_tag = substr($message, $curr_pos + 8);
 
-					$message = $before_start_tag . "<!-- BBCode Quote Start --><div class=\"bbs_quote\"><b>Quote:</b><div class=\"bbs_quote_body\">";
-					$message .= $between_tags . "</div></div><!-- BBCode Quote End -->";
-					$message .= $after_end_tag;
-					
-					// Now.. we've screwed up the indices by changing the length of the string. 
-					// So, if there's anything in the stack, we want to resume searching just after it.
-					// otherwise, we go back to the start.
-					if (sizeof($stack) > 0)
-					{
-						$curr_pos = array_pop($stack);
-						array_push($stack, $curr_pos);
-						++$curr_pos;
-					}
-					else
-					{
-						$curr_pos = 0;
-					}
-				}
-				else
-				{
-					// No matching start tag found. Increment pos, keep going.
-					++$curr_pos;	
-				}
-			}
-			else
-			{
-				// No starting tag or ending tag.. Increment pos, keep looping.,
-				++$curr_pos;	
-			}
-		}
-	} // while
-	
-	return $message;
-	
+          $message = $before_start_tag . "<!-- BBCode Quote Start --><div class=\"bbs_quote\"><b>Quote:</b><div class=\"bbs_quote_body\">";
+          $message .= $between_tags . "</div></div><!-- BBCode Quote End -->";
+          $message .= $after_end_tag;
+          
+          // Now.. we've screwed up the indices by changing the length of the string. 
+          // So, if there's anything in the stack, we want to resume searching just after it.
+          // otherwise, we go back to the start.
+          if (sizeof($stack) > 0)
+          {
+            $curr_pos = array_pop($stack);
+            array_push($stack, $curr_pos);
+            ++$curr_pos;
+          }
+          else
+          {
+            $curr_pos = 0;
+          }
+        }
+        else
+        {
+          // No matching start tag found. Increment pos, keep going.
+          ++$curr_pos;  
+        }
+      }
+      else
+      {
+        // No starting tag or ending tag.. Increment pos, keep looping.,
+        ++$curr_pos;  
+      }
+    }
+  } // while
+  
+  return $message;
+  
 } // bbencode_quote()
 
  
