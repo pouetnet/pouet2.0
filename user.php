@@ -586,7 +586,7 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->comments as $c)
       {
         $p = $c->prod;
-        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "isok");
+        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "");
         echo "<li class='blogprod'>";
         echo $p->RenderTypeIcons();
         echo $p->RenderPlatformIcons();
