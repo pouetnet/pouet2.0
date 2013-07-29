@@ -11,7 +11,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
     $this->title = ""; // set later
   }
   
-  function LoadFromDB() {
+  function Load( $cached ) {
     $s = new SQLSelect();
     $s->AddTable("buttons");
     $s->AddOrder("rand()");
