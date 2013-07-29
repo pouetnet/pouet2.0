@@ -1,7 +1,7 @@
 <?
 include_once("bootstrap.inc.php");
 
-$r = SQLLib::selectRows(sprintf_esc("select name,type,party_year from prods where name like '%%%s%%' order by views desc limit 10",$_GET["search"]));
+$r = SQLLib::selectRows(sprintf_esc("select name,type,party_year from prods where name like '%%%s%%' order by views desc limit 10",_like($_GET["search"])));
 $res[0] = $_GET["what"];
 foreach($r as $o)
 {
