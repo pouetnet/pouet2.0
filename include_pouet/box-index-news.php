@@ -3,7 +3,7 @@ include_once("include_generic/sqllib.inc.php");
 include_once("include_pouet/pouet-box.php");
 include_once("include_pouet/pouet-prod.php");
 
-class PouetBoxNews extends PouetBoxCachable {
+class PouetBoxNews extends PouetBox {
   var $data;
   var $prod;
   var $link;
@@ -12,7 +12,7 @@ class PouetBoxNews extends PouetBoxCachable {
   var $timestamp;
   function PouetBoxNews() {
     parent::__construct();
-    $this->uniqueID = "pouetbox_news";
+    $this->uniqueID = "pouetbox_newsbox";
     $this->title = "news box";
   }
 
@@ -23,7 +23,50 @@ class PouetBoxNews extends PouetBoxCachable {
     echo " <div class='foot'>lobstregated at <a href='http://www.bitfellas.org/'>BitFellas.org</a> on ".($this->timestamp)."</div>\n";
     echo "</div>\n";
   }
+};
 
+class PouetBoxNewsBoxes extends PouetBoxCachable 
+{
+  function PouetBoxNewsBoxes() 
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_news";
+    $this->rss = new lastRSS(); 
+    $this->rss->cache_dir = './cache'; 
+    $this->rss->cache_time = 5*60; // in seconds
+    $this->rss->CDATA = 'strip'; 
+    $this->rss->date_format = 'Y-m-d'; 
+  }
+  
+  function LoadFromDB()
+  {
+    $this->rssBitfellasNews = $this->rss->get('http://bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
+  }
+
+  function LoadFromCachedData($data) {
+    $this->rssBitfellasNews = unserialize($data);
+  }
+
+  function GetCacheableData() {
+    return serialize($this->rssBitfellasNews);
+  }  
+
+  function Render() 
+  {
+    if (!$this->rssBitfellasNews) {
+    	printf('Error: Unable to open BitFeed!');
+    } else {
+      $p = new PouetBoxNews();
+      for($i=0; $i < get_setting("indexojnews"); $i++) 
+      {
+        $p->content = $this->rssBitfellasNews['items'][$i]['description'];
+        $p->title = $this->rssBitfellasNews['items'][$i]['title'];
+        $p->link = $this->rssBitfellasNews['items'][$i]['link'];
+        $p->timestamp = $this->rssBitfellasNews['items'][$i]['pubDate'];
+        $p->Render();
+      }
+    }
+  }
 };
 
 ?>

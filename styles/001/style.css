@@ -338,7 +338,7 @@ td.date {
   background-position:2px 2px;
 }
 
-.pouetbox_news h3 {
+.pouetbox_newsbox h3 {
   padding: 3px;
   border: 0px;
   margin: 1px;
@@ -352,7 +352,7 @@ td.date {
 
   font-size: 100%;
 }
-.pouetbox_news .foot {
+.pouetbox_newsbox .foot {
   font-weight: normal;
 }
 #pouetbox_stats .stat {
@@ -363,7 +363,7 @@ td.date {
   margin-left: 40px;
   /*clear: both;*/
 }
-.pouetbox_news .content p {
+.pouetbox_newsbox .content p {
   margin-top: 10px;
   margin-bottom: 10px;
 }

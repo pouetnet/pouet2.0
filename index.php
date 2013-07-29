@@ -20,148 +20,50 @@ include_once("include_pouet/box-index-oneliner-latest.php");
 include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
 
-// setup transparent cache
-$rss = new lastRSS(); 
-$rss->cache_dir = './cache'; 
-$rss->cache_time = 5*60; // in seconds
-$rss->CDATA = 'strip'; 
-$rss->date_format = 'Y-m-d'; 
-$rss->itemtags[] = "demopartynet:title";
-$rss->itemtags[] = "demopartynet:startDate";
-$rss->itemtags[] = "demopartynet:endDate";
-
-$rssBitfellasNews = $rss->get('http://bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
-$rssDemopartyUpcoming = $rss->get('http://feeds.demoparty.net/demoparty/parties');
+// the way it's done like this is so that later
+// we can allow the user to customize/reorder/etc it.
+$boxes = array(
+  "leftbar" => array(
+    array("box"=>"Login"),
+    array("box"=>"CDC"),
+    array("box"=>"LatestAdded"),
+    array("box"=>"LatestReleased"),
+    array("box"=>"TopMonth"),
+    array("box"=>"TopAlltime"),
+  ),
+  "middlebar" => array(
+    array("box"=>"LatestOneliner"),
+    array("box"=>"LatestBBS"),
+    array("box"=>"NewsBoxes"),
+  ),
+  "rightbar" => array(
+    array("box"=>"SearchBox"),
+    array("box"=>"Stats"),
+    array("box"=>"AffilButton"),
+    array("box"=>"LatestComments"),
+    array("box"=>"LatestParties"),
+    array("box"=>"UpcomingParties"),
+    array("box"=>"TopGlops"), 
+  ),
+);
 
 echo "<div id='content' class='frontpage'>\n";
-echo "  <div id='leftbar'>\n";
 
-$st = microtime_float();
-
-$p = new PouetBoxLogin();
-$p->Render();
-
-if (get_setting("indexcdc"))
+foreach($boxes as $bar=>$boxlist)
 {
-  $p = new PouetBoxCDC();
-  $p->Load(true);
-  $p->Render();
-}
-  
-if (get_setting("indexlatestadded"))
-{
-  $p = new PouetBoxLatestAdded();
-  $p->Load(true);
-  $p->Render();
-}
-  
-if (get_setting("indexlatestreleased"))
-{
-  $p = new PouetBoxLatestReleased();
-  $p->Load(true);
-  $p->Render();
-}
-  
-if (get_setting("indextopprods"))
-{
-  $p = new PouetBoxTopMonth();
-  $p->Load(true);
-  $p->Render();
-}
-  
-if (get_setting("indextopkeops"))
-{
-  $p = new PouetBoxTopAlltime();
-  $p->Load(true);
-  $p->Render();
-}
-
-printf("<!-- presentation of left bar took %f-->\n",microtime_float() - $st);
-
-echo "  </div>\n";
-
-
-echo "  <div id='middlebar'>\n";
-
-if (get_setting("indexoneliner"))
-{
-  $p = new PouetBoxLatestOneliner();
-  $p->Load(true);
-  $p->Render();
-}
-
-if (get_setting("indexbbstopics"))
-{
-  $p = new PouetBoxLatestBBS();
-  $p->Load(true);
-  $p->Render();
-}
-
-
-if (!$rssBitfellasNews) {
-	printf('Error: Unable to open BitFeed!');
-} else {
-  $p = new PouetBoxNews();
-  for($i=0; $i < get_setting("indexojnews"); $i++) 
+  $st = microtime_float();
+  echo "  <div id='"._html($bar)."'>\n";
+  foreach($boxlist as $box)
   {
-    $p->content = $rssBitfellasNews['items'][$i]['description'];
-    $p->title = $rssBitfellasNews['items'][$i]['title'];
-    $p->link = $rssBitfellasNews['items'][$i]['link'];
-    $p->timestamp = $rssBitfellasNews['items'][$i]['pubDate'];
+    $class = "PouetBox".$box["box"];
+    $p = new $class();
+    $p->Load(true);
     $p->Render();
   }
+  echo "  </div>\n";
+  printf("<!-- presentation of %s took %f-->\n",$bar,microtime_float() - $st);
 }
 
-echo "  </div>\n";
-
-echo "  <div id='rightbar'>\n";
-
-if (get_setting("indexsearch"))
-{
-  $p = new PouetBoxSearchBox();
-  $p->Render();
-}
-
-if (get_setting("indexstats"))
-{
-  $p = new PouetBoxStats();
-  $p->Load(true);
-  $p->Render();
-}
-
-if (get_setting("indexlinks"))
-{
-  $p = new PouetBoxAffilButton();
-  $p->Load();
-  $p->Render();
-}
-
-if (get_setting("indexlatestcomments"))
-{
-  $p = new PouetBoxLatestComments();
-  $p->Load(true);
-  $p->Render();
-}
-
-if (get_setting("indexlatestparties"))
-{
-  $p = new PouetBoxLatestParties();
-  $p->Load(true);
-  $p->Render();
-}
-
-$p = new PouetBoxUpcomingParties( $rssDemopartyUpcoming );
-$p->Load(true);
-$p->Render();
-
-if (get_setting("indextopglops"))
-{
-  $p = new PouetBoxTopGlops();
-  $p->Load(true);
-  $p->Render();
-}
-
-echo "  </div>\n";
 echo "</div>\n";
 
 include("include_pouet/menu.inc.php");
