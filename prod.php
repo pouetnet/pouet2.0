@@ -263,10 +263,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       echo "<img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."\n";
     }
-    if ($this->prod->rank)
-    {
-      printf("<div id='alltimerank'>alltime top: #%d</div>",$this->prod->rank);
-    }
+    printf("<div id='alltimerank'>alltime top: #%s</div>",$this->prod->rank ? (int)$this->prod->rank : "n/a");
   }
   function RenderThumbs() { 
     echo "<ul>\n";
