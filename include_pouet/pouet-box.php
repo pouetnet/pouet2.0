@@ -127,6 +127,9 @@ class PouetBoxCachable extends PouetBox {
     $this->LoadFromDB();
     $this->SaveToCache();
   }
+  function SetParameters($data)
+  {
+  }
   function Load($cached=false) {
     global $timer;
     $timer[$this->uniqueID." load"]["start"] = microtime_float();

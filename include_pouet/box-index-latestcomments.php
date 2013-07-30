@@ -10,6 +10,8 @@ class PouetBoxLatestComments extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
     $this->title = "latest comments added";
+
+    $this->limit = 5;
   }
 
   function LoadFromCachedData($data) {
@@ -18,6 +20,11 @@ class PouetBoxLatestComments extends PouetBoxCachable {
 
   function GetCacheableData() {
     return serialize($this->data);
+  }
+
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
   function LoadFromDB() {
@@ -51,7 +58,7 @@ class PouetBoxLatestComments extends PouetBoxCachable {
         echo "</span>\n";
       }
       echo "</li>\n";
-      if (++$n == get_setting("indexlatestcomments")) break;
+      if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }

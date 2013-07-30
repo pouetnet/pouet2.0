@@ -12,7 +12,9 @@ class PouetBoxLogin extends PouetBox {
     $this->uniqueID = "pouetbox_login";
     $this->title = "login";
   }
-
+  function SetParameters($data)
+  {
+  }
   function RenderBody() {
     if (!get_login_id()) 
     {

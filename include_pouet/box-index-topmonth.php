@@ -10,6 +10,8 @@ class PouetBoxTopMonth extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_topmonth";
     $this->title = "top of the month";
+
+    $this->limit = 10;
   }
 
   function LoadFromCachedData($data) {
@@ -18,6 +20,10 @@ class PouetBoxTopMonth extends PouetBoxCachable {
 
   function GetCacheableData() {
     return serialize($this->data);
+  }
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
   function LoadFromDB() {
@@ -36,7 +42,7 @@ class PouetBoxTopMonth extends PouetBoxCachable {
       echo "<li>\n";
       $p->RenderAsEntry();
       echo "</li>\n";
-      if (++$n == get_setting("indextopprods")) break;
+      if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }

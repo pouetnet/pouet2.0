@@ -10,6 +10,8 @@ class PouetBoxTopAlltime extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_topalltime";
     $this->title = "all-time top";
+
+    $this->limit = 10;
   }
 
   function LoadFromCachedData($data) {
@@ -18,6 +20,10 @@ class PouetBoxTopAlltime extends PouetBoxCachable {
 
   function GetCacheableData() {
     return serialize($this->data);
+  }
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
   function LoadFromDB() {
@@ -35,7 +41,7 @@ class PouetBoxTopAlltime extends PouetBoxCachable {
       echo "<li>\n";
       $p->RenderAsEntry();
       echo "</li>\n";
-      if (++$n == get_setting("indextopkeops")) break;
+      if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }

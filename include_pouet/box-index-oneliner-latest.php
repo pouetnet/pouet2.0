@@ -10,6 +10,8 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestoneliner";
     $this->title = "the so famous pouët.net oneliner";
+
+    $this->limit = 5;
   }
 
   function Validate($post) 
@@ -46,6 +48,10 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
   function GetCacheableData() {
     return serialize($this->data);
   }
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
+  }
   
   function LoadFromDB() {
     $s = new BM_query();
@@ -60,7 +66,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
   function RenderBody() {
     echo "<ul class='boxlist'>\n";
-    $data = array_slice($this->data,-1 * get_setting("indexoneliner"),NULL,true);
+    $data = array_slice($this->data,-1 * $this->limit,NULL,true);
     foreach ($data as $r) {
       if (!$r->user) continue;
       echo "<li>\n";

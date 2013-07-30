@@ -10,6 +10,8 @@ class PouetBoxTopGlops extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_topglops";
     $this->title = "top of the glöps";
+
+    $this->limit = 10;
   }
 
   function LoadFromCachedData($data) {
@@ -18,6 +20,10 @@ class PouetBoxTopGlops extends PouetBoxCachable {
 
   function GetCacheableData() {
     return serialize($this->data);
+  }
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
   function LoadFromDB() {
@@ -36,7 +42,7 @@ class PouetBoxTopGlops extends PouetBoxCachable {
       echo "<span class='prod'>".$p->PrintLinkedName()."</span>\n";
       echo "<span class='group'>:: ".$p->glops." glöps</span>\n";
       echo "</li>\n";
-      if (++$n == get_setting("indextopglops")) break;
+      if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }

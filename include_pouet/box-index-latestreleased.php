@@ -6,6 +6,8 @@ class PouetBoxLatestReleased extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestreleased";
     $this->title = "latest released prods";
+
+    $this->limit = 5;
   }
 
   function LoadFromCachedData($data) {
@@ -14,6 +16,11 @@ class PouetBoxLatestReleased extends PouetBoxCachable {
 
   function GetCacheableData() {
     return serialize($this->data);
+  }
+
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
   function LoadFromDB() {
@@ -40,7 +47,7 @@ class PouetBoxLatestReleased extends PouetBoxCachable {
         echo "</span>\n";
       }
       echo "</li>\n";
-      if (++$n == get_setting("indexlatestreleased")) break;
+      if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }
