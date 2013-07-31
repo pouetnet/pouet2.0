@@ -162,8 +162,10 @@ document.observe("dom:loaded",function(){
       sel.selectedIndex = sel.options.length - 1;
   });
   sel.observe("change",function(){
-    if (sel.selectedIndex == 0) return;
-    location.href = "bbs.php?category=" + sel.options[ sel.selectedIndex ].value;
+    if (sel.selectedIndex == 0) 
+      location.href = "bbs.php";
+    else
+      location.href = "bbs.php?category=" + sel.options[ sel.selectedIndex ].value;
   });
 });
 //-->
