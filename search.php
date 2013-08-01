@@ -549,11 +549,8 @@ foreach($_GET as $k=>$v)
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
 if ($_GET["what"] && $_GET["type"])
 {
-  preg_match_all('/([^\s"]+)|"([^\s"]*)"/',$_GET["what"],$m);
-  $terms = array();
-  foreach($m[0] as $k=>$v)
-    $terms[] = $m[1][$k] ? $m[1][$k] : $m[2][$k];
-
+  $terms = split_search_terms( $_GET["what"] );
+ 
   switch($_GET["type"])
   {
     case "bbs":

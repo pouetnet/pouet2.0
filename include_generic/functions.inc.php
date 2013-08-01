@@ -173,6 +173,16 @@ function rootRelativePath()
   return substr($path,strlen(POUET_ROOT_URL));
 }
 
+function split_search_terms( $str )
+{
+  preg_match_all('/([^\s"]+)|"([^"]*)"/',$str,$m);
+  $terms = array();
+  foreach($m[0] as $k=>$v)
+    $terms[] = $m[1][$k] ? $m[1][$k] : $m[2][$k];
+  return $terms;
+}
+///////////////////////////////////////////////////////////////////////////////
+
 function _html( $s )
 {
   return htmlspecialchars($s,ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5,"utf-8");
