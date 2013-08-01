@@ -34,14 +34,6 @@ Autocompleter = Class.create({
         $$(".autocompleteList").invoke("hide");
         instance.showAutocomplete("");
       });
-      document.body.observe("click",function(e){
-        if ( e.findElement(".autocompleteDropbutton") != instance.dropButton
-          && e.findElement(".autocompleteSearch") != instance.searchBox
-          && e.findElement(".autocompleteList") != instance.autoCompleteList)
-          {
-            instance.autoCompleteList.hide();
-          }
-      });
       parent.insert( this.dropButton );
     }
 
@@ -56,9 +48,21 @@ Autocompleter = Class.create({
     this.keyboardSelection = -1;
     this.lastSearch = "";
     
-    //this.searchBox.observe("blur",function(){
-    //  instance.autoCompleteList.hide();
-    //})
+    // we use this to hide the list if the user clicks on something else.
+    // we have to use this because the "blur" event fires before the "click",
+    // and we won't be able to use the click to find out what we clicked if
+    // we hide the list.
+    document.body.observe("click",function(e){
+      if ( !instance.checkIfElementIsOurs( e ) )
+      {
+        instance.autoCompleteList.hide();
+      }
+    });
+    this.searchBox.observe("focus",function(){
+      if (instance.searchBox.value.length >= 1)
+        instance.showAutocomplete( instance.searchBox.value );
+    });
+    
     this.searchBox.observe("keydown",function(e){
       var items = instance.autoCompleteList.select("li");
       if (e.keyCode == Event.KEY_UP)
@@ -151,6 +155,13 @@ Autocompleter = Class.create({
         this.finalSelection.hide();
       this.searchBox.show();
     }
+  },
+  checkIfElementIsOurs: function(ev)
+  {
+    if (this.dropButton && ev.findElement(".autocompleteDropbutton") == this.dropButton) return true;
+    if (ev.findElement(".autocompleteSearch") == this.searchBox) return true;
+    if (ev.findElement(".autocompleteList") == this.autoCompleteList) return true;
+    return false;
   },
   select: function( id, name )
   {
