@@ -75,8 +75,23 @@ class PouetBoxAdmin extends PouetBox {
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "<h2>i'm gonna wreck it !</h2>\n";
     echo "<ul class='boxlist'>\n";
-    echo "  <li><form method='post'>flush front page cache: <input name='recacheFrontPage' type='submit' value='submit'/></form></li>\n";
-    echo "  <li><form method='post'>recalculate top demo list: <input name='recacheTopDemos' type='submit' value='submit'/></form></li>\n";
+    $actions = array(
+      "recacheFrontPage" => "flush front page cache",
+      "recacheTopDemos" => "recalculate top demo list",
+    );
+    foreach($actions as $k=>$v)
+    {
+      echo "  <li>";
+      echo "<form method='post'>";
+
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+
+      echo _html($v).": ";
+      echo "<input name='".$k."' type='submit' value='submit'/>";
+      echo "</form>";
+      echo "</li>\n";
+    }
     echo "</ul>\n";
     echo "</div>\n";
   }
@@ -92,11 +107,15 @@ echo "<div id='content'>\n";
 $content = "";
 if ($_POST)
 {
-  foreach($_POST as $k=>$v)
+  $csrf = new CSRFProtect();
+  if ($csrf->ValidateToken())
   {
-    $func = "pouetAdmin_".$k;
-    if (function_exists($func))
-      $content .= $func();
+    foreach($_POST as $k=>$v)
+    {
+      $func = "pouetAdmin_".$k;
+      if (function_exists($func))
+        $content .= $func();
+    }
   }
 }
 
