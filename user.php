@@ -119,7 +119,7 @@ class PouetBoxUserMain extends PouetBox
     $s = "";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo " <h2>";
-    echo "<img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."'/> ";
+    echo "<img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."' alt='avatar'/> ";
     echo "<span>"._html($this->user->nickname)."</span> information";
 
     if ($currentUser && $currentUser->IsAdministrator())
@@ -343,7 +343,7 @@ class PouetBoxUserMain extends PouetBox
   function RenderBody() {
     $s = "";
     echo "<div class='content'>\n";
-    echo "<div class='bigavatar'><img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."'/></div>\n";
+    echo "<div class='bigavatar'><img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."' alt='big avatar'/></div>\n";
     echo "<ul id='userdata'>\n";
 
     echo "<li class='header'>general:</li>\n";

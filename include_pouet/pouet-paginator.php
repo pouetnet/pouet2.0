@@ -33,7 +33,7 @@ class PouetPaginator
       echo "  <div class='nextpage'><a href='".$this->url["path"]."?"._html(http_build_query( array_merge($this->query,array("page"=>$this->page + 1)) ))."'>next page</a></div>\n";
     echo "  <div class='selector'>";
     
-    echo "  <form action='".$url["path"]."' method='get'>\n";
+    echo "  <form action='".$this->url["path"]."' method='get'>\n";
     foreach($this->query as $k=>$v)
       echo "  <input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
     echo "   go to page <select name='page'>\n";

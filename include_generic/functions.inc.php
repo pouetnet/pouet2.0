@@ -19,17 +19,17 @@ function better_wordwrap($str,$cols,$cut){
 	$str_len = mb_strlen($str,$encoding);
 	$segment_width = 0;
 
-	for ($i=1 ; $i<=$str_len ; $i++){
-		if ($str[$i] == $tag_open) {
+	for ($i=0; $i<=$str_len; $i++){
+		if ($str{$i} == $tag_open) {
 			$in_tag++;
-		} elseif ($str[$i] == $tag_close) {
+		} elseif ($str{$i} == $tag_close) {
 			if ($in_tag > 0) {
 				$in_tag--;
 				$segment_width = 0;
 			}
 		} else {
 			if ($in_tag == 0) {
-				if($str[$i] != ' ') {
+				if($str{$i} != ' ') {
 					$segment_width++;
 					if ($segment_width > $cols) {
 						 $str = mb_substr($str,0,$i,$encoding).$cut.mb_substr($str,$i,$str_len,$encoding);

@@ -55,5 +55,5 @@ if (get_setting("logos"))
 
 <div id="beta">
   <p>pou&euml;t 2.0 beta - read the <a href="faq.htm">testing FAQ</a>.</p>
-  <p><a href="http://www.pouet.net/<?=rootRelativePath()?>">old version</a></p>
+  <p><a href="http://www.pouet.net/<?=_html(rootRelativePath())?>">old version</a></p>
 </div>

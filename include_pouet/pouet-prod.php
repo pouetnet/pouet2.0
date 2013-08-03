@@ -148,14 +148,14 @@ class PouetProd extends BM_Class {
     return strtolower(date("F Y",strtotime($this->quand)));
   }
   function RenderAsEntry() {
-    echo "<div class='prodentry'>";
+    echo "<span class='prodentry'>";
     if (get_setting("indextype"))
       echo $this->RenderTypeIcons();
     if (get_setting("indexplatform"))
       echo $this->RenderPlatformIcons();
     echo "<span class='prod'>".$this->RenderLinkTruncated()."</span>\n";
     echo "<span class='group'>".$this->RenderGroupsShort()."</span>\n";
-    echo "</div>";
+    echo "</span>";
   }
 };
 
