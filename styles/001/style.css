@@ -996,7 +996,7 @@ td.date {
 	margin-top: .5em;
 	margin-bottom: .5em;
 }
-.bbs_quote_body, .bbs_code pre  {
+.bbs_quote blockquote, .bbs_code pre  {
 /*	width: 85%; -- unsure why this was here */
 	border: 1px solid #8ac;
 	background-color: #579;

@@ -8,13 +8,15 @@
  *
  * Note: This function assumes the first character of $message is a space, which is added by 
  * bbencode().
+ *
+ * modified and patched up by gargaj - still far from optimal!
  */
-function bbencode_quote($message)
+function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
 {
   // First things first: If there aren't any "[quote]" strings in the message, we don't
   // need to process it at all.
   
-  if (strpos(strtolower($message), "[quote]")===false)
+  if (strpos(strtolower($message), "[".$tag."]")===false)
   {
     return $message;  
   }
@@ -32,14 +34,14 @@ function bbencode_quote($message)
       // check if it's a starting or ending quote tag.
       $possible_start = substr($message, $curr_pos, 7);
       $possible_end = substr($message, $curr_pos, 8);
-      if (strcasecmp("[quote]", $possible_start) == 0)
+      if (strcasecmp("[".$tag."]", $possible_start) == 0)
       {
         // We have a starting quote tag.
         // Push its position on to the stack, and then keep going to the right.
         array_push($stack, $curr_pos);
         ++$curr_pos;
       }
-      else if (strcasecmp("[/quote]", $possible_end) == 0)
+      else if (strcasecmp("[/".$tag."]", $possible_end) == 0)
       {
         // We have an ending quote tag.
         // Check if we've already found a matching starting tag.
@@ -58,8 +60,8 @@ function bbencode_quote($message)
           // everything after the [/quote] tag.
           $after_end_tag = substr($message, $curr_pos + 8);
 
-          $message = $before_start_tag . "<!-- BBCode Quote Start --><div class=\"bbs_quote\"><b>Quote:</b><div class=\"bbs_quote_body\">";
-          $message .= $between_tags . "</div></div><!-- BBCode Quote End -->";
+          $message = $before_start_tag . $openCode;
+          $message .= $between_tags . $closeCode;
           $message .= $after_end_tag;
           
           // Now.. we've screwed up the indices by changing the length of the string. 
@@ -92,16 +94,15 @@ function bbencode_quote($message)
   
   return $message;
   
-} // bbencode_quote()
-
+}
  
 function bbencode( $text )
 {
   $text = preg_replace("/\[b\](.*?)\[\/b\]/s","<b>$1</b>",$text);
   $text = preg_replace("/\[i\](.*?)\[\/i\]/s","<i>$1</i>",$text);
   $text = preg_replace("/\[u\](.*?)\[\/u\]/s","<u>$1</u>",$text);
-  $text = bbencode_quote($text);
-  $text = preg_replace("/\[code\](.*?)\[\/code\]/s","<div class=\"bbs_code\"><b>Code:</b><pre>$1</pre></div>",$text);
+  $text = bbencode_parse_tag($text,"quote","<div class=\"bbs_quote\"><b>Quote:</b><blockquote>","</blockquote></div>");
+  $text = bbencode_parse_tag($text,"code","<div class=\"bbs_code\"><b>Code:</b><pre>","</pre></div>");
   $text = preg_replace("/\[list\](.*?)\[\/list\]/s","<ul>$1</ul>",$text);
   $text = preg_replace("/\[list=(.*?)\](.*?)\[\/list\]/s","<ol type='$1'>$2</ol>",$text);
   $text = preg_replace("/\[\*\](.*)[\r\n]/","<li>$1</li>",$text);
