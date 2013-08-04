@@ -24,7 +24,7 @@ class PouetBoxProdNfo extends PouetBox {
   {
     echo "\n\n";
     echo "<div class='pouettbl asciiviewer' id='".$this->uniqueID."'>\n";
-    echo " <h2><big>"._html($this->prod->name)."</big>";
+    echo " <h2><big>".$this->prod->RenderLink()."</big>";
     if ($this->prod->groups)
       echo " by ".$this->prod->RenderGroupsLong();
     echo "</h2>\n";

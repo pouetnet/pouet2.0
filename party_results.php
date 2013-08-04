@@ -16,7 +16,7 @@ class PouetBoxPartyResults extends PouetBox {
   {
     echo "\n\n";
     echo "<div class='pouettbl asciiviewer' id='".$this->uniqueID."'>\n";
-    echo " <h2><big>"._html($this->title)."</big></h2>\n";
+    echo " <h2><big>".$this->party->PrintLinked( $_GET["when"] )." results"."</big></h2>\n";
   }
   function RenderContent() 
   {
