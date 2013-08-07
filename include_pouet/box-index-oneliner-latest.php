@@ -109,7 +109,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "if garfield was a criminal, we would purchase him until afghanistan.";
       //$funnytext = "crashes indeed.. but wow! NOOON..";
       //$funnytext = "time is to unicode on the onliner";
-      $funnytext = "pouët 2.0: where \xF0\x9F\x92\xA9 now works in the oneliner";
+      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";
       
       
       echo "  <div class='foot loggedin'>\n";
