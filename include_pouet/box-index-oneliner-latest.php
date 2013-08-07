@@ -111,6 +111,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "time is to unicode on the onliner";
       $funnytext = "pouët 2.0: where \xF0\x9F\x92\xA9 now works in the oneliner";
       
+      
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";      
       echo "   <form action='add.php' method='post'>\n";
@@ -119,6 +120,8 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       $csrf->PrintToken();
 
       echo "    <input type='hidden' name='type' value='oneliner'>\n";
+
+      // we dont use placeholder="" because we want people to be able to post the default nonsense
       echo "    <input type='text' name='message' value='"._html($funnytext)."' size='50' id='onelinermsg'/>\n";
       echo "    <input type='submit' value='Submit'/>\n";
       echo "   </form>\n";
