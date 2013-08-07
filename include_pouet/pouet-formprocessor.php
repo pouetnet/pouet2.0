@@ -86,7 +86,7 @@ class PouetFormProcessor
 
         printf("  <input type='hidden' name='%s' value='%s'/>\n",self::fieldName,_html($key));
         $object->Render();
-        printf("</form>");
+        printf("</form>\n\n\n");
       }
     }
   }

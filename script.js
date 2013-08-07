@@ -169,13 +169,13 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             options.onRowLoad($(tr));
           tr.down("input[type='submit']").observe("click",function(ev){
             ev.stop();
-            var invalidFields = tr.select("input,select").filter(function(item){ return item.validity && !item.validity.valid; });
+            var invalidFields = tr.up("form").select("input,select").filter(function(item){ return item.validity && !item.validity.valid; });
             if (invalidFields.length > 0)
             {
               alert("There are invalid values in the following fields: " + invalidFields.collect(function(i){ return i.name}).join(", ") );
               return;
             }
-            var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
+            var opt = Form.serializeElements( tr.up("form").select("input,select"), {hash:true} );
             opt["partial"] = true;
             opt["formProcessorAction"] = formAction;
             new Ajax.Request( tr.up("form").action, {
@@ -228,13 +228,13 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             options.onRowLoad($(tr));
           tr.down("input[type='submit']").observe("click",function(ev){
             ev.stop();
-            var invalidFields = tr.select("input,select").filter(function(item){ return item.validity && !item.validity.valid; });
+            var invalidFields = tr.up("form").select("input,select").filter(function(item){ return item.validity && !item.validity.valid; });
             if (invalidFields.length > 0)
             {
               alert("There are invalid values in the following fields: " + invalidFields.collect(function(i){ return i.name}).join(", ") );
               return;
             }
-            var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
+            var opt = Form.serializeElements( tr.up("form").select("input,select"), {hash:true} );
             opt["partial"] = true;
             opt["formProcessorAction"] = formAction;
             new Ajax.Request( tr.up("form").action, {
