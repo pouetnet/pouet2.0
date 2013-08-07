@@ -108,7 +108,8 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "NO THURSDAY ARRIVALS!";
       //$funnytext = "if garfield was a criminal, we would purchase him until afghanistan.";
       //$funnytext = "crashes indeed.. but wow! NOOON..";
-      $funnytext = "time is to unicode on the onliner";
+      //$funnytext = "time is to unicode on the onliner";
+      $funnytext = "pouët 2.0: where \xF0\x9F\x92\xA9 now works in the oneliner";
       
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";      
