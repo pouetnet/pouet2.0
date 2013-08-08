@@ -9,9 +9,10 @@ class PouetBoxButtons extends PouetBox {
 
   function LoadFromDB()
   {
-    $this->buttons = SQLLib::SelectRows("select * from buttons where dead = 0 order by type, rand()");
+    // Get all the buttons ordered by type of buttons, randomly within each type
+    $this->buttons = SQLLib::SelectRows("SELECT type, url, img, alt FROM buttons WHERE dead = 0 ORDER BY type ASC, RAND()");
   }
-  function Render() 
+  function Render()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
