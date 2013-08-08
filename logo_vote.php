@@ -17,6 +17,8 @@ class PouetBoxLogoVote extends PouetBox {
   function RenderFooter() {
     echo "  <div class='foot'>";
     echo "    <form action='".$_SERVER["REQUEST_URI"]."' method='post'>";
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
     echo "      <input name='logoID' type='hidden' value='".(int)$this->logo->id."'/>";
     echo "      <input name='submit' type='submit' value='rulez'/>";
     echo "      <input name='submit' type='submit' value='sucks'/>";
@@ -69,8 +71,9 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
   $vote = 0;
   if ($_POST["submit"] == "rulez") $vote = 1;
   if ($_POST["submit"] == "sucks") $vote = -1;
-  
-  if ($vote)
+
+  $csrf = new CSRFProtect();
+  if ($vote && $csrf->ValidateToken())
   {
     $a = array();
     $a["logo"] = (int)$_POST["logoID"];
