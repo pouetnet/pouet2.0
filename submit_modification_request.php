@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-modalmessage.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-modalmessage.php");
 
 class PouetBoxModificationRequest extends PouetBox 
 {
@@ -138,8 +138,8 @@ class PouetBoxModificationRequest extends PouetBox
 
 $TITLE = "submit a modification request";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -186,14 +186,14 @@ document.observe("dom:loaded",function(){
 }
 else
 {
-  include_once("include_pouet/box-login.php");
+  require_once("include_pouet/box-login.php");
   $box = new PouetBoxLogin();
   $box->Render();
 }
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

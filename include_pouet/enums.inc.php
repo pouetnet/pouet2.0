@@ -1,5 +1,5 @@
 <?
-include_once("platforms.inc.php");
+require_once("platforms.inc.php");
 
 $AFFILIATIONS_ORIGINAL = array(
   "remix" => "remixed in",

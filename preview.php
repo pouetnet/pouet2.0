@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxPreview extends PouetBox {
   function PouetBoxPreview() {
@@ -16,7 +16,7 @@ class PouetBoxPreview extends PouetBox {
 
 $TITLE = "post preview";
 
-include("include_pouet/header.bare.php");
+require_once("include_pouet/header.bare.php");
 
 echo "<div id='content'>\n";
 
@@ -25,5 +25,5 @@ $box->Render();
 
 echo "</div>\n";
 
-include("include_pouet/footer.bare.php");
+require_once("include_pouet/footer.bare.php");
 ?>

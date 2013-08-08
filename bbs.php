@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-open.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-open.php");
 
 class PouetBoxBBSTopicList extends PouetBox 
 {
@@ -188,8 +188,8 @@ if ($p->page > 1)
   $TITLE .= " :: page ".(int)$p->page;
 
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='bbs.php' method='get'>\n";
@@ -205,6 +205,6 @@ if($q) $q->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

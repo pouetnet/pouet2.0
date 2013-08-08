@@ -1,10 +1,10 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-modalmessage.php");
-include_once("include_pouet/box-index-oneliner-latest.php");
-include_once("include_pouet/box-bbs-post.php");
-include_once("include_pouet/box-prod-post.php");
-include_once("include_pouet/box-bbs-open.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-modalmessage.php");
+require_once("include_pouet/box-index-oneliner-latest.php");
+require_once("include_pouet/box-bbs-post.php");
+require_once("include_pouet/box-prod-post.php");
+require_once("include_pouet/box-bbs-open.php");
 
 $errormessage = "";
 
@@ -82,11 +82,11 @@ if ($box) {
   $message->message = "not implemented!";
 }
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo $message->Render();
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

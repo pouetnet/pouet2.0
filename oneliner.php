@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-post.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-post.php");
 
 $POSTS_PER_PAGE = 25;
 
@@ -65,13 +65,13 @@ $p->Load();
 
 $TITLE = "oneliner";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo $p->Render();
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

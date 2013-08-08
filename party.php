@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxPartyHeader extends PouetBox 
 {
@@ -272,8 +272,8 @@ $h->Load();
 $TITLE = $p->party->name." ".$p->year;
 
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -282,6 +282,6 @@ if($p) $p->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

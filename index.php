@@ -1,24 +1,24 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-login.php");
-include_once("include_pouet/box-index-bbs-latest.php");
-include_once("include_pouet/box-index-cdc.php");
-include_once("include_pouet/box-index-latestadded.php");
-include_once("include_pouet/box-index-latestreleased.php");
-include_once("include_pouet/box-index-latestcomments.php");
-include_once("include_pouet/box-index-latestparties.php");
-include_once("include_pouet/box-index-upcomingparties.php");
-include_once("include_pouet/box-index-topmonth.php");
-include_once("include_pouet/box-index-topalltime.php");
-include_once("include_pouet/box-index-news.php");
-include_once("include_pouet/box-index-searchbox.php");
-include_once("include_pouet/box-index-affilbutton.php");
-include_once("include_pouet/box-index-stats.php");
-include_once("include_pouet/box-index-user-topglops.php");
-include_once("include_pouet/box-index-oneliner-latest.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-login.php");
+require_once("include_pouet/box-index-bbs-latest.php");
+require_once("include_pouet/box-index-cdc.php");
+require_once("include_pouet/box-index-latestadded.php");
+require_once("include_pouet/box-index-latestreleased.php");
+require_once("include_pouet/box-index-latestcomments.php");
+require_once("include_pouet/box-index-latestparties.php");
+require_once("include_pouet/box-index-upcomingparties.php");
+require_once("include_pouet/box-index-topmonth.php");
+require_once("include_pouet/box-index-topalltime.php");
+require_once("include_pouet/box-index-news.php");
+require_once("include_pouet/box-index-searchbox.php");
+require_once("include_pouet/box-index-affilbutton.php");
+require_once("include_pouet/box-index-stats.php");
+require_once("include_pouet/box-index-user-topglops.php");
+require_once("include_pouet/box-index-oneliner-latest.php");
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 // the reason this is done like this is so that later
 // we can allow the user to customize/reorder/etc it.
@@ -69,6 +69,6 @@ foreach($boxes as $bar=>$boxlist)
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxGloperatorLog extends PouetBox {
   function PouetBoxGloperatorLog() {
@@ -61,8 +61,8 @@ class PouetBoxGloperatorLog extends PouetBox {
 
 $TITLE = "glöperator log";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -72,7 +72,7 @@ $box->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

@@ -1,10 +1,10 @@
 <?
-include_once("bootstrap.inc.php");
-//include_once("include_pouet/box-prod-comments.php");
-//include_once("include_pouet/box-prod-main.php");
-//include_once("include_pouet/box-prod-popularityhelper.php");
-//include_once("include_pouet/box-prod-submitchanges.php");
-include_once("include_pouet/box-prod-post.php");
+require_once("bootstrap.inc.php");
+//require_once("include_pouet/box-prod-comments.php");
+//require_once("include_pouet/box-prod-main.php");
+//require_once("include_pouet/box-prod-popularityhelper.php");
+//require_once("include_pouet/box-prod-submitchanges.php");
+require_once("include_pouet/box-prod-post.php");
 
 class PouetBoxProdMain extends PouetBox {
   var $id;
@@ -510,8 +510,8 @@ $main->Load();
 if ($main->prod)
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "  <div id='prodpagecontainer'>\n";
@@ -550,6 +550,6 @@ else
 echo "  </div>\n";
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

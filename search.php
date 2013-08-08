@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxSearchBoxMain extends PouetBox 
 {
@@ -533,8 +533,8 @@ $TITLE = "search";
 if ($_GET["what"])
   $TITLE .= ": ".$_GET["what"];
   
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 $p = new PouetBoxSearchBoxMain();
 echo "<div id='content'>\n";
@@ -583,6 +583,6 @@ if ($_GET["what"] && $_GET["type"])
 echo "</form>\n";
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

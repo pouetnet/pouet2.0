@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxBoardNfo extends PouetBox {
   function PouetBoxBoardNfo() {
@@ -82,8 +82,8 @@ $box->Load();
 if ($box->nfo)
   $TITLE = $box->nfo->name;
   
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -91,7 +91,7 @@ $box->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

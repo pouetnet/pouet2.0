@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxProdNfo extends PouetBox {
   function PouetBoxProdNfo() {
@@ -81,8 +81,8 @@ $box->Load();
 if ($box->prod)
   $TITLE = $box->prod->name.($box->prod->groups ? " by ".$box->prod->RenderGroupsPlain() : "")." :: nfo";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -90,7 +90,7 @@ $box->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

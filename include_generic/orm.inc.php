@@ -1,6 +1,6 @@
 <?php
 //require_once("credentials.php");
-include_once("sqllib.inc.php");
+require_once("sqllib.inc.php");
 
 $BM_ORM_CLASSES = array();
 

@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxProdlist extends PouetBox 
 {
@@ -222,8 +222,8 @@ if ($p->page > 1)
   $TITLE .= " :: page ".(int)$p->page;
 
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require_once("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='prodlist.php' method='get'>\n";
@@ -237,6 +237,6 @@ if($p) $p->Render();
 echo "</form>\n";
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require_once("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>
