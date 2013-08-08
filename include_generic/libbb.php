@@ -21,6 +21,8 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
     return $message;  
   }
   
+  $tagLen = strlen($tag);
+  
   $stack = Array();
   $curr_pos = 0;
   while ($curr_pos!==false && ($curr_pos < strlen($message)))
@@ -32,8 +34,8 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
     {
       // We found a [. It starts at $curr_pos.
       // check if it's a starting or ending quote tag.
-      $possible_start = substr($message, $curr_pos, 7);
-      $possible_end = substr($message, $curr_pos, 8);
+      $possible_start = substr($message, $curr_pos, 2 + $tagLen);
+      $possible_end = substr($message, $curr_pos, 3 + $tagLen);
       if (strcasecmp("[".$tag."]", $possible_start) == 0)
       {
         // We have a starting quote tag.
@@ -55,10 +57,10 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
           $before_start_tag = substr($message, 0, $start_index);
 
           // everything after the [quote] tag, but before the [/quote] tag.
-          $between_tags = substr($message, $start_index + 7, $curr_pos - $start_index - 7);
+          $between_tags = substr($message, $start_index + 2 + $tagLen, $curr_pos - $start_index - (2 + $tagLen));
 
           // everything after the [/quote] tag.
-          $after_end_tag = substr($message, $curr_pos + 8);
+          $after_end_tag = substr($message, $curr_pos + 3 + $tagLen);
 
           $message = $before_start_tag . $openCode;
           $message .= $between_tags . $closeCode;
@@ -101,8 +103,8 @@ function bbencode( $text )
   $text = preg_replace("/\[b\](.*?)\[\/b\]/s","<b>$1</b>",$text);
   $text = preg_replace("/\[i\](.*?)\[\/i\]/s","<i>$1</i>",$text);
   $text = preg_replace("/\[u\](.*?)\[\/u\]/s","<u>$1</u>",$text);
-  $text = bbencode_parse_tag($text,"quote","<div class=\"bbs_quote\"><b>Quote:</b><blockquote>","</blockquote></div>");
-  $text = bbencode_parse_tag($text,"code","<div class=\"bbs_code\"><b>Code:</b><pre>","</pre></div>");
+  $text = bbencode_parse_tag($text,"quote","<section class=\"bbs_quote\"><b>Quote:</b><blockquote>","</blockquote></section>");
+  $text = bbencode_parse_tag($text,"code","<section class=\"bbs_code\"><b>Code:</b><pre>","</pre></section>");
   $text = preg_replace("/\[list\](.*?)\[\/list\]/s","<ul>$1</ul>",$text);
   $text = preg_replace("/\[list=(.*?)\](.*?)\[\/list\]/s","<ol type='$1'>$2</ol>",$text);
   $text = preg_replace("/\[\*\](.*)[\r\n]/","<li>$1</li>",$text);

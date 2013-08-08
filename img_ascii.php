@@ -1,4 +1,8 @@
 <?
+/*
+ * ASCII to PNG renderer code (c) Rez / Eclipse ^ Razor 1911 (http://rez.chiptune.com)
+ */
+ 
 include_once("include_generic/credentials.inc.php");
 include_once("include_generic/functions.inc.php");
 
