@@ -33,7 +33,7 @@ function pouetAdmin_recacheTopDemos()
   $content .= "<li>".$i." prod views loaded</li>\n";
 
   $i=0;
-  // Get the list of prod IDs order by the sum of their comment ratings
+  // Get the list of prod IDs ordered by the sum of their comment ratings
   $query  = 'SELECT prods.id';
   $query .= ' FROM prods';
   $query .= ' JOIN comments ON prods.id = comments.which';
