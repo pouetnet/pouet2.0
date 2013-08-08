@@ -534,7 +534,7 @@ if ($_GET["what"])
   $TITLE .= ": ".$_GET["what"];
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 $p = new PouetBoxSearchBoxMain();
 echo "<div id='content'>\n";
@@ -583,6 +583,6 @@ if ($_GET["what"] && $_GET["type"])
 echo "</form>\n";
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

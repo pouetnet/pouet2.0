@@ -83,7 +83,7 @@ if ($box->nfo)
   $TITLE = $box->nfo->name;
   
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -91,7 +91,7 @@ $box->Render();
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 
 ?>

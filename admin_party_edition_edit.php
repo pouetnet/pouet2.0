@@ -85,7 +85,7 @@ if ($currentUser && $currentUser->CanEditItems())
 $TITLE = sprintf("edit a party edition: %s %04d",$box->party->name,$box->year);
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -102,7 +102,7 @@ else
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 
 ?>

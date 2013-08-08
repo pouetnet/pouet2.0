@@ -856,7 +856,7 @@ if ($currentUser && $currentUser->CanEditItems())
 $TITLE = "edit a prod: ".$box->prod->name;
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -888,7 +888,7 @@ else
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 
 ?>

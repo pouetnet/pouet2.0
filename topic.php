@@ -117,7 +117,7 @@ $q = new PouetBoxBBSPost($topicid);
 $TITLE = $p->topic->topic;
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 if ($p->topic)
@@ -165,6 +165,6 @@ else
 }
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

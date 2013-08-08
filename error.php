@@ -15,10 +15,10 @@ $message->title = "An error has occured:";
 $message->message = $_GET["e"];
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo $message->Render();
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

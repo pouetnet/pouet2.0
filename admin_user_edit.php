@@ -173,7 +173,7 @@ if ($currentUser && $currentUser->IsAdministrator())
 $TITLE = "edit this user: ".$box->user->nickname;
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -190,7 +190,7 @@ else
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 
 ?>

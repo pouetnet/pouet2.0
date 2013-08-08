@@ -139,7 +139,7 @@ class PouetBoxModificationRequest extends PouetBox
 $TITLE = "submit a modification request";
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -193,7 +193,7 @@ else
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 
 ?>

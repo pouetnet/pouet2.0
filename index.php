@@ -18,7 +18,7 @@ require_once("include_pouet/box-index-user-topglops.php");
 require_once("include_pouet/box-index-oneliner-latest.php");
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 // the reason this is done like this is so that later
 // we can allow the user to customize/reorder/etc it.
@@ -69,6 +69,6 @@ foreach($boxes as $bar=>$boxlist)
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

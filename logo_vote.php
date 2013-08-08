@@ -111,7 +111,7 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
 $TITLE = "vote for logos !";
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -201,6 +201,6 @@ else
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

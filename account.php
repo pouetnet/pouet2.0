@@ -555,7 +555,7 @@ if ($_POST)
 $TITLE = "account!";
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='account.php' method='post'>\n";
@@ -614,6 +614,6 @@ document.observe("dom:loaded",function(){
 </script>
 <?
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

@@ -189,7 +189,7 @@ if ($p->page > 1)
 
 
 require_once("include_pouet/header.php");
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='bbs.php' method='get'>\n";
@@ -205,6 +205,6 @@ if($q) $q->Render();
 
 echo "</div>\n";
 
-require_once("include_pouet/menu.inc.php");
+require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>
