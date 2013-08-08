@@ -130,14 +130,21 @@ Autocompleter = Class.create({
     
     if (this.originalElement.value.length > 0)
     {
-      new Ajax.Request(options.dataUrl,{
-        method: "post",
-        parameters: $H({"id":this.originalElement.value}).toQueryString(),
-        onSuccess: function(transport) 
-        {
-          instance.select( transport.responseJSON[0].id, transport.responseJSON[0].name );
-        },
-      });
+      if (this.options.keyValue)
+      {
+        new Ajax.Request(options.dataUrl,{
+          method: "post",
+          parameters: $H({"id":this.originalElement.value}).toQueryString(),
+          onSuccess: function(transport) 
+          {
+            instance.select( transport.responseJSON[0].id, transport.responseJSON[0].name );
+          },
+        });
+      }
+      else
+      {
+        this.searchBox.value = this.originalElement.value;
+      }      
     }
   },
   selectListItem: function(li)
