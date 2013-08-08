@@ -64,7 +64,7 @@ if ($box) {
   {
     $message->classes[] = "errorbox";
     $message->message = "who are you and where did you come from ?";
-  } 
+  }
   else
   {
     $errormessage = $box->ParsePostMessage($_POST);

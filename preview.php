@@ -8,7 +8,7 @@ class PouetBoxPreview extends PouetBox {
     $this->title = "this is what marcellus wallace looks like";
   }
 
-  function RenderContent() 
+  function RenderContent()
   {
     echo parse_message( $_POST["message"] );
   }

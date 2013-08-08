@@ -2,11 +2,11 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-open.php");
 
-class PouetBoxBBSTopicList extends PouetBox 
+class PouetBoxBBSTopicList extends PouetBox
 {
   var $id;
   var $group;
-  
+
   function PouetBoxBBSTopicList() {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbslist";
@@ -15,7 +15,7 @@ class PouetBoxBBSTopicList extends PouetBox
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->categories = $m[1];
   }
-  
+
   function BuildURL( $param ) {
     $query = array_merge($_GET,$param);
     unset( $query["reverse"] );
@@ -26,9 +26,9 @@ class PouetBoxBBSTopicList extends PouetBox
   function LoadFromDB() {
     $s = new SQLSelect();
 
-    $perPage = get_setting("bbsbbstopics");  
+    $perPage = get_setting("bbsbbstopics");
     $this->page = (int)max( 1, (int)$_GET["page"] );
-    
+
     $s = new BM_query();
     $s->AddField("bbs_topics.id as id");
     $s->AddField("bbs_topics.lastpost as lastpost");
@@ -37,9 +37,9 @@ class PouetBoxBBSTopicList extends PouetBox
     $s->AddField("bbs_topics.count as count");
     $s->AddField("bbs_topics.category as category");
     $s->AddTable("bbs_topics");
-    $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));    
-    $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));    
-    
+    $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));
+    $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));
+
 
     $dir = "DESC";
     if ($_GET["reverse"])
@@ -58,11 +58,11 @@ class PouetBoxBBSTopicList extends PouetBox
     }
     $s->AddOrder("bbs_topics.lastpost ".$dir);
     $s->SetLimit( $perPage, (int)(($this->page - 1) * $perPage) );
-    
+
     if ($_GET["category"])
       $s->AddWhere(sprintf_esc("category='%s'",$_GET["category"]));
     //echo $s->GetQuery();
-    
+
     $this->topics = $s->performWithCalcRows( $this->count );
     //PouetCollectPlatforms($this->prods);
 
@@ -85,7 +85,7 @@ class PouetBoxBBSTopicList extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th id='th_%s'><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $key,$this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text); 
+        $key,$this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -94,7 +94,7 @@ class PouetBoxBBSTopicList extends PouetBox
 
     foreach ($this->topics as $p) {
       echo "<tr>\n";
-      
+
       echo " <td>";
       echo $p->firstpost;
       echo "</td>\n";
@@ -105,7 +105,7 @@ class PouetBoxBBSTopicList extends PouetBox
       echo "</td>\n";
 
       echo " <td>"._html($p->category)."</td>\n";
-      
+
       echo " <td class='topic'>";
       echo "<a href='topic.php?which=".(int)$p->id."'>"._html($p->topic)."</a>";
       echo "</td>\n";
@@ -115,7 +115,7 @@ class PouetBoxBBSTopicList extends PouetBox
       echo " <td title='"._html(dateDiffReadable(time(),$p->lastpost))." ago'>";
       echo $p->lastpost;
       echo "</td>\n";
-      
+
       echo " <td>";
       echo $p->lastuser->PrintLinkedAvatar()." ";
       echo $p->lastuser->PrintLinkedName();
@@ -123,18 +123,18 @@ class PouetBoxBBSTopicList extends PouetBox
 
       echo "</tr>\n";
     }
-    
-    $perPage = get_setting("bbsbbstopics");  
-    
+
+    $perPage = get_setting("bbsbbstopics");
+
     echo "<tr>\n";
     echo "<td class='nav' colspan=".(count($headers)).">\n";
-    
+
     $this->page = ((int)$_GET["page"] ? $_GET["page"] : 1);
     if ($this->page > 1)
       echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
       echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
-    
+
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
       printf("    <option value='%d'%s>%d</option>\n",$x,$x==$this->page?" selected='selected'":"",$x);
@@ -152,9 +152,9 @@ foreach($this->categories as $v) echo "'"._js($v)."',";
 document.observe("dom:loaded",function(){
   var sel = new Element("select",{"id":"categoryFilter"});
   $("th_category").insert(sel);
-  
+
   var q = location.href.toQueryParams();
-  
+
   sel.add( new Option("-- filter to","") );
   threadCategories.each(function(item){
     sel.add( new Option(item,item) );
@@ -162,7 +162,7 @@ document.observe("dom:loaded",function(){
       sel.selectedIndex = sel.options.length - 1;
   });
   sel.observe("change",function(){
-    if (sel.selectedIndex == 0) 
+    if (sel.selectedIndex == 0)
       location.href = "bbs.php";
     else
       location.href = "bbs.php?category=" + sel.options[ sel.selectedIndex ].value;

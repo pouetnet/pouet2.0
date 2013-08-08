@@ -1,17 +1,17 @@
 <?
 require_once("bootstrap.inc.php");
 
-class PouetBoxGroupMain extends PouetBox 
+class PouetBoxGroupMain extends PouetBox
 {
   var $id;
   var $group;
-  
+
   function PouetBoxGroupMain($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_groupmain";
     $this->id = (int)$id;
   }
-  
+
   function BuildURL( $param ) {
     $query = array_merge($_GET,$param);
     unset( $query["reverse"] );
@@ -21,11 +21,11 @@ class PouetBoxGroupMain extends PouetBox
   }
   function LoadFromDB() {
     $s = new SQLSelect();
-    
+
     $this->group = PouetGroup::Spawn($this->id);
-    
+
     // not to boast or anything, but this is fucking beautiful.
-    
+
     $sub = new SQLSelect();
     $sub->AddField("comments.quand");
     $sub->AddField("comments.who");
@@ -34,7 +34,7 @@ class PouetBoxGroupMain extends PouetBox
     $sub->AddJoin("left","prods","prods.id = comments.which");
     $sub->AddOrder("comments.quand desc");
     $sub->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
-    
+
     $s = new BM_Query("prods");
     $s->AddField("cmts.quand as lastcomment");
     $s->AddJoin("left","(select quand,who,which from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
@@ -65,10 +65,10 @@ class PouetBoxGroupMain extends PouetBox
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
-    
+
     echo "<table id='pouetbox_groupmain' class='boxtable pagedtable'>\n";
     echo "<tr>\n";
     echo "<th colspan='9' id='groupname'>\n";
@@ -84,14 +84,14 @@ class PouetBoxGroupMain extends PouetBox
       echo sprintf(" [<a href='http://zxdemo.org/author.php?id=%d'>zxdemo</a>]",$this->group->zxdemo);
 
     printf(" [<a href='gloperator_log.php?which=%d&amp;what=group'>glöplog</a>]\n",$this->group->id);
-      
+
     if ($currentUser && $currentUser->CanEditItems())
     {
       printf("<div id='adminlinks'>");
       printf("[<a href='admin_group_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
       printf("</div>");
     }
-      
+
     echo "</th>\n";
     echo "</tr>\n";
 
@@ -107,12 +107,12 @@ class PouetBoxGroupMain extends PouetBox
       "views"=>"popularity",
       "latestcomment"=>"last comment",
     );
-    
+
     echo "<tr class='sortable'>\n";
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text); 
+        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
       if ($key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -122,7 +122,7 @@ class PouetBoxGroupMain extends PouetBox
 /*
     foreach($headers as $key=>$text)
     {
-      $out = sprintf("<th><a id='%s' href='groups.php?which=%d&amp;order=%s'>%s</a></th>\n","sort_".$key,$this->id,$key,$text); 
+      $out = sprintf("<th><a id='%s' href='groups.php?which=%d&amp;order=%s'>%s</a></th>\n","sort_".$key,$this->id,$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
       if ($key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -132,7 +132,7 @@ class PouetBoxGroupMain extends PouetBox
 
     foreach ($this->prods as $p) {
       echo "<tr>\n";
-      
+
       echo "<td>\n";
       echo $p->RenderTypeIcons();
       echo $p->RenderPlatformIcons();
@@ -147,7 +147,7 @@ class PouetBoxGroupMain extends PouetBox
       }
       echo $p->RenderAwards();
       echo "</td>\n";
-      
+
       echo "<td>\n";
       if ($p->placings)
         echo $p->placings[0]->PrintResult($p->year);
@@ -166,10 +166,10 @@ class PouetBoxGroupMain extends PouetBox
 
       $pop = (int)($p->views * 100 / $this->maxviews);
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
-      
+
       if ($p->user)
         echo "<td>".$p->lastcomment." ".$p->user->PrintLinkedAvatar()."</td>\n";
-      else 
+      else
         echo "<td> </td>";
 
       echo "</tr>\n";
@@ -182,19 +182,19 @@ class PouetBoxGroupMain extends PouetBox
   }
 };
 
-class PouetBoxGroupList extends PouetBox 
+class PouetBoxGroupList extends PouetBox
 {
   var $letter;
   function PouetBoxGroupList($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_grouplist";
-    
+
     $letter = substr($letter,0,1);
     if (preg_match("/^[a-z]$/",$letter))
       $this->letter = $letter;
     else
       $this->letter = "#";
-    
+
     $a = array();
     $a[] = "<a href='groups.php?pattern=%23'>#</a>";
     for($x=ord("a");$x<=ord("z");$x++)
@@ -203,14 +203,14 @@ class PouetBoxGroupList extends PouetBox
     $this->letterselect = "[ ".implode(" |\n",$a)." ]";
   }
 
-  function RenderHeader() 
+  function RenderHeader()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
   }
 
-  function RenderFooter() 
+  function RenderFooter()
   {
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
     echo "</div>\n";
@@ -228,16 +228,16 @@ class PouetBoxGroupList extends PouetBox
     {
       $ids = array();
       foreach($this->groups as $group) $ids[] = $group->id;
-      
+
       $idstr = implode(",",$ids);
-  
+
       $prods = SQLLib::selectRows(sprintf("select id,name,type,group1,group2,group3 from prods where (group1 in (%s)) or (group2 in (%s)) or (group3 in (%s))",$idstr,$idstr,$idstr));
       foreach($prods as $prod)
       {
         if ($prod->group1) $this->prods[$prod->group1][$prod->id] = $prod;
         if ($prod->group2) $this->prods[$prod->group2][$prod->id] = $prod;
         if ($prod->group3) $this->prods[$prod->group3][$prod->id] = $prod;
-      }    
+      }
     }
 
   }
@@ -276,13 +276,13 @@ class PouetBoxGroupList extends PouetBox
 $groupID = (int)$_GET["which"];
 
 $p = null;
-if (!$groupID) 
+if (!$groupID)
 {
   $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
   $p = new PouetBoxGroupList($pattern);
   $p->Load();
   $TITLE = "groups: ".$p->letter;
-} 
+}
 else
 {
   $p = new PouetBoxGroupMain($groupID);
