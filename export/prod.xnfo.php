@@ -1,5 +1,5 @@
 <?
-include_once("../bootstrap.inc.php");
+require_once("../bootstrap.inc.php");
 
 header("Content-type: application/xml; charset=utf-8");
 //header("Content-type: text/plain; charset=utf-8");

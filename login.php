@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/pouet-user.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/pouet-user.php");
 
 $csrf = new CSRFProtect();
 if (!$csrf->ValidateToken())

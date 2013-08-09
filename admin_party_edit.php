@@ -1,7 +1,7 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-modalmessage.php");
-include_once("include_pouet/box-party-submit.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-modalmessage.php");
+require_once("include_pouet/box-party-submit.php");
 
 if ($currentUser && !$currentUser->CanEditItems())
 {
@@ -56,8 +56,8 @@ if ($currentUser && $currentUser->CanEditItems())
 
 $TITLE = "edit a party: ".$box->party->name;
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -67,14 +67,14 @@ if (get_login_id())
 }
 else
 {
-  include_once("include_pouet/box-login.php");
+  require_once("include_pouet/box-login.php");
   $box = new PouetBoxLogin();
   $box->Render();
 }
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

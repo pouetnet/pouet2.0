@@ -1,8 +1,8 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_generic/recaptchalib.php");
-include_once("include_pouet/box-modalmessage.php");
-include_once("include_pouet/default_usersettings.php");
+require_once("bootstrap.inc.php");
+require_once("include_generic/recaptchalib.php");
+require_once("include_pouet/box-modalmessage.php");
+require_once("include_pouet/default_usersettings.php");
 
 $avatars = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
 
@@ -554,8 +554,8 @@ if ($_POST)
 }
 $TITLE = "account!";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='account.php' method='post'>\n";
@@ -614,6 +614,6 @@ document.observe("dom:loaded",function(){
 </script>
 <?
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

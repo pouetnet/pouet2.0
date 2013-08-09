@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-post.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-post.php");
 
 $POSTS_PER_PAGE = 25;
 
@@ -13,7 +13,7 @@ class PouetBoxOnelinerView extends PouetBox {
 
   function LoadFromDB() {
     global $POSTS_PER_PAGE;
-    
+
     $s = new SQLSelect();
     $s->AddField("count(*) as c");
     $s->AddTable("oneliner");
@@ -22,9 +22,9 @@ class PouetBoxOnelinerView extends PouetBox {
     $s = new BM_Query();
     $s->AddTable("oneliner");
     $s->AddField("oneliner.message");
-    $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));    
+    $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
-    
+
     $this->paginator = new PouetPaginator();
     $this->paginator->SetData( "oneliner.php", $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
@@ -65,13 +65,13 @@ $p->Load();
 
 $TITLE = "oneliner";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo $p->Render();
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>
