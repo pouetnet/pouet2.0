@@ -1278,7 +1278,7 @@ input[type="url"] {
   font-weight:bold;
 }
 
-#row_platform select, #row_type select {
+#row_platform select[multiple], #row_type select[multiple] {
   height: 150px;
 }
 
@@ -1513,4 +1513,10 @@ input.autocompleteSearch {
 
 .logovote .content {
   background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
+}
+
+#pouetbox_toplist .selector {
+  padding: 4px;
+  background: #224488;
+  margin: 1px;
 }

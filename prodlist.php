@@ -28,14 +28,14 @@ class PouetBoxProdlist extends PouetBox
     //$s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
     //$s->AddOrder("prods.date DESC, prods.quand DESC");
 
-    if ($_GET["type"])
+    if (is_array($_GET["type"]))
     {
       $cond = array();
       foreach($_GET["type"] as $type)
         $cond[] = sprintf_esc("FIND_IN_SET('%s',prods.type)",$type);
       $s->AddWhere(implode(" OR ",$cond));
     }
-    if ($_GET["platform"])
+    if (is_array($_GET["platform"]))
     {
       global $PLATFORMS;
       $platforms = array();

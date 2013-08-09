@@ -46,7 +46,7 @@ class PouetBoxTopAlltime extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='prodlist.php?order=added'>more</a>...</div>\n";
+    echo "  <div class='foot'><a href='toplist.php'>more</a>...</div>\n";
     echo "</div>\n";
   }
 };

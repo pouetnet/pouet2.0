@@ -43,15 +43,17 @@ class PouetBox {
   function RenderHeader() {
     echo "\n\n";
     echo "<div class='pouettbl".($this->classes?(" ".implode(" ",$this->classes)):"")."' id='".$this->uniqueID."'>\n";
+    $this->RenderTitle();
+  }
+
+  function RenderTitle() {
     echo " <h2>".$this->title."</h2>\n";
-    return $s;
   }
   
   function RenderBody() {
     echo " <div class='content'>\n";
     $this->RenderContent();
     echo " </div>\n";
-    return $s;
   }
 
   function RenderContent() { // override
