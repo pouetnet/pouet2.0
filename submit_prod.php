@@ -1,7 +1,7 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-modalmessage.php");
-include_once("include_pouet/box-prod-submit.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-modalmessage.php");
+require_once("include_pouet/box-prod-submit.php");
 
 if ($currentUser && !$currentUser->CanSubmitItems())
 {
@@ -20,8 +20,8 @@ $form->Add( "prod", new PouetBoxSubmitProd() );
 if ($currentUser && $currentUser->CanSubmitItems())
   $form->Process();
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -41,14 +41,14 @@ document.observe("dom:loaded",function(){
 }
 else
 {
-  include_once("include_pouet/box-login.php");
+  require_once("include_pouet/box-login.php");
   $box = new PouetBoxLogin();
   $box->Render();
 }
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

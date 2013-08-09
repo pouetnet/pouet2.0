@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-post.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-post.php");
 
 class PouetBoxMirrors extends PouetBox {
   function PouetBoxMirrors() {
@@ -74,14 +74,14 @@ $p->Load();
 
 $TITLE = $p->title;
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 if ($p->prod)
   echo $p->Render();
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

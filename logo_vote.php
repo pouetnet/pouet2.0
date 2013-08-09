@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-post.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-post.php");
 
 class PouetBoxLogoVote extends PouetBox {
   function PouetBoxLogoVote($logo) {
@@ -110,8 +110,8 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
 
 $TITLE = "vote for logos !";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -193,7 +193,7 @@ document.observe("dom:loaded",function(){
 }
 else
 {
-  include_once("include_pouet/box-login.php");
+  require_once("include_pouet/box-login.php");
   $box = new PouetBoxLogin();
   $box->Render();
 }
@@ -201,6 +201,6 @@ else
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

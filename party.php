@@ -1,18 +1,18 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
-class PouetBoxPartyHeader extends PouetBox 
+class PouetBoxPartyHeader extends PouetBox
 {
   function PouetBoxPartyHeader( $partyView ) {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyheader";
-    
+
     $this->party = $partyView->party;
     $this->year = $partyView->year;
 
     $this->title = _html($this->party->name." ".$this->year);
   }
-  
+
   function LoadFromDB()
   {
     $this->partylinks = SQLLib::selectRow(sprintf("SELECT * FROM `partylinks` WHERE party = %d and year = %d",$this->party->id,$this->year));
@@ -26,11 +26,11 @@ class PouetBoxPartyHeader extends PouetBox
     foreach($rows as $v)
       $this->years[$v->invitationyear] = true;
   }
-  
-  function RenderContent() 
+
+  function RenderContent()
   {
     global $currentUser;
-    
+
     if ($this->party->web)
       printf("[<a href='%s'>web</a>]\n",_html($this->party->web));
     if(file_exists($this->party->GetResultsLocalFileName($this->year)))
@@ -47,32 +47,32 @@ class PouetBoxPartyHeader extends PouetBox
       echo " [<a href='http://www.slengpung.com/?eventid=".(int)$this->partylinks->slengpung."'>slengpung</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+slengpung</a>]\n",$this->party->id,$this->year);
-      
+
     if($this->partylinks->csdb)
       echo " [<a href='http://csdb.dk/event/?id=".(int)$this->partylinks->csdb."'>csdb</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+csdb</a>]\n",$this->party->id,$this->year);
-      
+
     if($this->partylinks->zxdemo)
       echo " [<a href='http://zxdemo.org/party.php?id=".(int)$this->partylinks->zxdemo."'>zxdemo</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
-      
+
     if($this->partylinks->artcity)
       echo " [<a href='http://artcity.bitfellas.org/index.php?a=search&type=tag&text=".rawurlencode($this->partylinks->artcity)."'>artcity</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+artcity</a>]\n",$this->party->id,$this->year);
-      
+
     if ($currentUser && $currentUser->CanEditItems())
     {
       printf(" [<a href='admin_party_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->party->id);
       printf(" [<a href='admin_party_edition_edit.php?which=%d&amp;when=%d' class='adminlink'>edit year</a>]\n",$this->party->id,$this->year);
     }
     printf(" [<a href='gloperator_log.php?which=%d&amp;what=party'>glöplog</a>]\n",$this->party->id);
-      
+
   }
 
-  function RenderFooter() 
+  function RenderFooter()
   {
     $y = array();
     foreach($this->years as $v=>$dummy)
@@ -83,13 +83,13 @@ class PouetBoxPartyHeader extends PouetBox
   }
 };
 
-class PouetBoxPartyView extends PouetBox 
+class PouetBoxPartyView extends PouetBox
 {
   function PouetBoxPartyView() {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyview";
   }
-  
+
   function LoadFromDB() {
     $this->party = PouetParty::spawn($_GET["which"]);
     if (!$this->party) return;
@@ -103,12 +103,12 @@ class PouetBoxPartyView extends PouetBox
       $r = SQLLib::selectRow(sprintf_esc("select party_year from prods where party = %d order by rand() limit 1",$_GET["which"]));
       $this->year = $r->party_year;
     }
-    
+
     if ($this->year < 100)
     {
       $this->year += ($this->year < 50 ? 2000 : 1900);
     }
-    
+
     $this->prods = array();
     $s = new BM_Query("prods");
     $s->AddWhere( sprintf_esc("(prods.party = %d AND prods.party_year = %d) or (prodotherparty.party = %d AND prodotherparty.party_year = %d)",$this->party->id,$this->year,$this->party->id,$this->year) );
@@ -142,12 +142,12 @@ class PouetBoxPartyView extends PouetBox
       case "thumbdown": $s->AddOrder("prods.votedown ".$dir); break;
       case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
       case "views": $s->AddOrder("prods.views ".$dir); break;
-      default: 
+      default:
       {
         $s->AddOrder( "COALESCE(prodotherparty.partycompo ,prods.partycompo)" );
         $s->AddOrder( "COALESCE(prodotherparty.party_place,prods.party_place)" );
         $this->sortByCompo = true;
-        
+
         // include invitations on top
         $inv = new BM_Query("prods");
         $inv->AddWhere( sprintf_esc("(prods.invitation = %d AND prods.invitationyear = %d)",$this->party->id,$this->year,$this->party->id,$this->year) );
@@ -158,7 +158,7 @@ class PouetBoxPartyView extends PouetBox
           $v->partycompo = "invit";
           unset($v->placings);
         }
-        
+
         $this->prods = array_merge( $this->prods, $prods );
       } break;
     }
@@ -177,8 +177,8 @@ class PouetBoxPartyView extends PouetBox
       $query["reverse"] = 1;
     return _html("party.php?" . http_build_query($query));
   }
-  
-  function Render() 
+
+  function Render()
   {
     echo "<table id='".$this->uniqueID."' class='boxtable'>\n";
 
@@ -199,7 +199,7 @@ class PouetBoxPartyView extends PouetBox
       "avg"=>"avg",
       "views"=>"popularity",
     );
-    
+
     $lastCompo = "*";
     $headerDone = false;
     foreach($this->prods as $p)
@@ -210,7 +210,7 @@ class PouetBoxPartyView extends PouetBox
         foreach($headers as $key=>$text)
         {
           $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-            $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text); 
+            $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
           if ($key == "compo" && $this->sortByCompo) $out = "<th>".$p->partycompo."</th>";
@@ -234,7 +234,7 @@ class PouetBoxPartyView extends PouetBox
         echo "by ".$p->RenderGroupsLong()."\n";
       echo $p->RenderAwards();
       echo "</td>\n";
-      
+
       echo "<td class='votes'>".$p->voteup."</td>\n";
       echo "<td class='votes'>".$p->votepig."</td>\n";
       echo "<td class='votes'>".$p->votedown."</td>\n";
@@ -246,7 +246,7 @@ class PouetBoxPartyView extends PouetBox
 
       $pop = (int)($p->views * 100 / $this->maxviews);
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
-      
+
       echo "</tr>\n";
     }
     echo "</table>\n";
@@ -272,8 +272,8 @@ $h->Load();
 $TITLE = $p->party->name." ".$p->year;
 
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -282,6 +282,6 @@ if($p) $p->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

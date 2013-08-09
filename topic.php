@@ -1,7 +1,7 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_pouet/box-bbs-post.php");
-include_once("include_pouet/box-modalmessage.php");
+require_once("bootstrap.inc.php");
+require_once("include_pouet/box-bbs-post.php");
+require_once("include_pouet/box-modalmessage.php");
 
 $POSTS_PER_PAGE = max(1,get_setting("topicposts"));
 
@@ -12,7 +12,7 @@ if ($_GET["post"]) // setting-independent post lookup
   {
     $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from bbs_posts, (SELECT @rowID:=0) as init where topic = %d",$topicID);
     $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
-    
+
     redirect(sprintf("topic.php?which=%d&page=%d#c%d",$topicID,(int)($row->rowID / $POSTS_PER_PAGE) + 1,$_GET["post"]));
     exit();
   }
@@ -33,13 +33,13 @@ class PouetBoxBBSView extends PouetBox {
 
   function LoadFromDB() {
     global $POSTS_PER_PAGE;
-    
+
     $s = new SQLSelect();
     $s->AddTable("bbs_topics");
     $s->AddWhere("bbs_topics.id=".$this->id);
     $this->topic = SQLLib::SelectRow($s->GetQuery());
     if(!$this->topic) return false;
-    
+
     $s = new SQLSelect();
     $s->AddField("count(*) as c");
     $s->AddTable("bbs_posts");
@@ -51,14 +51,14 @@ class PouetBoxBBSView extends PouetBox {
     $s->AddField("bbs_posts.id as id");
     $s->AddField("bbs_posts.post as post");
     $s->AddField("bbs_posts.added as added");
-    $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));    
+    $s->attach(array("bbs_posts"=>"author"),array("users as user"=>"id"));
     $s->AddWhere("bbs_posts.topic=".$this->id);
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
-    
+
     $this->paginator = new PouetPaginator();
     $this->paginator->SetData( "topic.php?which=".$this->id, $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
-    
+
     $this->posts = $s->perform();
 
     $this->title = _html($this->topic->topic);
@@ -76,10 +76,10 @@ class PouetBoxBBSView extends PouetBox {
       printf(" [<a href='admin_topic_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
     }
     printf(" [<a href='gloperator_log.php?which=%d&amp;what=topic'>glöplog</a>]\n",$this->id);
-    
-    
+
+
     echo "</div>\n";
-    
+
     if ($this->postcount > $POSTS_PER_PAGE) {
       echo $this->paginator->RenderNavbar();
     } else {
@@ -116,8 +116,8 @@ $q = new PouetBoxBBSPost($topicid);
 
 $TITLE = $p->topic->topic;
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 if ($p->topic)
@@ -157,14 +157,14 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?  
+<?
 }
-else 
+else
 {
   echo "bla bla bla topic missing bla";
 }
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

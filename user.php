@@ -1,6 +1,6 @@
 <?
-include_once("bootstrap.inc.php");
-include_once("include_generic/recaptchalib.php");
+require_once("bootstrap.inc.php");
+require_once("include_generic/recaptchalib.php");
 
 class PouetBoxUserMain extends PouetBox
 {
@@ -618,8 +618,8 @@ $p->Load();
 if ($p->user)
   $TITLE = $p->user->nickname;
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
@@ -634,6 +634,6 @@ else
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

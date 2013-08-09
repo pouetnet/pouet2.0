@@ -3,24 +3,24 @@ define(POUET_ROOT_LOCAL,dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
   
-include_once( POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
-include_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 
-include_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-party.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-party.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 
 $lifetime = 60 * 60 * 24 * 365;
 ini_set('session.cookie_lifetime', $lifetime);
@@ -58,7 +58,7 @@ $timer["page"]["start"] = microtime_float();
 
 if (!$_SESSION["settings"]) 
 {
-  include_once("include_pouet/default_usersettings.php"); 
+  require_once("include_pouet/default_usersettings.php"); 
   $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
 }
 ?>

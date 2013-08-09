@@ -1,5 +1,5 @@
 <?
-include_once("credentials.inc.php");
+require_once("credentials.inc.php");
 
 $SQLLIB_QUERIES = array();
 

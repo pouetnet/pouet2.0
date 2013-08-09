@@ -1,5 +1,5 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
 class PouetBoxSubmit extends PouetBox {
   function PouetBoxSubmit() {
@@ -33,14 +33,14 @@ class PouetBoxSubmit extends PouetBox {
 
 $TITLE = "submit";
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
 if (!get_login_id())
 {
-  include_once("include_pouet/box-login.php");
+  require_once("include_pouet/box-login.php");
   $box = new PouetBoxLogin();
   $box->Render();
 }
@@ -50,7 +50,7 @@ $box->Render();
 
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 
 ?>

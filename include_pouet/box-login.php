@@ -1,8 +1,8 @@
 <?
-include_once("include_generic/sqllib.inc.php");
-include_once("include_pouet/pouet-box.php");
-include_once("include_pouet/pouet-prod.php");
-include_once("include_pouet/pouet-user.php");
+require_once("include_generic/sqllib.inc.php");
+require_once("include_pouet/pouet-box.php");
+require_once("include_pouet/pouet-prod.php");
+require_once("include_pouet/pouet-user.php");
 
 class PouetBoxLogin extends PouetBox {
   var $data;
