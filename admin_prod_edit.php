@@ -289,6 +289,10 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
     echo "<td>";
     if ($row->id)
       echo "<input type='hidden' name='editSceneorgRecID' value='".$row->id."'/>";
+      
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+    
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
@@ -409,6 +413,10 @@ class PouetBoxAdminEditProdLinks extends PouetBox
     echo "<td>";
     if ($row->id)
       echo "<input type='hidden' name='editLinkID' value='".$row->id."'/>";
+
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
@@ -565,6 +573,10 @@ class PouetBoxAdminEditProdParties extends PouetBox
     echo "<td>";
     if ($row->id)
       echo "<input type='hidden' name='editPartyID' value='".$row->id."'/>";
+
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
@@ -709,6 +721,10 @@ class PouetBoxAdminEditProdAffil extends PouetBox
     echo "<td>";
     if ($row->id)
       echo "<input type='hidden' name='editRelationID' value='".$row->id."'/>";
+
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
