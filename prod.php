@@ -6,6 +6,25 @@ include_once("bootstrap.inc.php");
 //include_once("include_pouet/box-prod-submitchanges.php");
 include_once("include_pouet/box-prod-post.php");
 
+if ($_GET["post"]) // setting-independent post lookup
+{
+  $prodID = SQLLib::SelectRow(sprintf_esc("select which from comments where id = %d",$_GET["post"]))->which;
+  if ($prodID)
+  {
+    if (get_setting("prodcomments") <= 0)
+    {
+      redirect(sprintf("prod.php?which=%d#c%d",$prodID,$_GET["post"]));
+    }
+    else
+    {
+      $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from comments, (SELECT @rowID:=0) as init where which = %d",$prodID);
+      $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
+      redirect(sprintf("prod.php?which=%d&page=%d#c%d",$prodID,(int)($row->rowID / get_setting("prodcomments")) + 1,$_GET["post"]));
+    }
+    exit();
+  }
+}
+
 class PouetBoxProdMain extends PouetBox {
   var $id;
   var $data;
@@ -443,7 +462,7 @@ class PouetBoxProdComments extends PouetBox {
         unset($main->userCDCs[$c->user->id]);
       }
   
-      echo "added on the <a href='#c".$c->id."'>".$c->quand."</a> by ";
+      echo "added on the <a href='prod.php?post=".$c->id."'>".$c->quand."</a> by ";
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
       
       echo "</div>\n";
