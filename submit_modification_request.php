@@ -14,12 +14,12 @@ class PouetBoxModificationRequest extends PouetBox
     $this->fieldsRequestTypes = array(
       "prod_add_link" => "add a new extra link to a prod",
       "prod_change_link" => "change an existing extra link",
-      "prod_change_field" => "change basic info about a prod",
+      //"prod_change_field" => "change basic info about a prod",
       "prod_del" => "delete a prod",
     );
   }
   
-  function ParsePostMessage( $data )
+  function Validate( $data )
   {
     global $currentUser;
     
@@ -30,13 +30,12 @@ class PouetBoxModificationRequest extends PouetBox
   	  $errormessage[]="you need to be logged in first.";
   	  return $errormessage;
   	}
-  	
-  	if ($data["finalStep"]!=1)
-  	  return array();
     
-    if (count($errormessage))
-      return $errormessage;
-
+  	return array();
+  }
+  
+  function Commit($data)
+  {
     $a = array();
     $a["requestType"] = $data["requestType"];
     if($_REQUEST["prod"])
@@ -90,7 +89,7 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  <div class='content'>\n";
       foreach($this->fields["requestType"]["fields"] as $k=>$v)
       {
-        if ($prod && strpos($k,"prod")!==0) unset($this->fields["requestType"]["fields"]);
+        if (!$prod || ($prod && strpos($k,"prod")!==0)) unset($this->fields["requestType"]["fields"]);
       }
       $this->formifier->RenderForm( $this->fields );
       echo "  </div>\n";
@@ -103,6 +102,7 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  </div>\n";
       echo "  <h2>more data</h2>\n";
       echo "  <div class='content'>\n";
+      $fields = array();
       switch($_POST["requestType"])
       {
         case "prod_add_link":
@@ -119,6 +119,58 @@ class PouetBoxModificationRequest extends PouetBox
             ),
           );
           break;
+        case "prod_change_link":
+          if ($_POST["linkID"])
+          {
+            $l = SQLLib::SelectRow(sprintf_esc("select * from downloadlinks where id = %d",$_POST["linkID"]));
+            $fields = array(
+              "linkID" => array(
+                "type"=>"hidden",
+                "value"=>(int)$_POST["linkID"],
+              ),
+              "type" => array(
+                "type"=>"text",
+                "value"=>$l->type,
+              ),
+              "link" => array(
+                "type"=>"link",
+                "value"=>$l->link,
+              ),
+              "finalStep" => array(
+                "type"=>"hidden",
+                "value"=>1,
+              ),
+            );
+          } 
+          else 
+          {
+            $l = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$prod->id));
+            foreach($l as $v)
+              $links[$v->id] = sprintf("[%s] %s",$v->type,$v->link);
+            $fields = array(
+              "linkID" => array(
+                "name"=>"select link",
+                "type"=>"select",
+                "fields"=>$links,
+                "assoc"=>true,
+              ),
+            );
+          }
+          break;
+        case "prod_del":
+          {
+            $fields = array(
+              "reason" => array(
+                "name"=>"why should this prod be deleted",
+                "type"=>"textarea",
+                "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
+              ),
+              "finalStep" => array(
+                "type"=>"hidden",
+                "value"=>1,
+              ),
+            );
+          } break;
       }
       if ($fields)
       {
@@ -143,46 +195,26 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-if ($currentUser && $currentUser->CanSubmitItems())
+$form = new PouetFormProcessor();
+
+$form->SetSuccessURL( "", false );
+
+$form->Add( "logo", new PouetBoxModificationRequest() );
+
+if ($currentUser && $currentUser->CanSubmitItems() && (int)$_POST["finalStep"]==1)
+  $form->Process();
+else
+  unset( $_POST[ PouetFormProcessor::fieldName ] );
+
+if (get_login_id())
 {
-  $box = new PouetBoxModificationRequest();
-
-  $errors = array();
-  if ($_POST)
-  {
-    $errors = $box->ParsePostMessage( $_POST );
-    if (count($errors))
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->title = "An error has occured:";
-      $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-      $msg->Render();
-    }
-    else if($reqID)
-    {
-      $msg = new PouetBoxModalMessage( true );
-      $msg->title = "Success!";
-      $msg->message = "your request has been stored (#".$reqID.") and will be reviewed by a glöperator !";
-      $msg->Render();
-    }
-  }
-
-  $box->Load();
-  if (!count($errors) && !$reqID)
-  {
-    printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",$_SERVER["REQUEST_URI"]);
-    $box->Render();
-    printf("</form>");
-  }
-
-
+  $form->Display();
 ?>
 <script type="text/javascript">
 document.observe("dom:loaded",function(){
 });
 </script>
 <?
-
 }
 else
 {

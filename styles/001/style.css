@@ -29,6 +29,10 @@ input, select, option {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-weight: normal;
 }
+textarea {
+  font-family: tahoma;
+  font-size: 9pt;
+}
 select[multiple="multiple"], select[multiple="multiple"] option {
   display: block;
   padding: 1px;
@@ -976,8 +980,6 @@ td.date {
 #pouetbox_bbsopen textarea, #pouetbox_bbspost textarea {
   width: 500px;
   height: 200px;
-  font-family: tahoma;
-  font-size: 9pt;
 }
 #pouetbox_bbsopen #topic {
   width: 300px;
@@ -1220,6 +1222,10 @@ tr.sortable th #sort_thumbdown {
 }
 .formifier .row > input {
   width: 250px;
+}
+.formifier .row > textarea {
+  width: 250px;
+  height: 150px;
 }
 .formifier .row > input[type="checkbox"] {
   width: auto;

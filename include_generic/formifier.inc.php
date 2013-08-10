@@ -105,6 +105,9 @@ class Formifier {
         case "email":
           echo "    <input type='email' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
+        case "textarea":
+          echo "    <textarea name='".$k."' id='".$k."'>"._html($v["value"])."</textarea>\n";
+          break;
         default:
           echo "    <input name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
