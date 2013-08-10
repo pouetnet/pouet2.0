@@ -4,8 +4,9 @@ pouet2.0
 The next generation of trumpets. Now with 10% more whining sound.
 
 Installation notes
-------------------
-# Make sure you create a credentials file: https://github.com/pouetnet/pouet2.0/blob/master/include_generic/credentials.inc.php.dist
+-----------------
+
+1. Make sure you create a credentials file: https://github.com/pouetnet/pouet2.0/blob/master/include_generic/credentials.inc.php.dist
 
 Credits (of sort)
 -----------------
