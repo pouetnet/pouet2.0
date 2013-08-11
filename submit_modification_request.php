@@ -5,7 +5,7 @@ require_once("include_pouet/box-modalmessage.php");
 if (!POUET_TEST)
 {
   header("Location: index.php");
-  exit()
+  exit();
 }
 
 class PouetBoxModificationRequest extends PouetBox 
