@@ -11,41 +11,51 @@ if (!$currentUser || !$currentUser->IsGloperator())
 function pouetAdmin_recacheFrontPage()
 {
   $content = "<ul>";
-  foreach(glob("cache/*") as $v) { $content .= "<li>deleting '".$v."'</li>\n"; unlink($v); }
+  foreach(glob("cache/*") as $v) { $content .= "<li>deleting '".$v."'</li>\n"; @unlink($v); }
   $content .= "</ul>";
   return $content;
 }
 
 function pouetAdmin_recacheTopDemos()
 {
-  $content = "<ul>";
 
   $total = array();
 
   // this needs to be made faster. a LOT faster.
   $i=0;
-  $query="SELECT id FROM prods ORDER BY views DESC";
+  $query="SELECT id,name,views FROM prods ORDER BY views DESC";
   $result = SQLLib::Query($query);
+  $content = "<ol>";
   while($tmp = SQLLib::Fetch($result)) {
     $total[$tmp->id]+=$i;
     $i++;
+    if ($i<=5)
+      $content .= "<li><b>"._html($tmp->name)."</b> - ".$tmp->views." views</li>\n";
   }
-  $content .= "<li>".$i." prod views loaded</li>\n";
+  $content .= "</ol>";
+  $content .= "<h3>".$i." prod views loaded</h3>\n";
 
   $i=0;
   // Get the list of prod IDs ordered by the sum of their comment ratings
-  $query  = 'SELECT prods.id';
-  $query .= ' FROM prods';
-  $query .= ' JOIN comments ON prods.id = comments.which';
-  $query .= ' GROUP BY prods.id';
-  $query .= ' ORDER BY SUM(comments.rating) DESC;';
+  $sql = new SQLSelect();
+  $sql->AddField("prods.id");
+  $sql->AddField("prods.name");
+  $sql->AddField("SUM(comments.rating) as theSum");
+  $sql->AddTable("prods");
+  $sql->AddJoin("","comments","prods.id = comments.which");
+  $sql->AddGroup("prods.id");
+  $sql->AddOrder("SUM(comments.rating) DESC");
 
-  $result = SQLLib::Query($query);
+  $result = SQLLib::Query( $sql->GetQuery() );
+  $content .= "<ol>";
   while($tmp = SQLLib::Fetch($result)) {
     $total[$tmp->id]+=$i;
     $i++;
+    if ($i<=5)
+      $content .= "<li><b>"._html($tmp->name)."</b> - "._html($tmp->theSum)." votes</li>\n";
   }
-  $content .= "<li>".$i." vote counts loaded</li>\n";
+  $content .= "</ol>";
+  $content .= "<h3>".$i." vote counts loaded</h3>\n";
 
   asort($total);
 
@@ -57,12 +67,10 @@ function pouetAdmin_recacheTopDemos()
     SQLLib::Query($query);
     $i++;
   }
-  $content .= "<li>".$i." prod rankings updated</li>\n";
+  $content .= "<h3>".$i." prod rankings updated</h3>\n";
 
-  $content .= "</ul>";
-
-  unlink('cache/pouetbox_topalltime.cache');
-  unlink('cache/pouetbox_topmonth.cache');
+  @unlink('cache/pouetbox_topalltime.cache');
+  @unlink('cache/pouetbox_topmonth.cache');
   return $content;
 }
 

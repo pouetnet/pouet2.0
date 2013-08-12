@@ -1526,3 +1526,7 @@ input.autocompleteSearch {
   background: #224488;
   margin: 1px;
 }
+
+#pouetbox_modalmessage .content h3 {
+  margin: 15px;
+}
