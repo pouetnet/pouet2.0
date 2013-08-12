@@ -21,7 +21,7 @@ function pouetAdmin_recacheTopDemos()
   $content = "<ul>";
 
   $total = array();
-  
+
   // this needs to be made faster. a LOT faster.
   $i=0;
   $query="SELECT id FROM prods ORDER BY views DESC";
@@ -32,19 +32,23 @@ function pouetAdmin_recacheTopDemos()
   }
   $content .= "<li>".$i." prod views loaded</li>\n";
 
-  //var_dump($total);
-  
   $i=0;
-  $query="SELECT prods.id,SUM(comments.rating) AS somme FROM prods JOIN comments ON prods.id=comments.which GROUP BY prods.id ORDER BY somme DESC";
+  // Get the list of prod IDs ordered by the sum of their comment ratings
+  $query  = 'SELECT prods.id';
+  $query .= ' FROM prods';
+  $query .= ' JOIN comments ON prods.id = comments.which';
+  $query .= ' GROUP BY prods.id';
+  $query .= ' ORDER BY SUM(comments.rating) DESC;';
+
   $result = SQLLib::Query($query);
   while($tmp = SQLLib::Fetch($result)) {
     $total[$tmp->id]+=$i;
     $i++;
   }
   $content .= "<li>".$i." vote counts loaded</li>\n";
-  
+
   asort($total);
-  
+
   $i=1;
   unset($tmp);
   unset($top_demos);
@@ -69,7 +73,7 @@ class PouetBoxAdmin extends PouetBox {
     $this->title = "i'm gonna wreck it !";
   }
 
-  function Render() 
+  function Render()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";

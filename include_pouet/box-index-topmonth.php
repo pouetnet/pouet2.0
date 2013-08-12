@@ -29,12 +29,12 @@ class PouetBoxTopMonth extends PouetBoxCachable {
   function LoadFromDB() {
     $s = new BM_Query("prods");
     $s->AddOrder("(prods.views/((sysdate()-prods.quand)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
-    $s->AddWhere("prods.quand > DATE_SUB(sysdate(),INTERVAL '30' DAY) AND prods.quand < DATE_SUB(sysdate(),INTERVAL '0' DAY)");
+    $s->AddWhere("prods.quand BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
     PouetCollectPlatforms($this->data);
   }
-  
+
   function RenderBody() {
     echo "<ul class='boxlist'>\n";
     $n = 0;
