@@ -29,6 +29,10 @@ input, select, option {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-weight: normal;
 }
+textarea {
+  font-family: tahoma;
+  font-size: 9pt;
+}
 select[multiple="multiple"], select[multiple="multiple"] option {
   display: block;
   padding: 1px;
@@ -976,8 +980,6 @@ td.date {
 #pouetbox_bbsopen textarea, #pouetbox_bbspost textarea {
   width: 500px;
   height: 200px;
-  font-family: tahoma;
-  font-size: 9pt;
 }
 #pouetbox_bbsopen #topic {
   width: 300px;
@@ -1221,6 +1223,10 @@ tr.sortable th #sort_thumbdown {
 .formifier .row > input {
   width: 250px;
 }
+.formifier .row > textarea {
+  width: 250px;
+  height: 150px;
+}
 .formifier .row > input[type="checkbox"] {
   width: auto;
   vertical-align: middle;
@@ -1278,7 +1284,7 @@ input[type="url"] {
   font-weight:bold;
 }
 
-#row_platform select, #row_type select {
+#row_platform select[multiple], #row_type select[multiple] {
   height: 150px;
 }
 
@@ -1513,4 +1519,10 @@ input.autocompleteSearch {
 
 .logovote .content {
   background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
+}
+
+#pouetbox_toplist .selector {
+  padding: 4px;
+  background: #224488;
+  margin: 1px;
 }

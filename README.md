@@ -3,9 +3,14 @@ pouet2.0
 
 The next generation of trumpets. Now with 10% more whining sound.
 
+Installation notes
+-----------------
 
-Written by Gargaj / Conspiracy
+1. Make sure you create a credentials file: https://github.com/pouetnet/pouet2.0/blob/master/include_generic/credentials.inc.php.dist
 
-"Based on" the original Pouet code at https://github.com/lra/pouet.net
+Credits (of sort)
+-----------------
 
-Original ASCIIfier code by Rez / Eclipse
+* "Based on" the original Pouet code at https://github.com/lra/pouet.net
+* Originally written by Gargaj / Conspiracy
+* Original ASCIIfier code by Rez / Eclipse

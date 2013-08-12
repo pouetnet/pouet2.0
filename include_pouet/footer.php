@@ -16,5 +16,5 @@ if (POUET_TEST)
   if ($_GET["QUERYDEBUG"]==1)
     echo "<!--\nQUERIES:\n".print_r($SQLLIB_QUERIES,true)."\n-->";
 }
-include_once("footer.bare.php");
+require_once("footer.bare.php");
 ?>

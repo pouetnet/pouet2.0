@@ -92,13 +92,21 @@ class Formifier {
           echo "    </div>\n";
           break;
         case "number":
-          echo "    <input type='number' min='"._html((int)$v["min"])."' max='"._html((int)$v["max"])."' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          echo "    <input type='number'";
+          if (isset($v["min"]))
+            echo " min='"._html((int)$v["min"])."'";
+          if (isset($v["max"]))
+            echo " max='"._html((int)$v["max"])."'";
+          echo " name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
         case "url":
           echo "    <input type='url' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
         case "email":
           echo "    <input type='email' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          break;
+        case "textarea":
+          echo "    <textarea name='".$k."' id='".$k."'>"._html($v["value"])."</textarea>\n";
           break;
         default:
           echo "    <input name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";

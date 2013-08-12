@@ -1,16 +1,16 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
-class PouetBoxListsMain extends PouetBox 
+class PouetBoxListsMain extends PouetBox
 {
   function PouetBoxListsMain($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_listsmain";
     $this->id = (int)$id;
-    
+
   }
-  
-  function LoadFromDB() 
+
+  function LoadFromDB()
   {
     $s = new BM_query("lists");
     $s->AddField("lists.id");
@@ -21,39 +21,39 @@ class PouetBoxListsMain extends PouetBox
     $s->Attach(array("lists"=>"upkeeper"),array("users as upkeeper"=>"id"));
     $s->AddWhere(sprintf_esc("lists.id=%d",$this->id));
     list($this->list) = $s->perform();
-    
+
     $s = new BM_query("listitems");
     $s->Attach(array("listitems"=>"itemid"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("listitems.list=%d",$this->id));
     $s->AddWhere("listitems.type='prod'");
     $this->prods = $s->perform();
-    
+
     $a = array();
     foreach($this->prods as $p) $a[] = &$p->prod;
     PouetCollectPlatforms($a);
-    
+
     $s = new BM_query("listitems");
     $s->Attach(array("listitems"=>"itemid"),array("groups as group"=>"id"));
     $s->AddWhere(sprintf_esc("listitems.list=%d",$this->id));
     $s->AddWhere("listitems.type='group'");
     $this->groups = $s->perform();
-        
+
     $s = new BM_query("listitems");
     $s->Attach(array("listitems"=>"itemid"),array("parties as party"=>"id"));
     $s->AddWhere(sprintf_esc("listitems.list=%d",$this->id));
     $s->AddWhere("listitems.type='party'");
     $this->parties = $s->perform();
-      
+
     $s = new BM_query("listitems");
     $s->Attach(array("listitems"=>"itemid"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("listitems.list=%d",$this->id));
     $s->AddWhere("listitems.type='user'");
     $this->users = $s->perform();
-                
-    
+
+
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser,$PLATFORMS;
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
@@ -67,14 +67,14 @@ class PouetBoxListsMain extends PouetBox
       printf("</div>");
     }
     echo "</div>\n";
-    
+
     echo " <div class='content'>upkept by ".$this->list->upkeeper->PrintLinkedName()." ".$this->list->upkeeper->PrintLinkedAvatar()."</div>\n";
-    
+
     if ($this->groups)
     {
       echo "<h2>groups</h2>";
       echo "<ul class='boxlist boxlisttable'>\n";
-      foreach($this->groups as $d) 
+      foreach($this->groups as $d)
       {
         echo "<li>\n";
         echo "<span>\n";
@@ -84,12 +84,12 @@ class PouetBoxListsMain extends PouetBox
       }
       echo "</ul>\n";
     }
-    
+
     if ($this->prods)
     {
       echo "<h2>prods</h2>";
       echo "<ul class='boxlist boxlisttable'>\n";
-      foreach($this->prods as $d) 
+      foreach($this->prods as $d)
       {
         echo "<li>\n";
         echo "<span>\n";
@@ -108,12 +108,12 @@ class PouetBoxListsMain extends PouetBox
       }
       echo "</ul>\n";
     }
-    
+
     if ($this->parties)
     {
       echo "<h2>parties</h2>";
       echo "<ul class='boxlist boxlisttable'>\n";
-      foreach($this->parties as $d) 
+      foreach($this->parties as $d)
       {
         echo "<li>\n";
         echo "<span>\n";
@@ -123,12 +123,12 @@ class PouetBoxListsMain extends PouetBox
       }
       echo "</ul>\n";
     }
-    
+
     if ($this->users)
     {
       echo "<h2>users</h2>";
       echo "<ul class='boxlist boxlisttable'>\n";
-      foreach($this->users as $d) 
+      foreach($this->users as $d)
       {
         echo "<li>\n";
         echo "<span>\n";
@@ -153,13 +153,13 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
   function PouetBoxListsList($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_listslist";
-    
+
     $letter = substr($letter,0,1);
     if (preg_match("/^[a-z]$/",$letter))
       $this->letter = $letter;
     else
       $this->letter = "#";
-    
+
     $a = array();
     $a[] = "<a href='lists.php?pattern=%23'>#</a>";
     for($x=ord("a");$x<=ord("z");$x++)
@@ -168,20 +168,20 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
     $this->letterselect = "[ ".implode(" |\n",$a)." ]";
   }
 
-  function RenderHeader() 
+  function RenderHeader()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
   }
 
-  function RenderFooter() 
+  function RenderFooter()
   {
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
     echo "</div>\n";
   }
 
-  function Load() 
+  function Load()
   {
     $s = new BM_query("lists");
     $s->AddField("lists.id");
@@ -219,13 +219,13 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
 $boardID = (int)$_GET["which"];
 
 $p = null;
-if (!$boardID) 
+if (!$boardID)
 {
   $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
   $p = new PouetBoxListsList($pattern);
   $p->Load();
   $TITLE = "lists: ".$p->letter;
-} 
+}
 else
 {
   $p = new PouetBoxListsMain($boardID);
@@ -233,13 +233,13 @@ else
   $TITLE = $p->list->name;
 }
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 if($p) $p->Render();
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

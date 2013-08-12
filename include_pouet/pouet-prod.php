@@ -134,6 +134,19 @@ class PouetProd extends BM_Class {
     }
     return $s;
   }
+  function RenderSingleRowShort() {
+    $s = "<span class='prod'>".$this->RenderLink()."</span>";
+    if ($this->groups)
+    {
+      $s .= " by ";
+      $a = array();
+      foreach($this->groups as $g) if ($g) {
+        $a[] = $g->RenderLong();
+      }
+      $s .= implode(" & ",$a);
+    }
+    return $s;
+  }
   
   function RenderReleaseDate() {
     if (!$this->date || $this->date{0}=="0") return "";

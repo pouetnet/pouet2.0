@@ -1,7 +1,7 @@
 <?
 $timer["html"]["start"] = microtime_float();
 header("Content-type: text/html; charset=utf-8");
-include_once("header.bare.php");
+require_once("header.bare.php");
 ?>
 
 <header>

@@ -1,7 +1,7 @@
 <?
 if ($_GET["regeneratePlatforms"])
 {
-  include_once("../include_generic/sqllib.inc.php");
+  require_once("../include_generic/sqllib.inc.php");
   $rows = SQLLIB::selectRows("select * from platforms");
   $platforms = array();
   foreach($rows as $r)

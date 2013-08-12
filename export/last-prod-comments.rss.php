@@ -1,6 +1,6 @@
 <?
-include_once("../bootstrap.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
+require_once("../bootstrap.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
 
 $s = new BM_Query("comments");
 $s->AddField("comments.id");

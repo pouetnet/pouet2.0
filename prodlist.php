@@ -1,16 +1,16 @@
 <?
-include_once("bootstrap.inc.php");
+require_once("bootstrap.inc.php");
 
-class PouetBoxProdlist extends PouetBox 
+class PouetBoxProdlist extends PouetBox
 {
   var $id;
   var $group;
-  
+
   function PouetBoxProdlist() {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodlist";
   }
-  
+
   function BuildURL( $param ) {
     $query = array_merge($_GET,$param);
     unset( $query["reverse"] );
@@ -21,21 +21,21 @@ class PouetBoxProdlist extends PouetBox
   function LoadFromDB() {
     $s = new SQLSelect();
 
-    $perPage = get_setting("prodlistprods");  
+    $perPage = get_setting("prodlistprods");
     $this->page = (int)max( 1, (int)$_GET["page"] );
-    
+
     $s = new BM_Query("prods");
     //$s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
     //$s->AddOrder("prods.date DESC, prods.quand DESC");
-    
-    if ($_GET["type"])
+
+    if (is_array($_GET["type"]))
     {
       $cond = array();
       foreach($_GET["type"] as $type)
         $cond[] = sprintf_esc("FIND_IN_SET('%s',prods.type)",$type);
       $s->AddWhere(implode(" OR ",$cond));
     }
-    if ($_GET["platform"])
+    if (is_array($_GET["platform"]))
     {
       global $PLATFORMS;
       $platforms = array();
@@ -66,13 +66,13 @@ class PouetBoxProdlist extends PouetBox
       case "added": $s->AddOrder("prods.quand ".$dir); break;
       //default: $s->AddOrder("prods.date DESC"); $s->AddOrder("prods.quand DESC"); break;
     }
-    $s->AddOrder("prods.date ".$dir); 
+    $s->AddOrder("prods.date ".$dir);
     $s->AddOrder("prods.quand ".$dir);
-    
+
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
-    
+
     //echo $s->GetQuery();
-    
+
     $this->prods = $s->performWithCalcRows( $this->count );
     PouetCollectPlatforms($this->prods);
     PouetCollectAwards($this->prods);
@@ -100,7 +100,7 @@ class PouetBoxProdlist extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text); 
+        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -109,7 +109,7 @@ class PouetBoxProdlist extends PouetBox
 
     foreach ($this->prods as $p) {
       echo "<tr>\n";
-      
+
       echo "<td>\n";
       echo $p->RenderTypeIcons();
       echo $p->RenderPlatformIcons();
@@ -120,7 +120,7 @@ class PouetBoxProdlist extends PouetBox
       echo "<td>\n";
       echo $p->RenderGroupsShortProdlist();
       echo "</td>\n";
-      
+
       echo "<td>\n";
       if ($p->placings)
         echo $p->placings[0]->PrintResult($p->year);
@@ -140,20 +140,20 @@ class PouetBoxProdlist extends PouetBox
 
       $pop = (int)($p->views * 100 / $this->maxviews);
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
-      
+
       echo "</tr>\n";
     }
-    
-    $perPage = get_setting("prodlistprods");  
-    
+
+    $perPage = get_setting("prodlistprods");
+
     echo "<tr>\n";
     echo "<td class='nav' colspan=".(count($headers)-2).">\n";
-    
+
     if ($this->page > 1)
       echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
       echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
-    
+
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
       printf("    <option value='%d'%s>%d</option>\n",$x,$x==$this->page?" selected='selected'":"",$x);
@@ -166,7 +166,7 @@ class PouetBoxProdlist extends PouetBox
   }
 };
 
-class PouetBoxProdlistSelectors extends PouetBox 
+class PouetBoxProdlistSelectors extends PouetBox
 {
   function Load() {
     $row = SQLLib::selectRow("DESC prods type");
@@ -185,8 +185,8 @@ class PouetBoxProdlistSelectors extends PouetBox
     echo "  type :\n";
     echo "  <select name='type[]' multiple='multiple' size='10'>\n";
     if (!$_GET["type"]) $_GET["type"] = array();
-	  foreach($this->types as $v) 
-	    echo "  <option".(array_search($v,$_GET["type"])===false?"":" selected='selected'").">".$v."</option>\n";  
+	  foreach($this->types as $v)
+	    echo "  <option".(array_search($v,$_GET["type"])===false?"":" selected='selected'").">".$v."</option>\n";
     echo "  </select>\n";
     echo "  </td>\n";
 
@@ -197,8 +197,8 @@ class PouetBoxProdlistSelectors extends PouetBox
     $plat = array();
 	  foreach($PLATFORMS as $v) $plat[] = $v["name"];
 	  usort($plat,"strcasecmp");
-	  foreach($plat as $v) 
-	    echo "  <option".(array_search($v,$_GET["platform"])===false?"":" selected='selected'").">".$v."</option>\n";  
+	  foreach($plat as $v)
+	    echo "  <option".(array_search($v,$_GET["platform"])===false?"":" selected='selected'").">".$v."</option>\n";
     echo "  </select>\n";
     echo "  </td>\n";
     echo "</tr>\n";
@@ -222,8 +222,8 @@ if ($p->page > 1)
   $TITLE .= " :: page ".(int)$p->page;
 
 
-include("include_pouet/header.php");
-include("include_pouet/menu.inc.php");
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 echo "<form action='prodlist.php' method='get'>\n";
@@ -237,6 +237,6 @@ if($p) $p->Render();
 echo "</form>\n";
 echo "</div>\n";
 
-include("include_pouet/menu.inc.php");
-include("include_pouet/footer.php");
+require("include_pouet/menu.inc.php");
+require_once("include_pouet/footer.php");
 ?>

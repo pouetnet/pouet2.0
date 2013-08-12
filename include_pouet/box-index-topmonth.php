@@ -1,7 +1,7 @@
 <?
-include_once("include_generic/sqllib.inc.php");
-include_once("include_pouet/pouet-box.php");
-include_once("include_pouet/pouet-prod.php");
+require_once("include_generic/sqllib.inc.php");
+require_once("include_pouet/pouet-box.php");
+require_once("include_pouet/pouet-prod.php");
 
 class PouetBoxTopMonth extends PouetBoxCachable {
   var $data;
@@ -47,7 +47,7 @@ class PouetBoxTopMonth extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='prodlist.php?order=added'>more</a>...</div>\n";
+    echo "  <div class='foot'><a href='toplist.php?days=30'>more</a>...</div>\n";
     echo "</div>\n";
   }
 };

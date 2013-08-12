@@ -68,7 +68,7 @@ class PouetBoxBBSPost extends PouetBox {
     global $currentUser;  
     if (!get_login_id()) 
     {
-      include_once("box-login.php");
+      require_once("box-login.php");
       $box = new PouetBoxLogin();
       $box->RenderBody();
     } 

@@ -1,7 +1,7 @@
 <?
-include_once("../bootstrap.inc.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/box-index-latestreleased.php");
-include_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
+require_once("../bootstrap.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/box-index-latestreleased.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
 
 $p = new PouetBoxLatestReleased();
 $p->Load(true);
