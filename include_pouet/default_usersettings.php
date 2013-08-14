@@ -44,7 +44,7 @@ $TEST = array(
    'indexlatestparties' => 5,
    'indextopkeops' => 10,
    'displayimages' => 1,
-   'indexbbsnoresidue' => 0,
+   'indexbbsnoresidue' => 1,
    'prodcomments' => -1,
 );
 $DEFAULT_USERSETTINGS = new stdClass();
