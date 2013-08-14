@@ -58,7 +58,8 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     $s->AddField("message");
     $s->AddTable("oneliner");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
-    $s->AddOrder("oneliner.quand desc");
+    //$s->AddOrder("oneliner.quand desc, oneliner.id desc");
+    $s->AddOrder("oneliner.id desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
     $this->data = array_reverse($this->data);
@@ -109,8 +110,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "if garfield was a criminal, we would purchase him until afghanistan.";
       //$funnytext = "crashes indeed.. but wow! NOOON..";
       //$funnytext = "time is to unicode on the onliner";
-      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";
-      
+      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";      
       
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";      
