@@ -11,7 +11,7 @@ class SQLLib {
     SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
     if (mysqli_connect_errno(SQLLib::$link))
       die("Unable to connect MySQL: ".mysqli_connect_error());
-    if (!mysqli_set_charset(SQLLib::$link,"utf8mb4"))
+    if (!mysqli_set_charset(SQLLib::$link,"utf8"))
       die("Error loading character set: ".mysqli_error(SQLLib::$link));
   }
 
@@ -25,7 +25,7 @@ class SQLLib {
     $r = @mysqli_query(SQLLib::$link,$cmd);
     if(!$r) throw new Exception("<pre>\nMySQL ERROR:\nError: ".mysqli_error(SQLLib::$link)."\nQuery: ".$cmd);
     
-    $SQLLIB_QUERIES[] = $cmd;
+    //$SQLLIB_QUERIES[] = $cmd;
 
     return $r;
   }
