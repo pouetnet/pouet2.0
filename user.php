@@ -357,7 +357,7 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->sceneID["email"])
     {
-      if ($this->sceneID["hidden"]=="yes")
+      if ($this->sceneID["emailHidden"]=="yes")
       {
         echo $this->AddRow("email","<span style='color:#9999AA'>hidden</span>",true);
       }
