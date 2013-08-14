@@ -125,6 +125,15 @@ function CheckReferrer( $ref )
   return true;
 }
 
+function move_uploaded_file_fake( $src, $dst )
+{
+  if (!is_uploaded_file($src)) return false;
+  
+  copy( $src, $dst );
+  unlink( $src );
+  
+  return true;
+}
 
 
 function array_select( $array, $keys )
