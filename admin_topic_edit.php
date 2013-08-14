@@ -20,6 +20,10 @@ class PouetBoxAdminEditTopic extends PouetBox
     $this->title = "edit this topic: "._html($this->topic->topic);
     $this->formifier = new Formifier();
     $this->fields = array();
+
+    $row = SQLLib::selectRow("DESC bbs_topics category");
+    preg_match_all("/'([^']+)'/",$row->Type,$m);
+    $this->categories = $m[1];
   }
   
   function ValidateInput( $data )
@@ -71,8 +75,7 @@ class PouetBoxAdminEditTopic extends PouetBox
       "category"=>array(
         "name"=>"topic category",
         "type"=>"select",
-        "assoc"=>true,
-        "fields"=>$THREAD_CATEGORIES,
+        "fields"=>$this->categories,
         "value"=>$this->topic->category,
       ),
       "closed"=>array(
