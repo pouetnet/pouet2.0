@@ -293,7 +293,7 @@ class PouetBoxProdMain extends PouetBox {
   }
   function RenderLinks() { 
     echo "<ul>\n";
-    echo "<li>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
+    echo "<li id='mainDownload'>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
     foreach ($this->downloadLinks as $link)
     {
       echo "<li>[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
