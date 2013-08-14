@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
+  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet.gif");
   font-size : 9pt;
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   margin: 0px;
@@ -794,7 +794,7 @@ td.date {
   display: inline-block;
 }
 #pouetbox_usermain #logolist li {
-  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
+  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet.gif");
   text-align: center;
 }
 #pouetbox_usermain #logolist li .logo {
@@ -852,41 +852,6 @@ td.date {
 .vote.sucks { background: url("http://content.pouet.net/gfx/sucks.gif") top left no-repeat; }
 .vote.isok { background: url("http://content.pouet.net/gfx/isok.gif") top left no-repeat; }
 .vote.cdc { background: url("http://content.pouet.net/gfx/titles/coupdecoeur.gif") top left no-repeat; }
-
-@keyframes lolololol {
-  from {
-    top: 5px;
-  }
-  50% {
-    top: 15px;
-  }
-  to {
-    top: 5px;
-  }
-}
-#beta {
-  top:5px;
-  right:25px;
-  opacity: 0.9;
-  width: 120px;
-  height: 80px;
-  background: #884444;
-  border: 2px solid black;
-  color: #ffffff;
-  padding: 5px;
-  text-align:center;
-  position: fixed;
-  z-index:2000;
-  
-  animation: lolololol 3s infinite;
-}
-#beta p {
-  margin-top: 10px;
-}
-#beta a {
-  color : #FF9F9F;
-  font-weight: bold;
-}
 
 /*
 #pouetbox_groupmain, #pouetbox_prodlist {
@@ -1518,7 +1483,7 @@ input.autocompleteSearch {
 }
 
 .logovote .content {
-  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet-beta.gif");
+  background: #3A6EA5 url("http://content.pouet.net/gfx/trumpet.gif");
 }
 
 #pouetbox_toplist .selector {
