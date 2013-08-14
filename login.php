@@ -40,12 +40,7 @@ switch( (int)$rv["returnCode"] )
       $user = PouetUser::Spawn( $user->id );
     }
     
-    $allowed = array(1007,30761);
-    if (!POUET_TEST && array_search($user->id,$allowed)===false)
-    {
-  		redirect("error.php?e=".rawurlencode("Sorry, we're in debugmode still :/"));
-    }
-    else if ( $user->level == "banned" )
+    if ( $user->level == "banned" )
     {
   		redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
     }
