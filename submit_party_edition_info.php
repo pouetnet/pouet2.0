@@ -60,7 +60,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
     
     if (is_uploaded_file($_FILES["results"]["tmp_name"]))
     {
-      move_uploaded_file($_FILES["results"]["tmp_name"],get_local_partyresult_path($this->id,$this->year));
+      move_uploaded_file_fake($_FILES["results"]["tmp_name"],get_local_partyresult_path($this->id,$this->year));
     }
     return array();
   }

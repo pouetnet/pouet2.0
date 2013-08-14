@@ -87,11 +87,11 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
         case 3:$extension="png";break;
       } 
       if ($extension != "_")
-        move_uploaded_file( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( (int)$this->id, $extension ) );
+        move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( (int)$this->id, $extension ) );
     }    
     if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
     {
-      move_uploaded_file( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( (int)$this->id ) );
+      move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( (int)$this->id ) );
     }
 
     gloperator_log( "prod", (int)$this->id, "prod_edit" );

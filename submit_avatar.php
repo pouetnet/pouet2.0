@@ -95,7 +95,7 @@ class PouetBoxSubmitAvatar extends PouetBox
   {
     $filename = strtolower( basename( $_FILES["avatar"]["name"] ) );
   
-    move_uploaded_file( $_FILES["avatar"]["tmp_name"], POUET_CONTENT_LOCAL . "avatars/".$filename );
+    move_uploaded_file_fake( $_FILES["avatar"]["tmp_name"], POUET_CONTENT_LOCAL . "avatars/".$filename );
     
     return array();
   }

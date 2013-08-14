@@ -59,7 +59,7 @@ class PouetBoxSubmitLogo extends PouetBox
     
     $filename = strtolower( basename( $_FILES["logo"]["name"] ) );
   
-    move_uploaded_file( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/gfx/logos/".$filename );
+    move_uploaded_file_fake( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/gfx/logos/".$filename );
     
     $a = array();
     $a["author1"] = $currentUser->id;
