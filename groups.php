@@ -100,9 +100,9 @@ class PouetBoxGroupMain extends PouetBox
       "name"=>"prodname",
       "party"=>"release party",
       "release"=>"release date",
-      "thumbup"=>"<img src='http://www.pouet.net/gfx/rulez.gif' alt='rulez' />",
-      "thumbpig"=>"<img src='http://www.pouet.net/gfx/isok.gif' alt='piggie' />",
-      "thumbdown"=>"<img src='http://www.pouet.net/gfx/sucks.gif' alt='sucks' />",
+      "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
+      "thumbpig"=>"<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />",
+      "thumbdown"=>"<img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />",
       "avg"=>"avg",
       "views"=>"popularity",
       "latestcomment"=>"last comment",
@@ -162,7 +162,7 @@ class PouetBoxGroupMain extends PouetBox
       $i = "isok";
       if ($p->voteavg < 0) $i = "sucks";
       if ($p->voteavg > 0) $i = "rulez";
-      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='http://www.pouet.net/gfx/".$i.".gif' alt='".$i."' /></td>\n";
+      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
 
       $pop = (int)($p->views * 100 / $this->maxviews);
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
