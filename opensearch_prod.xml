@@ -5,4 +5,6 @@
   <Image height="16" width="16" type="image/x-icon">http://www.pouet.net/favicon.ico</Image>
   <Url type="application/x-suggestions+json" method="GET" template="http://www.pouet.net/search_suggest.php?what={searchTerms}"/>
   <Url type="text/html" method="get" template="http://www.pouet.net/search.php?what={searchTerms}"/>
+  <OutputEncoding>UTF-8</OutputEncoding>
+  <InputEncoding>UTF-8</InputEncoding>
 </OpenSearchDescription>
