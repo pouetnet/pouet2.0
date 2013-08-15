@@ -22,9 +22,11 @@ class PouetBoxSearchBox extends PouetBoxCachable {
     $types = array("prod","group","party"/*,"board"*/,"user","bbs");
     $a = array();
     foreach($types as $t)
-      $a[] = "<input type='radio' name='type' value='".$t."' id='search".$t."' ".($t=="prod"?" checked='checked'":"")." />&nbsp;<label for='search".$t."'>".$t."</label>\n";
+      $a[] = "<li><input type='radio' name='type' value='".$t."' id='search".$t."' ".($t=="prod"?" checked='checked'":"")." />&nbsp;<label for='search".$t."'>".$t."</label></li>\n";
 
+    echo "<ul id='searchType'>";
     echo implode("\n",$a);
+    echo "</ul>";
     /*
     echo "<input type='radio' name='type' value='prod' id='prod' checked='checked' />&nbsp;<label for='prod'>prod</label>\n";
     echo "<input type='radio' name='type' value='group' id='group'/>&nbsp;<label for='group'>group</label>\n";

@@ -1150,6 +1150,13 @@ tr.sortable th #sort_thumbdown {
 #pouetbox_search .content.buttons {
   background: #446688;
 }
+#pouetbox_search #searchType {
+  list-style: none;
+}
+#pouetbox_search #searchType li {
+  display: inline-block;
+  margin: 1px;
+}
 #pouetbox_searchbbs .searchhighlight {
   background: yellow;
   color: black;
