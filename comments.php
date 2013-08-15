@@ -13,18 +13,18 @@ class PouetBoxLatestComments extends PouetBox {
     $s = new BM_Query("comments");
     $s->AddField("comments.rating");
     $s->AddField("comments.quand");
-    $s->attach(array("comments"=>"which"),array("prods as prod"=>"id"));        
-    $s->attach(array("comments"=>"who"),array("users as user"=>"id"));        
+    $s->attach(array("comments"=>"which"),array("prods as prod"=>"id"));
+    $s->attach(array("comments"=>"who"),array("users as user"=>"id"));
     $s->AddOrder("comments.quand DESC");
     $s->AddWhere(sprintf_esc("(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(comments.quand))<=(3600*%d)",get_setting("commentshours")));
     $this->comments = $s->perform();
-    
+
     $a = array();
     foreach($this->comments as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
-  
-  function RenderBody() 
+
+  function RenderBody()
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
@@ -44,7 +44,7 @@ class PouetBoxLatestComments extends PouetBox {
 
 
       $rating = $row->rating>0 ? "rulez" : ($row->rating<0 ? "sucks" : "isok");
-      
+
       echo "<td>\n";
       echo "<img src='".POUET_CONTENT_URL."gfx/".$rating.".gif'/>";
       echo "</td>\n";
@@ -62,16 +62,16 @@ class PouetBoxLatestComments extends PouetBox {
       echo "<td>\n";
       echo $p->RenderPlatformIcons();
       echo "</td>\n";
-      
+
       echo "<td class='date'>\n";
       echo dateDiffReadable( time(), $row->quand)." ago";
       echo "</td>\n";
-      
+
       echo "<td>\n";
       echo $row->user->PrintLinkedAvatar()." ";
       echo $row->user->PrintLinkedName()." ";
       echo "</td>\n";
-      
+
       echo "</tr>\n";
     }
     echo "</table>\n";

@@ -8,7 +8,7 @@ class PouetBoxSubmit extends PouetBox {
     $this->title = "What do you want to do?";
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     //echo "\n\n";
     //echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
@@ -20,7 +20,7 @@ class PouetBoxSubmit extends PouetBox {
       echo "  <li><a href='submit_party.php'>submit a party</a></li>\n";
       echo "  <li><a href='submit_avatar.php'>upload an avatar</a></li>\n";
       echo "  <li><a href='submit_logo.php'>upload a logo</a></li>\n";
-      echo "  <li><a href='logo_vote.php'>vote on logos</a></li>\n";      
+      echo "  <li><a href='logo_vote.php'>vote on logos</a></li>\n";
       echo "</ul>\n";
     }
     echo "<h2>free 4 all stuffz!</h2>\n";

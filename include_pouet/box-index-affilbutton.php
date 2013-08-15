@@ -10,7 +10,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_affilbutton";
     $this->title = ""; // set later
   }
-  
+
   function Load( $cached = false ) {
     $s = new SQLSelect();
     $s->AddTable("buttons");
@@ -18,7 +18,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
     $s->AddOrder("dead = 0");
     $s->SetLimit("1");
     $this->data = SQLLib::SelectRow($s->GetQuery());
-    
+
     $this->title = $this->data->type;
   }
 

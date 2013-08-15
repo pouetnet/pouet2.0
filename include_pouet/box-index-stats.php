@@ -31,7 +31,7 @@ class PouetBoxStats extends PouetBoxCachable {
   		$this->data[$v."_24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$time."))<=3600*24")->c;
     }
   }
-  
+
   function Render() {
     echo "<table class='boxtable' id='".$this->uniqueID."'>\n";
     $n = 0;

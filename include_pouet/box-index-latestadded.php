@@ -22,7 +22,7 @@ class PouetBoxLatestAdded extends PouetBoxCachable {
   function GetCacheableData() {
     return serialize($this->data);
   }
-  
+
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
@@ -36,11 +36,11 @@ class PouetBoxLatestAdded extends PouetBoxCachable {
     $this->data = $s->perform();
     PouetCollectPlatforms($this->data);
   }
-  
+
   function RenderBody() {
     echo "<ul class='boxlist boxlisttable'>\n";
     $n = 0;
-    foreach($this->data as $p) 
+    foreach($this->data as $p)
     {
       echo "<li>\n";
       echo "<span class='rowprod'>\n";

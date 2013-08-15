@@ -21,10 +21,10 @@ class SQLLib {
 
   static function Query($cmd) {
     global $SQLLIB_QUERIES;
-    
+
     $r = @mysqli_query(SQLLib::$link,$cmd);
     if(!$r) throw new Exception("<pre>\nMySQL ERROR:\nError: ".mysqli_error(SQLLib::$link)."\nQuery: ".$cmd);
-    
+
     $SQLLIB_QUERIES[] = "*";
 
     return $r;
@@ -33,7 +33,7 @@ class SQLLib {
   static function Fetch($r) {
     return mysqli_fetch_object($r);
   }
-  
+
   static function SelectRows($cmd) {
     $r = SQLLib::Query($cmd);
     $a = Array();
@@ -44,9 +44,9 @@ class SQLLib {
   static function SelectRow($cmd) {
     $r = SQLLib::Query($cmd);
     $a = SQLLib::Fetch($r);
-    return $a;    
+    return $a;
   }
-  
+
   static function InsertRow($table,$o) {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
@@ -64,9 +64,9 @@ class SQLLib {
 
     $cmd = sprintf("insert %s (%s) values (%s)",
       $table,implode(", ",$keys),implode(", ",$values));
-    
+
     $r = SQLLib::Query($cmd);
-    
+
     return mysqli_insert_id(SQLLib::$link);
   }
 
@@ -74,9 +74,9 @@ class SQLLib {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
       trigger_error("Arrays not cleaned before UpdateRow!",E_USER_ERROR);
-      
+
     if (is_object($o)) $a = get_object_vars($o);
-    else if (is_array($o)) $a = $o; 
+    else if (is_array($o)) $a = $o;
     $set = Array();
     foreach($a as $k=>$v) {
       if ($v===NULL)
@@ -104,7 +104,7 @@ class SQLSelect {
   var $groups;
   var $limit;
   var $offset;
- 
+
   function SQLSelect() {
     $this->fields = array();
     $this->tables = array();
@@ -145,7 +145,7 @@ class SQLSelect {
   function GetQuery() {
     if (!count($this->tables))
       throw new Exception("[sqlselect] No tables specified!");
-      
+
     $sql = "SELECT ";
     if ($this->fields) {
       $sql .= implode(", ",$this->fields);
@@ -182,8 +182,8 @@ function sprintf_esc() {
   next($args);
   while (list($key, $value) = each($args))
     $args[$key] = mysqli_real_escape_string( SQLLib::$link, $args[$key] );
-    
-  return call_user_func_array("sprintf", $args); 
+
+  return call_user_func_array("sprintf", $args);
 }
 
 function nop($s) { return $s; }

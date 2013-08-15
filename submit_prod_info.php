@@ -15,7 +15,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
   {
     parent::__construct();
 
-    
+
     $this->prod = PouetProd::Spawn( $id );
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
@@ -34,14 +34,14 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
   	}
     if (!$currentUser->CanSubmitItems())
     {
-      $errormessage[] = "you there. please do not add prods.";  
+      $errormessage[] = "you there. please do not add prods.";
   	  return $errormessage;
   	}
-    
+
     if( ($data["releaseDate_month"]&&$data["releaseDate_year"]) && ($data["releaseDate_month"]>date('m')&&$data["releaseDate_year"]>=date('Y')) ) {
       $errormessage[]="you can't submit a prod released in the future, sorry =)";
     }
-    
+
     if($data["partyYear"] && !$data["partyID"])
       $errormessage[] = "please either select a party AND a year, or neither !";
     if(($data["partyID"] && !$data["partyYear"]) && $data["partyID"] != NO_PARTY_ID)
@@ -50,7 +50,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
       $errormessage[] = "please select a party before you select a ranking !";
 
     $extension = "";
-    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
+    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
     {
       list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
       if($type!=IMAGETYPE_GIF && $type!=IMAGETYPE_JPEG && $type!=IMAGETYPE_PNG) {
@@ -66,22 +66,22 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
         $errormessage[]="the size of the screenshot must not be greater than 64Kb";
       }
     }
-    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
+    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
     {
       if(filesize($_FILES["nfofile"]["tmp_name"]) > 32768) {
         $errormessage[]="the size of the infofile must not be greater than 32Kb";
       }
     }
-    
+
     return $errormessage;
   }
-  
+
   function Commit($data)
   {
     $this->LoadFromDB();
-    
+
     $prodID = (int)$this->prod->id;
-    
+
     $sql = array();
 
     if ($this->fields["releaseDate"])
@@ -89,51 +89,51 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
       if ($data["releaseDate_month"] && $data["releaseDate_year"])
         $sql["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
     }
-    
+
     if ($this->fields["partyCompo"])
       $sql["partycompo"] = $data["partyCompo"];
     if ($this->fields["partyRank"])
       $sql["party_place"] = $data["partyRank"];
-      
+
     if ($sql)
       SQLLib::UpdateRow("prods",$sql,"id=".$prodID);
 
     if ($this->fields["screenshot"])
     {
-      if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
+      if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
       {
         foreach( array( "jpg","gif","png" ) as $v )
           @unlink( get_local_screenshot_path( $prodID, $v ) );
-        
+
         list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
         $extension = "_";
         switch($type) {
           case 1:$extension="gif";break;
           case 2:$extension="jpg";break;
           case 3:$extension="png";break;
-        } 
+        }
         move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( $prodID, $extension ) );
-  
+
         $a = array();
         $a["prod"] = $prodID;
         $a["user"] = get_login_id();
         $a["added"] = date("Y-m-d H:i:s");
-        SQLLib::InsertRow("screenshots",$a);    
-      }    
+        SQLLib::InsertRow("screenshots",$a);
+      }
     }
     if ($this->fields["nfofile"])
     {
-      if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
+      if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
       {
         move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( $prodID ) );
-  
+
         $a = array();
         $a["prod"] = $prodID;
         $a["user"] = get_login_id();
         $a["added"] = date("Y-m-d H:i:s");
-        SQLLib::InsertRow("nfos",$a);    
+        SQLLib::InsertRow("nfos",$a);
       }
-    }    
+    }
     return array();
   }
   function LoadFromDB()

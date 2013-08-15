@@ -1,13 +1,13 @@
 <?
-class PouetFormProcessor 
+class PouetFormProcessor
 {
   private $objects;
   private $errors;
   private $successURL;
   private $redirectOnSuccess;
-  
+
   const fieldName = "formProcessorAction";
-  
+
   function PouetFormProcessor()
   {
     $this->objects = array();
@@ -34,8 +34,8 @@ class PouetFormProcessor
       {
         $this->errors = array("who are you and where did you come from ?");
         return;
-      }   
-      
+      }
+
       $this->errors = $this->objects[$_POST[ self::fieldName ]]->ParsePostMessage( $_POST );
       if (!$this->errors)
       {

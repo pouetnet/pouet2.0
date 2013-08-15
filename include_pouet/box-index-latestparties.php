@@ -40,7 +40,7 @@ class PouetBoxLatestParties extends PouetBoxCachable {
     $this->data = $s->perform();
     //PouetCollectPlatforms($this->data);
   }
- 
+
   function RenderBody() {
     echo "<ul class='boxlist'>\n";
     $n = 0;

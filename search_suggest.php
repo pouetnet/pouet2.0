@@ -7,6 +7,6 @@ foreach($r as $o)
 {
   $res[1][] = $o->name;
   $res[2][] = $o->type.($o->party_year?", ".$o->party_year:"");
-}   
+}
 echo json_encode($res);
 ?>

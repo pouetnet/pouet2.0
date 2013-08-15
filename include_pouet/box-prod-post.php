@@ -15,9 +15,9 @@ class PouetBoxProdPost extends PouetBox {
     $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$_SESSION["user"]->id,$this->prod));
   }
 
-  function Validate($post) 
+  function Validate($post)
   {
-    global $currentUser;  
+    global $currentUser;
 
     if (!$currentUser)
       return array("you have to be logged in!");
@@ -38,15 +38,15 @@ class PouetBoxProdPost extends PouetBox {
 
     if ($r && $r->who == get_login_id() && $r->comment == $message)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
-      
+
     return array();
   }
-  
+
   function Commit($post)
   {
     $message = trim($post["comment"]);
     $rating = $post["rating"];
-    
+
     if ($this->myVote)
       $rating = "isok"; // user already has a vote
 
@@ -72,8 +72,8 @@ class PouetBoxProdPost extends PouetBox {
 		$checktable = array();
 
     $r = SQLLib::SelectRows("SELECT rating,who FROM comments WHERE which=".$this->prod);
-    foreach ($r as $t) 
-			if(!array_key_exists($t->who, $checktable) || $t->rating != 0) 
+    foreach ($r as $t)
+			if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
 			  $checktable[$t->who] = $t->rating;
 
 		foreach($checktable as $k=>$v)
@@ -103,7 +103,7 @@ class PouetBoxProdPost extends PouetBox {
   }
 
   function RenderBody() {
-    global $currentUser;  
+    global $currentUser;
 
     if (!$_SESSION["user"]) {
       require_once("box-login.php");

@@ -7,7 +7,7 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_latestbbs";
     $this->title = "the oldskool pouët.net bbs";
     $this->cacheTime = 60;
-    
+
     $this->limit = 10;
   }
   function LoadFromCachedData($data) {
@@ -21,7 +21,7 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
   }
-  
+
   function LoadFromDB() {
     $s = new BM_query();
     $s->AddField("bbs_topics.id as id");
@@ -30,11 +30,11 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     $s->AddField("bbs_topics.category as category");
     $s->AddField("bbs_topics.lastpost as lastpost");
     $s->AddTable("bbs_topics");
-    $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));    
-    $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));    
+    $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));
+    $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));
     $s->AddOrder("lastpost desc");
     $s->SetLimit(POUET_CACHE_MAX);
-    
+
     $this->data = $s->perform();
   }
 

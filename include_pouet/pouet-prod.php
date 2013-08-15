@@ -7,7 +7,7 @@ class PouetProd extends BM_Class {
   var $group1;
   var $group2;
   var $group3;
-  
+
   function PouetProd()
   {
     $this->types = array();
@@ -19,13 +19,13 @@ class PouetProd extends BM_Class {
   static function getFields() { return array("id","name","type","views","added","quand","date",
     "voteup","votepig","votedown","voteavg","download","partycompo","party_place","party_year"); }
   static function getExtendedFields() { return array("sceneorg","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
-  
+
   function onFinishedPopulate() {
     $this->groups = array();
     if ($this->group1) $this->groups[] = $this->group1;
     if ($this->group2) $this->groups[] = $this->group2;
     if ($this->group3) $this->groups[] = $this->group3;
-    
+
     $this->types = explode(",",$this->type);
     if ($this->party && $this->party->id != NO_PARTY_ID)
       $this->placings[] = new PouetPlacing( array("party"=>$this->party,"compo"=>$this->partycompo,"ranking"=>$this->party_place,"year"=>$this->party_year) );
@@ -104,7 +104,7 @@ class PouetProd extends BM_Class {
     {
       echo "<div class='awards'>";
       foreach($this->awards as $a)
-      {      
+      {
     		printf("<a href='sceneorg.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
     		  $a->type == "viewingtip" ? substr($this->date,0,4) : substr($this->date,0,4) . str_replace(" ","",$a->category),
     		  $a->type,
@@ -113,7 +113,7 @@ class PouetProd extends BM_Class {
   		}
       echo "</div>";
 		}
-      
+
   }
   function RenderLink() {
     return sprintf("<a href='prod.php?which=%d'>%s</a>",$this->id,_html($this->name));
@@ -147,7 +147,7 @@ class PouetProd extends BM_Class {
     }
     return $s;
   }
-  
+
   function RenderReleaseDate() {
     if (!$this->date || $this->date{0}=="0") return "";
     if (substr($this->date,5,2)=="00")
@@ -196,7 +196,7 @@ function PouetCollectAwards( &$prodArray )
   $ids = array();
   foreach($prodArray as $v) if ($v->id) $ids[] = $v->id;
   if (!$ids) return;
-  
+
   $rows = SQLLib::selectRows("select * from sceneorgrecommended where prodid in (".implode(",",$ids).") order by type, category");
   foreach($prodArray as &$v)
   {

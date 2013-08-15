@@ -9,9 +9,9 @@ class PouetBoxBBSPost extends PouetBox {
     $this->title = "post a new reply";
   }
 
-  function Validate($post) 
+  function Validate($post)
   {
-    global $currentUser;  
+    global $currentUser;
     if (!$currentUser)
       return array("you have to be logged in!");
 
@@ -33,11 +33,11 @@ class PouetBoxBBSPost extends PouetBox {
 
     if ($r && $r->author == get_login_id() && $r->post == $message)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
-    
+
     return array();
   }
-  
-  function Commit($post) 
+
+  function Commit($post)
   {
     $message = trim($post["message"]);
 
@@ -63,16 +63,16 @@ class PouetBoxBBSPost extends PouetBox {
     return array();
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
-    global $currentUser;  
-    if (!get_login_id()) 
+    global $currentUser;
+    if (!get_login_id())
     {
       require_once("box-login.php");
       $box = new PouetBoxLogin();
       $box->RenderBody();
-    } 
-    else 
+    }
+    else
     {
       if (!$currentUser->CanPostInBBS())
         return;

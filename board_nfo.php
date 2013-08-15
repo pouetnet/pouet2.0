@@ -7,7 +7,7 @@ class PouetBoxBoardNfo extends PouetBox {
     $this->uniqueID = "pouetbox_boardnfo";
     $this->title = "board nfo";
   }
-  
+
   function LoadFromDB()
   {
 ///    $this->nfo = SQLLib::SelectRow( sprintf_esc("select * from othernfos where id = %d", $_GET["which"] ) );
@@ -30,7 +30,7 @@ class PouetBoxBoardNfo extends PouetBox {
     echo " <h2><big>"._html($this->nfo->name)."</big>";
     echo "</h2>\n";
   }
-  function RenderBody() 
+  function RenderBody()
   {
     $title = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
     echo "<div class='content' title='".$title."'>\n";
@@ -50,7 +50,7 @@ class PouetBoxBoardNfo extends PouetBox {
   function RenderFooter()
   {
     global $currentUser;
-    
+
     echo "  <div class='content' id='fontlist'>";
     $fonts = array(
       "none" => "html",
@@ -81,7 +81,7 @@ $box->Load();
 
 if ($box->nfo)
   $TITLE = $box->nfo->name;
-  
+
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 

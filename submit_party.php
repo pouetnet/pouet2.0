@@ -32,7 +32,7 @@ if (get_login_id())
 ?>
 <script type="text/javascript">
 document.observe("dom:loaded",function(){
-  NameWarning({"ajaxURL":"./ajax_parties.php","linkURL":"party.php?which="});  
+  NameWarning({"ajaxURL":"./ajax_parties.php","linkURL":"party.php?which="});
 });
 </script>
 <?

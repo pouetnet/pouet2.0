@@ -14,20 +14,20 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     $this->limit = 5;
   }
 
-  function Validate($post) 
+  function Validate($post)
   {
     $message = trim($post["message"]);
-    
+
     if (!$message)
       return array("not too meaningful, is it...");
-    
+
     $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY quand DESC LIMIT 1");
-    
+
     if ($r->who == $_SESSION["user"]->id)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
   }
-  
-  function Commit($post) 
+
+  function Commit($post)
   {
     $message = trim($post["message"]);
 
@@ -35,11 +35,11 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
   	$a["who"] = $_SESSION["user"]->id;
   	$a["quand"] = date("Y-m-d H:i:s");
   	$a["message"] = $message;
-  
-    SQLLib::InsertRow("oneliner",$a);  
-    
+
+    SQLLib::InsertRow("oneliner",$a);
+
     $this->ForceCacheUpdate();
-    
+
     return array();
   }
   function LoadFromCachedData($data) {
@@ -52,7 +52,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
   }
-  
+
   function LoadFromDB() {
     $s = new BM_query();
     $s->AddField("message");
@@ -110,10 +110,10 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "if garfield was a criminal, we would purchase him until afghanistan.";
       //$funnytext = "crashes indeed.. but wow! NOOON..";
       //$funnytext = "time is to unicode on the onliner";
-      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";      
-      
+      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";
+
       echo "  <div class='foot loggedin'>\n";
-      echo "   <span><a href='oneliner.php'>more</a>...</span>\n";      
+      echo "   <span><a href='oneliner.php'>more</a>...</span>\n";
       echo "   <form action='add.php' method='post'>\n";
 
       $csrf = new CSRFProtect();

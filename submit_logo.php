@@ -2,21 +2,21 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 
-class PouetBoxSubmitLogo extends PouetBox 
+class PouetBoxSubmitLogo extends PouetBox
 {
-  function PouetBoxSubmitLogo() 
+  function PouetBoxSubmitLogo()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitlogo";
     $this->title = "submit a logo!";
   }
-  
-  function Validate( $data )  
+
+  function Validate( $data )
   {
     global $currentUser;
 
     $errormessage = array();
-    
+
     if (!$currentUser)
       return array("you have to be logged in !");
 
@@ -27,60 +27,60 @@ class PouetBoxSubmitLogo extends PouetBox
       return array("upload error !");
 
     list($width,$height,$type) = getimagesize( $_FILES["logo"]["tmp_name"] );
-    
-    if($width > 700) 
+
+    if($width > 700)
       $errormessage[]="the width can't be bigger than 700 pixels";
-    
-    if($height > 200) 
+
+    if($height > 200)
       $errormessage[]="the height can't be bigger than 200 pixels";
-    
+
     if($type != IMAGETYPE_GIF && $type != IMAGETYPE_PNG && $type != IMAGETYPE_JPEG)
       $errormessage[]="the file must be a .gif, .png or .jpg file";
-    
+
     if(filesize( $_FILES["logo"]["tmp_name"] ) > 128 * 1024)
       $errormessage[]="the file is too big ! 128 kilobytes should be enough for everybody !";
-    
+
     $filename = strtolower( basename( $_FILES["logo"]["name"] ) );
-    
-    if(!preg_match("/^[a-z0-9_-]{1,32}\.(gif|jpg|jpeg|png)$/",$filename)) 
+
+    if(!preg_match("/^[a-z0-9_-]{1,32}\.(gif|jpg|jpeg|png)$/",$filename))
       $errormessage[]="please give a senseful filename devoid of dumb characters, kthx? (nothing but alphanumerics, dash and underscore is allowed, 32 chars max)";
-    
-    if(file_exists(POUET_CONTENT_LOCAL . "/gfx/logos/".$filename)) 
+
+    if(file_exists(POUET_CONTENT_LOCAL . "/gfx/logos/".$filename))
       $errormessage[]="this filename already exists on the server";
-    
+
     if (count($errormessage))
       return $errormessage;
-      
+
     return array();
   }
   function Commit($data)
   {
     global $currentUser;
-    
+
     $filename = strtolower( basename( $_FILES["logo"]["name"] ) );
-  
+
     move_uploaded_file_fake( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/gfx/logos/".$filename );
-    
+
     $a = array();
     $a["author1"] = $currentUser->id;
     $a["file"] = $filename;
     SQLLib::InsertRow("logos",$a);
-    
+
     return array();
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
 
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
 
@@ -91,8 +91,8 @@ class PouetBoxSubmitLogo extends PouetBox
     echo "<p>The pou&euml;t background color is <b>#3A6EA5</b>.</p>\n";
 		echo "<p>Before being displayed, your logo will be voted up or down by the whole Pouet community.</p>\n";
 		echo "<p>Don't blame us for not displaying it if it's lame, the scene is rude, and that's why we like it !</p>\n";
-    echo "<input type='file' name='logo' accept='image/*'/>";  
-    
+    echo "<input type='file' name='logo' accept='image/*'/>";
+
     echo "  </div>\n";
     echo "  <div class='foot'><input name='submit' type='submit' value='Submit' /></div>";
     echo "</div>\n";
@@ -107,7 +107,7 @@ $form->Add( "logo", new PouetBoxSubmitLogo() );
 
 if ($currentUser && $currentUser->CanSubmitItems())
   $form->Process();
-  
+
 $TITLE = "submit a logo";
 
 require_once("include_pouet/header.php");

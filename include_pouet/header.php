@@ -19,7 +19,7 @@ if (get_setting("logos"))
   $s->AddWhere("logos.vote_count>0");
   $s->SetLimit("1");
   list($logo) = $s->perform();
-  
+
   if ($logo)
   {
     $credit = $logo->u1->PrintLinkedName();
@@ -27,8 +27,8 @@ if (get_setting("logos"))
       $credit .= " and " . $logo->u2->PrintLinkedName();
   }
   $timer["logo"]["end"] = microtime_float();
-  
-  
+
+
   $random_quotes = Array (
     'send your logos to <a href="submit_logo.php">us</a> and be a popstar !',
     '<a href="logo_vote.php">vote</a> for the logos you like and be a lamah !',
@@ -41,7 +41,7 @@ if (get_setting("logos"))
     'glop me beautiful'
   */
     );
-?>  
+?>
   <a href="./index.php"><img src="<?=POUET_CONTENT_URL?>gfx/logos/<?=$logo->file?>" alt="logo"/></a>
   <p>logo done by <?=$credit?> :: <?=$random_quotes[ array_rand($random_quotes) ]?></p>
 <?

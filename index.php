@@ -43,7 +43,7 @@ $boxes = array(
     array("box"=>"LatestComments" ,"limit"=>get_setting("indexlatestcomments")),
     array("box"=>"LatestParties"  ,"limit"=>get_setting("indexlatestparties")),
     array("box"=>"UpcomingParties"),
-    array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")), 
+    array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")),
   ),
 );
 

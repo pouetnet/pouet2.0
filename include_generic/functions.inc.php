@@ -11,7 +11,7 @@ function microtime_float()
  */
 function better_wordwrap($str,$cols,$cut){
   $encoding = "utf-8";
-  
+
 	$tag_open = '<';
 	$tag_close = '>';
 	$count = 0;
@@ -58,9 +58,9 @@ function dateDiffReadable( $a, $b )
 {
   if (is_string($a)) $a = strtotime($a);
   if (is_string($b)) $b = strtotime($b);
-  
+
   $dif = $a - $b;
-  
+
   $s = ($dif % 60) . "s"      ; $dif = (int)($dif / 60); if (!$dif) return $s;
   $s = ($dif % 60) . "m " . $s; $dif = (int)($dif / 60); if (!$dif) return $s;
   $s = ($dif % 24) . "h " . $s; $dif = (int)($dif / 24); if (!$dif) return $s;
@@ -72,9 +72,9 @@ function dateDiffReadableDays( $a, $b )
 {
   if (is_string($a)) $a = strtotime($a);
   if (is_string($b)) $b = strtotime($b);
-  
+
   $dif = ($a - $b) / (60 * 60 * 24);
-  
+
   $s = ($dif % 30) . "d"      ; $dif = (int)($dif / 30); if (!$dif) return $s;
   $s = ($dif % 12) . "m " . $s; $dif = (int)($dif / 12); if (!$dif) return $s;
   $s = $dif . "y " . $s;
@@ -99,7 +99,7 @@ function cdcstack($n) { // by ryg
 function gloperator_log( $itemType, $itemID, $action, $additionalData = array() )
 {
   global $currentUser;
-  
+
   $sql = array();
   $sql["gloperatorID"] = $currentUser->id;
   $sql["itemID"] = $itemID;
@@ -111,7 +111,7 @@ function gloperator_log( $itemType, $itemID, $action, $additionalData = array() 
 }
 
 // i'm not even sure how much of this is even valid --garg
-function CheckReferrer( $ref ) 
+function CheckReferrer( $ref )
 {
   $myurl=parse_url($ref);
   if(strstr($myurl["host"],"farb-rausch.de")) return false;
@@ -128,10 +128,10 @@ function CheckReferrer( $ref )
 function move_uploaded_file_fake( $src, $dst )
 {
   if (!is_uploaded_file($src)) return false;
-  
+
   copy( $src, $dst );
   unlink( $src );
-  
+
   return true;
 }
 
@@ -234,7 +234,7 @@ function find_screenshot( $id )
   $ext = array(".jpg",".gif",".png");
   foreach ($ext as $e) {
     $p = "screenshots/".(int)$id.$e;
-    if(file_exists(POUET_CONTENT_LOCAL . "/" . $p)) 
+    if(file_exists(POUET_CONTENT_LOCAL . "/" . $p))
       return $p;
   }
   return NULL;

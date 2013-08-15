@@ -11,36 +11,36 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProd extends PouetBoxSubmitProd 
+class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 {
-  function PouetBoxAdminEditProd( $id ) 
+  function PouetBoxAdminEditProd( $id )
   {
     parent::__construct();
 
     $this->id = (int)$id;
-    
+
     $this->prod = PouetProd::Spawn( $this->id );
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
     $this->title = "edit this prod: ".$this->prod->RenderLink();
   }
-  function Commit($data) 
+  function Commit($data)
   {
     //die("almost there");
     $a = array();
     $a["name"] = $data["name"];
     $a["download"] = $data["download"];
-    
+
     if ($data["releaseDate_month"] && $data["releaseDate_year"])
       $a["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
     else if ($data["releaseDate_year"])
       $a["date"] = sprintf("%04d-00-15",$data["releaseDate_year"]);
     else
       $a["date"] = null;
-      
+
     $a["type"] = implode(",",$data["type"]);
-        
+
     $groups = array();
     if ($data["group1"]) $groups[] = (int)$data["group1"];
     if ($data["group2"]) $groups[] = (int)$data["group2"];
@@ -49,7 +49,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     if (count($groups)) $a["group1"] = array_shift($groups); else $a["group1"] = 0;
     if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = 0;
     if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = 0;
-    
+
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
     $a["zxdemo"] = $data["zxdemoID"];
@@ -60,10 +60,10 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $a["invitation"] = $data["invitationParty"];
     $a["invitationyear"] = $data["invitationYear"];
     $a["boardID"] = $data["boardID"];
-    
+
     global $prodID;
     SQLLib::UpdateRow("prods",$a,"id=".(int)$this->id);
-    
+
     $data["platform"] = array_unique($data["platform"]);
     SQLLib::Query(sprintf_esc("delete from prods_platforms where prod = %d",(int)$this->id));
     foreach($data["platform"] as $v)
@@ -71,10 +71,10 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       $a = array();
       $a["prod"] = (int)$this->id;
       $a["platform"] = $v;
-      SQLLib::InsertRow("prods_platforms",$a);    
+      SQLLib::InsertRow("prods_platforms",$a);
     }
-    
-    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
+
+    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
     {
       foreach( array( "jpg","gif","png" ) as $v )
         @unlink( get_local_screenshot_path( (int)$this->id, $v ) );
@@ -85,11 +85,11 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
         case 1:$extension="gif";break;
         case 2:$extension="jpg";break;
         case 3:$extension="png";break;
-      } 
+      }
       if ($extension != "_")
         move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( (int)$this->id, $extension ) );
-    }    
-    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
+    }
+    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
     {
       move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( (int)$this->id ) );
     }
@@ -101,13 +101,13 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
   function LoadFromDB()
   {
     parent::LoadFromDB();
-    
+
     $prod = $this->prod;
-    
+
     $a = array();
     $this->fields["name"]["value"] = $prod->name;
     $this->fields["download"]["value"] = $prod->download;
-    
+
     $this->fields["group1"]["value"] = $prod->group1->id;
     $this->fields["group2"]["value"] = $prod->group2->id;
     $this->fields["group3"]["value"] = $prod->group3->id;
@@ -116,7 +116,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
     $this->fields["platform"]["value"] = $prod->platforms;
     $this->fields["type"]["value"] = $prod->types;
-    
+
     if (count($prod->placings) > 0)
     {
       $this->fields["partyID"]["value"] = $prod->placings[0]->party->id;
@@ -124,30 +124,30 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       $this->fields["partyCompo"]["value"] = $prod->placings[0]->compo;
       $this->fields["partyRank"]["value"] = $prod->placings[0]->ranking;
     }
-    
+
     $this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
     $this->fields["zxdemoID"]["value"] = $prod->zxdemo;
     $this->fields["csdbID"]["value"] = $prod->csdb;
     $this->fields["invitationParty"]["value"] = $prod->invitation;
     $this->fields["invitationYear"]["value"] = $prod->invitationyear;
-   
+
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminDeleteProd extends PouetBox 
+class PouetBoxAdminDeleteProd extends PouetBox
 {
-  function PouetBoxAdminDeleteProd( $prod ) 
+  function PouetBoxAdminDeleteProd( $prod )
   {
     parent::__construct();
-    
+
     $this->uniqueID = "pouetbox_proddelete";
-    
+
     $this->classes[] = "errorbox";
-    
+
     $this->prod = $prod;
-    
+
     $strings = array(
       "CELEBRANDIL-VECTOR",
       "MEKKA-SYMPOSIUM",
@@ -162,7 +162,7 @@ class PouetBoxAdminDeleteProd extends PouetBox
       return array("wrong verification string !");
     return array();
   }
-  function Commit($data) 
+  function Commit($data)
   {
     SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM downloadlinks WHERE prod=%d",$this->prod->id));
@@ -185,7 +185,7 @@ class PouetBoxAdminDeleteProd extends PouetBox
 
     return array();
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<div class='content'/>";
     echo "  <p>To make sure you want to delete <b>this</b> prod, type \"".$this->checkString."\" here:</p>";
@@ -216,16 +216,16 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdSceneorg extends PouetBox 
+class PouetBoxAdminEditProdSceneorg extends PouetBox
 {
-  function PouetBoxAdminEditProdSceneorg( $prod ) 
+  function PouetBoxAdminEditProdSceneorg( $prod )
   {
     parent::__construct();
-    
+
     $this->uniqueID = "pouetbox_prodeditprodsceneorg";
     $this->prod = $prod;
     $this->title = "scene.org recommendations";
-    
+
     $this->sceneorg = SQLLib::SelectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d",$this->prod->id));
 
     $row = SQLLib::selectRow("DESC sceneorgrecommended type");
@@ -236,7 +236,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->categories = $m[1];
   }
-  function Commit($data) 
+  function Commit($data)
   {
     if ($data["delSceneorgRec"])
     {
@@ -244,7 +244,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
       gloperator_log( "prod", (int)$this->prod->id, "prod_sceneorg_delete" );
       return array();
     }
-    
+
     $a = array();
     $a["type"] = $data["type"];
     $a["category"] = $data["category"];
@@ -270,7 +270,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
     return array();
   }
   function GetRow($id)
-  { 
+  {
     foreach($this->sceneorg as $v)
       if ($v->id == $id)
         return $v;
@@ -289,10 +289,10 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
     echo "<td>";
     if ($row->id)
       echo "<input type='hidden' name='editSceneorgRecID' value='".$row->id."'/>";
-      
+
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-    
+
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
@@ -304,7 +304,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBox
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id,
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id);
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<table class='boxtable'>\n";
     echo "  <tr>\n";
@@ -350,25 +350,25 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?    
+<?
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdLinks extends PouetBox 
+class PouetBoxAdminEditProdLinks extends PouetBox
 {
-  function PouetBoxAdminEditProdLinks( $prod ) 
+  function PouetBoxAdminEditProdLinks( $prod )
   {
     parent::__construct();
-    
+
     $this->uniqueID = "pouetbox_prodeditprodlinks";
     $this->prod = $prod;
     $this->title = "additional links";
-    
+
     $this->links = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$this->prod->id));
   }
-  function Commit($data) 
+  function Commit($data)
   {
     if ($data["delLink"])
     {
@@ -376,7 +376,7 @@ class PouetBoxAdminEditProdLinks extends PouetBox
       gloperator_log( "prod", (int)$this->prod->id, "prod_link_del" );
       return array();
     }
-    
+
     $a = array();
     $a["type"] = $data["type"];
     $a["link"] = $data["link"];
@@ -400,7 +400,7 @@ class PouetBoxAdminEditProdLinks extends PouetBox
     return array();
   }
   function GetRow($id)
-  { 
+  {
     foreach($this->links as $v)
       if ($v->id == $id)
         return $v;
@@ -428,7 +428,7 @@ class PouetBoxAdminEditProdLinks extends PouetBox
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id,
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id);
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<table class='boxtable'>\n";
     echo "  <tr>\n";
@@ -465,22 +465,22 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?    
+<?
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdParties extends PouetBox 
+class PouetBoxAdminEditProdParties extends PouetBox
 {
-  function PouetBoxAdminEditProdParties( $prod ) 
+  function PouetBoxAdminEditProdParties( $prod )
   {
     parent::__construct();
-    
+
     $this->uniqueID = "pouetbox_prodeditprodparties";
     $this->prod = $prod;
     $this->title = "additional parties";
-    
+
     $s = new BM_Query();
     $s->AddField("prodotherparty.id");
     $s->AddField("prodotherparty.partycompo");
@@ -490,24 +490,24 @@ class PouetBoxAdminEditProdParties extends PouetBox
     $s->attach(array("prodotherparty"=>"party"),array("parties as party"=>"id"));
     $s->AddWhere(sprintf_esc("prod=%d",$this->prod->id));
     $this->parties = $s->perform();
-    
-    
+
+
     $row = SQLLib::selectRow("DESC prods partycompo");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->compos = array("");
     $this->compos = array_merge($this->compos,$m[1]);
-    
+
     $this->ranks = array(0=>"");
     $this->ranks[97] = "disqualified";
     $this->ranks[98] = "not applicable";
     $this->ranks[99] = "not shown";
     for ($x=1; $x<=96; $x++) $this->ranks[$x] = $x;
-    
+
     $this->years = array("");
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
-   
+
   }
-  function Commit($data) 
+  function Commit($data)
   {
     if ($data["delParty"])
     {
@@ -515,7 +515,7 @@ class PouetBoxAdminEditProdParties extends PouetBox
       gloperator_log( "prod", (int)$this->prod->id, "prod_party_del" );
       return array();
     }
-    
+
     $a = array();
     $a["party"] = $data["partyID"];
     $a["party_year"] = $data["partyYear"];
@@ -543,7 +543,7 @@ class PouetBoxAdminEditProdParties extends PouetBox
     return array();
   }
   function GetRow($id)
-  { 
+  {
     foreach($this->parties as $v)
       if ($v->id == $id)
         return $v;
@@ -590,7 +590,7 @@ class PouetBoxAdminEditProdParties extends PouetBox
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id,
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id);
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<table class='boxtable'>\n";
     echo "  <tr>\n";
@@ -633,23 +633,23 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?    
+<?
   }
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdAffil extends PouetBox 
+class PouetBoxAdminEditProdAffil extends PouetBox
 {
-  function PouetBoxAdminEditProdAffil( $prod ) 
+  function PouetBoxAdminEditProdAffil( $prod )
   {
     parent::__construct();
-    
+
     $this->uniqueID = "pouetbox_prodeditprodaffil";
     $this->prod = $prod;
     $this->title = "related prods";
-    
+
     $s = new BM_Query();
     $s->AddField("affiliatedprods.id");
     $s->AddField("affiliatedprods.type");
@@ -659,7 +659,7 @@ class PouetBoxAdminEditProdAffil extends PouetBox
     $s->AddWhere(sprintf_esc("original=%d or derivative=%d",$this->prod->id,$this->prod->id));
     $this->prods = $s->perform();
   }
-  function Commit($data) 
+  function Commit($data)
   {
     if ($data["delRelation"])
     {
@@ -667,7 +667,7 @@ class PouetBoxAdminEditProdAffil extends PouetBox
       gloperator_log( "prod", (int)$this->prod->id, "prod_rel_del" );
       return array();
     }
-    
+
     list($direction,$type) = explode(":",$data["type"],2);
     $a = array();
     $a["type"] = $type;
@@ -692,11 +692,11 @@ class PouetBoxAdminEditProdAffil extends PouetBox
       $this->RenderNormalRow($o);
       exit();
     }
-  
+
     return array();
   }
   function GetRow($id)
-  { 
+  {
     foreach($this->prods as $v)
       if ($v->id == $id)
         return $v;
@@ -732,7 +732,7 @@ class PouetBoxAdminEditProdAffil extends PouetBox
   {
     global $AFFILIATIONS_ORIGINAL;
     global $AFFILIATIONS_INVERSE;
-    
+
     $a = ($this->prod->id == $v->prodOriginal->id ? $AFFILIATIONS_ORIGINAL : $AFFILIATIONS_INVERSE);
     $prod = ($this->prod->id == $v->prodOriginal->id ? $v->prodDerivative : $v->prodOriginal);
     echo "    <td>"._html($a[$v->type])."</td>\n";
@@ -741,7 +741,7 @@ class PouetBoxAdminEditProdAffil extends PouetBox
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id,
       $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id);
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<table class='boxtable'>\n";
     echo "  <tr>\n";
@@ -782,7 +782,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?    
+<?
   }
 }
 
@@ -834,7 +834,7 @@ if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
     $box = new PouetBoxAdminEditProdAffil( $prod );
     $box->RenderEditRow( new stdClass() );
   }
-  exit(); 
+  exit();
 }
 
 $form = new PouetFormProcessor();

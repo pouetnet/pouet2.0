@@ -14,7 +14,7 @@ class PouetParty extends BM_Class {
     {
       return sprintf("<a href='party.php?which=%d&amp;when=%d'>%s</a> %d",
         $this->id,$year,_html($this->name),$year);
-    } 
+    }
     else
     {
       return sprintf("<a href='party.php?which=%d'>%s</a>",
@@ -67,7 +67,7 @@ class PouetPlacing {
     $p = $n % 10;
     if ($p==3) $suf = "rd";
     if ($p==2) $suf = "nd";
-    if ($p==1) $suf = "st";  
+    if ($p==1) $suf = "st";
     if ($n==11) $suf = "th";
     if ($n==12) $suf = "th";
     return $this->ranking."<span class='ordinal'>".$suf."</span>";
@@ -77,7 +77,7 @@ class PouetPlacing {
     if ($s) $s.= " at ";
     $s .= $this->party->PrintLinked($this->year);
     return $s;
-      
+
   }
 }
 

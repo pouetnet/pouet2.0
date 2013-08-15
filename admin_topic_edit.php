@@ -9,9 +9,9 @@ if ($currentUser && !$currentUser->CanEditBBS())
   exit();
 }
 
-class PouetBoxAdminEditTopic extends PouetBox 
+class PouetBoxAdminEditTopic extends PouetBox
 {
-  function PouetBoxAdminEditTopic( $id ) 
+  function PouetBoxAdminEditTopic( $id )
   {
     parent::__construct();
     $this->id = (int)$id;
@@ -25,7 +25,7 @@ class PouetBoxAdminEditTopic extends PouetBox
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->categories = $m[1];
   }
-  
+
   function ValidateInput( $data )
   {
     $errormessage = array();
@@ -46,7 +46,7 @@ class PouetBoxAdminEditTopic extends PouetBox
   function Commit($data)
   {
     global $groupID;
-    
+
     $a = array();
     $a["category"] = $data["category"];
     $a["closed"] = $data["closed"]=="on";
@@ -56,7 +56,7 @@ class PouetBoxAdminEditTopic extends PouetBox
 
     return array();
   }
-  
+
   function ParsePostMessage( $data )
   {
     global $groupID,$currentUser;
@@ -64,13 +64,13 @@ class PouetBoxAdminEditTopic extends PouetBox
     $errormessages = $this->Validate($data);
     if (count($errormessages))
       return $errormessages;
-      
+
     return $this->Commit($data);
-  }  
+  }
   function LoadFromDB()
   {
     global $THREAD_CATEGORIES;
-  
+
     $this->fields = array(
       "category"=>array(
         "name"=>"topic category",
@@ -89,18 +89,18 @@ class PouetBoxAdminEditTopic extends PouetBox
         $this->fields[$k]["value"] = $v;
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
 
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
     $this->formifier->RenderForm( $this->fields );

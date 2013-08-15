@@ -39,12 +39,12 @@ class PouetBoxUserMain extends PouetBox
     {
       $this->prods = $this->GetProdsAdded( $_GET["show"]=="prods"? null : get_setting("userprods") );
     }
-    
+
     $this->groups = array();
     if (!$_GET["show"] || $_GET["show"]=="groups")
     {
       $this->groups = $this->GetGroupsAdded( $_GET["show"]=="groups"? null : get_setting("usergroups") );
-    }    
+    }
 
     $this->parties = array();
     if (!$_GET["show"] || $_GET["show"]=="parties")
@@ -87,13 +87,13 @@ class PouetBoxUserMain extends PouetBox
     {
       $this->comments = $this->GetCommentsAdded( 10, $_GET["page"] );
     }
-    
+
     $this->agreeRulez = array();
     if (!$_GET["show"])
     {
       $this->agreeRulez = $this->GetThumbAgreers( get_setting("userrulez"), 1 );
     }
-    
+
     $this->agreeSucks = array();
     if (!$_GET["show"])
     {
@@ -259,7 +259,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf_esc("c2.who != %d",$this->id));
     $s->AddGroup("c2.who");
     $s->AddOrder("c DESC");
-    
+
     if ($limit)
       $s->SetLimit( $limit );
 
@@ -547,7 +547,7 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
       $this->paginator->RenderNavbar();
     }
-    
+
     if ($this->agreeRulez)
     {
       echo "<div class='contribheader'>top thumb up agreers";
@@ -563,7 +563,7 @@ class PouetBoxUserMain extends PouetBox
       }
       echo "</ul>";
     }
-    
+
     if ($this->agreeSucks)
     {
       echo "<div class='contribheader'>top thumb down agreers";

@@ -3,7 +3,7 @@
  * Basic connection library for SceneId 2.0
  * @author Reza Esmaili <me@dfox.info>
  * @version 1.2
- * 
+ *
  * @example
  *  $data = SceneId::Factory('test', 'test')->getUserInfoByUserId(1)->asXML();
  *  $data = SceneId::Factory('test', 'test')->getUserInfoByUserLogin('dfox')->asSimpleXML();
@@ -12,7 +12,7 @@
 class SceneIdException extends Exception {}
 
 class SceneId {
-	
+
 	private $login;
 	private $password;
 	private $url = 'https://id.scene.org/sceneid.php';
@@ -21,7 +21,7 @@ class SceneId {
 	private $format = 'xml';
 	private $command;
 	private $commandParams = array();
-	
+
 	/**
 	 * Factory
 	 * @param string $login the sceneid portal login
@@ -84,7 +84,7 @@ class SceneId {
 			'portalPassword' => $this->password,
 			'command' => $this->command
 		);
-		
+
 		// GET is deprecated and will be removed in the future
 		switch ($this->method) {
 			case 'GET':
@@ -96,7 +96,7 @@ class SceneId {
 				$content = http_build_query(array_merge($params, $this->commandParams));
 				break;
 		}
-		
+
 		// Create stream context
 		$options = array('http' => array('method' => $this->method, 'content' => $content, 'header' => 'Content-Type: application/x-www-form-urlencoded'));
 		$context = stream_context_create($options);
@@ -112,13 +112,13 @@ class SceneId {
 		while (!feof($connection)) {
 			$data .= fgets($connection, 4096);
 		}
-		
+
 		// Close socket
 		fclose($connection);
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Return requested data as raw xml
 	 * @return string
@@ -127,7 +127,7 @@ class SceneId {
 	{
 		return $this->asData();
 	}
-	
+
 	/**
 	 * Return requested data as it is
 	 * @return string
@@ -181,8 +181,8 @@ class SceneId {
 	  }
 	  return $data;
 	}
-	
-	
+
+
 	/**
 	 * Get user info by user id
 	 * @param string $userId the sceneid user id
@@ -194,7 +194,7 @@ class SceneId {
 		$this->commandParams = array('userID' => $userID);
 		return $this;
 	}
-	
+
 	/**
 	 * Get user info by user login
 	 * @param string $login the sceneid user login
@@ -241,7 +241,7 @@ class SceneId {
 	function login($login, $password, $externalid=NULL, $permanent=NULL)
 	{
 		$params = array('login' => $login, 'password' => md5($password), 'externalid' => $externalid, 'permanent' => $permanent, 'ip' => (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1'));
-		
+
 		$this->command = 'loginUserMD5';
 		$this->commandParams = $params;
 		return $this;
@@ -283,7 +283,7 @@ class SceneId {
 		$this->commandParams = array('cookie' => $cookie);
 		return $this;
 	}
-	
+
 	/**
 	 * Request new user password by userId
 	 * @param string $userID the sceneid user id
@@ -335,7 +335,7 @@ class SceneId {
 				unset($params[$param]);
 			}
 		}
-		
+
 		// Check valid date
 		if (isset($params['birthdate'])) {
 			if (!preg_match('/^(\d\d\d\d)-(\d\d?)-(\d\d?)$/', $params['birthdate'], $matches)) {
@@ -378,7 +378,7 @@ class SceneId {
 				unset($params[$param]);
 			}
 		}
-		
+
 		// Check valid date
 		if (isset($params['birthdate'])) {
 			if (!preg_match('/^(\d\d\d\d)-(\d\d?)-(\d\d?)$/', $params['birthdate'], $matches)) {

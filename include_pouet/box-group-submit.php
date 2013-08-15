@@ -1,8 +1,8 @@
 <?
 
-class PouetBoxSubmitGroup extends PouetBox 
+class PouetBoxSubmitGroup extends PouetBox
 {
-  function PouetBoxSubmitGroup() 
+  function PouetBoxSubmitGroup()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitgroup";
@@ -10,7 +10,7 @@ class PouetBoxSubmitGroup extends PouetBox
     $this->formifier = new Formifier();
     $this->fields = array();
   }
-  
+
   function ValidateInput( $data )
   {
     $errormessage = array();
@@ -41,7 +41,7 @@ class PouetBoxSubmitGroup extends PouetBox
   function Commit($data)
   {
     global $groupID;
-    
+
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["acronym"] = $data["acronym"];
@@ -58,14 +58,14 @@ class PouetBoxSubmitGroup extends PouetBox
   {
     return (int)$this->groupID;
   }
-  
+
   function LoadFromDB()
   {
     global $PLATFORMS;
     $plat = array();
 	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
 	  uasort($plat,"strcasecmp");
-  
+
     $this->fields = array(
       "name"=>array(
         "name"=>"group name",
@@ -90,18 +90,18 @@ class PouetBoxSubmitGroup extends PouetBox
         $this->fields[$k]["value"] = $v;
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
 
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
     $this->formifier->RenderForm( $this->fields );

@@ -7,7 +7,7 @@ $AFFILIATIONS_ORIGINAL = array(
   "final" => "final version",
   "pack" => "packed in",
   "related" => "related to",
-);	
+);
 $AFFILIATIONS_INVERSE = array(
   "remix" => "remix of",
   "port" => "ported from",
@@ -25,5 +25,5 @@ $THREAD_CATEGORIES = array(
   6 => "offtopic",
   1 => "residue",
 );
-	
+
 ?>

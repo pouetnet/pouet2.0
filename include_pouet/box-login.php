@@ -16,13 +16,13 @@ class PouetBoxLogin extends PouetBox {
   {
   }
   function RenderBody() {
-    if (!get_login_id()) 
+    if (!get_login_id())
     {
       echo "<form action='login.php' method='post'>\n";
-      
+
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
-      
+
       echo "<div class='content r1 center'>\n";
       //echo "<input id='loginusername' type='text' name='login' value='SceneID' size='15' maxlength='16'/><br />\n";
       //echo "<input id='loginpassword' type='password' name='password' value='password' size='15'/><br />\n";

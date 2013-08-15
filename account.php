@@ -35,9 +35,9 @@ $namesNumeric = array(
   "usersucks" => "user page - sucks",
   "commentshours" => "comments page - hours",
   "commentsnamecut" => "comments page - name cut",
-  "topicposts" => "topic page - posts", 
+  "topicposts" => "topic page - posts",
 );
-$namesSwitch = array(  
+$namesSwitch = array(
   //select
   "logos" => "logos",
   "topbar" => "top bar",
@@ -53,9 +53,9 @@ $namesSwitch = array(
   "topichidefakeuser" => "bbs page - hide fakeuser",
   "prodhidefakeuser" => "prod page - hide fakeuser",
   "displayimages" => "[img][/img] tags should be displayed as...",
-  "indexbbsnoresidue" => "residue threads on the front page are...",           
+  "indexbbsnoresidue" => "residue threads on the front page are...",
 );
-      
+
 class PouetBoxAccount extends PouetBox
 {
   function PouetBoxAccount( )
@@ -217,7 +217,7 @@ class PouetBoxAccount extends PouetBox
           $this->fieldsSettings[$k]["type"] = "select";
           $this->fieldsSettings[$k]["assoc"] = true;
           $this->fieldsSettings[$k]["fields"] = array(0=>"hidden",1=>"displayed");
-        }        
+        }
       }
       // exceptions!
       $this->fieldsSettings["topicposts"]["min"] = 1;
@@ -257,7 +257,7 @@ class PouetBoxAccount extends PouetBox
   function ParsePostLoggedIn( $data )
   {
     global $currentUser;
-    
+
     $errors = array();
 
     // sceneid bit
@@ -305,7 +305,7 @@ class PouetBoxAccount extends PouetBox
     }
     $cdcUnique = array_unique($cdcUnique);
     SQLLib::Query(sprintf_esc("delete from users_cdcs where user = %d",get_login_id()));
-    
+
     foreach($cdcUnique as $c)
     {
       $a = array();
@@ -338,7 +338,7 @@ class PouetBoxAccount extends PouetBox
       $a["nick"] = $currentUser->nickname;
       SQLLib::InsertRow("oldnicks",$a);
     }
-    
+
     // customizer bit
 
     global $avatars;
@@ -604,7 +604,7 @@ document.observe("dom:loaded",function(){
   $("customizer").parentNode.insertBefore(s,$("customizer"));
   $("customizer").hide();
 
-  for (var i=1; i<10; i++)  
+  for (var i=1; i<10; i++)
   {
     if (!$("cdc"+i)) continue;
     new Autocompleter($("cdc"+i), {"dataUrl":"./ajax_prods.php"});

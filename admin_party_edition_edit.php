@@ -9,30 +9,30 @@ if ($currentUser && !$currentUser->CanEditItems())
   exit();
 }
 
-class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition 
+class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 {
-  function PouetBoxAdminEditPartyEdition( $id, $year ) 
+  function PouetBoxAdminEditPartyEdition( $id, $year )
   {
     parent::__construct();
-    
+
     $this->id = $id;
     $this->year = $year;
-    
+
     $this->party = PouetParty::Spawn( $this->id );
-    
+
     $this->title = sprintf("edit this party: %s %04d",_html($this->party->name),$this->year);
   }
-  function Commit($data) 
+  function Commit($data)
   {
     global $partyID;
-    
+
     $sql = array();
     $sql["download"] = $data["download"];
     $sql["csdb"] = $data["csdbID"];
     $sql["slengpung"] = $data["slengpungID"];
     $sql["zxdemo"] = $data["zxdemoID"];
     $sql["artcity"] = $data["artcity"];
-        
+
     $links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
     if ($links)
     {
@@ -44,7 +44,7 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
       $sql["year"] = $this->year;
       SQLLib::InsertRow("partylinks",$sql);
     }
-    
+
     if (is_uploaded_file($_FILES["results"]["tmp_name"]))
     {
       move_uploaded_file_fake($_FILES["results"]["tmp_name"],get_local_partyresult_path($this->id,$this->year));
@@ -57,15 +57,15 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
   function LoadFromDB()
   {
     parent::LoadFromDB();
-    
+
     $this->links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
-    
+
     $this->fields["download"]["value"] = $this->links->download;
     $this->fields["csdbID"]["value"] = $this->links->csdb;
     $this->fields["slengpungID"]["value"] = $this->links->slengpung;
     $this->fields["zxdemoID"]["value"] = $this->links->zxdemo;
     $this->fields["artcity"]["value"] = $this->links->artcity;
-    
+
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;

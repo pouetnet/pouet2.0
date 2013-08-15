@@ -5,12 +5,12 @@ class PouetBoxTopList extends PouetBox {
   function PouetBoxTopList() {
     parent::__construct();
     $this->uniqueID = "pouetbox_toplist";
-    
+
     $this->formifier = new Formifier();
-    
+
     $row = SQLLib::selectRow("DESC prods type");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
-    
+
     $this->types = array();
     $this->types[""] = "- none - ";
     foreach($m[1] as $v) $this->types[$v] = $v;
@@ -56,7 +56,7 @@ class PouetBoxTopList extends PouetBox {
         "max"=>50,
       ),
     );
-    
+
 
     if ($_GET)
     {
@@ -64,7 +64,7 @@ class PouetBoxTopList extends PouetBox {
         if ($this->fields[$k])
           $this->fields[$k]["value"] = $v;
     }
-        
+
     $s = new BM_Query("prods");
     if ($_GET["days"])
     {
@@ -90,7 +90,7 @@ class PouetBoxTopList extends PouetBox {
     $s->SetLimit($limit);
     $this->prods = $s->perform();
   }
-  function RenderTitle() 
+  function RenderTitle()
   {
     echo "<div class='selector'>";
     echo "<form action='toplist.php' method='get'>\n";
@@ -99,7 +99,7 @@ class PouetBoxTopList extends PouetBox {
     echo "</form>\n";
     echo "</div>";
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<ul class='boxlist'>\n";
     $n = 1;

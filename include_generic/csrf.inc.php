@@ -1,11 +1,11 @@
 <?
-class CSRFProtect 
+class CSRFProtect
 {
   public function CSRFProtect()
   {
     if(session_id() == '')
       die("Initialize sessions please!");
-    
+
     if ($_SESSION["CSRFProtect"])
     {
       // garbage collect
@@ -23,7 +23,7 @@ class CSRFProtect
     //do {
       $name  = "Protect".sprintf("%06d",rand(0,999999));
     //} while (isset($_SESSION["CSRFProtect"][$name]));
-    
+
     $token = sha1(time() . rand(0,9999));
     printf("<input type='hidden' name='ProtName' value='%s'/>\n",_html($name));
     printf("<input type='hidden' name='ProtValue' value='%s'/>\n",_html($token));

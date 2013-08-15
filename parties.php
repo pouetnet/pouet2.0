@@ -1,19 +1,19 @@
 <?
 require_once("bootstrap.inc.php");
 
-class PouetBoxPartyList extends PouetBox 
+class PouetBoxPartyList extends PouetBox
 {
   var $letter;
   function PouetBoxPartyList($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_partylist";
-    
+
     $letter = substr($letter,0,1);
     if (preg_match("/^[a-z]$/",$letter))
       $this->letter = $letter;
     else
       $this->letter = "#";
-    
+
     $a = array();
     $a[] = "<a href='parties.php?pattern=%23'>#</a>";
     for($x=ord("a");$x<=ord("z");$x++)
@@ -22,14 +22,14 @@ class PouetBoxPartyList extends PouetBox
     $this->letterselect = "[ ".implode(" |\n",$a)." ]";
   }
 
-  function RenderHeader() 
+  function RenderHeader()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
   }
 
-  function RenderFooter() 
+  function RenderFooter()
   {
     echo " <div class='letterselect'>".$this->letterselect."</div>\n";
     echo "</div>\n";
@@ -43,19 +43,19 @@ class PouetBoxPartyList extends PouetBox
       $s->AddWhere(sprintf("name like '%s%%'",$this->letter));
     $s->AddOrder("name");
     $this->parties = $s->perform();
-    
+
     if ($this->parties)
     {
       $ids = array();
       foreach($this->parties as $group) $ids[] = $group->id;
       $idstr = implode(",",$ids);
-  
+
       $rows = SQLLib::selectRows(sprintf("SELECT count(*) as c, party, party_year FROM `prods` WHERE party in (%s) GROUP by party, party_year order by party_year",$idstr));
       $this->partyyears = array();
       foreach($rows as $row)
         if ($row->party)
           $this->partyyears[$row->party][$row->party_year] = $row->c;
-  
+
       $rows = SQLLib::selectRows(sprintf("SELECT * FROM `partylinks` WHERE party in (%s)",$idstr));
       $this->partylinks = array();
       foreach($rows as $row)
@@ -96,10 +96,10 @@ class PouetBoxPartyList extends PouetBox
         echo "</td>\n";
         echo "  <td>".$count."</td>\n";
         echo "  <td>";
-        
+
         if($this->partylinks[$party->id][$year]->download)
           echo "[<a href='".$this->partylinks[$party->id][$year]->download."'>prods</a>] ";
-          
+
         if(file_exists($party->GetResultsLocalFileName($year)))
           echo $party->RenderResultsLink( $year );
 
