@@ -30,8 +30,9 @@ input, select, option {
   font-weight: normal;
 }
 textarea {
-  font-family: tahoma;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-size: 9pt;
+  padding: 2px;
 }
 select[multiple="multiple"], select[multiple="multiple"] option {
   display: block;
@@ -980,10 +981,8 @@ td.date {
 }
 
 #pouetbox_prodpost textarea {
-  width:435px;
+  width: 435px;
   height: 200px;
-  font-family: tahoma;
-  font-size: 9pt;
 }
 
 #pouetbox_prodpost #prodvote {
