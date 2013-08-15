@@ -63,21 +63,21 @@ if (count($prod->groups))
 $xml->demo->addChild("support");
 $xml->demo->support->addChild("configuration");
 foreach($prod->platforms as $v)
-  $xml->demo->support->configuration->addChild("platform",$PLATFORMS[$v]["name"])->addAttribute("type",$PLATFORMS[$v]["slug"]);
+  $xml->demo->support->configuration->addChild("platform",_html($PLATFORMS[$v]["name"]))->addAttribute("type",_html($PLATFORMS[$v]["slug"]));
 
 $xml->demo->addChild("download");
-$xml->demo->download->addChild("url",$prod->download)->addAttribute("type","download");
+$xml->demo->download->addChild("url",_html($prod->download))->addAttribute("type","download");
 
 $downloads = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$prod->id));
 foreach($downloads as $v)
-  $xml->demo->download->addChild("url",$v->link)->addAttribute("type",$v->type);
+  $xml->demo->download->addChild("url",_html($v->link))->addAttribute("type",$v->type);
 
 
 $shot = find_screenshot($prod->id);
 if ($shot)
 {
   $xml->demo->addChild("screenshot");
-  $xml->demo->screenshot->addChild("url",POUET_ROOT_URL.$shot);
+  $xml->demo->screenshot->addChild("url",_html(POUET_ROOT_URL.$shot));
 }
 
 $dom = dom_import_simplexml($xml)->ownerDocument;
