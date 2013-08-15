@@ -74,6 +74,7 @@ class PouetBoxTopList extends PouetBox {
     else
     {
       $s->AddOrder("prods.rank");
+      $s->AddWhere("prods.rank > 0");
     }
     if ($_GET["type"])
     {
