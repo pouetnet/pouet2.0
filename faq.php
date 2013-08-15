@@ -10,7 +10,7 @@ class PouetBoxFAQ extends PouetBox {
 
   function LoadFromDB() 
   {
-    $this->entries = SQLLib::SelectRows("select * from faq order by category, id");
+    $this->entries = SQLLib::SelectRows("select * from faq order by category, id where deprecated = 0");
   }
 
   function RenderBody() 
