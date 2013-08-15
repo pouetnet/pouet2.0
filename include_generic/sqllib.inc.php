@@ -25,7 +25,7 @@ class SQLLib {
     $r = @mysqli_query(SQLLib::$link,$cmd);
     if(!$r) throw new Exception("<pre>\nMySQL ERROR:\nError: ".mysqli_error(SQLLib::$link)."\nQuery: ".$cmd);
     
-    //$SQLLIB_QUERIES[] = $cmd;
+    $SQLLIB_QUERIES[] = "*";
 
     return $r;
   }
