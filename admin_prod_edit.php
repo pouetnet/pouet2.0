@@ -177,9 +177,9 @@ class PouetBoxAdminDeleteProd extends PouetBox
     SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE prod=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM cdc WHERE which=%d",$this->prod->id));
 
-    unlink( get_local_nfo_path( (int)$this->prod->id ) );
+    @unlink( get_local_nfo_path( (int)$this->prod->id ) );
     foreach( array( "jpg","gif","png" ) as $v )
-      unlink( get_local_screenshot_path( (int)$this->prod->id, $v ) );
+      @unlink( get_local_screenshot_path( (int)$this->prod->id, $v ) );
 
     gloperator_log( "prod", (int)$this->prod->id, "prod_delete", get_object_vars($this->prod) );
 
