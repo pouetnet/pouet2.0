@@ -2,11 +2,11 @@
 /**
  * Nathan Codding - Jan. 12, 2001.
  * Performs [quote][/quote] bbencoding on the given string, and returns the results.
- * Any unmatched "[quote]" or "[/quote]" token will just be left alone. 
+ * Any unmatched "[quote]" or "[/quote]" token will just be left alone.
  * This works fine with both having more than one quote in a message, and with nested quotes.
  * Since that is not a regular language, this is actually a PDA and uses a stack. Great fun.
  *
- * Note: This function assumes the first character of $message is a space, which is added by 
+ * Note: This function assumes the first character of $message is a space, which is added by
  * bbencode().
  *
  * modified and patched up by gargaj - still far from optimal!
@@ -15,20 +15,20 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
 {
   // First things first: If there aren't any "[quote]" strings in the message, we don't
   // need to process it at all.
-  
+
   if (stripos(strtolower($message), "[".$tag."]")===false)
   {
-    return $message;  
+    return $message;
   }
-  
+
   $tagLen = strlen($tag);
-  
+
   $stack = Array();
   $curr_pos = 0;
   while ($curr_pos!==false && ($curr_pos < strlen($message)))
-  { 
+  {
     $curr_pos = stripos($message, "[", $curr_pos);
-  
+
     // If not found, $curr_pos will be 0, and the loop will end.
     if ($curr_pos!==false)
     {
@@ -49,7 +49,7 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
         // Check if we've already found a matching starting tag.
         if (sizeof($stack) > 0)
         {
-          // There exists a starting tag. 
+          // There exists a starting tag.
           // We need to do 2 replacements now.
           $start_index = array_pop($stack);
 
@@ -65,8 +65,8 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
           $message = $before_start_tag . $openCode;
           $message .= $between_tags . $closeCode;
           $message .= $after_end_tag;
-          
-          // Now.. we've screwed up the indices by changing the length of the string. 
+
+          // Now.. we've screwed up the indices by changing the length of the string.
           // So, if there's anything in the stack, we want to resume searching just after it.
           // otherwise, we go back to the start.
           if (sizeof($stack) > 0)
@@ -83,21 +83,21 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
         else
         {
           // No matching start tag found. Increment pos, keep going.
-          ++$curr_pos;  
+          ++$curr_pos;
         }
       }
       else
       {
         // No starting tag or ending tag.. Increment pos, keep looping.,
-        ++$curr_pos;  
+        ++$curr_pos;
       }
     }
   } // while
-  
+
   return $message;
-  
+
 }
- 
+
 function bbencode( $text )
 {
   $text = preg_replace("/\[b\](.*?)\[\/b\]/si","<b>$1</b>",$text);

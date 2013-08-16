@@ -1,5 +1,5 @@
 <?
-class PouetRSS 
+class PouetRSS
 {
   private $xml;
   function __construct()
@@ -10,7 +10,7 @@ class PouetRSS
     $this->xml->channel->addChild("title","pouët.net");
     $this->xml->channel->addChild("link",POUET_ROOT_URL);
     $this->xml->channel->addChild("description","your online demoscene resource");
-    
+
     $link = $this->xml->channel->addChild("atom:link","","http://www.w3.org/2005/Atom");
     $link->addAttribute("href",($_SERVER["HTTPS"]=="on"?"https":"http")."://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"] );
     $link->addAttribute("rel","self");
@@ -48,7 +48,7 @@ class PouetRSS
   {
     header("Content-type: application/rss+xml; charset=utf-8");
     //header("Content-type: text/plain; charset=utf-8");
-    
+
     //echo $this->xml->asXML();
     $dom = dom_import_simplexml($this->xml)->ownerDocument;
     $dom->formatOutput = true;

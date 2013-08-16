@@ -1,29 +1,29 @@
 <?
-class PouetBoxSubmitProd extends PouetBox 
+class PouetBoxSubmitProd extends PouetBox
 {
-  function PouetBoxSubmitProd() 
+  function PouetBoxSubmitProd()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitprod";
     $this->title = "submit a prod!";
     $this->formifier = new Formifier();
     $this->fields = array();
-    
+
     $row = SQLLib::selectRow("DESC prods type");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->types = $m[1];
-    
+
     $row = SQLLib::selectRow("DESC prods partycompo");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->compos = array("");
     $this->compos = array_merge($this->compos,$m[1]);
-    
+
     $this->ranks = array(0=>"");
     $this->ranks[97] = "disqualified";
     $this->ranks[98] = "not applicable";
     $this->ranks[99] = "not shown";
     for ($x=1; $x<=96; $x++) $this->ranks[$x] = $x;
-    
+
     $this->years = array("");
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
   }
@@ -40,10 +40,10 @@ class PouetBoxSubmitProd extends PouetBox
   	}
     if (!$currentUser->CanSubmitItems())
     {
-      $errormessage[] = "you there. please do not add prods.";  
+      $errormessage[] = "you there. please do not add prods.";
   	  return $errormessage;
   	}
-    
+
     if(!$data["name"])
     {
   	  $errormessage[]="sorry, alien prophets already did a demo with no title!";
@@ -87,10 +87,10 @@ class PouetBoxSubmitProd extends PouetBox
     foreach ($shithosts as $v)
       if(strstr($myurl["host"],$v))
         $errormessage[] = "seriously, get better hosting";
-      
+
     if(strstr($myurl["host"],"youtube") || strstr($myurl["host"],"youtu.be"))
       $errormessage[] = "FUCK YOUTUBE - BINARY OR GTFO";
-      
+
     // ** apparently this is needed for csdb - still think its a bad idea
     //if(strstr($myurl["path"],".php") && !strstr($myurl["host"],"scene.org"))
     //  $errormessage[] = "please link to the file directly";
@@ -119,12 +119,12 @@ class PouetBoxSubmitProd extends PouetBox
 
     if( ($data["releaseDate_month"]&&$data["releaseDate_year"]) )
     {
-      if ( ($data["releaseDate_month"]>date('m')&&$data["releaseDate_year"]==date('Y')) || ($data["releaseDate_year"]>date('Y')) ) 
+      if ( ($data["releaseDate_month"]>date('m')&&$data["releaseDate_year"]==date('Y')) || ($data["releaseDate_year"]>date('Y')) )
       {
         $errormessage[]="you can't submit a prod released in the future, sorry =)";
       }
     }
-    
+
     if(!count($data["type"])) {
       $errormessage[] = "you must select at least one type for this prod";
     }
@@ -143,7 +143,7 @@ class PouetBoxSubmitProd extends PouetBox
       $errormessage[] = "please either select an invitation party AND a year, or neither !";
 
     $extension = "";
-    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
+    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
     {
       list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
       if($type!=IMAGETYPE_GIF && $type!=IMAGETYPE_JPEG && $type!=IMAGETYPE_PNG) {
@@ -160,7 +160,7 @@ class PouetBoxSubmitProd extends PouetBox
       }
     }
     // check the .nfo
-    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
+    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
     {
       if (!$currentUser->IsGloperator()) // gloperators are exempt from size limits
       {
@@ -169,29 +169,29 @@ class PouetBoxSubmitProd extends PouetBox
         }
       }
     }
-    
+
     return $errormessage;
   }
-  
+
   function Commit($data)
   {
-    //////////////////////////////////////////////////////////////////  
+    //////////////////////////////////////////////////////////////////
     // everything has been validated (..., the new album by BT!)
-      
+
     $a = array();
     $a["name"] = $data["name"];
     $a["download"] = $data["download"];
-    
+
     $a["added"] = get_login_id();
     $a["quand"] = date("Y-m-d H:i:s");
-    
+
     if( checkdate( $data["releaseDate_month"], 15, $data["releaseDate_year"]) )
       $a["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
     else if ($data["releaseDate_year"])
       $a["date"] = sprintf("%04d-00-15",$data["releaseDate_year"]);
-      
+
     $a["type"] = implode(",",$data["type"]);
-        
+
     $groups = array();
     if ($data["group1"]) $groups[] = (int)$data["group1"];
     if ($data["group2"]) $groups[] = (int)$data["group2"];
@@ -200,7 +200,7 @@ class PouetBoxSubmitProd extends PouetBox
     if (count($groups)) $a["group1"] = array_shift($groups);
     if (count($groups)) $a["group2"] = array_shift($groups);
     if (count($groups)) $a["group3"] = array_shift($groups);
-    
+
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
     $a["zxdemo"] = $data["zxdemoID"];
@@ -211,19 +211,19 @@ class PouetBoxSubmitProd extends PouetBox
     $a["invitation"] = $data["invitationParty"];
     $a["invitationyear"] = $data["invitationYear"];
     $a["boardID"] = $data["boardID"];
-    
-    $this->prodID = SQLLib::InsertRow("prods",$a);    
-    
+
+    $this->prodID = SQLLib::InsertRow("prods",$a);
+
     $data["platform"] = array_unique($data["platform"]);
     foreach($data["platform"] as $k=>$v)
     {
       $a = array();
       $a["prod"] = $this->prodID;
       $a["platform"] = $v;
-      SQLLib::InsertRow("prods_platforms",$a);    
+      SQLLib::InsertRow("prods_platforms",$a);
     }
-    
-    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
+
+    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
     {
       list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
       $extension = "_";
@@ -231,16 +231,16 @@ class PouetBoxSubmitProd extends PouetBox
         case 1:$extension="gif";break;
         case 2:$extension="jpg";break;
         case 3:$extension="png";break;
-      } 
+      }
       move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( $this->prodID, $extension ) );
 
       $a = array();
       $a["prod"] = $this->prodID;
       $a["user"] = get_login_id();
       $a["added"] = date("Y-m-d H:i:s");
-      SQLLib::InsertRow("screenshots",$a);    
-    }    
-    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"])) 
+      SQLLib::InsertRow("screenshots",$a);
+    }
+    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
     {
       move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( $this->prodID ) );
 
@@ -248,28 +248,28 @@ class PouetBoxSubmitProd extends PouetBox
       $a["prod"] = $this->prodID;
       $a["user"] = get_login_id();
       $a["added"] = date("Y-m-d H:i:s");
-      SQLLib::InsertRow("nfos",$a);    
-    }    
-    
+      SQLLib::InsertRow("nfos",$a);
+    }
+
     @unlink("cache/pouetbox_latestadded.cache");
     @unlink("cache/pouetbox_latestreleased.cache");
     @unlink("cache/pouetbox_latestparties.cache");
-    
+
     return array();
   }
-  
+
   function GetInsertionID()
   {
     return $this->prodID;
   }
-    
+
   function LoadFromDB()
   {
     global $PLATFORMS;
     $plat = array();
 	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
 	  uasort($plat,"strcasecmp");
-  
+
     $this->fields = array(
       "name"=>array(
         "name"=>"prod name / title",
@@ -370,19 +370,19 @@ class PouetBoxSubmitProd extends PouetBox
     }
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
-    
+
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
 
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     $fields = array_select($this->fields,array("name"));
     if ($fields)
@@ -400,7 +400,7 @@ class PouetBoxSubmitProd extends PouetBox
       $this->formifier->RenderForm( $fields );
       echo "  </div>\n";
     }
-    
+
     $fields = array_select($this->fields,array("download","releaseDate","platform","type"));
     if ($fields)
     {
@@ -436,7 +436,7 @@ class PouetBoxSubmitProd extends PouetBox
       $this->formifier->RenderForm( $fields );
       echo "  </div>\n";
     }
-    
+
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
   }

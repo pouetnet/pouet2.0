@@ -7,11 +7,11 @@ class PouetBoxProdNfo extends PouetBox {
     $this->uniqueID = "pouetbox_prodnfo";
     $this->title = "prod nfo";
   }
-  
+
   function LoadFromDB()
   {
     $this->prod = PouetProd::spawn( $_GET["which"] );
-    
+
     $s = new BM_Query();
     $s->AddField("added");
     $s->AddTable("nfos");
@@ -29,7 +29,7 @@ class PouetBoxProdNfo extends PouetBox {
       echo " by ".$this->prod->RenderGroupsLong();
     echo "</h2>\n";
   }
-  function RenderBody() 
+  function RenderBody()
   {
     $title = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
     echo "<div class='content' title='".$title."'>\n";
@@ -49,7 +49,7 @@ class PouetBoxProdNfo extends PouetBox {
   function RenderFooter()
   {
     global $currentUser;
-    
+
     echo "  <div class='content' id='fontlist'>";
     $fonts = array(
       "none" => "html",

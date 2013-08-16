@@ -32,7 +32,7 @@ if (get_login_id())
 ?>
 <script type="text/javascript">
 document.observe("dom:loaded",function(){
-  NameWarning({"ajaxURL":"./ajax_groups.php","linkURL":"groups.php?which="});  
+  NameWarning({"ajaxURL":"./ajax_groups.php","linkURL":"groups.php?which="});
 });
 </script>
 <?

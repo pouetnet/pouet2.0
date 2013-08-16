@@ -10,7 +10,7 @@ $prod = PouetProd::Spawn( $_GET["which"] );
 
 $a = array(&$prod);
 PouetCollectPlatforms( $a );
-    
+
 if (!$prod)
   die($xml->AsXML());
 

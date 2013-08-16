@@ -8,12 +8,12 @@ class PouetBoxFAQ extends PouetBox {
     $this->title = "the always incomplete pouët.net faq";
   }
 
-  function LoadFromDB() 
+  function LoadFromDB()
   {
     $this->entries = SQLLib::SelectRows("select * from faq where deprecated = 0 order by category, id");
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<div class='content'>\n";
     $lastType = "";

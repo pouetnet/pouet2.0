@@ -25,21 +25,21 @@ class PouetBoxNews extends PouetBox {
   }
 };
 
-class PouetBoxNewsBoxes extends PouetBoxCachable 
+class PouetBoxNewsBoxes extends PouetBoxCachable
 {
-  function PouetBoxNewsBoxes() 
+  function PouetBoxNewsBoxes()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_news";
-    $this->rss = new lastRSS(); 
-    $this->rss->cache_dir = './cache'; 
+    $this->rss = new lastRSS();
+    $this->rss->cache_dir = './cache';
     $this->rss->cache_time = 5*60; // in seconds
-    $this->rss->CDATA = 'strip'; 
-    $this->rss->date_format = 'Y-m-d'; 
+    $this->rss->CDATA = 'strip';
+    $this->rss->date_format = 'Y-m-d';
 
     $this->limit = 5;
   }
-  
+
   function LoadFromDB()
   {
     $this->rssBitfellasNews = $this->rss->get('http://bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
@@ -51,20 +51,20 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
 
   function GetCacheableData() {
     return serialize($this->rssBitfellasNews);
-  }  
+  }
 
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
   }
 
-  function Render() 
+  function Render()
   {
     if (!$this->rssBitfellasNews) {
     	printf('Error: Unable to open BitFeed!');
     } else {
       $p = new PouetBoxNews();
-      for($i=0; $i < $this->limit; $i++) 
+      for($i=0; $i < $this->limit; $i++)
       {
         $p->content = $this->rssBitfellasNews['items'][$i]['description'];
         $p->title = $this->rssBitfellasNews['items'][$i]['title'];

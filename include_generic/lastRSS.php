@@ -2,11 +2,11 @@
 /*
  ======================================================================
  lastRSS 0.9.1
- 
+
  Simple yet powerfull PHP class to parse RSS files.
- 
+
  by Vojtech Semecky, webmaster @ webdot . cz
- 
+
  Latest version, features, manual and examples:
  	http://lastrss.webdot.cz/
 
@@ -89,7 +89,7 @@ class lastRSS {
 		// return result
 		return $result;
 	}
-	
+
 	// -------------------------------------------------------------------
 	// Modification of preg_match(); return trimed field with index 1
 	// from 'classic' preg_match() array output

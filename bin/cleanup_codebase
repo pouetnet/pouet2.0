@@ -10,4 +10,4 @@ then
 fi
 
 # Remove trailing spaces on every line
-LANG=C find . -name "*.php" -exec sed -e 's/ +$//' -i '' {} \;
+LANG=C find . -name "*.php" -exec sed -i "" -E "s/[[:space:]]+$//" {} \;

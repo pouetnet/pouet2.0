@@ -26,7 +26,7 @@ class PouetBoxLogoVote extends PouetBox {
     echo "  </div>\n";
     echo "</div>\n";
   }
-	
+
 };
 
 
@@ -45,15 +45,15 @@ class PouetBoxLogoLama extends PouetBox {
       'logos-lamerbus.jpg',
       'logos-lamerst-by-charlie.jpg',
       'logos-lamercream.jpg',
-    );  
-    
+    );
+
     echo "<img src='".POUET_CONTENT_URL."gfx/".$lama_pictures[array_rand($lama_pictures)]."' alt='Lamer picture'/>";
 	}
   function RenderFooter() {
     echo "  <div class='foot'><a href='".POUET_ROOT_URL."'>get back</a></div>\n";
     echo "</div>\n";
   }
-	
+
 };
 
 $sel = new SQLSelect();
@@ -67,7 +67,7 @@ $sel->AddOrder("RAND()");
 if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
 {
   SQLLib::Query(sprintf_esc("delete from logos_votes where logo = %d and user = %d",$_POST["logoID"],$currentUser->id));
-  
+
   $vote = 0;
   if ($_POST["submit"] == "rulez") $vote = 1;
   if ($_POST["submit"] == "sucks") $vote = -1;
@@ -81,9 +81,9 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
     $a["vote"] = $vote;
     SQLLib::InsertRow("logos_votes",$a);
   }
-  
+
   SQLLib::Query(sprintf_esc("update logos set vote_count = (select sum(vote) from logos_votes where logo = %d) where id = %d",(int)$_POST["logoID"],(int)$_POST["logoID"]));
-  
+
   // ajax
   if ($_POST["partial"]==1)
   {
@@ -93,7 +93,7 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
     $s->AddWhere(sprintf_esc("logos.id not in (%s)",implode(",",$visibleLogos)));
     $s->SetLimit(1);
     $logo = SQLLib::SelectRow($s->GetQuery());
-    
+
     if ($logo)
     {
       $box = new PouetBoxLogoVote($logo);
@@ -120,7 +120,7 @@ if (get_login_id())
   $s = clone $sel;
   $s->SetLimit(5);
   $logos = SQLLib::SelectRows($s->GetQuery());
-  
+
   if ($logos)
   {
     foreach($logos as $logo)
@@ -134,7 +134,7 @@ if (get_login_id())
     $box = new PouetBoxLogoLama();
     $box->Render();
   }
-  
+
 ?>
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -154,7 +154,7 @@ function InstrumentForm(form)
     values.set("submit",form.select("input[type=submit][clicked=true]").first().value);
     values.set("partial",1);
     values.set("visibleLogos[]",visibleLogos);
-    
+
     new Ajax.Request(form.action,{
       method: form.method,
       parameters: values,
@@ -167,7 +167,7 @@ function InstrumentForm(form)
 
           console.log( $("content").select("div").length );
           console.log( div.down("#pouetbox_logolama") );
-          
+
           if (div.down("#pouetbox_logolama"))
           {
             if ($("content").select("div.logovote").length == 0)
@@ -186,10 +186,10 @@ document.observe("dom:loaded",function(){
   $$("form").each(function(item){
     InstrumentForm(item);
   });
-}); 
+});
 //-->
 </script>
-<?  
+<?
 }
 else
 {

@@ -9,22 +9,22 @@ if ($currentUser && !$currentUser->CanEditItems())
   exit();
 }
 
-class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup 
+class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 {
-  function PouetBoxAdminEditGroup( $id ) 
+  function PouetBoxAdminEditGroup( $id )
   {
     parent::__construct();
 
     $this->id = (int)$id;
-    
+
     $this->group = PouetGroup::Spawn( $this->id );
 
     $this->title = "edit this group: "._html($this->group->name);
   }
-  function Commit($data) 
+  function Commit($data)
   {
     global $groupID;
-    
+
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["acronym"] = $data["acronym"];
@@ -32,17 +32,17 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
     $a["csdb"] = $data["csdbID"];
     $a["zxdemo"] = $data["zxdemoID"];
     SQLLib::UpdateRow("groups",$a,"id=".$this->id);
-    
+
     gloperator_log( "group", $this->id, "group_edit" );
-    
+
     return array();
   }
   function LoadFromDB()
   {
     parent::LoadFromDB();
-    
+
     $group = $this->group;
-    
+
     $this->fields["name"]["value"] = $group->name;
     $this->fields["acronym"]["value"] = $group->acronym;
     $this->fields["website"]["value"] = $group->web;

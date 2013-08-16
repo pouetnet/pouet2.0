@@ -15,9 +15,9 @@ class PouetBoxGloperatorLog extends PouetBox {
     $q->AddTable("gloperator_log");
     $q->AddWhere(sprintf_esc("itemType = '%s'",$_GET["what"]));
     $q->AddWhere(sprintf_esc("itemID = %d",$_GET["which"]));
-    $q->attach(array("gloperator_log"=>"gloperatorID"),array("users as gloperator"=>"id"));    
+    $q->attach(array("gloperator_log"=>"gloperatorID"),array("users as gloperator"=>"id"));
     $q->AddOrder("date desc");
-    
+
     $this->logs = $q->perform();
   }
   function RenderBody() {

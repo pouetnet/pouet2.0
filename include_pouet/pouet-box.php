@@ -13,28 +13,28 @@ class PouetBox {
   function Validate( $data )
   {
     return array();
-  }  
+  }
 
   function Commit( $data )
   {
     return array();
-  }  
+  }
 
   function ParsePostMessage( $data )
   {
     $errors = $this->Validate( $data );
-   
+
     if (count($errors))
       return $errors;
-      
+
     return $this->Commit( $data );
   }
-  
+
   function GetInsertionID()
   {
     return 0;
   }
-  
+
   function GetData() // override
   {
     return NULL;
@@ -49,7 +49,7 @@ class PouetBox {
   function RenderTitle() {
     echo " <h2>".$this->title."</h2>\n";
   }
-  
+
   function RenderBody() {
     echo " <div class='content'>\n";
     $this->RenderContent();
@@ -59,11 +59,11 @@ class PouetBox {
   function RenderContent() { // override
     return "content comes here";
   }
-  
+
   function RenderFooter() {
     echo "</div>\n";
   }
-  
+
   function Render() {
     global $timer;
     $timer[$this->uniqueID." render"]["start"] = microtime_float();
@@ -82,14 +82,14 @@ class PouetBox {
 
   function LoadFromDB() { // override
   }
-  
+
   function Load()
   {
     global $timer;
     $timer[$this->uniqueID." load"]["start"] = microtime_float();
     $this->LoadFromDB();
     $timer[$this->uniqueID." load"]["end"] = microtime_float();
-  } 
+  }
 }
 
 class PouetBoxCachable extends PouetBox {
@@ -103,13 +103,13 @@ class PouetBoxCachable extends PouetBox {
   }
 
   function LoadFromCachedData($data) { // override
-    
+
   }
 
   function GetCacheFilename() {
     return POUET_ROOT_LOCAL . "/cache/".$this->uniqueID.".cache";
   }
-  
+
   function SaveToCache() {
     $s = $this->GetCacheableData();
     file_put_contents($this->GetCacheFilename(),$s);
@@ -118,12 +118,12 @@ class PouetBoxCachable extends PouetBox {
   function GetCachedData() {
     return file_get_contents($this->GetCacheFilename(),$s);
   }
-  
+
   function IsCacheValid() {
     $f = $this->GetCacheFilename();
     return (file_exists($f) && (  (time() - filemtime($f)) < $this->cacheTime));
   }
-  
+
   function ForceCacheUpdate()
   {
     $this->LoadFromDB();
@@ -148,6 +148,6 @@ class PouetBoxCachable extends PouetBox {
     }
     $timer[$this->uniqueID." load"]["end"] = microtime_float();
   }
-  
+
 };
 ?>

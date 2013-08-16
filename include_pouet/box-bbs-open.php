@@ -11,15 +11,15 @@ class PouetBoxBBSOpen extends PouetBox {
     $this->categories = $m[1];
   }
 
-  function ParsePostMessage($post) 
+  function ParsePostMessage($post)
   {
-    global $currentUser;  
+    global $currentUser;
     if (!$currentUser)
       return "you have to be logged in!";
 
     if (!$currentUser->CanPostInBBS())
       return "not allowed lol.";
-    
+
     $message = trim($post["message"]);
     if (!$message)
       return "not too meaningful, is it...";
@@ -54,20 +54,20 @@ class PouetBoxBBSOpen extends PouetBox {
 
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     global $currentUser;
-    if (!get_login_id()) 
+    if (!get_login_id())
     {
       require_once("box-login.php");
       $box = new PouetBoxLogin();
       $box->RenderBody();
-    } 
-    else 
+    }
+    else
     {
       if (!$currentUser->CanPostInBBS())
         return;
-        
+
       echo "<form action='add.php' method='post'>\n";
 
       $csrf = new CSRFProtect();
@@ -87,7 +87,7 @@ class PouetBoxBBSOpen extends PouetBox {
 
       echo " <label for='message'>message:</label>\n";
       echo " <textarea name='message' id='message'></textarea>\n";
-      
+
       echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
       echo "</div>\n";
       echo "<div class='foot'>\n";

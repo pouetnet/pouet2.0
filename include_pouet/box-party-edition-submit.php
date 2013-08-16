@@ -1,8 +1,8 @@
 <?
 
-class PouetBoxSubmitPartyEdition extends PouetBox 
+class PouetBoxSubmitPartyEdition extends PouetBox
 {
-  function PouetBoxSubmitPartyEdition() 
+  function PouetBoxSubmitPartyEdition()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitpartyedition";
@@ -10,17 +10,17 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     $this->formifier = new Formifier();
     $this->fields = array();
   }
-  
+
   function Validate( $data )
   {
     global $currentUser;
-    
+
     if (!$currentUser)
       return array("you have to be logged in !");
-    
+
     if (!$currentUser->CanSubmitItems())
       return array("not allowed lol !");
-    
+
     if ($data["download"])
     {
       $url = parse_url($data["download"]);
@@ -43,7 +43,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     $a["slengpung"] = $data["slengpungID"];
     $a["artcity"] = $data["artcity"];
     SQLLib::InsertRow("partylinks",$a);
-    
+
     return array();
   }
   function LoadFromDB()
@@ -52,7 +52,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     $plat = array();
 	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
 	  uasort($plat,"strcasecmp");
-  
+
     $this->fields = array(
       "download"=>array(
         "name"=>"download directory",
@@ -81,19 +81,19 @@ class PouetBoxSubmitPartyEdition extends PouetBox
         $this->fields[$k]["value"] = $v;
   }
 
-  function Render() 
+  function Render()
   {
     global $partyID,$currentUser;
-    
+
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
-    
+
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
     $this->formifier->RenderForm( $this->fields );

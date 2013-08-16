@@ -8,9 +8,9 @@ if (!POUET_TEST)
   exit();
 }
 
-class PouetBoxModificationRequest extends PouetBox 
+class PouetBoxModificationRequest extends PouetBox
 {
-  function PouetBoxModificationRequest() 
+  function PouetBoxModificationRequest()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_modificationrequest";
@@ -24,22 +24,22 @@ class PouetBoxModificationRequest extends PouetBox
       "prod_del" => "delete a prod",
     );
   }
-  
+
   function Validate( $data )
   {
     global $currentUser;
-    
+
     $errormessage = array();
-    
+
     if (!$currentUser)
     {
   	  $errormessage[]="you need to be logged in first.";
   	  return $errormessage;
   	}
-    
+
   	return array();
   }
-  
+
   function Commit($data)
   {
     $a = array();
@@ -48,14 +48,14 @@ class PouetBoxModificationRequest extends PouetBox
       $a["itemID"] = (int)$_REQUEST["prod"];
     $a["requestDate"] = date("Y-m-d H:i:s");
     $a["userID"] = get_login_id();
-    
+
     $post = $data;
     unset($post["requestType"]);
     $a["requestBlob"] = serialize($post);
-    
+
     global $reqID;
     $reqID = SQLLib::InsertRow("modification_requests",$a);
-    
+
     return array();
   }
   function LoadFromDB()
@@ -71,14 +71,14 @@ class PouetBoxModificationRequest extends PouetBox
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
-       
+
   }
 
-  function Render() 
+  function Render()
   {
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title.": ";
     if ($_REQUEST["prod"])
     {
@@ -89,7 +89,7 @@ class PouetBoxModificationRequest extends PouetBox
         echo " by ".$prod->RenderGroupsPlain();
     }
     echo "</h2>\n";
-    
+
     if(!$_POST["requestType"])
     {
       echo "  <div class='content'>\n";
@@ -147,8 +147,8 @@ class PouetBoxModificationRequest extends PouetBox
                 "value"=>1,
               ),
             );
-          } 
-          else 
+          }
+          else
           {
             $l = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$prod->id));
             foreach($l as $v)
@@ -186,7 +186,7 @@ class PouetBoxModificationRequest extends PouetBox
         $this->formifier->RenderForm($fields);
       }
       echo "  </div>\n";
-      
+
     }
 
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";

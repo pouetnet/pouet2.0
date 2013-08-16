@@ -2,7 +2,7 @@
 define(POUET_ROOT_LOCAL,dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
-  
+
 require_once( POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
@@ -40,7 +40,7 @@ if (get_login_id())
 
   $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
   if ($host!==".")
-  {  
+  {
     SQLLib::Query(sprintf_esc("update users set lastip='%s', lasthost='%s', lastlogin='%s' where id=%d",
         $_SERVER["REMOTE_ADDR"],$host,date("Y-m-d H:i:s"),$id));
     $currentUser = PouetUser::Spawn( $id );
@@ -56,9 +56,9 @@ $_SESSION["keepalive"] = str_pad("",rand(1,10),"x") . rand(1,10000);
 
 $timer["page"]["start"] = microtime_float();
 
-if (!$_SESSION["settings"]) 
+if (!$_SESSION["settings"])
 {
-  require_once("include_pouet/default_usersettings.php"); 
+  require_once("include_pouet/default_usersettings.php");
   $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
 }
 ?>

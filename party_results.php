@@ -6,7 +6,7 @@ class PouetBoxPartyResults extends PouetBox {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyresults";
   }
-  
+
   function LoadFromDB()
   {
     $this->party = PouetParty::spawn( $_GET["which"] );
@@ -18,7 +18,7 @@ class PouetBoxPartyResults extends PouetBox {
     echo "<div class='pouettbl asciiviewer' id='".$this->uniqueID."'>\n";
     echo " <h2><big>".$this->party->PrintLinked( $_GET["when"] )." results"."</big></h2>\n";
   }
-  function RenderContent() 
+  function RenderContent()
   {
     if ($_GET["font"]=="none")
     {
@@ -32,7 +32,7 @@ class PouetBoxPartyResults extends PouetBox {
   function RenderFooter()
   {
     global $currentUser;
-    
+
     echo "  <div class='content' id='fontlist'>";
     $fonts = array(
       "none" => "html",

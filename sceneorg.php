@@ -13,19 +13,19 @@ class PouetBoxSceneOrgAwards extends PouetBox {
     $s = new BM_Query("sceneorgrecommended");
     $s->AddField("sceneorgrecommended.type");
     $s->AddField("sceneorgrecommended.category");
-    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));    
+    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
     $s->AddOrder("date_format(sceneorgrecommended_prod.date,'%Y') DESC");
     $s->AddOrder("sceneorgrecommended.category");
     $s->AddOrder("sceneorgrecommended.type");
     $s->AddWhere("sceneorgrecommended.type != 'viewingtip'");
     $this->sceneorg = $s->perform();
-    
+
     $a = array();
     foreach($this->sceneorg as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
-  
-  function RenderBody() 
+
+  function RenderBody()
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
@@ -76,17 +76,17 @@ class PouetBoxSceneOrgTips extends PouetBox {
   {
     $s = new BM_Query("sceneorgrecommended");
     $s->AddField("sceneorgrecommended.type");
-    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));    
+    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
     $s->AddOrder("date_format(sceneorgrecommended_prod.date,'%Y') DESC");
     $s->AddWhere("sceneorgrecommended.type = 'viewingtip'");
     $this->sceneorg = $s->perform();
-    
+
     $a = array();
     foreach($this->sceneorg as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
-  
-  function RenderBody() 
+
+  function RenderBody()
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";

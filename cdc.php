@@ -12,16 +12,16 @@ class PouetBoxCDCModerator extends PouetBox {
   {
     $s = new BM_Query("cdc");
     $s->AddField("cdc.quand");
-    $s->attach(array("cdc"=>"which"),array("prods as prod"=>"id"));    
+    $s->attach(array("cdc"=>"which"),array("prods as prod"=>"id"));
     $s->AddOrder("cdc.quand desc");
     $this->cdcs = $s->perform();
-    
+
     $a = array();
     foreach($this->cdcs as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
-  
-  function RenderBody() 
+
+  function RenderBody()
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
@@ -57,21 +57,21 @@ class PouetBoxCDCUser extends PouetBox {
     $this->title = "users' coup de coeur toplist";
   }
 
-  function LoadFromDB() 
+  function LoadFromDB()
   {
     $s = new BM_Query("users_cdcs");
-    $s->attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));    
+    $s->attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));
     $s->AddGroup("users_cdcs.cdc");
     $s->AddField("count(*) as c");
     $s->AddOrder("c desc");
     $this->cdcs = $s->perform();
-    
+
     $a = array();
     foreach($this->cdcs as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
-  
-  function RenderBody() 
+
+  function RenderBody()
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";

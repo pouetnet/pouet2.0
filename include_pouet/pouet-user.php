@@ -66,10 +66,10 @@ class PouetUser extends BM_Class {
       }
     }
     global $sceneID;
-    try 
+    try
     {
       $rv = $sceneID->getUserInfoById( $this->id )->asAssoc();
-    } 
+    }
     catch(SceneIdException $e)
     {
       return NULL;
@@ -91,9 +91,9 @@ class PouetUser extends BM_Class {
       return NULL;
     }
   }
-  
-  
-  
+
+
+
   function GetLevel()
   {
     return $this->level;
@@ -118,9 +118,9 @@ class PouetUser extends BM_Class {
   {
     return ($this->level=="banned");
   }
-  
-  
-  
+
+
+
   function CanPostInOneliner()
   {
     return true;

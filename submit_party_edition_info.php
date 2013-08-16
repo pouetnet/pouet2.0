@@ -10,27 +10,27 @@ if ($currentUser && !$currentUser->CanSubmitItems())
   exit();
 }
 
-class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition 
+class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
 {
-  function PouetBoxSubmitPartyEditionInfo( $id, $year ) 
+  function PouetBoxSubmitPartyEditionInfo( $id, $year )
   {
     parent::__construct();
-    
+
     $this->id = (int)$id;
     $this->year = (int)$year;
-    
+
     $this->party = PouetParty::Spawn( $this->id );
 
     $this->prods = SQLLib::selectRow(sprintf_esc("select * from prods where party = %d and party_year = %d limit 1",$this->id,$this->year));
-    
+
     $this->title = sprintf("submit links for this party: %s %04d",_html($this->party->name),$this->year);
   }
-  function Commit($data) 
+  function Commit($data)
   {
     global $partyID;
-    
+
     $this->LoadFromDB();
-    
+
     $sql = array();
     if ($this->fields["download"])
       $sql["download"] = $data["download"];
@@ -44,7 +44,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
       $sql["artcity"] = $data["artcity"];
 
     if ($sql)
-    {        
+    {
       $links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
       if ($links)
       {
@@ -57,7 +57,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
         SQLLib::InsertRow("partylinks",$sql);
       }
     }
-    
+
     if (is_uploaded_file($_FILES["results"]["tmp_name"]))
     {
       move_uploaded_file_fake($_FILES["results"]["tmp_name"],get_local_partyresult_path($this->id,$this->year));
@@ -69,7 +69,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
     parent::LoadFromDB();
 
     $this->links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
-    
+
     if ($this->links->download)
       unset($this->fields["download"]);
     if ($this->links->csdb)
@@ -82,7 +82,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
       unset($this->fields["artcity"]);
     if (file_exists(get_local_partyresult_path($this->id,$this->year)))
       unset($this->fields["results"]);
-      
+
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
@@ -105,7 +105,7 @@ $form->Add( "partyInfo", $box );
 
 if ($currentUser && $currentUser->CanSubmitItems())
   $form->Process();
-  
+
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 

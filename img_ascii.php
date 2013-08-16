@@ -2,7 +2,7 @@
 /*
  * ASCII to PNG renderer code (c) Rez / Eclipse ^ Razor 1911 (http://rez.chiptune.com)
  */
- 
+
 include_once("include_generic/credentials.inc.php");
 include_once("include_generic/functions.inc.php");
 
@@ -107,7 +107,7 @@ for($i=0;$i<$nbr;$i++)
 {
   $len=strlen($txt[$i]);
   for($j=0;$j<$len+1;$j++)
-  { 
+  {
     $chr=ord($txt[$i]{$j});
     if($chr==9) $chr=32;
     $x=$chr%16*$c_w;
@@ -132,7 +132,7 @@ function write($txt,$a,$b,$br,$bg,$bb)
   imagecolorset($fnt,$f2,($br+255)/2,($bg+255)/2,($bb+255)/2);
   imagecolorset($fnt,$f3,255,255,255);
   for($i=0;$i<strlen($txt);$i++)
-  { 
+  {
     $chr=ord($txt{$i});
     $x=$chr%16*$c_w;
     $y=($chr-$chr%16)/16*$c_h;

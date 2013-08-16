@@ -10,25 +10,25 @@ if ($currentUser && !$currentUser->IsAdministrator())
 
 class PouetBoxAdminEditUser extends PouetBox
 {
-  function PouetBoxAdminEditUser( $id ) 
+  function PouetBoxAdminEditUser( $id )
   {
     parent::__construct();
 
     $this->id = (int)$id;
-    
+
     $this->user = PouetUser::Spawn( $this->id );
 
     $this->title = "edit this user: <a href='user.php?who=".$this->user->id."'>"._html( $this->user->nickname )."</a>";
     $this->sceneID = $this->user->GetSceneIDData( false );
     $this->formifier = new Formifier();
     $this->fields = array();
-    
+
     $row = SQLLib::selectRow("DESC users level");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->levels = $m[1];
-   
+
   }
-  function Commit($data) 
+  function Commit($data)
   {
     $a = array();
     if (array_search($data["level"],$this->levels)!==false)
@@ -59,20 +59,20 @@ class PouetBoxAdminEditUser extends PouetBox
         "value" => $this->user->level,
         "fields" => $this->levels,
       ),
-    );  
+    );
   }
-  function Render() 
+  function Render()
   {
     global $currentUser;
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->IsAdministrator())
       return;
 
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
     $this->formifier->RenderForm( $this->fields );
@@ -80,14 +80,14 @@ class PouetBoxAdminEditUser extends PouetBox
 
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
-  }  
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 class PouetBoxAdminUserNicks extends PouetBox
 {
-  function PouetBoxAdminUserNicks( $id ) 
+  function PouetBoxAdminUserNicks( $id )
   {
     parent::__construct();
 
@@ -98,7 +98,7 @@ class PouetBoxAdminUserNicks extends PouetBox
   {
     $this->nicks = SQLLib::SelectRows(sprintf_esc("select * from oldnicks where user = %d",$this->id));
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<ul class='boxlist'>\n";
     foreach($this->nicks as $n) {
@@ -107,14 +107,14 @@ class PouetBoxAdminUserNicks extends PouetBox
       echo "</li>\n";
     }
     echo "</ul>\n";
-  }  
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 class PouetBoxAdminUserIPs extends PouetBox
 {
-  function PouetBoxAdminUserIPs( $ip ) 
+  function PouetBoxAdminUserIPs( $ip )
   {
     parent::__construct();
 
@@ -128,7 +128,7 @@ class PouetBoxAdminUserIPs extends PouetBox
     $s->AddWhere(sprintf_esc("lastip = '%s'",$this->ip));
     $this->nicks = $s->perform();
   }
-  function RenderBody() 
+  function RenderBody()
   {
     echo "<ul class='boxlist boxlisttable'>\n";
     foreach($this->nicks as $p) {
@@ -147,7 +147,7 @@ class PouetBoxAdminUserIPs extends PouetBox
       echo "</li>\n";
     }
     echo "</ul>\n";
-  }  
+  }
 }
 
 $form = new PouetFormProcessor();
@@ -155,7 +155,7 @@ $form = new PouetFormProcessor();
 if (is_numeric($_GET["who"]))
 {
   $form->SetSuccessURL( "user.php?who=".(int)$_GET["who"]."#success", true );
-  
+
   $box = new PouetBoxAdminEditUser( $_GET["who"] );
   $form->Add( "user", $box );
   $form->Add( "userNicks", new PouetBoxAdminUserNicks( $_GET["who"] ) );
@@ -163,7 +163,7 @@ if (is_numeric($_GET["who"]))
 else if ($_GET["ip"])
 {
   $form->SetSuccessURL( "user.php?ip=".rawurlencode($_GET["ip"])."#success", true );
-  
+
   $form->Add( "userIP", new PouetBoxAdminUserIPs( $_GET["ip"] ) );
 }
 

@@ -30,9 +30,9 @@ class PouetBoxProdMain extends PouetBox {
   var $data;
   var $prod;
   var $votes;
-  
+
   var $maxviews;
-  
+
   function PouetBoxProdMain($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodmain";
@@ -44,14 +44,14 @@ class PouetBoxProdMain extends PouetBox {
     $this->prod = PouetProd::spawn( $this->id );
     if(!$this->prod)
       return;
-      
-    if($this->prod->latestip != $_SERVER["REMOTE_ADDR"] && CheckReferrer($_SERVER["HTTP_REFERER"]) ) 
+
+    if($this->prod->latestip != $_SERVER["REMOTE_ADDR"] && CheckReferrer($_SERVER["HTTP_REFERER"]) )
     {
-      SQLLib::Query(sprintf_esc("UPDATE prods SET views=views+1, latestip='%s' WHERE id=%d",$_SERVER["REMOTE_ADDR"],$this->id)); 
+      SQLLib::Query(sprintf_esc("UPDATE prods SET views=views+1, latestip='%s' WHERE id=%d",$_SERVER["REMOTE_ADDR"],$this->id));
     }
-      
+
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
-    
+
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
@@ -78,7 +78,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $this->prod->placings[] = new PouetPlacing( array("party"=>$row->party,"compo"=>$row->partycompo,"ranking"=>$row->party_place,"year"=>$row->party_year) );
     }
-    
+
     $s = new BM_Query();
     $s->AddTable("affiliatedprods");
     $s->AddField("affiliatedprods.type");
@@ -92,18 +92,18 @@ class PouetBoxProdMain extends PouetBox {
     $s->attach(array("users_cdcs"=>"user"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("cdc = %d",$this->id));
     $cdcs = $s->perform();
-    
+
     $this->userCDCs = array();
     foreach($cdcs as $v)
       $this->userCDCs[$v->user->id] = $v;
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
-    
+
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
-    
+
     $this->downloadLinks = SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d",$this->id));
   }
 
-  function RenderScreenshot() { 
+  function RenderScreenshot() {
     $shotpath = find_screenshot($this->prod->id);
     if ($shotpath)
     {
@@ -121,9 +121,9 @@ class PouetBoxProdMain extends PouetBox {
       return $s;
     }
   }
-  
-  function RenderDetails() 
-  { 
+
+  function RenderDetails()
+  {
     global $currentUser;
     //var_dump($this->data);
     echo "<table id='stattable'>\n";
@@ -154,7 +154,7 @@ class PouetBoxProdMain extends PouetBox {
     echo " </tr>\n";
     if ($this->prod->party->id != NO_PARTY_ID)
     {
-      if (count($this->prod->placings) == 1) 
+      if (count($this->prod->placings) == 1)
       {
         $p = $this->prod->placings[0];
         if ($p->party)
@@ -167,7 +167,7 @@ class PouetBoxProdMain extends PouetBox {
         echo " <tr>\n";
         echo "  <td>compo :</td>\n";
         echo "  <td>";
-        if ($p->compo) 
+        if ($p->compo)
         {
           echo $p->compo;
         }
@@ -183,7 +183,7 @@ class PouetBoxProdMain extends PouetBox {
         echo " <tr>\n";
         echo "  <td>ranked :</td>\n";
         echo "  <td>";
-        if ($p->ranking) 
+        if ($p->ranking)
         {
           echo $p->PrintRanking();
         }
@@ -235,7 +235,7 @@ class PouetBoxProdMain extends PouetBox {
       echo " </tr>\n";
     }
     echo "</table>\n";
-    
+
     if (count($this->prod->placings) > 1) {
       echo "<table id='partytable'>\n";
       echo " <tr>\n";
@@ -252,15 +252,15 @@ class PouetBoxProdMain extends PouetBox {
         //if ($p->compo)
           echo "  <td>".$p->compo."</td>\n";
         echo " </tr>\n";
-      }    
+      }
       echo "</table>\n";
     }
   }
-  function RenderPopularity() { 
+  function RenderPopularity() {
     $pop = (int)($this->prod->views * 100 / $this->maxviews);
-    echo "popularity : ".$pop."%<br/>\n"; 
+    echo "popularity : ".$pop."%<br/>\n";
     echo "<div class='outerbar'><div class='innerbar' style='width: ".$pop."%'>&nbsp;<span>".$pop."%</span></div></div>\n";
-    
+
     $year = substr($this->prod->date,0,4);
     foreach($this->awards as $award)
     {
@@ -271,7 +271,7 @@ class PouetBoxProdMain extends PouetBox {
         $award->category);
     }
   }
-  function RenderAverage() { 
+  function RenderAverage() {
     $p = "isok";
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
@@ -284,14 +284,14 @@ class PouetBoxProdMain extends PouetBox {
     }
     printf("<div id='alltimerank'>alltime top: #%s</div>",$this->prod->rank ? (int)$this->prod->rank : "n/a");
   }
-  function RenderThumbs() { 
+  function RenderThumbs() {
     echo "<ul>\n";
     echo "<li><img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />&nbsp;".$this->prod->voteup."</li>\n";
     echo "<li><img src='".POUET_CONTENT_URL."gfx/isok.gif'  alt='is ok' />&nbsp;".$this->prod->votepig."</li>\n";
     echo "<li><img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />&nbsp;".$this->prod->votedown."</li>\n";
     echo "</ul>\n";
   }
-  function RenderLinks() { 
+  function RenderLinks() {
     echo "<ul>\n";
     echo "<li id='mainDownload'>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
     foreach ($this->downloadLinks as $link)
@@ -302,12 +302,12 @@ class PouetBoxProdMain extends PouetBox {
     echo "</ul>\n";
   }
 
-  function Render() 
+  function Render()
   {
     global $currentUser;
-    
+
     $timer[$this->uniqueID." render"]["start"] = microtime_float();
-    
+
     echo "<table id='pouetbox_prodmain'>\n";
     echo "<tr>\n";
     echo "<th colspan='3'>\n";
@@ -347,7 +347,7 @@ class PouetBoxProdMain extends PouetBox {
     $this->RenderPopularity();
     echo " </td>\n";
     echo "</tr>\n";
-    
+
     echo "<tr>\n";
     echo " <td class='r2'>\n";
     $this->RenderAverage();
@@ -363,7 +363,7 @@ class PouetBoxProdMain extends PouetBox {
       echo " <td class='foot' colspan='3'>added on the ".$this->prod->quand." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
       echo "</tr>\n";
     }
-    
+
     echo "</table>\n";
     $timer[$this->uniqueID." render"]["end"] = microtime_float();
   }
@@ -396,7 +396,7 @@ class PouetBoxProdComments extends PouetBox {
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
     $this->id = (int)$id;
-    
+
     $this->paginator = new PouetPaginator();
   }
 
@@ -417,13 +417,13 @@ class PouetBoxProdComments extends PouetBox {
       $sc->AddField("count(*) as c");
       $sc->AddWhere("comments.which=".$this->id);
       $sc->AddTable("comments");
-      
+
       $commentCount = SQLLib::SelectRow($sc->GetQuery())->c;
-      
+
       $this->paginator->SetData( "prod.php?which=".$this->id, $commentCount, $perPage, $_GET["page"] );
       $this->paginator->SetLimitOnQuery( $s );
       /*
-      $this->commentCount = 
+      $this->commentCount =
 
       $this->numPages = (int)ceil($this->commentCount / $this->perPage);
       if (!isset($_GET["page"]))
@@ -442,13 +442,13 @@ class PouetBoxProdComments extends PouetBox {
     $this->data = $r;
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     global $main;
-    foreach ($this->data as $c) 
+    foreach ($this->data as $c)
     {
       $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "");
-      
+
       $p = $c->comment;
       $p = parse_message($p);
 
@@ -461,15 +461,15 @@ class PouetBoxProdComments extends PouetBox {
         echo "<span class='vote cdc'>cdc</span>";
         unset($main->userCDCs[$c->user->id]);
       }
-  
+
       echo "added on the <a href='prod.php?post=".$c->id."'>".$c->quand."</a> by ";
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
-      
+
       echo "</div>\n";
     }
     $this->paginator->RenderNavbar();
   }
-  
+
   function RenderFooter() {
     echo "</div>\n";
   }
@@ -506,7 +506,7 @@ class PouetBoxProdSneakyCDCs extends PouetBox {
     $this->title = "sneaky cdcs";
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     global $main;
     echo "<ul class='boxlist'>\n";
@@ -538,10 +538,10 @@ echo "  <div id='prodpagecontainer'>\n";
 if ($main->prod)
 {
   $main->Render();
-  
+
   $p = new PouetBoxProdPopularityHelper($prodid);
   $p->Render();
-  
+
   if (get_setting("prodcomments")!=0)
   {
     $p = new PouetBoxProdComments($prodid);
@@ -554,11 +554,11 @@ if ($main->prod)
   {
     $p = new PouetBoxProdSneakyCDCs($prodid);
     $p->Render();
-  }  
-  
+  }
+
   $p = new PouetBoxProdSubmitChanges($prodid);
   $p->Render();
-  
+
   $p = new PouetBoxProdPost($prodid);
   $p->Render();
 }

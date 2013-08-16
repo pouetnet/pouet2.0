@@ -1,8 +1,8 @@
 <?
 
-class PouetBoxSubmitParty extends PouetBox 
+class PouetBoxSubmitParty extends PouetBox
 {
-  function PouetBoxSubmitParty() 
+  function PouetBoxSubmitParty()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitparty";
@@ -10,17 +10,17 @@ class PouetBoxSubmitParty extends PouetBox
     $this->formifier = new Formifier();
     $this->fields = array();
   }
-  
+
   function Validate( $data )
   {
     global $partyID,$currentUser;
-    
+
     if (!$currentUser)
       return array("you have to be logged in !");
-    
+
     if (!$currentUser->CanSubmitItems())
       return array("not allowed lol !");
-    
+
     if (!trim($data["name"]))
     {
       return array("Oh yeah, the party with no name, I remember that one!");
@@ -41,21 +41,21 @@ class PouetBoxSubmitParty extends PouetBox
     $a["added"] = get_login_id();
     $a["quand"] = date("Y-m-d H:i:s");
     $this->partyID = SQLLib::InsertRow("parties",$a);
-    
+
     return array();
   }
   function GetInsertionID()
   {
     return $this->partyID;
   }
-  
+
   function LoadFromDB()
   {
     global $PLATFORMS;
     $plat = array();
 	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
 	  uasort($plat,"strcasecmp");
-  
+
     $this->fields = array(
       "name"=>array(
         "name"=>"party name",
@@ -71,19 +71,19 @@ class PouetBoxSubmitParty extends PouetBox
         $this->fields[$k]["value"] = $v;
   }
 
-  function Render() 
+  function Render()
   {
     global $partyID,$currentUser;
-    
+
     if (!$currentUser)
       return;
-    
+
     if (!$currentUser->CanSubmitItems())
       return;
-    
+
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    
+
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
     $this->formifier->RenderForm( $this->fields );
