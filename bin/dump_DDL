@@ -33,7 +33,7 @@ sed -e '/-- MySQL dump .*  Distrib .*, for .*/d' -i '' pouet.sql
 # Remove the MySQL server version header
 sed -e '/-- Server version.*/d' -i '' pouet.sql
 
-# Remove the host/database iformation
+# Remove the host/database information
 sed -e '/-- Host:.*Database:.*/d' -i '' pouet.sql
 
 echo "Dump of the DDL completed in pouet.sql"
