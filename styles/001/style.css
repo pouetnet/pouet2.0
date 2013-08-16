@@ -482,7 +482,6 @@ td.date {
 }
 
 #prodpagecontainer {
-  display: table;
   margin: 0px auto;
   max-width: 900px;
 }
