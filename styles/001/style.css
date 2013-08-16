@@ -496,7 +496,7 @@ td.date {
   margin-top: 3px;
 }
 
-#pouetbox_onelinerview li, #pouetbox_latestoneliner li {
+#pouetbox_onelinerview li, #pouetbox_latestoneliner li, #pouetbox_prodcomments .content, #pouetbox_bbsview .content {
   overflow: hidden;
 }
 
@@ -736,7 +736,7 @@ td.date {
   text-align: center;
 }
 
-#pouetbox_bbsview img {
+#pouetbox_bbsview img, #pouetbox_prodcomments img {
   max-width: 95%;
 }
 
