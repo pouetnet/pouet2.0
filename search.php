@@ -59,7 +59,7 @@ class PouetBoxSearchProd extends PouetBox
 
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
-    //var_dump($s->GetQuery());
+    echo "<!--".$s->GetQuery()."-->";
     $this->prods = $s->performWithCalcRows( $this->count );
 
     PouetCollectPlatforms($this->prods);
@@ -75,9 +75,9 @@ class PouetBoxSearchProd extends PouetBox
       "group"=>"group",
       "party"=>"release party",
       "release"=>"release date",
-      "avg"=>"<img src='http://www.pouet.net/gfx/rulez.gif' alt='rulez' />".
-             "<img src='http://www.pouet.net/gfx/isok.gif' alt='piggie' />".
-             "<img src='http://www.pouet.net/gfx/sucks.gif' alt='sucks' />",
+      "avg"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />".
+             "<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />".
+             "<img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />",
       "comments"=>"#",
       "views"=>"popularity",
     );
@@ -113,7 +113,7 @@ class PouetBoxSearchProd extends PouetBox
       $i = "isok";
       if ($p->voteavg < 0) $i = "sucks";
       if ($p->voteavg > 0) $i = "rulez";
-      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='http://www.pouet.net/gfx/".$i.".gif' alt='".$i."' /></td>\n";
+      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
 
       echo "<td>".(int)$p->commentCount."</td>\n";
 
@@ -547,7 +547,7 @@ echo "<form action='search.php' method='get'>\n";
 foreach($_GET as $k=>$v)
   if ($k != "page")
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
-if ($_GET["what"] && $_GET["type"])
+if ($_GET["what"])
 {
   $terms = split_search_terms( $_GET["what"] );
 
