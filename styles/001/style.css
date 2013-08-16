@@ -965,13 +965,13 @@ td.date {
 	margin-bottom: .5em;
 	display: block;
 }
-.bbs_quote blockquote, .bbs_code pre  {
+.bbs_quote blockquote, .bbs_code code  {
 /*	width: 85%; -- unsure why this was here */
 	border: 1px solid #8ac;
 	background-color: #579;
 	padding: .5em;
 	margin-top: .5em;
-	white-space: pre-wrap;
+	display: block;
 }
 
 #pouetbox_prodpost {
