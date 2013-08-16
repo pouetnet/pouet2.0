@@ -1,5 +1,9 @@
 #!/bin/sh
-# Dump the pouet.net DDL into a SQL text file
+# Dump the pouet.net DDL into a SQL text file and remove any runtime related
+# information. The goal is to only keep the SQL structure as a clean DDL file.
+# This works on OS X provided that you have a working "pouet" ssh alias that
+# connects to pouet.net
+# Support for other OSes can be added at will.
 
 # Needed by sed to not throw out some warnings
 LANG=C
