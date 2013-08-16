@@ -200,10 +200,12 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
       if(!confirm("Are you sure you want to delete this item?"))
         return;
   
-      var opt = item.href.toQueryParams();
+      //var opt = item.href.toQueryParams();
+      var opt = Form.serializeElements( tr.up("form").select("input,select"), {hash:true} );
+      opt = $H(opt).merge( item.href.toQueryParams() ).toObject();
       opt["partial"] = true;
       opt["formProcessorAction"] = formAction;
-      new Ajax.Request( item.href, {
+      new Ajax.Request( tr.up("form").action, {
         method: "post",
         parameters: opt,
         onSuccess: function(transport) {
