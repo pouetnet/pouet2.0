@@ -921,7 +921,6 @@ CREATE TABLE `usersettings` (
   `userrulez` int(10) unsigned NOT NULL DEFAULT '10',
   `usersucks` int(10) unsigned NOT NULL DEFAULT '10',
   `commentshours` int(10) unsigned NOT NULL DEFAULT '24',
-  `commentsnamecut` int(10) unsigned NOT NULL DEFAULT '50',
   `indexcdc` int(1) unsigned NOT NULL DEFAULT '1',
   `indexsearch` int(1) unsigned NOT NULL DEFAULT '1',
   `indexlinks` int(1) unsigned NOT NULL DEFAULT '1',

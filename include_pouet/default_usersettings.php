@@ -26,7 +26,6 @@ $TEST = array(
    'userrulez' => 10,
    'usersucks' => 10,
    'commentshours' => 24,
-   'commentsnamecut' => 50,
    'indexcdc' => 1,
    'indexsearch' => 1,
    'indexlinks' => 1,
