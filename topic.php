@@ -109,31 +109,38 @@ if (!$_GET["which"])
   redirect("bbs.php");
 }
 $topicid = (int)$_GET["which"];
-$p = new PouetBoxBBSView($topicid);
-$p->Load();
+$view = new PouetBoxBBSView($topicid);
+$view->Load();
 
-$q = new PouetBoxBBSPost($topicid);
+$post = new PouetBoxBBSPost($topicid);
 
-$TITLE = $p->topic->topic;
+$TITLE = $view->topic->topic;
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-if ($p->topic)
+if ($view->topic)
 {
-  echo $p->Render();
-  if ($p->topic->closed)
+  echo $view->Render();
+  if (!get_login_id()) 
   {
-    $msg = new PouetBoxModalMessage( true );
-    $msg->title = "thread closed";
-    $msg->message = "this thread now officially wants YOU to go make a demo about it instead. please comply.";
-    $msg->Render();
-  }
-  else
+    require_once("include_pouet/box-login.php");
+    $box = new PouetBoxLogin();
+    $box->Render();
+  } 
+  else 
   {
-    echo $q->Render();
-  }
+    if ($view->topic->closed)
+    {
+      $msg = new PouetBoxModalMessage( true );
+      $msg->title = "thread closed";
+      $msg->message = "this thread now officially wants YOU to go make a demo about it instead. please comply.";
+      $msg->Render();
+    }
+    else
+    {
+      echo $post->Render();
 ?>
 <script type="text/javascript">
 <!--
@@ -158,6 +165,8 @@ document.observe("dom:loaded",function(){
 //-->
 </script>
 <?
+    }
+  }
 }
 else
 {
