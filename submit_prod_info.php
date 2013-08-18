@@ -42,13 +42,16 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
       $errormessage[]="you can't submit a prod released in the future, sorry =)";
     }
     
-    if($data["partyYear"] && !$data["partyID"])
-      $errormessage[] = "please either select a party AND a year, or neither !";
-    if(($data["partyID"] && !$data["partyYear"]) && $data["partyID"] != NO_PARTY_ID)
-      $errormessage[] = "please either select a party AND a year, or neither !";
-    if($data["partyRank"] && !$data["partyID"])
-      $errormessage[] = "please select a party before you select a ranking !";
-
+    if ($this->fields["partyID"] && $this->fields["partyYear"])
+    {
+      if($data["partyYear"] && !$data["partyID"])
+        $errormessage[] = "please either select a party AND a year, or neither !";
+      if(($data["partyID"] && !$data["partyYear"]) && $data["partyID"] != NO_PARTY_ID)
+        $errormessage[] = "please either select a party AND a year, or neither !";
+      if($data["partyRank"] && !$data["partyID"])
+        $errormessage[] = "please select a party before you select a ranking !";
+    }
+    
     $extension = "";
     if(is_uploaded_file($_FILES["screenshot"]["tmp_name"])) 
     {
