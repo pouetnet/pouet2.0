@@ -484,6 +484,7 @@ td.date {
 #prodpagecontainer {
   margin: 0px auto;
   max-width: 900px;
+  display: table;
 }
 
 #pouetbox_latestoneliner .loggedin {
@@ -742,6 +743,7 @@ td.date {
 #pouetbox_prodcomments {
   display: block;
   width: 100%;
+  max-width: 900px;
 }
 
 #pouetbox_bbsview {
