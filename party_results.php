@@ -23,7 +23,7 @@ class PouetBoxPartyResults extends PouetBox {
     if ($_GET["font"]=="none")
     {
       echo "<pre>";
-      echo _html( file_get_contents( get_local_partyresult_path( $_GET["which"], $_GET["when"] ) ) );
+      echo _html( process_ascii( file_get_contents( get_local_partyresult_path( $_GET["which"], $_GET["when"] ) ) ) );
       echo "</pre>";
     }
     else

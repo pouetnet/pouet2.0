@@ -38,9 +38,7 @@ class PouetBoxBoardNfo extends PouetBox {
     {
       echo "<pre>";
       $text = file_get_contents( get_local_bbsnfo_path( $_GET["which"] ) );
-      $enc = mb_detect_encoding( $text, "iso-8859-1,utf-8" );
-      $utf8 = mb_convert_encoding( $text, "utf-8", $enc );
-      echo _html( $utf8 );
+      echo _html( process_ascii( $text ) );
       echo "</pre>";
     }
     else

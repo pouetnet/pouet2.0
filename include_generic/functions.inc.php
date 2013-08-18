@@ -190,6 +190,14 @@ function split_search_terms( $str )
     $terms[] = $m[1][$k] ? $m[1][$k] : $m[2][$k];
   return $terms;
 }
+
+function process_ascii( $text )
+{
+  $enc = mb_detect_encoding( $text, "iso-8859-1,utf-8" );
+  $utf8 = mb_convert_encoding( $text, "utf-8", $enc );
+  return $utf8;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )
