@@ -482,9 +482,9 @@ td.date {
 }
 
 #prodpagecontainer {
-  display: table;
   margin: 0px auto;
   max-width: 900px;
+  display: table;
 }
 
 #pouetbox_latestoneliner .loggedin {
@@ -494,6 +494,10 @@ td.date {
 #pouetbox_latestoneliner .loggedin span {
   float: right;
   margin-top: 3px;
+}
+
+#pouetbox_onelinerview li, #pouetbox_latestoneliner li, #pouetbox_prodcomments .content, #pouetbox_bbsview .content {
+  overflow: hidden;
 }
 
 #pouetbox_prodmain {
@@ -732,13 +736,14 @@ td.date {
   text-align: center;
 }
 
-#pouetbox_bbsview img {
+#pouetbox_bbsview img, #pouetbox_prodcomments img {
   max-width: 95%;
 }
 
 #pouetbox_prodcomments {
   display: block;
   width: 100%;
+  max-width: 900px;
 }
 
 #pouetbox_bbsview {
@@ -965,13 +970,13 @@ td.date {
 	margin-bottom: .5em;
 	display: block;
 }
-.bbs_quote blockquote, .bbs_code pre  {
+.bbs_quote blockquote, .bbs_code code  {
 /*	width: 85%; -- unsure why this was here */
 	border: 1px solid #8ac;
 	background-color: #579;
 	padding: .5em;
 	margin-top: .5em;
-	white-space: pre-wrap;
+	display: block;
 }
 
 #pouetbox_prodpost {
@@ -1148,6 +1153,9 @@ tr.sortable th #sort_thumbdown {
 }
 #pouetbox_search .content.buttons {
   background: #446688;
+}
+#pouetbox_search input[type="text"] {
+    width: 80%;
 }
 #pouetbox_search #searchType {
   list-style: none;

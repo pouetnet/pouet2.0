@@ -1,5 +1,5 @@
 <?
-define(POUET_ROOT_LOCAL,dirname(__FILE__));
+define("POUET_ROOT_LOCAL",dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
 
@@ -22,6 +22,9 @@ require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 
+if (POUET_TEST)
+  SQLLib::$debugMode = true;
+  
 $lifetime = 60 * 60 * 24 * 365;
 @ini_set('session.cookie_lifetime', $lifetime);
 

@@ -65,39 +65,31 @@ class PouetBoxBBSPost extends PouetBox {
 
   function RenderBody()
   {
-    global $currentUser;
-    if (!get_login_id())
-    {
-      require_once("box-login.php");
-      $box = new PouetBoxLogin();
-      $box->RenderBody();
-    }
-    else
-    {
-      if (!$currentUser->CanPostInBBS())
-        return;
-      echo "<form action='add.php' method='post'>\n";
+    global $currentUser;  
+    if (!$currentUser || !$currentUser->CanPostInBBS())
+      return;
 
-      $csrf = new CSRFProtect();
-      $csrf->PrintToken();
+    echo "<form action='add.php' method='post'>\n";
 
-      echo "<div class='content'>\n";
-      echo " <input type='hidden' name='which' value='".(int)$this->topic."'>\n";
-      echo " <input type='hidden' name='type' value='post'>\n";
-      echo " message:\n";
-      echo " <textarea name='message' id='message'></textarea>\n";
-      echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
-      echo "</div>\n";
-      echo "<div class='foot'>\n";
-      echo " <script language='JavaScript' type='text/javascript'>\n";
-      echo " <!--\n";
-      echo "   document.observe('dom:loaded',function(){ AddPreviewButton($('submit')); });\n";
-      echo " //-->\n";
-      echo " </script>\n";
-      echo " <input type='submit' value='Submit' id='submit'>";
-      echo "</div>\n";
-      echo "</form>\n";
-    }
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
+    echo "<div class='content'>\n";
+    echo " <input type='hidden' name='which' value='".(int)$this->topic."'>\n";
+    echo " <input type='hidden' name='type' value='post'>\n";
+    echo " message:\n";
+    echo " <textarea name='message' id='message'></textarea>\n";
+    echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
+    echo "</div>\n";
+    echo "<div class='foot'>\n";
+    echo " <script language='JavaScript' type='text/javascript'>\n";
+    echo " <!--\n";
+    echo "   document.observe('dom:loaded',function(){ AddPreviewButton($('submit')); });\n";
+    echo " //-->\n";
+    echo " </script>\n";
+    echo " <input type='submit' value='Submit' id='submit'>";
+    echo "</div>\n";
+    echo "</form>\n";
   }
 
 };

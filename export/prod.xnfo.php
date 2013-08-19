@@ -57,7 +57,7 @@ if (count($prod->groups))
 {
   $xml->demo->addChild("authors");
   foreach($prod->groups as $v)
-    $xml->demo->authors->addChild("groups",_html($v->name))->addAttribute("pouet_id",$v->id);
+    $xml->demo->authors->addChild("group",_html($v->name))->addAttribute("pouet_id",$v->id);
 }
 
 $xml->demo->addChild("support");
