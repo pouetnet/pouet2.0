@@ -34,12 +34,7 @@ $namesNumeric = array(
   "userrulez" => "user page - rulez",
   "usersucks" => "user page - sucks",
   "commentshours" => "comments page - hours",
-<<<<<<< HEAD
-  "commentsnamecut" => "comments page - name cut",
-  "topicposts" => "topic page - posts",
-=======
   "topicposts" => "topic page - posts", 
->>>>>>> master
 );
 $namesSwitch = array(
   //select
