@@ -100,7 +100,7 @@ class PouetBoxProdMain extends PouetBox {
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
 
-    $this->downloadLinks = SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d",$this->id));
+    $this->downloadLinks = SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d order by type",$this->id));
   }
 
   function RenderScreenshot() {
