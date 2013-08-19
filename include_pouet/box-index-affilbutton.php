@@ -15,7 +15,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
     $s = new SQLSelect();
     $s->AddTable("buttons");
     $s->AddOrder("rand()");
-    $s->AddOrder("dead = 0");
+    $s->AddWhere("dead = 0");
     $s->SetLimit("1");
     $this->data = SQLLib::SelectRow($s->GetQuery());
 
