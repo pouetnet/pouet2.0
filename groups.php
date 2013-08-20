@@ -30,6 +30,7 @@ class PouetBoxGroupMain extends PouetBox
     $sub->AddField("comments.quand");
     $sub->AddField("comments.who");
     $sub->AddField("comments.which");
+    $sub->AddField("comments.rating");
     $sub->AddTable("comments");
     $sub->AddJoin("left","prods","prods.id = comments.which");
     $sub->AddOrder("comments.quand desc");
@@ -37,7 +38,8 @@ class PouetBoxGroupMain extends PouetBox
 
     $s = new BM_Query("prods");
     $s->AddField("cmts.quand as lastcomment");
-    $s->AddJoin("left","(select quand,who,which from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
+    $s->AddField("cmts.rating as lastcommentrating");
+    $s->AddJoin("left","(select quand,who,which,rating from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
     $s->attach(array("cmts"=>"who"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
@@ -168,9 +170,16 @@ class PouetBoxGroupMain extends PouetBox
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
 
       if ($p->user)
-        echo "<td>".$p->lastcomment." ".$p->user->PrintLinkedAvatar()."</td>\n";
+      {
+        $rating = "isok";
+        if ($p->lastcommentrating < 0) $rating = "sucks";
+        if ($p->lastcommentrating > 0) $rating = "rulez";
+        echo "<td>";
+        echo "<span class='vote ".$rating."'>".$rating."</span> ";
+        echo $p->lastcomment." ".$p->user->PrintLinkedAvatar()."</td>\n";
+      }
       else
-        echo "<td> </td>";
+        echo "<td>&nbsp;</td>";
 
       echo "</tr>\n";
     }
