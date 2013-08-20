@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 
-if ($currentUser && !$currentUser->IsAdministrator())
+if ($currentUser && !$currentUser->IsModerator())
 {
   redirect("user.php?who=".(int)$_GET["who"]);
   exit();
@@ -37,6 +37,7 @@ class PouetBoxAdminEditUser extends PouetBox
   }
   function LoadFromDB()
   {
+    global $currentUser;
     $this->fields = array(
       "name"=>array(
         "name"=>"sceneID login",
@@ -60,6 +61,8 @@ class PouetBoxAdminEditUser extends PouetBox
         "fields" => $this->levels,
       ),
     );
+    if ($currentUser && !$currentUser->IsAdministrator())
+      foreach($this->fields as &$v) $v["type"] = "static";
   }
   function Render()
   {
@@ -67,7 +70,7 @@ class PouetBoxAdminEditUser extends PouetBox
     if (!$currentUser)
       return;
 
-    if (!$currentUser->IsAdministrator())
+    if (!$currentUser->IsModerator())
       return;
 
     echo "\n\n";
@@ -78,7 +81,10 @@ class PouetBoxAdminEditUser extends PouetBox
     $this->formifier->RenderForm( $this->fields );
     echo "  </div>\n";
 
-    echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
+    if ($currentUser->IsAdministrator())
+    {
+      echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
+    }
     echo "</div>\n";
   }
 }

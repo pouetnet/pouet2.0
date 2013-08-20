@@ -15,7 +15,9 @@ class Formifier {
       switch ($v["type"])
       {
         case "static":
-          echo "    <div class='static' id='".$k."'>".($v["fields"]?$v["fields"][$v["value"]]:$v["value"])."</div>\n";
+          echo "    <div class='static' id='".$k."'>";
+          echo ($v["fields"]&&$v["assoc"]?$v["fields"][$v["value"]]:$v["value"]);
+          echo "</div>\n";
           break;
         case "statichidden":
           echo "    <div class='static' id='".$k."'>".($v["fields"]?$v["fields"][$v["value"]]:$v["value"])."</div>\n";
