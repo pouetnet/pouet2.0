@@ -100,7 +100,29 @@ class PouetBoxProdMain extends PouetBox {
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
 
-    $this->downloadLinks = SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d order by type",$this->id));
+    $this->downloadLinks = array();
+    if ($this->prod->sceneorg)
+    {
+      $o = new stdClass();
+      $o->type = "scene.org";
+      $o->link = "http://scene.org/file.php?id=".(int)$this->prod->sceneorg;
+      $this->downloadLinks[] = $o;
+    }
+    if ($this->prod->csdb)
+    {
+      $o = new stdClass();
+      $o->type = "csdb";
+      $o->link = "http://csdb.dk/release/?id=".(int)$this->prod->csdb;
+      $this->downloadLinks[] = $o;
+    }
+    if ($this->prod->zxdemo)
+    {
+      $o = new stdClass();
+      $o->type = "zxdemo";
+      $o->link = "http://zxdemo.org/item.php?id=".(int)$this->prod->zxdemo;
+      $this->downloadLinks[] = $o;
+    }
+    $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d order by type",$this->id)));
   }
 
   function RenderScreenshot() {
