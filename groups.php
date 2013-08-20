@@ -24,7 +24,7 @@ class PouetBoxGroupMain extends PouetBox
 
     $this->group = PouetGroup::Spawn($this->id);
     $this->addeduser = PouetUser::Spawn($this->group->added);
-
+    
     // not to boast or anything, but this is fucking beautiful.
 
     $sub = new SQLSelect();
@@ -182,7 +182,7 @@ class PouetBoxGroupMain extends PouetBox
       echo "</tr>\n";
     }
     echo "<tr>\n";
-    echo " <td class='foot' colspan='9'>added on the ".$this->group->quand." by ".($this->addeduser?$this->addeduser->PrintLinkedName():"")." ".$this->addeduser->PrintLinkedAvatar()."</td>\n";
+    echo " <td class='foot' colspan='9'>added on the ".$this->group->quand." by ".($this->addeduser?$this->addeduser->PrintLinkedName():"")." ".($this->addeduser?$this->addeduser->PrintLinkedAvatar():"")."</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
     return $s;
