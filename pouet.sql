@@ -702,7 +702,9 @@ CREATE TABLE `prodotherparty` (
   `party_year` int(10) unsigned NOT NULL DEFAULT '0',
   `party_place` int(10) unsigned NOT NULL DEFAULT '0',
   `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','black&white video compo','bootsector intro','browser demo','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','gravedigger') DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `prod` (`prod`),
+  KEY `partyyear` (`party`,`party_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -753,7 +755,8 @@ CREATE TABLE `prods` (
   KEY `party` (`party`),
   KEY `date` (`date`),
   KEY `quand` (`quand`),
-  KEY `datequand` (`date`,`quand`)
+  KEY `datequand` (`date`,`quand`),
+  KEY `partyyear` (`party`,`party_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
