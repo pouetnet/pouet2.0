@@ -590,7 +590,7 @@ class PouetBoxUserMain extends PouetBox
         echo "<li class='blogprod'>";
         echo $p->RenderTypeIcons();
         echo $p->RenderPlatformIcons();
-        echo "<span class='prod'>".$p->RenderLink()."</span>\n";
+        echo $p->RenderSingleRow();        
         echo "</li>";
         echo "<li class='blogcomment'>";
         echo parse_message( $c->comment );
