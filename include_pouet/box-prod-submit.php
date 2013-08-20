@@ -354,11 +354,13 @@ class PouetBoxSubmitProd extends PouetBox
       "nfofile"=>array(
         "name"=>"infofile / file_id.diz",
         "type"=>"file",
+        "info"=>"(maximum 32kb)",
       ),
       "screenshot"=>array(
         "name"=>"screenshot",
         "type"=>"file",
         "accept"=>"image/*",
+        "info"=>"(maximum 400x300 pixels, and 64kb)",
       ),
     );
     if ($_POST)
