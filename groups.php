@@ -44,22 +44,19 @@ class PouetBoxGroupMain extends PouetBox
     $s->attach(array("cmts"=>"who"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
-    $dir = "DESC";
-    if ($_GET["reverse"])
-      $dir = "ASC";
-
+    $r = !!$_GET["reverse"];
     switch($_GET["order"])
     {
-      case "type": $s->AddOrder("prods.type ".$dir); break;
-      case "party": $s->AddOrder("prods_party.name ".$dir); $s->AddOrder("prods.party_year ".$dir); $s->AddOrder("prods.party_place ".$dir); break;
-      case "release": $s->AddOrder("prods.date ".$dir); break;
-      case "thumbup": $s->AddOrder("prods.voteup ".$dir); break;
-      case "thumbpig": $s->AddOrder("prods.votepig ".$dir); break;
-      case "thumbdown": $s->AddOrder("prods.votedown ".$dir); break;
-      case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
-      case "views": $s->AddOrder("prods.views ".$dir); break;
-      case "latestcomment": $s->AddOrder("lastcomment ".$dir); break;
-      default: $s->AddOrder("prods.name ".$dir); break;
+      case "type": $s->AddOrder("prods.type ".($r?"DESC":"ASC")); break;
+      case "party": $s->AddOrder("prods_party.name ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_year ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_place ".($r?"DESC":"ASC")); break;
+      case "release": $s->AddOrder("prods.date ".($r?"ASC":"DESC")); break;
+      case "thumbup": $s->AddOrder("prods.voteup ".($r?"ASC":"DESC")); break;
+      case "thumbpig": $s->AddOrder("prods.votepig ".($r?"ASC":"DESC")); break;
+      case "thumbdown": $s->AddOrder("prods.votedown ".($r?"ASC":"DESC")); break;
+      case "avg": $s->AddOrder("prods.voteavg ".($r?"ASC":"DESC")); break;
+      case "views": $s->AddOrder("prods.views ".($r?"ASC":"DESC")); break;
+      case "latestcomment": $s->AddOrder("lastcomment ".($r?"ASC":"DESC")); break;
+      default: $s->AddOrder("prods.name ".($r?"DESC":"ASC")); break;
     }
     $this->prods = $s->perform();
     PouetCollectPlatforms($this->prods);
