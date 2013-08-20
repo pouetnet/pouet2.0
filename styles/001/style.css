@@ -155,6 +155,11 @@ nav li a {
   text-align: left;
 }
 
+#content.frontpage {
+  display: table;
+  width: 100%;
+}
+
 .frontpage .pouettbl {
   display: block;
 }
