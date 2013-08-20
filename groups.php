@@ -294,6 +294,11 @@ else
 {
   $p = new PouetBoxGroupMain($groupID);
   $p->Load();
+  if (!$p->group)
+  {
+    redirect("groups.php");
+    exit();
+  }
   $TITLE = $p->group->name;
 }
 
