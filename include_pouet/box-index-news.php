@@ -30,6 +30,9 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
   function PouetBoxNewsBoxes()
   {
     parent::__construct();
+
+    $this->cacheTime = 60*15;
+
     $this->uniqueID = "pouetbox_news";
     $this->rss = new lastRSS();
     $this->rss->cache_dir = './cache';
