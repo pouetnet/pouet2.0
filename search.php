@@ -601,7 +601,7 @@ echo "<form action='search.php' method='get'>\n";
 foreach($_GET as $k=>$v)
   if ($k != "page")
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
-    
+
 if ($results) $results->Render();
 echo "</form>\n";
 echo "</div>\n";

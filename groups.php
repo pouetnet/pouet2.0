@@ -24,7 +24,7 @@ class PouetBoxGroupMain extends PouetBox
 
     $this->group = PouetGroup::Spawn($this->id);
     $this->addeduser = PouetUser::Spawn($this->group->added);
-    
+
     // not to boast or anything, but this is fucking beautiful.
 
     $sub = new SQLSelect();
