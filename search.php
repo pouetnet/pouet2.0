@@ -59,7 +59,7 @@ class PouetBoxSearchProd extends PouetBox
 
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
-    echo "<!--".$s->GetQuery()."-->";
+//    echo "<!--".$s->GetQuery()."-->";
     $this->data = $s->performWithCalcRows( $this->count );
 
     PouetCollectPlatforms($this->data);
