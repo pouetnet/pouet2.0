@@ -28,10 +28,10 @@ class PouetRSS
       {
         case "enclosure":
           {
-            $data = getimagesize(POUET_ROOT_LOCAL . "/" . $v);
+            $data = getimagesize(POUET_CONTENT_LOCAL . "/" . $v);
             $enc = $node->addChild("enclosure");
-            $enc->addAttribute("url",POUET_ROOT_URL . $v);
-            $enc->addAttribute("length",filesize(POUET_ROOT_LOCAL . "/" . $v));
+            $enc->addAttribute("url",POUET_CONTENT_URL . $v);
+            $enc->addAttribute("length",filesize(POUET_CONTENT_LOCAL . "/" . $v));
             if ($data && $data["mime"])
               $enc->addAttribute("type",$data["mime"]);
           } break;
