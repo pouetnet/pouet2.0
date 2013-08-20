@@ -268,6 +268,26 @@ function get_local_bbsnfo_path( $id )
   return sprintf(POUET_CONTENT_LOCAL . "othernfo/%d.nfo",$id);
 }
 
+function get_screenshot_url( $id, $ext )
+{
+  return sprintf(POUET_CONTENT_URL . "screenshots/%d.%s",$id,$ext);
+}
+
+function get_nfo_url( $id )
+{
+  return sprintf(POUET_CONTENT_URL . "nfo/%d.nfo",$id);
+}
+
+function get_partyresult_url( $id, $year )
+{
+  return sprintf(POUET_CONTENT_URL . "results/%d_%02d.txt",$id,$year%100);
+}
+
+function get_bbsnfo_url( $id )
+{
+  return sprintf(POUET_CONTENT_URL . "othernfo/%d.nfo",$id);
+}
+
 define("NO_PARTY_ID",1024);
 define("POUET_CACHE_MAX",25);
 if (POUET_TEST)

@@ -50,7 +50,7 @@ class PouetBoxPartyResults extends PouetBox {
     if ($currentUser && $currentUser->IsGloperator())
     {
       printf("[ <a class='adminlink' href='admin_party_edition_edit.php?which=%d&amp;when=%d'>update res</a> ]\n",$_GET["which"], $_GET["when"]);
-      printf("[ <a class='adminlink' href='%s'>download res</a> ]\n",get_local_partyresult_path( $_GET["which"], $_GET["when"] ) );
+      printf("[ <a class='adminlink' href='%s'>download res</a> ]\n",get_partyresult_url( $_GET["which"], $_GET["when"] ) );
     }
     printf("[ <a href='party.php?which=%d&amp;when=%d'>back to the party</a> ]\n",$_GET["which"],$_GET["when"]);
     echo "  </div>";

@@ -65,7 +65,7 @@ class PouetBoxProdNfo extends PouetBox {
     if ($currentUser && $currentUser->IsGloperator())
     {
       printf("[ <a class='adminlink' href='admin_prod_edit.php?which=%d#files'>update nfo</a> ]\n",$_GET["which"]);
-      printf("[ <a class='adminlink' href='%s'>download nfo</a> ]\n",get_local_nfo_path( $_GET["which"] ));
+      printf("[ <a class='adminlink' href='%s'>download nfo</a> ]\n",get_nfo_url( $_GET["which"] ));
     }
     printf("[ <a href='prod.php?which=%d'>back to the prod</a> ]\n",$_GET["which"]);
     echo "  </div>";
