@@ -74,7 +74,7 @@ if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
   if ($vote && $csrf->ValidateToken())
   {
     SQLLib::Query(sprintf_esc("delete from logos_votes where logo = %d and user = %d",$_POST["logoID"],$currentUser->id));
-  
+
     $a = array();
     $a["logo"] = (int)$_POST["logoID"];
     $a["user"] = $currentUser->id;

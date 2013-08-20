@@ -65,7 +65,7 @@ class PouetBoxBBSPost extends PouetBox {
 
   function RenderBody()
   {
-    global $currentUser;  
+    global $currentUser;
     if (!$currentUser || !$currentUser->CanPostInBBS())
       return;
 
