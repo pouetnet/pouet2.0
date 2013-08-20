@@ -24,7 +24,7 @@ require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 
 if (POUET_TEST)
   SQLLib::$debugMode = true;
-  
+
 $lifetime = 60 * 60 * 24 * 365;
 @ini_set('session.cookie_lifetime', $lifetime);
 

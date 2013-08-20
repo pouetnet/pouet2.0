@@ -123,13 +123,13 @@ echo "<div id='content'>\n";
 if ($view->topic)
 {
   echo $view->Render();
-  if (!get_login_id()) 
+  if (!get_login_id())
   {
     require_once("include_pouet/box-login.php");
     $box = new PouetBoxLogin();
     $box->Render();
-  } 
-  else 
+  }
+  else
   {
     if ($view->topic->closed)
     {

@@ -8,7 +8,7 @@ $SQLLIB_ARRAYS_CLEANED = false;
 class SQLLib {
   public static $link;
   public static $debugMode = false;
-  
+
   static function Connect() {
     SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
     if (mysqli_connect_errno(SQLLib::$link))
