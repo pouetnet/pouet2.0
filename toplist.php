@@ -52,7 +52,7 @@ class PouetBoxTopList extends PouetBox {
       "limit"=>array(
         "name"=>"number of prods",
         "type"=>"number",
-        "value"=>0,
+        "value"=>10,
         "max"=>50,
       ),
     );
