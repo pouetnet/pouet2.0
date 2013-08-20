@@ -60,10 +60,10 @@ class PouetBoxSearchProd extends PouetBox
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
     echo "<!--".$s->GetQuery()."-->";
-    $this->prods = $s->performWithCalcRows( $this->count );
+    $this->data = $s->performWithCalcRows( $this->count );
 
-    PouetCollectPlatforms($this->prods);
-    PouetCollectAwards($this->prods);
+    PouetCollectPlatforms($this->data);
+    PouetCollectAwards($this->data);
 
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
@@ -88,7 +88,7 @@ class PouetBoxSearchProd extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->prods as $p) {
+    foreach ($this->data as $p) {
       echo "<tr>\n";
 
       echo "<td>\n";
@@ -143,6 +143,10 @@ class PouetBoxSearchProd extends PouetBox
     echo "</table>\n";
     return $s;
   }
+  function GetForwardURL()
+  {
+    return POUET_ROOT_URL . "prod.php?which=" . reset($this->data)->id;
+  }
 };
 
 class PouetBoxSearchGroup extends PouetBox
@@ -180,7 +184,7 @@ class PouetBoxSearchGroup extends PouetBox
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
     //var_dump($s->GetQuery());
-    $this->groups = $s->performWithCalcRows( $this->count );
+    $this->data = $s->performWithCalcRows( $this->count );
 
   }
 
@@ -198,7 +202,7 @@ class PouetBoxSearchGroup extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->groups as $g) {
+    foreach ($this->data as $g) {
       echo "<tr>\n";
 
       echo "<td class='name'>";
@@ -236,6 +240,10 @@ class PouetBoxSearchGroup extends PouetBox
     echo "</table>\n";
     return $s;
   }
+  function GetForwardURL()
+  {
+    return POUET_ROOT_URL . "groups.php?which=" . reset($this->data)->id;
+  }
 };
 
 class PouetBoxSearchParty extends PouetBox
@@ -269,7 +277,7 @@ class PouetBoxSearchParty extends PouetBox
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
     //var_dump($s->GetQuery());
-    $this->parties = $s->performWithCalcRows( $this->count );
+    $this->data = $s->performWithCalcRows( $this->count );
 
   }
 
@@ -287,7 +295,7 @@ class PouetBoxSearchParty extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->parties as $p) {
+    foreach ($this->data as $p) {
       echo "<tr>\n";
 
       echo "<td class='name'>";
@@ -325,6 +333,10 @@ class PouetBoxSearchParty extends PouetBox
     echo "</table>\n";
     return $s;
   }
+  function GetForwardURL()
+  {
+    return POUET_ROOT_URL . "party.php?which=" . reset($this->data)->id;
+  }
 };
 
 class PouetBoxSearchUser extends PouetBox
@@ -358,7 +370,7 @@ class PouetBoxSearchUser extends PouetBox
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
     //var_dump($s->GetQuery());
-    $this->users = $s->performWithCalcRows( $this->count );
+    $this->data = $s->performWithCalcRows( $this->count );
 
   }
 
@@ -376,7 +388,7 @@ class PouetBoxSearchUser extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->users as $u) {
+    foreach ($this->data as $u) {
       echo "<tr>\n";
 
       echo "<td class='name'>";
@@ -414,6 +426,10 @@ class PouetBoxSearchUser extends PouetBox
     echo "</tr>\n";
     echo "</table>\n";
     return $s;
+  }
+  function GetForwardURL()
+  {
+    return POUET_ROOT_URL . "user.php?who=" . reset($this->data)->id;
   }
 };
 
@@ -453,7 +469,7 @@ class PouetBoxSearchBBS extends PouetBox
 
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
-    $this->posts = $s->performWithCalcRows( $this->count );
+    $this->data = $s->performWithCalcRows( $this->count );
 
   }
 
@@ -471,7 +487,7 @@ class PouetBoxSearchBBS extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->posts as $p) {
+    foreach ($this->data as $p) {
       echo "<tr class='r2'>\n";
 
       echo "<td class='name'>";
@@ -526,6 +542,10 @@ class PouetBoxSearchBBS extends PouetBox
     echo "</table>\n";
     return $s;
   }
+  function GetForwardURL()
+  {
+    return POUET_ROOT_URL . "topic.php?post=" . reset($this->data)->postID;
+  }
 };
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -533,20 +553,7 @@ $TITLE = "search";
 if ($_GET["what"])
   $TITLE .= ": ".$_GET["what"];
 
-require_once("include_pouet/header.php");
-require("include_pouet/menu.inc.php");
-
-$p = new PouetBoxSearchBoxMain();
-echo "<div id='content'>\n";
-
-echo "<form action='search.php' method='get'>\n";
-if($p) $p->Render();
-echo "</form>\n";
-
-echo "<form action='search.php' method='get'>\n";
-foreach($_GET as $k=>$v)
-  if ($k != "page")
-    echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
+$results = null;
 if ($_GET["what"])
 {
   $terms = split_search_terms( $_GET["what"] );
@@ -554,32 +561,48 @@ if ($_GET["what"])
   switch($_GET["type"])
   {
     case "bbs":
-      $p = new PouetBoxSearchBBS($terms);
-      $p->Load();
-      $p->Render();
+      $results = new PouetBoxSearchBBS($terms);
       break;
     case "user":
-      $p = new PouetBoxSearchUser($terms);
-      $p->Load();
-      $p->Render();
+      $results = new PouetBoxSearchUser($terms);
       break;
     case "party":
-      $p = new PouetBoxSearchParty($terms);
-      $p->Load();
-      $p->Render();
+      $results = new PouetBoxSearchParty($terms);
       break;
     case "group":
-      $p = new PouetBoxSearchGroup($terms);
-      $p->Load();
-      $p->Render();
+      $results = new PouetBoxSearchGroup($terms);
       break;
     default:
-      $p = new PouetBoxSearchProd($terms);
-      $p->Load();
-      $p->Render();
+      $results = new PouetBoxSearchProd($terms);
       break;
   }
+  if ($results)
+  {
+    $results->Load();
+    if (count($results->data) == 1)
+    {
+      header("Location: " . $results->GetForwardURL());
+      exit();
+    }
+  }
 }
+
+require_once("include_pouet/header.php");
+require("include_pouet/menu.inc.php");
+
+$main = new PouetBoxSearchBoxMain();
+echo "<div id='content'>\n";
+
+echo "<form action='search.php' method='get'>\n";
+if($main) $main->Render();
+echo "</form>\n";
+
+echo "<form action='search.php' method='get'>\n";
+foreach($_GET as $k=>$v)
+  if ($k != "page")
+    echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
+    
+if ($results) $results->Render();
 echo "</form>\n";
 echo "</div>\n";
 
