@@ -6,7 +6,7 @@ class PouetGroup extends BM_Class {
 
   static function onAttach( &$node, &$query )
   {
-    $node->attach( $query, "added", array("users as addeduser"=>"id"));
+//    $node->attach( $query, "added", array("users as addeduser"=>"id"));
   }
 
   function RenderShort() {
