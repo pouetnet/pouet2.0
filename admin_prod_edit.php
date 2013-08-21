@@ -228,21 +228,9 @@ class PouetBoxAdminEditProdBase extends PouetBox
   }
   function RenderEditRow($row)
   {
-    echo "<td>";
-    if ($row->id)
-      echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
-
-    $csrf = new CSRFProtect();
-    $csrf->PrintToken();
-
-    echo "<input type='submit' value='Submit'/>";
-    echo "</td>\n";
   }
-  function RenderNormalRow($v)
+  function RenderNormalRow($row)
   {
-    printf("    <td><a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a></td>\n",
-      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$v->id,
-      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$v->id);
   }
   function RenderBody()
   {
@@ -252,16 +240,38 @@ class PouetBoxAdminEditProdBase extends PouetBox
       echo "    <th>"._html($v)."</th>\n";
     echo "    <th>&nbsp;</th>\n";
     echo "  </tr>\n";
-    foreach($this->data as $v)
+    foreach($this->data as $row)
     {
       echo "  <tr>\n";
-      if ($_GET["edit" . static::$slug] == $v->id)
+      if ($_GET["edit" . static::$slug] == $row->id)
       {
-        $this->RenderEditRow($v);
+        $this->RenderEditRow($row);
+        echo "<td>";
+        if ($row->id)
+          echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
+    
+        $csrf = new CSRFProtect();
+        $csrf->PrintToken();
+    
+        echo "<input type='submit' value='Submit'/>";
+        echo "</td>\n";
+      }
+      else if ($_GET["del" . static::$slug] == $row->id)
+      {
+        $this->RenderNormalRow($row);
+        echo "<td>";
+        $csrf = new CSRFProtect();
+        $csrf->PrintToken();
+        echo "<input type='hidden' name='del".static::$slug."' value='".$row->id."'/>";
+        echo "<input type='submit' value='Delete!'/>";
+        echo "</td>\n";
       }
       else
       {
-        $this->RenderNormalRow($v);
+        $this->RenderNormalRow($row);
+        printf("    <td><a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a></td>\n",
+          $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id,
+          $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
       }
       echo "  </tr>\n";
     }
@@ -302,7 +312,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
   {
     if ($data["delSceneorg"])
     {
-      SQLLib::Query("delete from sceneorgrecommended where id=".(int)$data["delSceneorgRec"]);
+      SQLLib::Query("delete from sceneorgrecommended where id=".(int)$data["delSceneorg"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_sceneorg_delete" );
       return array();
     }
@@ -341,13 +351,11 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
     foreach($this->categories as $v)
       printf("<option%s>%s</option>",$row->category==$v?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
-    parent::RenderEditRow($row);
   }
   function RenderNormalRow($v)
   {
     echo "    <td><img src='".POUET_CONTENT_URL."gfx/sceneorg/"._html($v->type).".gif'/> "._html($v->type)."</td>\n";
     echo "    <td>"._html($v->category)."</td>\n";
-    parent::RenderNormalRow($v);
   }
   function RenderBody()
   {
@@ -424,13 +432,11 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
   {
     echo "    <td><input name='type' value='"._html($row->type)."'/></td>\n";
     echo "    <td><input name='link' value='"._html($row->link)."' type='url'/></td>\n";
-    parent::RenderEditRow($row);
   }
   function RenderNormalRow($v)
   {
     echo "    <td>"._html($v->type)."</td>\n";
     echo "    <td>"._html($v->link)."</td>\n";
-    parent::RenderNormalRow($row);
   }
   function RenderBody()
   {
@@ -542,7 +548,6 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
       printf("<option value='%s'%s>%s</option>",_html($k),($k == $row->party_place) ? " selected='selected'" : "",_html($v));
     echo "</select></td>\n";
 
-    parent::RenderEditRow($row);
   }
   function RenderNormalRow($v)
   {
@@ -550,7 +555,6 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     echo "    <td>"._html($v->party_year)."</td>\n";
     echo "    <td>"._html($v->partycompo)."</td>\n";
     echo "    <td>"._html($v->party_place)."</td>\n";
-    parent::RenderNormalRow($v);
   }
   function RenderBody()
   {
@@ -631,13 +635,11 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
   {
     echo "    <td><input name='userID' value='"._html($row->user?$row->user->id:"")."' class='userID'/></td>\n";
     echo "    <td><input name='role' value='"._html($row->role)."' class='role'/></td>\n";
-    parent::RenderEditRow($row);
   }
   function RenderNormalRow($v)
   {
     echo "    <td>".($v->user ? $v->user->PrintLinkedAvatar()." ".$v->user->PrintLinkedName() : "")."</td>\n";
     echo "    <td>"._html($v->role)."</td>\n";
-    parent::RenderNormalRow($v);
   }
   function RenderBody()
   {
@@ -735,7 +737,6 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
     echo "</select></td>\n";
 
     echo "    <td><input name='prod' value='"._html( $this->prod->id == $row->prodOriginal->id ? $row->prodDerivative->id : $row->prodOriginal->id)."' class='prodID'/></td>\n";
-    parent::RenderEditRow($row);
   }
   function RenderNormalRow($v)
   {
@@ -746,7 +747,6 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
     $prod = ($this->prod->id == $v->prodOriginal->id ? $v->prodDerivative : $v->prodOriginal);
     echo "    <td>"._html($a[$v->type])."</td>\n";
     echo "    <td>".($prod ? $prod->RenderLink() : "")."</td>\n";
-    parent::RenderNormalRow($v);
   }
   function RenderBody()
   {
@@ -771,11 +771,11 @@ document.observe("dom:loaded",function(){
 ///////////////////////////////////////////////////////////////////////////////
 
 $boxen = array(
-  "PouetBoxAdminEditProdAffil",
-  "PouetBoxAdminEditProdCredits",
   "PouetBoxAdminEditProdLinks",
+  "PouetBoxAdminEditProdCredits",
   "PouetBoxAdminEditProdParties",
   "PouetBoxAdminEditProdSceneorg",
+  "PouetBoxAdminEditProdAffil",
 );
 if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
 {
@@ -804,11 +804,8 @@ $form->SetSuccessURL( "prod.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditProd( $_GET["which"] );
 $form->Add( "prod", $box );
-$form->Add( "prodLinks", new PouetBoxAdminEditProdLinks($box->prod) );
-$form->Add( "prodCredits", new PouetBoxAdminEditProdCredits($box->prod) );
-$form->Add( "prodParties", new PouetBoxAdminEditProdParties($box->prod) );
-$form->Add( "prodSceneorg", new PouetBoxAdminEditProdSceneorg($box->prod) );
-$form->Add( "prodAffil", new PouetBoxAdminEditProdAffil($box->prod) );
+foreach($boxen as $class)
+  $form->Add( "prod" . $class::$slug, new $class($box->prod) );
 if ($currentUser && $currentUser->CanDeleteItems())
   $form->Add( "prodDelete", new PouetBoxAdminDeleteProd($box->prod) );
 
