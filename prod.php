@@ -297,14 +297,60 @@ class PouetBoxProdMain extends PouetBox {
     $p = "isok";
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
-    echo "<img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />&nbsp;".sprintf("%.2f",$this->prod->voteavg)."\n";
+    echo "<ul id='avgstats'>";
+    echo "<li><img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />&nbsp;".sprintf("%.2f",$this->prod->voteavg)."</li>\n";
     $cdcs = count($this->userCDCs);
     if ($this->isPouetCDC) $cdcs++;
     if ($cdcs)
     {
-      echo "<img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."\n";
+      echo "<li><img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."</li>\n";
     }
-    printf("<div id='alltimerank'>alltime top: #%s</div>",$this->prod->rank ? (int)$this->prod->rank : "n/a");
+    
+    global $currentUser;
+    if ($currentUser)
+    {
+      echo "<li>";
+      echo "<form action='prod.php?which=".$this->prod->id."' method='post' id='watchlistFrm'>";
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+      
+      $row = SQLLib::SelectRow(sprintf_esc("select * from watchlist where prodID = %d and userID = %d",$this->prod->id,$currentUser->id));
+      if ($row)
+      {
+        echo "<input type='hidden' name='wlAction' value='removeFromWatchlist'>";
+        echo "<input type='submit' value='remove from watchlist' class='remove'/>";
+      }
+      else
+      {
+        echo "<input type='hidden' name='wlAction' value='addToWatchlist'>";
+        echo "<input type='submit' value='add to watchlist' class='add'/>";
+      }
+      echo "</form>";
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $("watchlistFrm").observe("submit",function(e){
+    e.stop();
+    var opt = Form.serializeElements( $("watchlistFrm").select("input"), {hash:true} );
+    opt["partial"] = true;
+    new Ajax.Request( $("watchlistFrm").action, {
+      method: "post",
+      parameters: opt,
+      onSuccess: function(transport) {
+        $("watchlistFrm").update( transport.responseText );
+      }
+    });
+  });
+});
+//-->
+</script>
+<?
+      echo "</li>\n";
+    }
+    
+    echo "</ul>";
+    printf("<div id='alltimerank'>alltime top: %s</div>",$this->prod->rank ? "#".(int)$this->prod->rank : "n/a");
   }
   function RenderThumbs() {
     echo "<ul>\n";
@@ -550,6 +596,35 @@ $main = new PouetBoxProdMain($prodid);
 $main->Load();
 if ($main->prod)
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+
+$csrf = new CSRFProtect();
+if ($_POST["wlAction"] && $csrf->ValidateToken() && $currentUser)
+{
+  if ($_POST["wlAction"]=="removeFromWatchlist")
+  {
+    SQLLib::Query(sprintf_esc("delete from watchlist where prodID = %d and userID = %d",$prodid,$currentUser->id));
+  }
+  else if ($_POST["wlAction"]=="addToWatchlist")
+  {
+    $a = array("prodID"=>$prodid,"userID"=>$currentUser->id);
+    SQLLib::InsertRow("watchlist",$a);
+  }
+  if ($_POST["partial"])
+  {
+    $csrf->PrintToken();
+    if ($_POST["wlAction"]=="addToWatchlist")
+    {
+      echo "<input type='hidden' name='wlAction' value='removeFromWatchlist'>";
+      echo "<input type='submit' value='remove from watchlist' class='remove'/>";
+    }
+    else if ($_POST["wlAction"]=="removeFromWatchlist")
+    {
+      echo "<input type='hidden' name='wlAction' value='addToWatchlist'>";
+      echo "<input type='submit' value='add to watchlist' class='add'/>";
+    }
+    exit();
+  }
+}
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
