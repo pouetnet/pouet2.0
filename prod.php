@@ -356,8 +356,28 @@ class PouetBoxProdMain extends PouetBox {
 
     echo "<tr>\n";
     echo " <td rowspan='3' id='screenshot'>".$this->RenderScreenshot()."</td>\n";
-    echo " <td colspan='2'>\n";
+    echo " <td>\n";
     $this->RenderDetails();
+    echo " </td>\n";
+    echo " <td class='r2'>\n";
+    
+    $a = array(
+      19 => "code",
+      1 => "code",
+      22 => "musix",
+    );
+    echo "<ul id='credits'>";
+    foreach($a as $k=>$v)
+    {
+      $user = PouetUser::Spawn($k);
+      echo "<li>";
+      echo $user->PrintLinkedAvatar()." ";
+      echo $user->PrintLinkedName(); 
+      echo " - "._html($v);
+      echo "</li>";
+    }
+    echo "</ul>";
+    //$this->RenderDetails();
     echo " </td>\n";
     echo "</tr>\n";
 
