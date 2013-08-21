@@ -42,7 +42,7 @@ $boxes = array(
     array("box"=>"Stats"          ,"limit"=>get_setting("indexstats")),
     array("box"=>"AffilButton"    ,"limit"=>get_setting("indexlinks")),
     array("box"=>"LatestComments" ,"limit"=>get_setting("indexlatestcomments")),
-    array("box"=>"Watchlist"      ,"limit"=>5),
+    array("box"=>"Watchlist"      ,"limit"=>5,"loggedInOnly"=>true),
     array("box"=>"LatestParties"  ,"limit"=>get_setting("indexlatestparties")),
     array("box"=>"UpcomingParties"),
     array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")),
@@ -58,6 +58,8 @@ foreach($boxes as $bar=>$boxlist)
   foreach($boxlist as $box)
   {
     if ($box["limit"]===0)
+      continue;
+    if ($box["loggedInOnly"] && !$currentUser)
       continue;
     $class = "PouetBox".$box["box"];
     $p = new $class();
