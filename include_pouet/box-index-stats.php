@@ -12,7 +12,7 @@ class PouetBoxStats extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_stats";
     $this->title = "some stats";
     $this->fields = array("prods", "groups", "parties", "bbses", "users", "comments");
-    $this->links = array("prodlist.php", "groups.php", "parties.php", "bbses.php", "userlist.php", "comments.php");
+    $this->links = array("prodlist.php", "groups.php", "parties.php", "boards.php", "userlist.php", "comments.php");
   }
 
   function LoadFromCachedData($data) {
