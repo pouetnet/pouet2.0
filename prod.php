@@ -323,7 +323,25 @@ class PouetBoxProdMain extends PouetBox {
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
   }
-
+  function RenderCredits() 
+  {
+    $a = array(
+      19 => "code",
+      1 => "code",
+      22 => "musix",
+    );
+    echo "<ul id='credits'>";
+    foreach($a as $k=>$v)
+    {
+      $user = PouetUser::Spawn($k);
+      echo "<li>";
+      echo $user->PrintLinkedAvatar()." ";
+      echo $user->PrintLinkedName(); 
+      echo " - "._html($v);
+      echo "</li>";
+    }
+    echo "</ul>";
+  }
   function Render()
   {
     global $currentUser;
@@ -356,34 +374,15 @@ class PouetBoxProdMain extends PouetBox {
 
     echo "<tr>\n";
     echo " <td rowspan='3' id='screenshot'>".$this->RenderScreenshot()."</td>\n";
-    echo " <td>\n";
+    echo " <td colspan='2'>\n";
     $this->RenderDetails();
-    echo " </td>\n";
-    echo " <td class='r2'>\n";
-    
-    $a = array(
-      19 => "code",
-      1 => "code",
-      22 => "musix",
-    );
-    echo "<ul id='credits'>";
-    foreach($a as $k=>$v)
-    {
-      $user = PouetUser::Spawn($k);
-      echo "<li>";
-      echo $user->PrintLinkedAvatar()." ";
-      echo $user->PrintLinkedName(); 
-      echo " - "._html($v);
-      echo "</li>";
-    }
-    echo "</ul>";
-    //$this->RenderDetails();
     echo " </td>\n";
     echo "</tr>\n";
 
     echo "<tr>\n";
     echo " <td class='r2'>\n";
     $this->RenderThumbs();
+    $this->RenderAverage();
     echo " </td>\n";
     echo " <td id='popularity'>\n";
     $this->RenderPopularity();
@@ -392,7 +391,7 @@ class PouetBoxProdMain extends PouetBox {
 
     echo "<tr>\n";
     echo " <td class='r2'>\n";
-    $this->RenderAverage();
+    $this->RenderCredits();
     echo " </td>\n";
     echo " <td id='links'>\n";
     $this->RenderLinks();
