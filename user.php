@@ -390,7 +390,8 @@ class PouetBoxUserMain extends PouetBox
       echo "<li class='header'>cdcs:</li>\n";
       $x = 1;
       foreach($this->cdcProds as $v)
-        $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
+        if ($v->prod)
+          $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
     }
 
     echo "</ul>\n";
