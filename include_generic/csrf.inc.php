@@ -18,17 +18,19 @@ class CSRFProtect
       }
     }
   }
-  public function PrintToken()
+  public function GenerateTokens()
   {
-    //do {
-      $name  = "Protect".sprintf("%06d",rand(0,999999));
-    //} while (isset($_SESSION["CSRFProtect"][$name]));
-
+    $name  = "Protect".sprintf("%06d",rand(0,999999));
     $token = sha1(time() . rand(0,9999));
-    printf("<input type='hidden' name='ProtName' value='%s'/>\n",_html($name));
-    printf("<input type='hidden' name='ProtValue' value='%s'/>\n",_html($token));
     $_SESSION["CSRFProtect"][$name]["token"] = $token;
     $_SESSION["CSRFProtect"][$name]["time"] = time();
+    return array("name"=>$name,"token"=>$token);
+  }
+  public function PrintToken()
+  {
+    $a = $this->GenerateTokens();
+    printf("<input type='hidden' name='ProtName' value='%s'/>\n",_html($a["name"]));
+    printf("<input type='hidden' name='ProtValue' value='%s'/>\n",_html($a["token"]));
   }
   public function ValidateToken()
   {
