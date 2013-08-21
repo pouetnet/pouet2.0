@@ -640,6 +640,134 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
+class PouetBoxAdminEditProdCredits extends PouetBox
+{
+  function PouetBoxAdminEditProdCredits( $prod )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_prodeditprodcredits";
+    $this->prod = $prod;
+    $this->title = "credits";
+
+    $s = new BM_Query("credits");
+    $s->AddField("credits.id");
+    $s->AddField("credits.role");
+    $s->AddWhere(sprintf("credits.prodID = %d",$this->prod->id));
+    $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $this->credits = $s->perform();
+  }
+  function Commit($data)
+  {
+    if ($data["delCredit"])
+    {
+      SQLLib::Query("delete from credits where id=".(int)$data["delCredit"]);
+      gloperator_log( "prod", (int)$this->prod->id, "prod_credits_del" );
+      return array();
+    }
+
+    $a = array();
+    $a["userID"] = $data["userID"];
+    $a["role"] = $data["role"];
+    if ($data["editCreditID"])
+    {
+      SQLLib::UpdateRow("credits",$a,"id=".(int)$data["editCreditID"]);
+      $a["id"] = $data["editCreditID"];
+      gloperator_log( "prod", (int)$this->prod->id, "prod_credits_edit", array("id"=>$a["id"]) );
+    }
+    else
+    {
+      $a["prodID"] = $this->prod->id;
+      $a["id"] = SQLLib::InsertRow("credits",$a);
+      gloperator_log( "prod", (int)$this->prod->id, "prod_credits_add", array("id"=>$a["id"]) );
+    }
+    if ($data["partial"])
+    {
+      $o = toObject($a);
+      $o->user = PouetUser::Spawn($a["userID"]);
+      $this->RenderNormalRow($o);
+      exit();
+    }
+    return array();
+  }
+  function GetRow($id)
+  {
+    foreach($this->credits as $v)
+      if ($v->id == $id)
+        return $v;
+    return new stdClass();
+  }
+  function RenderEditRow($row)
+  {
+    echo "    <td><input name='userID' value='"._html($row->user?$row->user->id:"")."' class='userID'/></td>\n";
+    echo "    <td><input name='role' value='"._html($row->role)."' class='role'/></td>\n";
+
+    echo "<td>";
+    if ($row->id)
+      echo "<input type='hidden' name='editPartyID' value='".$row->id."'/>";
+
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
+    echo "<input type='submit' value='Submit'/>";
+    echo "</td>\n";
+  }
+  function RenderNormalRow($v)
+  {
+    echo "    <td>".$v->user->PrintLinkedAvatar()." ".$v->user->PrintLinkedName()."</td>\n";
+    echo "    <td>"._html($v->role)."</td>\n";
+    printf("    <td><a href='%s?which=%d&amp;editCredit=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;delCredit=%d' class='delete'>delete</a></td>\n",
+      $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id,
+      $_SERVER["SCRIPT_NAME"],$this->prod->id,$v->id);
+  }
+  function RenderBody()
+  {
+    echo "<table class='boxtable'>\n";
+    echo "  <tr>\n";
+    echo "    <th>user</th>\n";
+    echo "    <th>role</th>\n";
+    echo "    <th>&nbsp;</th>\n";
+    echo "  </tr>\n";
+    foreach($this->credits as $v)
+    {
+      echo "  <tr>\n";
+      if ($_GET["editCredit"] == $v->id)
+      {
+        $this->RenderEditRow($v);
+      }
+      else
+      {
+        $this->RenderNormalRow($v);
+      }
+      echo "  </tr>\n";
+    }
+    if ($_GET["newCredit"])
+    {
+      $this->RenderEditRow( new stdClass() );
+    }
+    echo "</table>\n";
+    echo "<div class='foot'>";
+    printf("<a href='%s?which=%d&amp;newCredit=true' class='new'>new</a>",$_SERVER["SCRIPT_NAME"],$this->prod->id);
+    echo "</div>\n";
+?>
+<script language="JavaScript" type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodcredits"), "prodCredits", {
+    onRowLoad: function(tr){
+      new Autocompleter(tr.down(".userID"), {"dataUrl":"./ajax_users.php"});
+    }
+  } );
+});
+//-->
+</script>
+<?
+  }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 class PouetBoxAdminEditProdAffil extends PouetBox
 {
   function PouetBoxAdminEditProdAffil( $prod )
@@ -834,6 +962,16 @@ if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
     $box = new PouetBoxAdminEditProdAffil( $prod );
     $box->RenderEditRow( new stdClass() );
   }
+  if ($_GET["editCredit"])
+  {
+    $box = new PouetBoxAdminEditProdCredits( $prod );
+    $box->RenderEditRow( $box->GetRow( $_GET["editCredit"] ) );
+  }
+  if ($_GET["newCredit"])
+  {
+    $box = new PouetBoxAdminEditProdCredits( $prod );
+    $box->RenderEditRow( new stdClass() );
+  }
   exit();
 }
 
@@ -844,6 +982,7 @@ $form->SetSuccessURL( "prod.php?which=".(int)$_GET["which"], true );
 $box = new PouetBoxAdminEditProd( $_GET["which"] );
 $form->Add( "prod", $box );
 $form->Add( "prodLinks", new PouetBoxAdminEditProdLinks($box->prod) );
+$form->Add( "prodCredits", new PouetBoxAdminEditProdCredits($box->prod) );
 $form->Add( "prodParties", new PouetBoxAdminEditProdParties($box->prod) );
 $form->Add( "prodSceneorg", new PouetBoxAdminEditProdSceneorg($box->prod) );
 $form->Add( "prodAffil", new PouetBoxAdminEditProdAffil($box->prod) );

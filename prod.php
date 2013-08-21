@@ -99,6 +99,12 @@ class PouetBoxProdMain extends PouetBox {
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
+    
+    $s = new BM_Query("credits");
+    $s->AddField("credits.role");
+    $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
+    $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $this->credits = $s->perform();
 
     $this->downloadLinks = array();
     if ($this->prod->sceneorg)
@@ -325,19 +331,14 @@ class PouetBoxProdMain extends PouetBox {
   }
   function RenderCredits() 
   {
-    $a = array(
-      19 => "code",
-      1 => "code",
-      22 => "musix",
-    );
     echo "<ul id='credits'>";
-    foreach($a as $k=>$v)
+    foreach($this->credits as $v)
     {
-      $user = PouetUser::Spawn($k);
+//      $user = PouetUser::Spawn($k);
       echo "<li>";
-      echo $user->PrintLinkedAvatar()." ";
-      echo $user->PrintLinkedName(); 
-      echo " - "._html($v);
+      echo $v->user->PrintLinkedAvatar()." ";
+      echo $v->user->PrintLinkedName(); 
+      echo " - "._html($v->role);
       echo "</li>";
     }
     echo "</ul>";
@@ -382,7 +383,6 @@ class PouetBoxProdMain extends PouetBox {
     echo "<tr>\n";
     echo " <td class='r2'>\n";
     $this->RenderThumbs();
-    $this->RenderAverage();
     echo " </td>\n";
     echo " <td id='popularity'>\n";
     $this->RenderPopularity();
@@ -391,7 +391,7 @@ class PouetBoxProdMain extends PouetBox {
 
     echo "<tr>\n";
     echo " <td class='r2'>\n";
-    $this->RenderCredits();
+    $this->RenderAverage();
     echo " </td>\n";
     echo " <td id='links'>\n";
     $this->RenderLinks();
