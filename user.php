@@ -122,7 +122,7 @@ class PouetBoxUserMain extends PouetBox
     echo "<img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."' alt='avatar'/> ";
     echo "<span>"._html($this->user->nickname)."</span> information";
 
-    if ($currentUser && $currentUser->IsAdministrator())
+    if ($currentUser && $currentUser->IsModerator())
     {
       printf(" [<a href='admin_user_edit.php?who=%d' class='adminlink'>edit</a>]\n",$this->id);
     }
