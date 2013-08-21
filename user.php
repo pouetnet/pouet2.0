@@ -400,7 +400,7 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->logos)
     {
-      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span></div>\n";
+      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span> [<a href='user.php?who=".$this->id."&amp;show=logos'>show all</a>]</div>\n";
       echo "<ul class='boxlist' id='logolist'>";
       foreach($this->logos as $l)
       {
