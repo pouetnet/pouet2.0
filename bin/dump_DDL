@@ -15,14 +15,23 @@ then
     exit 1
 fi
 
-echo "Dumping the current DDL..."
-ssh pouet mysqldump --skip-lock-tables \
-                    --no-data \
-                    --result-file=pouet.sql \
-                    pouet
-
-echo "Downloading the DDL..."
-scp pouet:pouet.sql .
+if [ "$1" = "local" ]
+then
+  echo "Dumping the current DDL locally..."
+  mysqldump --skip-lock-tables \
+            --no-data \
+            --result-file=pouet.sql \
+            pouet
+else
+  echo "Dumping the current DDL..."
+  ssh pouet mysqldump --skip-lock-tables \
+                      --no-data \
+                      --result-file=pouet.sql \
+                      pouet
+  
+  echo "Downloading the DDL..."
+  scp pouet:pouet.sql .
+fi
 
 echo "Cleaning up the DDL..."
 # Remove any AUTO_INCREMENT option
