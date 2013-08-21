@@ -3,14 +3,25 @@ require_once("bootstrap.inc.php");
 
 header("Content-type: application/json; charset=utf-8");
 
-$sql = "";
-if ($_POST["search"])
-  $sql = sprintf_esc("select id, name from bbses where name like '%%%s%%' order by name limit 10",_like($_POST["search"]),_like($_POST["search"]));
-else if ($_POST["id"])
-  $sql = sprintf_esc("select id, name from bbses where id = %d limit 1",$_POST["id"]);
+$sql = new SQLSelect();
+$sql->AddField("id");
+$sql->AddField("name");
+$sql->AddTable("bbses");
 
-if ($sql)
-  $r = SQLLib::selectRows($sql);
+$r = array();
+if ($_POST["search"])
+{
+  $sql->AddWhere(sprintf_esc("name like '%%%s%%'",_like($_POST["search"])));
+  $sql->AddOrder(sprintf_esc("if(name='%s',1,2), name",$_POST["search"]));
+  $sql->SetLimit(10);
+  $r = SQLLib::selectRows( $sql->GetQuery() );
+}
+else if ($_POST["id"])
+{
+  $sql->AddWhere(sprintf_esc("id = %d",$_POST["id"]));
+  $sql->SetLimit(1);
+  $r = SQLLib::selectRows( $sql->GetQuery() );
+}
 
 echo json_encode($r);
 ?>
