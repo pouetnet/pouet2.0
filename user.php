@@ -136,6 +136,7 @@ class PouetBoxUserMain extends PouetBox
     $s = new BM_Query("logos");
     $s->AddField("logos.file");
     $s->AddField("logos.vote_count");
+    $s->AddOrder("logos.vote_count DESC");
     $s->AddWhere(sprintf("logos.author1 = %d or logos.author2 = %d",$this->id,$this->id));
     if ($limit)
       $s->SetLimit( $limit );
