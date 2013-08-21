@@ -1,0 +1,23 @@
+body {
+  font-size: 12pt;
+}
+#leftbar, #middlebar, #rightbar {
+  width: 100%;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+#content.frontpage {
+  display: block;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+#pouetbox_bbsview {
+  display: block;
+  width: 100%;
+  margin: 0px;
+}
+#logo {
+  display: none;
+}
