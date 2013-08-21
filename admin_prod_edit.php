@@ -232,6 +232,33 @@ class PouetBoxAdminEditProdBase extends PouetBox
   function RenderNormalRow($row)
   {
   }
+  function RenderNormalRowEnd($row)
+  {
+    printf("    <td><a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a></td>\n",
+      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id,
+      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
+  }
+  function RenderDeleteRowEnd($row)
+  {
+    echo "<td>";
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+    echo "<input type='hidden' name='del".static::$slug."' value='".$row->id."'/>";
+    echo "<input type='submit' value='Delete!'/>";
+    echo "</td>\n";
+  }
+  function RenderEditRowEnd($row)
+  {
+    echo "<td>";
+    if ($row->id)
+      echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
+
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
+
+    echo "<input type='submit' value='Submit'/>";
+    echo "</td>\n";
+  }
   function RenderBody()
   {
     echo "<table class='boxtable'>\n";
@@ -246,38 +273,24 @@ class PouetBoxAdminEditProdBase extends PouetBox
       if ($_GET["edit" . static::$slug] == $row->id)
       {
         $this->RenderEditRow($row);
-        echo "<td>";
-        if ($row->id)
-          echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
-    
-        $csrf = new CSRFProtect();
-        $csrf->PrintToken();
-    
-        echo "<input type='submit' value='Submit'/>";
-        echo "</td>\n";
+        $this->RenderEditRowEnd($row);
       }
       else if ($_GET["del" . static::$slug] == $row->id)
       {
         $this->RenderNormalRow($row);
-        echo "<td>";
-        $csrf = new CSRFProtect();
-        $csrf->PrintToken();
-        echo "<input type='hidden' name='del".static::$slug."' value='".$row->id."'/>";
-        echo "<input type='submit' value='Delete!'/>";
-        echo "</td>\n";
+        $this->RenderDeleteRowEnd($row);
       }
       else
       {
         $this->RenderNormalRow($row);
-        printf("    <td><a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a></td>\n",
-          $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id,
-          $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
+        $this->RenderNormalRowEnd($row);
       }
       echo "  </tr>\n";
     }
     if ($_GET["new" . static::$slug])
     {
       $this->RenderEditRow( new stdClass() );
+      $this->RenderEditRowEnd( new stdClass() );
     }
     echo "</table>\n";
     echo "<div class='foot'>";
@@ -337,6 +350,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
     if ($data["partial"])
     {
       $this->RenderNormalRow(toObject($a));
+      $this->RenderNormalRowEnd(toObject($a));
       exit();
     }
     return array();
@@ -424,6 +438,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
     if ($data["partial"])
     {
       $this->RenderNormalRow(toObject($a));
+      $this->RenderNormalRowEnd(toObject($a));
       exit();
     }
     return array();
@@ -525,6 +540,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
       $o = toObject($a);
       $o->party = PouetParty::Spawn($a["party"]);
       $this->RenderNormalRow($o);
+      $this->RenderNormalRowEnd($o);
       exit();
     }
     return array();
@@ -627,6 +643,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
       $o = toObject($a);
       $o->user = PouetUser::Spawn($a["userID"]);
       $this->RenderNormalRow($o);
+      $this->RenderNormalRowEnd($o);
       exit();
     }
     return array();
@@ -716,6 +733,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
       $o->prodOriginal   = PouetProd::Spawn($a["original"]);
       $o->prodDerivative = PouetProd::Spawn($a["derivative"]);
       $this->RenderNormalRow($o);
+      $this->RenderNormalRowEnd($o);
       exit();
     }
 
@@ -788,11 +806,13 @@ if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
     {
       $box = new $class( $prod );
       $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
+      $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
     }
     if ($_GET["new" . $class::$slug])
     {
       $box = new $class( $prod );
       $box->RenderEditRow( new stdClass() );
+      $box->RenderEditRowEnd( new stdClass() );
     }
   }
   exit();
