@@ -309,7 +309,10 @@ function Youtubify( e )
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON.entry.title)
-            item.update(transport.responseJSON.entry.title.$t);
+          {
+            var s = transport.responseJSON.entry.title.$t;
+            item.update( s.escapeHTML() );
+          }
         },
       });
     }
