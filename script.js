@@ -152,9 +152,9 @@ function PreparePostForm( form )
     }
   });
 }
-function InstrumentAdminEditorForAjax( parentElement, formAction, options )
+function InstrumentAdminEditorForAjax( parentElement, formAction, _options )
 {
-  options = options || {};
+  var options = _options || {};
   
   parentElement.select(".edit").each(function(item){
     var tr = item.up("tr");
@@ -184,7 +184,7 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
               parameters: opt,
               onSuccess: function(transport) {
                 tr.update(transport.responseText);
-                InstrumentAdminEditorForAjax( tr, formAction );
+                InstrumentAdminEditorForAjax( tr, formAction, options );
                 fireSuccessOverlay();
               }
             });
@@ -245,7 +245,7 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
               parameters: opt,
               onSuccess: function(transport) {
                 tr.update(transport.responseText);
-                InstrumentAdminEditorForAjax( tr, formAction );
+                InstrumentAdminEditorForAjax( tr, formAction, options );
                 fireSuccessOverlay();
               }
             });
