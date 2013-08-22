@@ -329,6 +329,7 @@ td.date {
   padding-bottom: 2px;
   background: #224488 url("http://content.pouet.net/gfx/titles/stats.gif") top left no-repeat;
   background-position:2px 2px;
+  text-align: left;
 }
 #pouetbox_stats td:nth-child(2), 
 #pouetbox_stats th:nth-child(2) {
@@ -773,7 +774,9 @@ td.date {
 #pouetbox_affilbutton .content {
   text-align: center;
 }
-
+#pouetbox_affilbutton img {
+  border: 0px;
+}
 #pouetbox_usermain {
   width: 50%;
 }
@@ -1398,6 +1401,9 @@ input.autocompleteSearch {
 #pouetbox_buttons h2 {
   clear: both;
 }
+#pouetbox_buttons img {
+  border: 0px;
+}
 #pouetbox_buttons li {
   margin: 3px; 
   float: left;
@@ -1522,4 +1528,14 @@ input.autocompleteSearch {
   list-style: none;
   margin: 0px auto;
   display: table;
+}
+
+#pouetbox_login .loggedin {
+  text-align: center;
+}
+
+#pouetbox_login .loggedin .user {
+  padding: 0px;
+  background: none;
+  font-weight: bold;
 }
