@@ -227,7 +227,7 @@ class PouetBoxAccount extends PouetBox
       $this->fieldsSettings["prodcomments"]["type"] = "select";
       $this->fieldsSettings["prodcomments"]["assoc"] = true;
       $this->fieldsSettings["prodcomments"]["fields"] = array(-1=>"all",0=>"hide",5=>"5",10=>"10",25=>"25",50=>"50",100=>"100");
-
+      $this->fieldsSettings["prodcomments"]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->prodcomments : $DEFAULT_USERSETTINGS->prodcomments;
     }
     else
     {

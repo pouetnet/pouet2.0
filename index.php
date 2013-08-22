@@ -55,7 +55,7 @@ foreach($boxes as $bar=>$boxlist)
   echo "  <div id='"._html($bar)."'>\n";
   foreach($boxlist as $box)
   {
-    if ($box["limit"]===0)
+    if (isset($box["limit"]) && (int)$box["limit"]==0)
       continue;
     $class = "PouetBox".$box["box"];
     $p = new $class();
