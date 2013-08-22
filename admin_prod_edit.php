@@ -460,7 +460,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
 <script language="JavaScript" type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
-  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodlinks"), "prodLinks" );
+  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodlinks"), "prodLink" );
 });
 //-->
 </script>
@@ -579,7 +579,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
 <script language="JavaScript" type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
-  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodparties"), "prodParties", {
+  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodparties"), "prodParty", {
     onRowLoad: function(tr){
       new Autocompleter(tr.down(".partyID"), {"dataUrl":"./ajax_parties.php"});
     }
@@ -665,7 +665,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
 <script language="JavaScript" type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
-  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodcredits"), "prodCredits", {
+  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodcredits"), "prodCredit", {
     onRowLoad: function(tr){
       new Autocompleter(tr.down(".userID"), {"dataUrl":"./ajax_users.php"});
     }
@@ -682,7 +682,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
 {
-  public static $slug = "Relation";
+  public static $slug = "Affil";
   function PouetBoxAdminEditProdAffil( $prod )
   {
     parent::__construct();
