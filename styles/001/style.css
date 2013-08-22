@@ -1428,6 +1428,7 @@ input.autocompleteSearch {
   font-weight: bold;
   margin: 0px 1px;
   padding: 3px;
+  text-transform: lowercase;
 }
 
 #pouetbox_faq dd {
