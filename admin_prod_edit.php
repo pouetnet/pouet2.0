@@ -668,7 +668,12 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodcredits"), "prodCredit", {
     onRowLoad: function(tr){
-      new Autocompleter(tr.down(".userID"), {"dataUrl":"./ajax_users.php"});
+      new Autocompleter(tr.down(".userID"), {
+        "dataUrl":"./ajax_users.php",
+        "processRow": function(item) {
+          return "<img class='avatar' src='<?=POUET_CONTENT_URL?>/avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML();
+        }
+      });
     }
   } );
 });

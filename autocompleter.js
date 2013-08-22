@@ -207,7 +207,8 @@ Autocompleter = Class.create({
           "width":instance.searchBox.getLayout().get("width") + "px",
         });
         results.each(function(item){
-          var li = new Element("li").update(item.name.escapeHTML());
+          var func = instance.options.processRow || function(item) { return item.name.escapeHTML() };
+          var li = new Element("li").update( func(item) );
           li.store("item",item);
           li.observe("click",function(){
             instance.selectListItem(li);
