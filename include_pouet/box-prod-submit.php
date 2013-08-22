@@ -185,7 +185,7 @@ class PouetBoxSubmitProd extends PouetBox
     $a["added"] = get_login_id();
     $a["quand"] = date("Y-m-d H:i:s");
 
-    if( checkdate( $data["releaseDate_month"], 15, $data["releaseDate_year"]) )
+    if( $data["releaseDate_year"] && $data["releaseDate_month"] && checkdate( (int)$data["releaseDate_month"], 15, (int)$data["releaseDate_year"]) )
       $a["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
     else if ($data["releaseDate_year"])
       $a["date"] = sprintf("%04d-00-15",$data["releaseDate_year"]);

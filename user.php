@@ -85,7 +85,7 @@ class PouetBoxUserMain extends PouetBox
     $this->comments = array();
     if ($_GET["show"]=="demoblog")
     {
-      $this->comments = $this->GetCommentsAdded( 10, $_GET["page"] );
+      $this->comments = $this->GetDemoblog( $_GET["page"] );
     }
 
     $this->agreeRulez = array();
@@ -316,7 +316,7 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
-  function GetCommentsAdded( $limit, $page )
+  function GetDemoblog( $page )
   {
     $s = new BM_Query("comments");
     $s->AddField("count(*) as c");
@@ -330,8 +330,17 @@ class PouetBoxUserMain extends PouetBox
     $s->AddOrder("comments.quand desc");
     //$s->AddJoin("left","comments","prods.id = comments.which");
     $s->Attach(array("comments"=>"which"),array("prods as prod"=>"id"));
-    $s->AddWhere(sprintf("comments.who = %d",$this->id));
-
+    $s->AddWhere(sprintf_esc("comments.who = %d",$this->id));
+    if ($_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
+    if ($_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
+    if ($_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
+    
+    $limit = 10;
+    if ($_GET["com"]) $limit = (int)$_GET["com"];
+    $limit = min($limit,100);
+    $limit = max($limit,1);
+    if ($_GET["com"]==-1) $limit = $this->postcount;
+    
     $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
 
@@ -390,7 +399,8 @@ class PouetBoxUserMain extends PouetBox
       echo "<li class='header'>cdcs:</li>\n";
       $x = 1;
       foreach($this->cdcProds as $v)
-        $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
+        if ($v->prod)
+          $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
     }
 
     echo "</ul>\n";
@@ -587,7 +597,7 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->comments as $c)
       {
         $p = $c->prod;
-        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "");
+        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "isok");
         echo "<li class='blogprod'>";
         echo $p->RenderTypeIcons();
         echo $p->RenderPlatformIcons();

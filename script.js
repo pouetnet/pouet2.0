@@ -152,9 +152,9 @@ function PreparePostForm( form )
     }
   });
 }
-function InstrumentAdminEditorForAjax( parentElement, formAction, options )
+function InstrumentAdminEditorForAjax( parentElement, formAction, _options )
 {
-  options = options || {};
+  var options = _options || {};
   
   parentElement.select(".edit").each(function(item){
     var tr = item.up("tr");
@@ -178,13 +178,13 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             }
             var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
             opt["partial"] = true;
-            opt["formProcessorAction"] = formAction;
+            opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
             new Ajax.Request( tr.up("form").action, {
               method: "post",
               parameters: opt,
               onSuccess: function(transport) {
                 tr.update(transport.responseText);
-                InstrumentAdminEditorForAjax( tr, formAction );
+                InstrumentAdminEditorForAjax( tr, formAction, options );
                 fireSuccessOverlay();
               }
             });
@@ -201,10 +201,10 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
         return;
   
       //var opt = item.href.toQueryParams();
-      var opt = Form.serializeElements( tr.up("form").select("input,select"), {hash:true} );
+      var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
       opt = $H(opt).merge( item.href.toQueryParams() ).toObject();
       opt["partial"] = true;
-      opt["formProcessorAction"] = formAction;
+      opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
       new Ajax.Request( tr.up("form").action, {
         method: "post",
         parameters: opt,
@@ -239,13 +239,13 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             }
             var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
             opt["partial"] = true;
-            opt["formProcessorAction"] = formAction;
+            opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
             new Ajax.Request( tr.up("form").action, {
               method: "post",
               parameters: opt,
               onSuccess: function(transport) {
                 tr.update(transport.responseText);
-                InstrumentAdminEditorForAjax( tr, formAction );
+                InstrumentAdminEditorForAjax( tr, formAction, options );
                 fireSuccessOverlay();
               }
             });
@@ -267,7 +267,7 @@ function fadeSuccess()
 {
   var step = 1.0 / (timeCrossfade * 1.0 / timerDensity);
   $("successOverlay").style.opacity = parseFloat($("successOverlay").style.opacity) - step;
-  if ($("successOverlay").style.opacity <= 0.0)
+  if ($("successOverlay").style.opacity <= step + 0.01) // wahey chrome precision!
   {
     $("successOverlay").remove();
     return;
@@ -309,7 +309,10 @@ function Youtubify( e )
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON.entry.title)
-            item.update(transport.responseJSON.entry.title.$t);
+          {
+            var s = transport.responseJSON.entry.title.$t;
+            item.update( s.escapeHTML() );
+          }
         },
       });
     }

@@ -11,7 +11,7 @@ class CSRFProtect
       // garbage collect
       foreach($_SESSION["CSRFProtect"] as $k=>$v)
       {
-        if ($v["time"] > time() + 60 * 60 * 24)
+        if (time() > $v["time"] + 60 * 60 * 24)
         {
           unset( $_SESSION["CSRFProtect"][$k] );
         }

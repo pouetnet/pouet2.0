@@ -99,6 +99,12 @@ class PouetBoxProdMain extends PouetBox {
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
+    
+    $s = new BM_Query("credits");
+    $s->AddField("credits.role");
+    $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
+    $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $this->credits = $s->perform();
 
     $this->downloadLinks = array();
     if ($this->prod->sceneorg)
@@ -369,7 +375,20 @@ document.observe("dom:loaded",function(){
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
   }
-
+  function RenderCredits() 
+  {
+    echo "<ul id='credits'>";
+    foreach($this->credits as $v)
+    {
+//      $user = PouetUser::Spawn($k);
+      echo "<li>";
+      echo $v->user->PrintLinkedAvatar()." ";
+      echo $v->user->PrintLinkedName(); 
+      echo " - "._html($v->role);
+      echo "</li>";
+    }
+    echo "</ul>";
+  }
   function Render()
   {
     global $currentUser;
