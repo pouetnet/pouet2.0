@@ -267,7 +267,7 @@ function fadeSuccess()
 {
   var step = 1.0 / (timeCrossfade * 1.0 / timerDensity);
   $("successOverlay").style.opacity = parseFloat($("successOverlay").style.opacity) - step;
-  if ($("successOverlay").style.opacity <= 0.0)
+  if ($("successOverlay").style.opacity <= step + 0.01) // wahey chrome precision!
   {
     $("successOverlay").remove();
     return;

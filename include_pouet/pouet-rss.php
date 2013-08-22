@@ -36,10 +36,10 @@ class PouetRSS
               $enc->addAttribute("type",$data["mime"]);
           } break;
         case "guid":
-          $node->addChild($k,$v)->addAttribute("isPermaLink",strstr($v,"://")===false?"false":"true");
+          $node->addChild($k,_html($v))->addAttribute("isPermaLink",strstr($v,"://")===false?"false":"true");
           break;
         default:
-          $node->addChild($k,$v);
+          $node->addChild($k,_html($v));
           break;
       }
     }
