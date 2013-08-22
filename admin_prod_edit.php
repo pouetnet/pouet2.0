@@ -234,9 +234,10 @@ class PouetBoxAdminEditProdBase extends PouetBox
   }
   function RenderNormalRowEnd($row)
   {
-    printf("    <td><a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a> | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a></td>\n",
-      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id,
-      $_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
+    echo "<td>";
+    printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
+    printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
+    echo "</td>\n";
   }
   function RenderDeleteRowEnd($row)
   {
