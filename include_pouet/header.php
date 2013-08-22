@@ -1,11 +1,10 @@
 <?
 $timer["html"]["start"] = microtime_float();
 require_once("header.bare.php");
-?>
 
-<header>
-  <h1>pouët.net</h1>
-<?
+echo "<header>\n";
+echo "  <h1>pouët.net</h1>\n";
+
 if (get_setting("logos"))
 {
   $timer["logo"]["start"] = microtime_float();
@@ -51,5 +50,10 @@ if (get_setting("logos"))
   <a href="./index.php">pouët.net</a>
 <?
 }
+echo "</header>\n";
+
+if (POUET_TEST)
+{
+  echo "<div id='testbanner'>THIS POUET IS IN TEST MODE!</div>\n";
+}
 ?>
-</header>
