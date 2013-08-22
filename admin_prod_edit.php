@@ -235,6 +235,8 @@ class PouetBoxAdminEditProdBase extends PouetBox
   function RenderNormalRowEnd($row)
   {
     echo "<td>";
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
     printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
     printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
     echo "</td>\n";
@@ -251,12 +253,10 @@ class PouetBoxAdminEditProdBase extends PouetBox
   function RenderEditRowEnd($row)
   {
     echo "<td>";
-    if ($row->id)
-      echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
-
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-
+    if ($row->id)
+      echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }

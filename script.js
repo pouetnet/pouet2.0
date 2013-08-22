@@ -178,7 +178,7 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             }
             var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
             opt["partial"] = true;
-            opt["formProcessorAction"] = formAction;
+            opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
             new Ajax.Request( tr.up("form").action, {
               method: "post",
               parameters: opt,
@@ -201,10 +201,10 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
         return;
   
       //var opt = item.href.toQueryParams();
-      var opt = Form.serializeElements( tr.up("form").select("input,select"), {hash:true} );
+      var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
       opt = $H(opt).merge( item.href.toQueryParams() ).toObject();
       opt["partial"] = true;
-      opt["formProcessorAction"] = formAction;
+      opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
       new Ajax.Request( tr.up("form").action, {
         method: "post",
         parameters: opt,
@@ -239,7 +239,7 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, options )
             }
             var opt = Form.serializeElements( tr.select("input,select"), {hash:true} );
             opt["partial"] = true;
-            opt["formProcessorAction"] = formAction;
+            opt["formProcessorAction"] = tr.up("form").down("input[name='formProcessorAction']").value;
             new Ajax.Request( tr.up("form").action, {
               method: "post",
               parameters: opt,
