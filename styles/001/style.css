@@ -1567,3 +1567,19 @@ input.autocompleteSearch {
   background: none;
   font-weight: bold;
 }
+
+#testbanner {
+    background: none repeat scroll 0 0 #AA5555;
+    border: 2px solid black;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 60px;
+    opacity: 0.8;
+    padding: 10px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    top: 10px;
+    width: 60px;
+    z-index: 10;
+}
