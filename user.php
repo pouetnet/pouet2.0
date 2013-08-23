@@ -552,7 +552,7 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->credits)
     {
-      echo "<div class='contribheader'>contributions";
+      echo "<div class='contribheader'>contributions to prods";
       echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
       echo "<ul class='boxlist'>";
@@ -561,7 +561,7 @@ class PouetBoxUserMain extends PouetBox
         echo "<li>";
         echo $p->prod->RenderTypeIcons();
         echo $p->prod->RenderPlatformIcons();
-        echo $p->prod->RenderSingleRow();
+        echo $p->prod->RenderSingleRow()." ";
         echo $p->prod->RenderAwards();
         echo " [".$p->role."]";
         echo "</li>";
