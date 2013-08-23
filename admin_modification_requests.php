@@ -14,6 +14,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
   function PouetBoxAdminModificationRequests( )
   {
     parent::__construct();
+    $this->uniqueID = "pouetbox_adminreq";
     $this->title = "process the following requests";
   }
   function Commit($data)

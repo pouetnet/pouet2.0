@@ -271,12 +271,6 @@ class PouetBoxAccount extends PouetBox
         $params["password"] = ($data["password"]);
     }
 
-/*
-    if (strstr($data["email"],"@")===false)
-      $errors[] = "invalid email";
-    else
-      $params["email"] = $data["email"];
-*/
     $params["firstname"] = $data["firstname"];
     $params["lastname"] = $data["lastname"];
 
@@ -488,15 +482,10 @@ class PouetBoxAccount extends PouetBox
       $errors[] = "nick too short!";
       return $errors;
     }
-/*
-    if (!preg_match("/^[a-zA-Z0-9][a-zA-Z0-9._\\-\\+]*@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$/",$data["email"]))
-    {
-      $errors[] = "invalid email address";
-      return $errors;
-    }
-*/
+
     if (!$errors)
     {
+      $this->LoadFromDB();
       if (get_login_id())
       {
         $errors = $this->ParsePostLoggedIn( $data );
@@ -506,7 +495,7 @@ class PouetBoxAccount extends PouetBox
         $errors = $this->ParsePostNewUser( $data );
       }
     }
-    $this->LoadFromDB();
+//    $this->LoadFromDB();
     return $errors;
   }
 
@@ -541,44 +530,88 @@ class PouetBoxAccount extends PouetBox
   }
 };
 
+class PouetBoxAccountModificationRequests extends PouetBox
+{
+  function PouetBoxAccountModificationRequests( )
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_accountreq";
+    $this->title = "your most recent modification requests";
+  }
+  function LoadFromDB()
+  {
+    global $currentUser;
+    
+    $s = new BM_Query("modification_requests");
+    $s->AddField("modification_requests.id");
+    $s->AddField("modification_requests.requestType");
+    $s->AddField("modification_requests.itemID");
+    $s->AddField("modification_requests.itemType");
+    $s->AddField("modification_requests.requestBlob");
+    $s->AddField("modification_requests.requestDate");
+    $s->AddField("modification_requests.approved");
+    //$s->Attach(array("modification_requests"=>"gloperatorID"),array("users as gloperator"=>"id"));
+    $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
+    $s->AddOrder("requestDate desc");
+    $s->SetLimit(10);
+    $this->requests = $s->perform();
+  }
+  function Render()
+  {
+    global $REQUESTTYPES;
+    echo "<table id='".$this->uniqueID."' class='boxtable'>\n";
+    echo "  <tr>\n";
+    echo "    <th colspan='4'>".$this->title."</th>\n";
+    echo "  </tr>\n";
+    echo "  <tr>\n";
+    echo "    <th>date</th>\n";
+    echo "    <th>item</th>\n";
+    echo "    <th>request</th>\n";
+    echo "    <th>approved?</th>\n";
+    echo "  </tr>\n";
+    foreach($this->requests as $r)
+    {
+      echo "  <tr>\n";
+      echo "    <td>".$r->requestDate."</td>\n";
+      echo "    <td>".$r->itemType.": ";
+      switch ($r->itemType)
+      {
+        case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
+      }
+      echo "</td>\n";
+      echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
+      echo "    <td>";
+      if ( $r->approved === NULL ) echo "pending";
+      else if ( $r->approved == 0 ) echo "no";
+      else if ( $r->approved == 1 ) echo "yes";
+      echo "</td>\n";
+      echo "  </tr>\n";
+    }
+    echo "</table>\n";
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
-$p = new PouetBoxAccount();
-$p->Load();
+$form = new PouetFormProcessor();
 
-$errors = array();
-if ($_POST)
-{
-  $errors = $p->ParsePostMessage( $_POST );
-}
+$form->SetSuccessURL( "account.php", false );
+
+$form->Add( "account", new PouetBoxAccount() );
+$form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
+
+$form->Process();
+
 $TITLE = "account!";
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-echo "<form action='account.php' method='post'>\n";
 
-if (count($errors))
-{
-  $msg = new PouetBoxModalMessage( true );
-  $msg->classes[] = "errorbox";
-  $msg->title = "An error has occured:";
-  $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-  $msg->Render();
-}
-else if ($success)
-{
-  $msg = new PouetBoxModalMessage( true );
-  $msg->classes[] = "successbox";
-  $msg->title = "Success!";
-  $msg->message = $success;
-  $msg->Render();
-}
+$form->Display();
 
-if($p) $p->Render();
-
-echo "</form>\n";
 echo "</div>\n";
 
 ?>
