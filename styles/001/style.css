@@ -1523,12 +1523,20 @@ input.autocompleteSearch {
   margin: 15px;
 }
 
-#credits {
-  text-align: left;
+#credits ul {
   list-style: none;
-  margin: 0px auto;
-  display: table;
+  text-align: left;
+  padding: 2px;
 }
+
+#credits ul li {
+  display: inline;
+}
+
+#credits ul li:before {
+  content: " :: ";
+}
+
 
 #pouetbox_login .loggedin {
   text-align: center;

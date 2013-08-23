@@ -331,14 +331,14 @@ class PouetBoxProdMain extends PouetBox {
   }
   function RenderCredits() 
   {
-    echo "<ul id='credits'>";
+    echo "<ul>";
     foreach($this->credits as $v)
     {
 //      $user = PouetUser::Spawn($k);
       echo "<li>";
       echo $v->user->PrintLinkedAvatar()." ";
       echo $v->user->PrintLinkedName(); 
-      echo " - "._html($v->role);
+      echo " ("._html($v->role).")";
       echo "</li>";
     }
     echo "</ul>";
@@ -397,6 +397,16 @@ class PouetBoxProdMain extends PouetBox {
     $this->RenderLinks();
     echo " </td>\n";
     echo "</tr>\n";
+
+    if ($this->credits)
+    {
+      echo "<tr>\n";
+      echo " <td id='credits' colspan='3' class='r2'>";
+      $this->RenderCredits();
+      echo "</td>\n";
+      echo "</tr>\n";
+    }
+
 
     if($this->prod->addeduser)
     {
