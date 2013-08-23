@@ -1530,7 +1530,7 @@ input.autocompleteSearch {
 }
 
 #credits ul li {
-  display: inline;
+  display: inline-block;
 }
 
 #credits ul li:before {
