@@ -76,10 +76,12 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
           "value"=>(int)$data["linkID"],
         ),
         "newLinkKey" => array(
+          "name"=>"link description (youtube, source, linux port, etc)",
           "type"=>"text",
           "value"=>$l->type,
         ),
         "newLink" => array(
+          "name"=>"link url",
           "type"=>"url",
           "value"=>$l->link,
         ),
@@ -120,7 +122,11 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
   }
 
   static function Process($itemID, $reqData) 
-  { 
+  {
+    $a = array();
+    $a["type"] = $reqData["newLinkKey"];
+    $a["link"] = $reqData["newLink"];
+    SQLLib::UpdateRow("downloadlinks",$a,"id=".(int)$reqData["linkID"]);
   }
 };
 
@@ -172,6 +178,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
 
   static function Process($itemID, $reqData) 
   { 
+    SQLLib::Query(sprintf_esc("delete from downloadlinks where id=%d",$reqData["linkID"]));
   }
 };
 
