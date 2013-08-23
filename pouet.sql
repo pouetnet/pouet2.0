@@ -13,14 +13,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `affiliatedbbses`
+-- Table structure for table `affiliatedboards`
 --
 
-DROP TABLE IF EXISTS `affiliatedbbses`;
+DROP TABLE IF EXISTS `affiliatedboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `affiliatedbbses` (
-  `bbs` int(10) unsigned NOT NULL DEFAULT '0',
+CREATE TABLE `affiliatedboards` (
+  `board` int(10) unsigned NOT NULL DEFAULT '0',
   `group` int(10) unsigned NOT NULL DEFAULT '0',
   `type` enum('WHQ','member','EHQ','USHQ','HQ','dist') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
@@ -141,22 +141,6 @@ CREATE TABLE `awardscand_2011` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bbs_ads`
---
-
-DROP TABLE IF EXISTS `bbs_ads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bbs_ads` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `bbs` int(10) unsigned NOT NULL DEFAULT '0',
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `adder` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `bbs_posts`
 --
 
@@ -199,13 +183,13 @@ CREATE TABLE `bbs_topics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bbses`
+-- Table structure for table `boards`
 --
 
-DROP TABLE IF EXISTS `bbses`;
+DROP TABLE IF EXISTS `boards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bbses` (
+CREATE TABLE `boards` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `sysop` varchar(255) NOT NULL,
@@ -220,31 +204,47 @@ CREATE TABLE `bbses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bbses_platforms`
+-- Table structure for table `boards_ads`
 --
 
-DROP TABLE IF EXISTS `bbses_platforms`;
+DROP TABLE IF EXISTS `boards_ads`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bbses_platforms` (
-  `bbs` int(10) unsigned NOT NULL DEFAULT '0',
+CREATE TABLE `boards_ads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `board` int(10) unsigned NOT NULL DEFAULT '0',
+  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `adder` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `boards_platforms`
+--
+
+DROP TABLE IF EXISTS `boards_platforms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `boards_platforms` (
+  `board` int(10) unsigned NOT NULL DEFAULT '0',
   `platform` int(10) unsigned NOT NULL DEFAULT '0',
-  KEY `bbsb` (`bbs`),
-  KEY `bbs` (`bbs`,`platform`),
+  KEY `bbsb` (`board`),
+  KEY `bbs` (`board`,`platform`),
   KEY `bbspl` (`platform`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bbsesaka`
+-- Table structure for table `boardsaka`
 --
 
-DROP TABLE IF EXISTS `bbsesaka`;
+DROP TABLE IF EXISTS `boardsaka`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bbsesaka` (
-  `bbs1` int(10) unsigned NOT NULL DEFAULT '0',
-  `bbs2` int(10) unsigned NOT NULL DEFAULT '0'
+CREATE TABLE `boardsaka` (
+  `board1` int(10) unsigned NOT NULL DEFAULT '0',
+  `board2` int(10) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -338,27 +338,6 @@ CREATE TABLE `downloadlinks` (
   KEY `dl_prod` (`prod`),
   KEY `dl_prodtype` (`prod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `editrequests`
---
-
-DROP TABLE IF EXISTS `editrequests`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `editrequests` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `prodid` int(11) NOT NULL,
-  `field` text NOT NULL,
-  `newvalue` text NOT NULL,
-  `userid` int(11) NOT NULL,
-  `gloperatorid` int(11) NOT NULL,
-  `approved` int(11) NOT NULL,
-  `datetime` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `prodid` (`prodid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,6 +491,30 @@ CREATE TABLE `logos_votes` (
   KEY `user` (`user`,`vote`),
   KEY `user_2` (`user`,`vote`,`logo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='logos ratings given by users';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `modification_requests`
+--
+
+DROP TABLE IF EXISTS `modification_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modification_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `requestType` varchar(32) NOT NULL,
+  `itemID` int(11) NOT NULL,
+  `itemType` enum('prod','group','party') NOT NULL,
+  `requestBlob` text NOT NULL,
+  `requestDate` datetime NOT NULL,
+  `userID` int(11) NOT NULL,
+  `gloperatorID` int(11) DEFAULT NULL,
+  `approved` tinyint(4) DEFAULT NULL,
+  `comment` text NOT NULL,
+  `approveDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `prodid` (`itemID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -721,31 +724,31 @@ CREATE TABLE `prods` (
   `date` date DEFAULT NULL,
   `views` int(10) unsigned DEFAULT '0',
   `added` int(10) unsigned NOT NULL DEFAULT '1',
+  `rank` int(11) unsigned NOT NULL DEFAULT '0',
   `type` set('32b','64b','128b','256b','512b','1k','4k','8k','16k','32k','40k','64k','80k','96k','100k','128k','256k','artpack','bbstro','cracktro','demo','demopack','demotool','dentro','diskmag','fastdemo','game','intro','invitation','liveact','musicdisk','procedural graphics','report','slideshow','votedisk','wild') DEFAULT NULL,
+  `party` int(10) unsigned NOT NULL DEFAULT '0',
   `party_year` int(2) unsigned DEFAULT NULL,
+  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','beginner demo compo','black&white video compo','bootsector intro','browser demo','browser intro','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','hugescreen wild','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','javascript 1k','freestyle','media facade','shadertoy','gravedigger') DEFAULT NULL,
   `party_place` tinyint(3) unsigned DEFAULT NULL,
   `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `latestip` varchar(255) NOT NULL,
-  `party` int(10) unsigned NOT NULL DEFAULT '0',
   `group1` int(10) unsigned NOT NULL DEFAULT '0',
   `group2` int(10) unsigned NOT NULL DEFAULT '0',
-  `rank` int(11) unsigned NOT NULL DEFAULT '0',
-  `downloads` int(10) unsigned NOT NULL DEFAULT '0',
-  `downloads_ip` varchar(255) NOT NULL,
-  `video` varchar(255) NOT NULL,
+  `group3` int(10) unsigned NOT NULL DEFAULT '0',
   `csdb` int(10) unsigned NOT NULL DEFAULT '0',
   `zxdemo` int(10) unsigned NOT NULL DEFAULT '0',
+  `sceneorg` int(10) unsigned NOT NULL DEFAULT '0',
   `voteup` int(10) unsigned NOT NULL DEFAULT '0',
   `votepig` int(10) unsigned NOT NULL DEFAULT '0',
   `votedown` int(10) unsigned NOT NULL DEFAULT '0',
   `voteavg` decimal(4,2) NOT NULL DEFAULT '0.00',
-  `source` varchar(255) NOT NULL,
-  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','beginner demo compo','black&white video compo','bootsector intro','browser demo','browser intro','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','hugescreen wild','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','javascript 1k','freestyle','media facade','shadertoy','gravedigger') DEFAULT NULL,
-  `group3` int(10) unsigned NOT NULL DEFAULT '0',
   `invitation` int(10) unsigned NOT NULL DEFAULT '0',
   `invitationyear` int(10) unsigned NOT NULL DEFAULT '0',
   `boardID` int(11) NOT NULL,
-  `sceneorg` int(10) unsigned NOT NULL DEFAULT '0',
+  `DEPRECATED_downloads` int(10) unsigned NOT NULL DEFAULT '0',
+  `DEPRECATED_downloads_ip` varchar(255) NOT NULL,
+  `DEPRECATED_video` varchar(255) NOT NULL,
+  `DEPRECATED_source` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group1` (`group1`),
   KEY `group2` (`group2`),
