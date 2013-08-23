@@ -94,9 +94,16 @@ class PouetBoxAdminModificationRequests extends PouetBox
       
       echo "</td>\n";
       echo "<td>";
+      
+      printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
       printf("  <input type='hidden' name='requestID' value='%d'/>",$r->id);
       printf("  <input type='submit' name='requestAccept' value='accept !'/>");
       printf("  <input type='submit' name='requestDeny' value='deny !'/>");
+      printf("  <input type='hidden' name='%s' value='%s'/>\n",PouetFormProcessor::fieldName,"adminModReq");
+      printf("</form>\n\n\n");
+      
       echo "</td>\n";
       echo "  </tr>\n";
     }
@@ -106,11 +113,10 @@ class PouetBoxAdminModificationRequests extends PouetBox
 
 
 $form = new PouetFormProcessor();
-
-$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"], true );
+$form->renderForm = false;
 
 $box = new PouetBoxAdminModificationRequests( );
-$form->Add( "party", $box );
+$form->Add( "adminModReq", $box );
 
 $form->SetSuccessURL( "admin_modification_requests.php", true );
 

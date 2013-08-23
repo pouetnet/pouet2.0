@@ -44,7 +44,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
   static function Display($data) 
   { 
     $s =  _html($data["newLinkKey"])." - ";
-    $s .= "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
+    $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
     return $s;
   }
 
@@ -114,10 +114,10 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = "<b>old</b>: ";
     $s .= _html($row->type)." - ";
-    $s .= "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
+    $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
     $s .= "<br/><b>new</b>: ";
     $s .= _html($data["newLinkKey"])." - ";
-    $s .= "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
+    $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
     return $s;
   }
 
@@ -170,7 +170,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
   { 
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = _html($row->type)." - ";
-    $s .= "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
+    $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
     $s .= "<br/><b>reason</b>: ";
     $s .= _html($data["reason"]);
     return $s;
