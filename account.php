@@ -274,6 +274,11 @@ class PouetBoxAccount extends PouetBox
     $params["firstname"] = $data["firstname"];
     $params["lastname"] = $data["lastname"];
 
+    if (strstr($data["email"],"@")===false)
+      $errors[] = "invalid email";
+    else
+      $params["email"] = $data["email"];
+
     if ($params)
     {
       global $sceneID;
