@@ -90,34 +90,6 @@ class PouetBoxAdminModificationRequests extends PouetBox
       global $REQUESTTYPES;
       if ($REQUESTTYPES[$r->requestType])
         echo $REQUESTTYPES[$r->requestType]::Display($data);
-        
-      /*
-      switch ($r->requestType)
-      {
-        case "prod_add_link":
-          {
-            echo _html($data["newLinkKey"])." - ";
-            echo "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
-          } break;
-        case "prod_change_link":
-          {
-            $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
-            echo "<b>old</b>: ";
-            echo _html($row->type)." - ";
-            echo "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
-            echo "<br/><b>new</b>: ";
-            echo _html($data["newLinkKey"])." - ";
-            echo "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
-          } break;
-        case "prod_remove_link":
-          {
-            $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
-            echo _html($row->type)." - ";
-            echo "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
-            echo "<br/><b>reason</b>: ";
-            echo _html($data["reason"]);
-          } break;
-      }*/
       
       echo "</td>\n";
       echo "<td>";
