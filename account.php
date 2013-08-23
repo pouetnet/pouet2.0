@@ -601,10 +601,14 @@ class PouetBoxAccountModificationRequests extends PouetBox
 
 $form = new PouetFormProcessor();
 
-$form->SetSuccessURL( "account.php", false );
+if (!get_login_id())
+  $form->successMessage = "registration complete! a confirmation mail will be sent to your address soon - you can't login until you confirmed your email address!";
+  
+$form->SetSuccessURL( "index.php", false );
 
 $form->Add( "account", new PouetBoxAccount() );
-$form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
+if (get_login_id())
+  $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
 
 $form->Process();
 

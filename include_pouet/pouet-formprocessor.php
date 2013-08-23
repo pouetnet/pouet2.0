@@ -6,6 +6,7 @@ class PouetFormProcessor
   private $successURL;
   private $redirectOnSuccess;
   public $renderForm = true;
+  public $successMessage = "see what you've done";
   
   const fieldName = "formProcessorAction";
 
@@ -68,7 +69,7 @@ class PouetFormProcessor
         $msg->classes[] = "successbox";
         $msg->title = "Success!";
         if ($this->successURL)
-          $msg->message = "<a href='"._html($this->successURL)."'>see what you've done</a>";
+          $msg->message = "<a href='"._html($this->successURL)."'>".$this->successMessage."</a>";
         else
           $msg->message = "<a href='".POUET_ROOT_URL."'>go back to the front page</a>";
         $msg->Render();
