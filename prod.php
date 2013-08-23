@@ -104,6 +104,7 @@ class PouetBoxProdMain extends PouetBox {
     $s->AddField("credits.role");
     $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
     $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $s->AddOrder("credits.role");
     $this->credits = $s->perform();
 
     $this->downloadLinks = array();
@@ -338,7 +339,7 @@ class PouetBoxProdMain extends PouetBox {
       echo "<li>";
       echo $v->user->PrintLinkedAvatar()." ";
       echo $v->user->PrintLinkedName(); 
-      echo " ("._html($v->role).")";
+      echo " ["._html($v->role)."]";
       echo "</li>";
     }
     echo "</ul>";
