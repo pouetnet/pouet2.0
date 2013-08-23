@@ -4,10 +4,18 @@ send comments and bug reports to <a href="mailto:webmaster@pouet.net">webmaster@
 <?
 $timer["html"]["end"] = microtime_float();
 $timer["page"]["end"] = microtime_float();
-printf("page created in %f seconds with %d queries.\n",$timer["page"]["end"] - $timer["page"]["start"],count($SQLLIB_QUERIES));
-?>
-</footer>
-<?
+printf("page created in %f seconds with %d queries.<br/>\n",$timer["page"]["end"] - $timer["page"]["start"],count($SQLLIB_QUERIES));
+
+if (POUET_TEST)
+{
+  $data = @file_get_contents( POUET_ROOT_LOCAL . "/.git/HEAD");
+  if (preg_match("/ref: refs\/heads\/(.*)/",$data,$m))
+  {
+    printf("current development branch: %s.<br/>\n",$m[1]);
+  }
+}
+echo "</footer>";
+
 if (POUET_TEST)
 {
   foreach($timer as $k=>$v) {
