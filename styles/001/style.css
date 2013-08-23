@@ -1531,9 +1531,7 @@ input.autocompleteSearch {
 
 #credits ul li {
   display: inline-block;
-  margin-bottom: 2px;
-  margin-top: 2px;
-  margin-left: 15px;
+  margin: 2px 8px;
 }
 
 #pouetbox_login .loggedin {
