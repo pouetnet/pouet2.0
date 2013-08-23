@@ -99,7 +99,7 @@ class PouetBoxProdMain extends PouetBox {
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
-    
+
     $s = new BM_Query("credits");
     $s->AddField("credits.role");
     $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
@@ -330,7 +330,7 @@ class PouetBoxProdMain extends PouetBox {
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
   }
-  function RenderCredits() 
+  function RenderCredits()
   {
     echo "<ul>";
     foreach($this->credits as $v)
@@ -338,7 +338,7 @@ class PouetBoxProdMain extends PouetBox {
 //      $user = PouetUser::Spawn($k);
       echo "<li>";
       echo $v->user->PrintLinkedAvatar()." ";
-      echo $v->user->PrintLinkedName(); 
+      echo $v->user->PrintLinkedName();
       echo " ["._html($v->role)."]";
       echo "</li>";
     }
