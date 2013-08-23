@@ -6,7 +6,7 @@ header("Content-type: application/json; charset=utf-8");
 $sql = new SQLSelect();
 $sql->AddField("id");
 $sql->AddField("name");
-$sql->AddTable("bbses");
+$sql->AddTable("boards");
 
 $r = array();
 if ($_POST["search"])

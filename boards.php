@@ -14,9 +14,9 @@ class PouetBoxBoardMain extends PouetBox
   }
 
   function LoadFromDB() {
-    $this->board = SQLLib::SelectRow(sprintf_esc("select * from bbses where id = %d",$this->id));
+    $this->board = SQLLib::SelectRow(sprintf_esc("select * from boards where id = %d",$this->id));
 
-    $a = SQLLib::SelectRows(sprintf_esc("select * from bbses_platforms where bbs = %d",$this->id));
+    $a = SQLLib::SelectRows(sprintf_esc("select * from boards_platforms where board = %d",$this->id));
     $this->platforms = array();
     foreach($a as $v) $this->platforms[] = $v->platform;
 
@@ -24,10 +24,10 @@ class PouetBoxBoardMain extends PouetBox
 
     $this->nfos = SQLLib::SelectRows(sprintf_esc("select * from othernfos where refid = %d",$this->id));
 
-    $s = new BM_Query("affiliatedbbses");
-    $s->AddField("affiliatedbbses.type");
-    $s->Attach(array("affiliatedbbses"=>"group"),array("groups as group"=>"id"));
-    $s->AddWhere(sprintf_esc("affiliatedbbses.bbs = %d",$this->id));
+    $s = new BM_Query("affiliatedboards");
+    $s->AddField("affiliatedboards.type");
+    $s->Attach(array("affiliatedboards"=>"group"),array("groups as group"=>"id"));
+    $s->AddWhere(sprintf_esc("affiliatedboards.board = %d",$this->id));
     $this->groups = $s->perform();
 
     $s = new BM_Query("prods");
@@ -276,10 +276,10 @@ class PouetBoxBoardList extends PouetBox
   }
 
   function Load() {
-    $s = new BM_query("bbses");
-    $s->AddField("bbses.id");
-    $s->AddField("bbses.name");
-    $s->AddField("bbses.phonenumber");
+    $s = new BM_query("boards");
+    $s->AddField("boards.id");
+    $s->AddField("boards.name");
+    $s->AddField("boards.phonenumber");
     if ($this->letter=="#")
       $s->AddWhere(sprintf_esc("name regexp '^[^a-z]'"));
     else

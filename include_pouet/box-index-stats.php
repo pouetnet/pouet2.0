@@ -11,7 +11,7 @@ class PouetBoxStats extends PouetBoxCachable {
     parent::__construct();
     $this->uniqueID = "pouetbox_stats";
     $this->title = "some stats";
-    $this->fields = array("prods", "groups", "parties", "bbses", "users", "comments");
+    $this->fields = array("prods", "groups", "parties", "boards", "users", "comments");
     $this->links = array("prodlist.php", "groups.php", "parties.php", "boards.php", "userlist.php", "comments.php");
   }
 
@@ -24,9 +24,9 @@ class PouetBoxStats extends PouetBoxCachable {
   }
 
   function LoadFromDB() {
-    $a = array("prods", "groups", "parties", "bbses", "users", "comments");
+    $a = array("prods", "groups", "parties", "boards", "users", "comments");
     foreach($this->fields as $v) {
-      $time = $v == "bbses" ? "added" : "quand";
+      $time = $v == "boards" ? "added" : "quand";
   		$this->data[$v."_all"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v)->c;
   		$this->data[$v."_24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$time."))<=3600*24")->c;
     }

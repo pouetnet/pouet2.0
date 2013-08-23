@@ -56,7 +56,7 @@ class PouetBoxProdMain extends PouetBox {
     PouetCollectPlatforms( $a );
 
     if ($this->prod->boardID)
-      $this->board = SQLLib::SelectRow(sprintf_esc("SELECT * FROM bbses WHERE id = %d",$this->prod->boardID));
+      $this->board = SQLLib::SelectRow(sprintf_esc("SELECT * FROM boards WHERE id = %d",$this->prod->boardID));
 
     $s = new BM_Query();
     $s->AddField("added");
