@@ -246,7 +246,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
 
     $data = $s->perform();
-    
+
     $a = array();
     foreach($data as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
@@ -359,13 +359,13 @@ class PouetBoxUserMain extends PouetBox
     if ($_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
     if ($_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
     if ($_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
-    
+
     $limit = 10;
     if ($_GET["com"]) $limit = (int)$_GET["com"];
     $limit = min($limit,100);
     $limit = max($limit,1);
     if ($_GET["com"]==-1) $limit = $this->postcount;
-    
+
     $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
 
