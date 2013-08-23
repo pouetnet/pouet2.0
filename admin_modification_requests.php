@@ -31,16 +31,10 @@ class PouetBoxAdminModificationRequests extends PouetBox
     
     $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob from modification_requests where id = %d",$data["requestID"]));
     $reqData = unserialize($req->requestBlob);
-    switch ($req->requestType)
-    {
-      case "prod_add_link":
-        $a = array();
-        $a["prod"] = $req->itemID;
-        $a["type"] = $reqData["newLinkKey"];
-        $a["link"] = $reqData["newLink"];
-        SQLLib::InsertRow("downloadlinks",$a);
-        break;
-    }
+    global $REQUESTTYPES;
+    if ($REQUESTTYPES[$req->requestType])
+      $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
+
     $a = array();
     $a["gloperatorID"] = $currentUser->id;
     $a["approved"] = 1;
@@ -89,9 +83,15 @@ class PouetBoxAdminModificationRequests extends PouetBox
         case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
       }
       echo "</td>\n";
-      echo "    <td>".$REQUESTTYPES[$r->requestType]."</td>\n";
+      echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
       echo "    <td>";
       $data = unserialize($r->requestBlob);
+      
+      global $REQUESTTYPES;
+      if ($REQUESTTYPES[$r->requestType])
+        echo $REQUESTTYPES[$r->requestType]::Display($data);
+        
+      /*
       switch ($r->requestType)
       {
         case "prod_add_link":
@@ -117,7 +117,8 @@ class PouetBoxAdminModificationRequests extends PouetBox
             echo "<br/><b>reason</b>: ";
             echo _html($data["reason"]);
           } break;
-      }
+      }*/
+      
       echo "</td>\n";
       echo "<td>";
       printf("  <input type='hidden' name='requestID' value='%d'/>",$r->id);

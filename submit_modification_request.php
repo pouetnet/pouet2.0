@@ -17,9 +17,6 @@ class PouetBoxModificationRequest extends PouetBox
     $this->title = "submit a change request";
     $this->formifier = new Formifier();
     $this->fields = array();
-
-    global $REQUESTTYPES;
-    $this->fieldsRequestTypes = $REQUESTTYPES;
   }
 
   function Validate( $data )
@@ -63,11 +60,18 @@ class PouetBoxModificationRequest extends PouetBox
     $this->fields = array(
       "requestType"=>array(
         "type"=>"select",
-        "fields"=>$this->fieldsRequestTypes,
         "name"=>"whatchu want",
         "assoc"=>true,
       ),
     );
+
+    global $REQUESTTYPES;
+    
+    foreach($REQUESTTYPES as $k=>$v)
+    {
+      if ($_REQUEST["prod"] && $v::GetItemType()=="prod") $this->fields["requestType"]["fields"][$k] = $v::Describe();
+    }
+    
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
@@ -94,10 +98,6 @@ class PouetBoxModificationRequest extends PouetBox
     if(!$_POST["requestType"])
     {
       echo "  <div class='content'>\n";
-      foreach($this->fields["requestType"]["fields"] as $k=>$v)
-      {
-        if (!$prod || ($prod && strpos($k,"prod")!==0)) unset($this->fields["requestType"]["fields"]);
-      }
       if(count($this->fields["requestType"]["fields"]))
         $this->formifier->RenderForm( $this->fields );
       else
@@ -116,6 +116,14 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  <h2>more data</h2>\n";
       echo "  <div class='content'>\n";
       $fields = array();
+      
+      global $REQUESTTYPES;
+      if ($REQUESTTYPES[ $_POST["requestType"] ])
+      {
+        $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields);
+      }
+      
+      /*
       switch($_POST["requestType"])
       {
         case "prod_add_link":
@@ -222,6 +230,7 @@ class PouetBoxModificationRequest extends PouetBox
             );
           } break;
       }
+      */
       if ($fields && !$error)
       {
         foreach($_POST as $k=>$v)

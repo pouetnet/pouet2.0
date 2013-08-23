@@ -300,7 +300,7 @@ class PouetBoxSubmitProd extends PouetBox
         "type"=>"select",
         "multiple"=>true,
         "fields"=>$this->types,
-        "info"=>" ",
+        "info"=>"ctrl + click or cmd + click to select more than one !",
         "required"=>true,
       ),
       "platform"=>array(
@@ -309,7 +309,7 @@ class PouetBoxSubmitProd extends PouetBox
         "multiple"=>true,
         "assoc"=>true,
         "fields"=>$plat,
-        "info"=>" ",
+        "info"=>"ctrl + click or cmd + click to select more than one !",
         "required"=>true,
       ),
       "csdbID"=>array(
