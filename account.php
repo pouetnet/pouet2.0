@@ -270,7 +270,7 @@ class PouetBoxAccount extends PouetBox
       else if (strcmp($data["password"],$data["password2"])!=0)
         $errors[] = "passwords don't match, sorry!";
       else
-        $params["password"] = ($data["password"]);
+        $params["password"] = $params["password2"] = ($data["password"]);
     }
 
     $params["firstname"] = $data["firstname"];
