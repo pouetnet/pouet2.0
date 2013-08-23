@@ -231,6 +231,8 @@ class PouetBoxAccount extends PouetBox
     }
     else
     {
+      if (POUET_TEST)
+        unset($this->fieldsSceneID["captcha"]);
       $this->fieldsSceneID["login"]["required"] = true;
     }
 
@@ -373,14 +375,17 @@ class PouetBoxAccount extends PouetBox
   {
     $errors = array();
 
-    $resp = recaptcha_check_answer (CAPTCHA_PRIVATEKEY,
-                                    $_SERVER["REMOTE_ADDR"],
-                                    $_POST["recaptcha_challenge_field"],
-                                    $_POST["recaptcha_response_field"]);
-    if (!$resp->is_valid)
+    if (!POUET_TEST)
     {
-      $errors[] = "wrong funny letters, sorry!";
-      return $errors;
+      $resp = recaptcha_check_answer (CAPTCHA_PRIVATEKEY,
+                                      $_SERVER["REMOTE_ADDR"],
+                                      $_POST["recaptcha_challenge_field"],
+                                      $_POST["recaptcha_response_field"]);
+      if (!$resp->is_valid)
+      {
+        $errors[] = "wrong funny letters, sorry!";
+        return $errors;
+      }
     }
 
     if (strlen($data["password"]) < 6)
