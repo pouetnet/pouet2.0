@@ -316,9 +316,8 @@ DROP TABLE IF EXISTS `credits`;
 CREATE TABLE `credits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `prodID` int(11) NOT NULL,
-  `userID` int(11) DEFAULT NULL,
-  `name` varchar(32) NOT NULL,
-  `role` text NOT NULL,
+  `userID` int(11) NOT NULL,
+  `role` tinytext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
