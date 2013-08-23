@@ -216,7 +216,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdBase extends PouetBox 
+class PouetBoxAdminEditProdBase extends PouetBox
 {
   public static $slug = "None";
   function GetRow($id)
@@ -313,7 +313,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
 
     $this->data = SQLLib::SelectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d",$this->prod->id));
     $this->headers = array("type","category");
-    
+
     $row = SQLLib::selectRow("DESC sceneorgrecommended type");
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->types = $m[1];
@@ -607,7 +607,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
     $this->title = "credits";
 
     $this->headers = array("user","role");
-    
+
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");

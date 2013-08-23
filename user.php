@@ -64,6 +64,12 @@ class PouetBoxUserMain extends PouetBox
       $this->nfos = $this->GetNFOsAdded( $_GET["show"]=="nfos" ? null : get_setting("usernfos") );
     }
 
+    $this->credits = array();
+    if (!$_GET["show"] || $_GET["show"]=="credits")
+    {
+      $this->credits = $this->GetCredits( $_GET["show"]=="credits" ? null : 10 );
+    }
+
     $this->firstComments = array();
     if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
     {
@@ -229,6 +235,25 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
+  function GetCredits( $limit = null )
+  {
+    $s = new BM_Query(" credits");
+    $s->AddField("credits.role");
+    $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf("credits.userID = %d",$this->id));
+    $s->AddOrder("credits_prod.quand desc");
+    if ($limit)
+      $s->SetLimit( $limit );
+
+    $data = $s->perform();
+
+    $a = array();
+    foreach($data as $v) $a[] = &$v->prod;
+    PouetCollectPlatforms($a);
+    PouetCollectAwards($a);
+
+    return $data;
+  }
   function GetFirstCommentsAdded( $limit = null )
   {
     $s = new BM_Query("prods");
@@ -334,13 +359,13 @@ class PouetBoxUserMain extends PouetBox
     if ($_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
     if ($_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
     if ($_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
-    
+
     $limit = 10;
     if ($_GET["com"]) $limit = (int)$_GET["com"];
     $limit = min($limit,100);
     $limit = max($limit,1);
     if ($_GET["com"]==-1) $limit = $this->postcount;
-    
+
     $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
 
@@ -520,6 +545,25 @@ class PouetBoxUserMain extends PouetBox
         echo $p->RenderPlatformIcons();
         echo $p->RenderSingleRow();
         echo $p->RenderAwards();
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
+
+    if ($this->credits)
+    {
+      echo "<div class='contribheader'>contributions to prods";
+      echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
+      echo "</div>\n";
+      echo "<ul class='boxlist'>";
+      foreach($this->credits as $p)
+      {
+        echo "<li>";
+        echo $p->prod->RenderTypeIcons();
+        echo $p->prod->RenderPlatformIcons();
+        echo $p->prod->RenderSingleRow()." ";
+        echo $p->prod->RenderAwards();
+        echo " [".$p->role."]";
         echo "</li>";
       }
       echo "</ul>";

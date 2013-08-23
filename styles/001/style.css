@@ -1527,35 +1527,15 @@ input.autocompleteSearch {
   display: inline;
 }
 
-#watchlistFrm {
-  display: inline;
-}
-#watchlistFrm input[type='submit']
-{
-  background: url("http://content.pouet.net/gfx/watchlist-on.gif") top left no-repeat;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-  text-indent: -90px;
-  border: 0px;
-  cursor: hand;
-  cursor: pointer;
-  color: transparent;
-}
-#watchlistFrm input[type='submit'].add
-{
-  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-off.gif");
-}
-#watchlistFrm input[type='submit'].remove
-{
-  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-on.gif");
+#credits ul {
+  list-style: none;
+  text-align: left;
+  padding: 2px;
 }
 
-#credits {
-  text-align: left;
-  list-style: none;
-  margin: 0px auto;
-  display: table;
+#credits ul li {
+  display: inline-block;
+  margin: 2px 8px;
 }
 
 #pouetbox_login .loggedin {
@@ -1582,4 +1562,28 @@ input.autocompleteSearch {
     top: 10px;
     width: 60px;
     z-index: 10;
+}
+
+#watchlistFrm {
+  display: inline;
+}
+#watchlistFrm input[type='submit']
+{
+  background: url("http://content.pouet.net/gfx/watchlist-on.gif") top left no-repeat;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  text-indent: -90px;
+  border: 0px;
+  cursor: hand;
+  cursor: pointer;
+  color: transparent;
+}
+#watchlistFrm input[type='submit'].add
+{
+  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-off.gif");
+}
+#watchlistFrm input[type='submit'].remove
+{
+  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-on.gif");
 }
