@@ -326,7 +326,7 @@ class PouetBoxAccount extends PouetBox
       $sql[$k] = trim($data[$k]);
     }
 
-    if (!file_exists(POUET_CONTENT_LOCAL."avatars/".$sql["avatar"]))
+    if (!file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
 
     SQLLib::UpdateRow("users",$sql,"id=".(int)get_login_id());
@@ -470,7 +470,7 @@ class PouetBoxAccount extends PouetBox
     $sql["lastip"] = $_SERVER["REMOTE_ADDR"];
     $sql["lasthost"] = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
 
-    if (!file_exists("avatars/".$sql["avatar"]))
+    if (!file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
     SQLLib::InsertRow("users",$sql);
 
