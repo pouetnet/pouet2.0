@@ -1,4 +1,6 @@
 <?
+error_reporting(E_ALL & ~E_NOTICE);
+
 define("POUET_ROOT_LOCAL",dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
