@@ -34,8 +34,10 @@ class PouetBoxAdminModificationRequests extends PouetBox
     $reqData = unserialize($req->requestBlob);
     global $REQUESTTYPES;
     if ($REQUESTTYPES[$req->requestType])
-      $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
-
+    {
+      $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
+      if ($errors) return $errors;
+    }
     $a = array();
     $a["gloperatorID"] = $currentUser->id;
     $a["approved"] = 1;

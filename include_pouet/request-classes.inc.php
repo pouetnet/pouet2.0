@@ -10,11 +10,14 @@ class PouetRequestClassBase
   // return error string on error, empty string / null / false / etc. on success
   static function GetFields($data,&$fields) { return ""; }
 
+  // return error array on error, empty array on success
+  static function ValidateRequest($input,&$output) { $output = $input; return array(); }
+
   // return HTML string
   static function Display($data) { return ""; }
 
-  // return error string on error, empty string / null / false / etc. on success
-  static function Process($itemID,$reqData) { return ""; }
+  // return error array on error, empty array on success
+  static function Process($itemID,$reqData) { return array(); }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,6 +44,17 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
     );
   }
 
+  static function ValidateRequest($input,&$output) 
+  {     
+    $myurl = parse_url($input["newLink"]);
+    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
+      return array("only http/https and ftp protocols are supported for links");
+
+    $output["newLink"] = $input["newLink"];
+    $output["newLinkKey"] = $input["newLinkKey"];
+    return array(); 
+  }
+
   static function Display($data) 
   { 
     $s =  _html($data["newLinkKey"])." - ";
@@ -55,6 +69,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
     $a["type"] = $reqData["newLinkKey"];
     $a["link"] = $reqData["newLink"];
     SQLLib::InsertRow("downloadlinks",$a);
+    return array();
   }
 };
 
@@ -109,6 +124,21 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     }
   }
 
+  static function ValidateRequest($input,&$output) 
+  {     
+    if (!SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"])))
+      return array("nice try :|");
+
+    $myurl = parse_url($input["newLink"]);
+    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
+      return array("only http/https and ftp protocols are supported for links");
+
+    $output["linkID"] = $input["linkID"];
+    $output["newLink"] = $input["newLink"];
+    $output["newLinkKey"] = $input["newLinkKey"];
+    return array(); 
+  }
+
   static function Display($data) 
   { 
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
@@ -127,6 +157,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $a["type"] = $reqData["newLinkKey"];
     $a["link"] = $reqData["newLink"];
     SQLLib::UpdateRow("downloadlinks",$a,"id=".(int)$reqData["linkID"]);
+    return array();
   }
 };
 
@@ -166,6 +197,19 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
     );
   }
 
+  static function ValidateRequest($input,&$output) 
+  {     
+    if (!SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"])))
+      return array("nice try :|");
+
+    if (!$input["reason"])
+      return array("no deleting without a good reason !");
+
+    $output["linkID"] = $input["linkID"];
+    $output["reason"] = $input["reason"];
+    return array(); 
+  }
+
   static function Display($data) 
   { 
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
@@ -179,6 +223,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
   static function Process($itemID, $reqData) 
   { 
     SQLLib::Query(sprintf_esc("delete from downloadlinks where id=%d",$reqData["linkID"]));
+    return array();
   }
 };
 

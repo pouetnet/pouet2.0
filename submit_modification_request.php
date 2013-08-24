@@ -36,6 +36,14 @@ class PouetBoxModificationRequest extends PouetBox
 
   function Commit($data)
   {
+    $post = array();
+
+    global $REQUESTTYPES;
+    if ($REQUESTTYPES[ $_POST["requestType"] ])
+    {
+      $error = $REQUESTTYPES[ $_POST["requestType"] ]::ValidateRequest($data,$post);
+      if ($error) return $error;
+    }
     $a = array();
     $a["requestType"] = $data["requestType"];
     if($_REQUEST["prod"])
@@ -46,8 +54,6 @@ class PouetBoxModificationRequest extends PouetBox
     $a["requestDate"] = date("Y-m-d H:i:s");
     $a["userID"] = get_login_id();
 
-    $post = $data;
-    unset($post["requestType"]);
     $a["requestBlob"] = serialize($post);
 
     global $reqID;
