@@ -78,7 +78,9 @@ class PouetBoxAccount extends PouetBox
 //        $query->AddField("users.".$v);
       $query->AddWhere(sprintf_esc("users.id = %d",get_login_id()));
       $query->SetLimit(1);
-      $this->user = reset( $query->perform() );
+
+      $s = $query->perform();
+      $this->user = reset( $s );
 
       $this->sceneID = $this->user->GetSceneIDData( false );
 
