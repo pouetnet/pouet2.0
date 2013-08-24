@@ -29,6 +29,7 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     $s->AddField("bbs_topics.count as count");
     $s->AddField("bbs_topics.category as category");
     $s->AddField("bbs_topics.lastpost as lastpost");
+    $s->AddField("bbs_topics.closed as closed");
     $s->AddTable("bbs_topics");
     $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));
     $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));
@@ -47,7 +48,7 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
       {
         if ($r->category == "residue") continue;
       }
-      echo "<tr>\n";
+      printf("<tr class='%s'>\n",$r->closed?"closed":"");
       echo "  <td class='avatar'>".$r->firstuser->PrintLinkedAvatar()."</td>\n";
       echo "  <td class='category'>"._html($r->category)."</td>\n";
       echo "  <td class='topic'><a href='topic.php?which=".(int)$r->id."'>"._html($r->topic)."</a></td>\n";
