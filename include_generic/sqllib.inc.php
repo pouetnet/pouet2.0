@@ -8,13 +8,28 @@ $SQLLIB_ARRAYS_CLEANED = false;
 class SQLLib {
   public static $link;
   public static $debugMode = false;
+  public static $charset = "";
 
-  static function Connect() {
+  static function Connect() 
+  {
     SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
     if (mysqli_connect_errno(SQLLib::$link))
       die("Unable to connect MySQL: ".mysqli_connect_error());
-    if (!mysqli_set_charset(SQLLib::$link,"utf8"))
-      die("Error loading character set: ".mysqli_error(SQLLib::$link));
+      
+    $charsets = array("utf8mb4","utf8");
+    SQLLib::$charset = "";
+    foreach($charsets as $c)
+    {
+      if (mysqli_set_charset(SQLLib::$link,$c))
+      {
+        SQLLib::$charset = $c;
+        break;
+      }
+    }
+    if (!SQLLib::$charset)
+    {
+      die("Error loading any of the character sets:");
+    }
   }
 
   static function Disconnect() {
