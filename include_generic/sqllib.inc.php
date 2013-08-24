@@ -68,7 +68,10 @@ class SQLLib {
     return $a;
   }
 
-  static function SelectRow($cmd) {
+  static function SelectRow($cmd) 
+  {
+    if (stristr($cmd," limit ")===false) // not exactly nice but i'll help
+      $cmd .= " LIMIT 1";
     $r = SQLLib::Query($cmd);
     $a = SQLLib::Fetch($r);
     return $a;
