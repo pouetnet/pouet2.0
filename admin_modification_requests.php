@@ -23,7 +23,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
 
     $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob,approved from modification_requests where id = %d",$data["requestID"]));
     if ($req->approved !== NULL)
-      return array("this request was already approved");
+      return array("this request was already processed");
       
     if ($data["requestDeny"])
     {
