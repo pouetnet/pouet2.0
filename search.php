@@ -54,6 +54,7 @@ class PouetBoxSearchProd extends PouetBox
     $s->AddField("cmts.c as commentCount");
     $s->AddJoin("left","(select which, count(*) as c from comments group by which) as cmts","cmts.which = prods.id");
     $s->AddOrder("prods.name ASC");
+    $s->AddOrder("prods.id");
     foreach($this->terms as $term)
       $s->AddWhere(sprintf_esc("prods.name LIKE '%%%s%%'",_like($term)));
 
