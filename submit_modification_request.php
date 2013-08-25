@@ -78,6 +78,8 @@ class PouetBoxModificationRequest extends PouetBox
       if ($_REQUEST["prod"] && $v::GetItemType()=="prod") $this->fields["requestType"]["fields"][$k] = $v::Describe();
     }
     
+    $this->fields["requestType"]["fields"]["other"] = "other request...";
+    
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
@@ -168,6 +170,12 @@ echo "<div id='content'>\n";
 $form = new PouetFormProcessor();
 
 $form->successMessage = "your request was recorded and will be processed by a glöperator eventually !";
+
+if ($_POST["requestType"] == "other")
+{
+  redirect("topic.php?which=1024#pouetbox_bbspost");
+  exit();
+}
 
 if ($_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
