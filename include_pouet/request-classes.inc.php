@@ -197,6 +197,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
         "name"=>"why should this link be deleted",
         "type"=>"textarea",
         "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
+        "required"=>true,
       ),
       "finalStep" => array(
         "type"=>"hidden",
@@ -463,6 +464,7 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
         "name"=>"why should this credit be deleted",
         "type"=>"textarea",
         "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
+        "required"=>true,
       ),
       "finalStep" => array(
         "type"=>"hidden",
