@@ -123,10 +123,11 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  <div class='content'>\n";
       $fields = array();
       
+      $js = "";
       global $REQUESTTYPES;
       if ($REQUESTTYPES[ $_POST["requestType"] ])
       {
-        $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields);
+        $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields,$js);
       }
 
       if ($fields && !$error)
@@ -140,6 +141,15 @@ class PouetBoxModificationRequest extends PouetBox
         echo $error;
       echo "  </div>\n";
 
+    }
+    
+    if ($js)
+    {
+      echo "<script type='text/javascript'>\n";
+      echo "<!--\n";
+      echo $js;
+      echo "//-->\n";
+      echo "</script>\n";
     }
   
     if (!$error)
@@ -157,7 +167,12 @@ echo "<div id='content'>\n";
 
 $form = new PouetFormProcessor();
 
-$form->SetSuccessURL( "", false );
+$form->successMessage = "your request was recorded and will be processed by a glöperator eventually !"
+
+if ($_REQUEST["prod"])
+  $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
+else
+  $form->SetSuccessURL( "", false );
 
 $form->Add( "logo", new PouetBoxModificationRequest() );
 
@@ -169,12 +184,6 @@ else
 if (get_login_id())
 {
   $form->Display();
-?>
-<script type="text/javascript">
-document.observe("dom:loaded",function(){
-});
-</script>
-<?
 }
 else
 {
