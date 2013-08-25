@@ -167,7 +167,7 @@ echo "<div id='content'>\n";
 
 $form = new PouetFormProcessor();
 
-$form->successMessage = "your request was recorded and will be processed by a glöperator eventually !"
+$form->successMessage = "your request was recorded and will be processed by a glöperator eventually !";
 
 if ($_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
