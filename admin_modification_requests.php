@@ -41,16 +41,20 @@ class PouetBoxAdminModificationRequests extends PouetBox
     {
       $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
       if ($errors) return $errors;
+
+      gloperator_log( $REQUESTTYPES[$req->requestType]::GetItemType(), $req->itemID, $req->requestType );
     }
     else
     {
       return array("no such request type!");
     }
+
     $a = array();
     $a["gloperatorID"] = $currentUser->id;
     $a["approved"] = 1;
     $a["approveDate"] = date("Y-m-d H:i:s");
     SQLLib::UpdateRow("modification_requests",$a,"id=".(int)$data["requestID"]);
+
     return array();
   }
   function LoadFromDB()
