@@ -181,7 +181,7 @@ $form->successMessage = "your request was recorded and will be processed by a gl
 
 if ($_POST["requestType"] == "other")
 {
-  redirect("topic.php?which=1024#pouetbox_bbspost");
+  redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
   exit();
 }
 
