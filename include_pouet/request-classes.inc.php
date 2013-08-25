@@ -257,7 +257,7 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
     $js .= "  new Autocompleter($('userID'), {\n";
     $js .= "    'dataUrl':'./ajax_users.php',\n";
     $js .= "    'processRow': function(item) {\n";
-    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML();\n";
+    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
     $js .= "    }\n";
     $js .= "  });\n";
     $js .= "});\n";
@@ -337,7 +337,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
       $js .= "  new Autocompleter($('userID'), {\n";
       $js .= "    'dataUrl':'./ajax_users.php',\n";
       $js .= "    'processRow': function(item) {\n";
-      $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML();\n";
+    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
       $js .= "    }\n";
       $js .= "  });\n";
       $js .= "});\n";
