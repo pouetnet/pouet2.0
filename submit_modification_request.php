@@ -164,6 +164,12 @@ class PouetBoxModificationRequest extends PouetBox
 
 $TITLE = "submit a modification request";
 
+if ($_POST["requestType"] == "other")
+{
+  redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
+  exit();
+}
+
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
@@ -172,12 +178,6 @@ echo "<div id='content'>\n";
 $form = new PouetFormProcessor();
 
 $form->successMessage = "your request was recorded and will be processed by a glöperator eventually !";
-
-if ($_POST["requestType"] == "other")
-{
-  redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
-  exit();
-}
 
 if ($_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
