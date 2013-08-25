@@ -42,7 +42,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
       $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
       if ($errors) return $errors;
 
-      gloperator_log( $REQUESTTYPES[$req->requestType]::GetItemType(), $req->itemID, $req->requestType );
+      gloperator_log( $REQUESTTYPES[$req->requestType]::GetItemType(), $req->itemID, $req->requestType, $reqData );
     }
     else
     {
