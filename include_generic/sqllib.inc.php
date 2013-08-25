@@ -8,20 +8,37 @@ $SQLLIB_ARRAYS_CLEANED = false;
 class SQLLib {
   public static $link;
   public static $debugMode = false;
+  public static $charset = "";
 
-  static function Connect() {
+  static function Connect() 
+  {
     SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
     if (mysqli_connect_errno(SQLLib::$link))
       die("Unable to connect MySQL: ".mysqli_connect_error());
-    if (!mysqli_set_charset(SQLLib::$link,"utf8"))
-      die("Error loading character set: ".mysqli_error(SQLLib::$link));
+      
+    $charsets = array("utf8mb4","utf8");
+    SQLLib::$charset = "";
+    foreach($charsets as $c)
+    {
+      if (mysqli_set_charset(SQLLib::$link,$c))
+      {
+        SQLLib::$charset = $c;
+        break;
+      }
+    }
+    if (!SQLLib::$charset)
+    {
+      die("Error loading any of the character sets:");
+    }
   }
 
-  static function Disconnect() {
+  static function Disconnect()
+	{
     mysqli_close(SQLLib::$link);
   }
 
-  static function Query($cmd) {
+  static function Query($cmd) 
+  {
     global $SQLLIB_QUERIES;
 
     if (SQLLib::$debugMode)
@@ -42,24 +59,30 @@ class SQLLib {
     return $r;
   }
 
-  static function Fetch($r) {
+  static function Fetch($r) 
+  {
     return mysqli_fetch_object($r);
   }
 
-  static function SelectRows($cmd) {
+  static function SelectRows($cmd) 
+  {
     $r = SQLLib::Query($cmd);
     $a = Array();
     while($o = SQLLib::Fetch($r)) $a[]=$o;
     return $a;
   }
 
-  static function SelectRow($cmd) {
+  static function SelectRow($cmd) 
+  {
+    if (stristr($cmd,"select ")!==false && stristr($cmd," limit ")===false) // not exactly nice but i'll help
+      $cmd .= " LIMIT 1";
     $r = SQLLib::Query($cmd);
     $a = SQLLib::Fetch($r);
     return $a;
   }
 
-  static function InsertRow($table,$o) {
+  static function InsertRow($table,$o) 
+  {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
       trigger_error("Arrays not cleaned before InsertRow!",E_USER_ERROR);
@@ -82,7 +105,8 @@ class SQLLib {
     return mysqli_insert_id(SQLLib::$link);
   }
 
-  static function UpdateRow($table,$o,$where) {
+  static function UpdateRow($table,$o,$where) 
+  {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
       trigger_error("Arrays not cleaned before UpdateRow!",E_USER_ERROR);
@@ -105,9 +129,42 @@ class SQLLib {
     SQLLib::Query($cmd);
   }
 
+  static function StartTransaction() 
+  {
+    mysqli_autocommit(SQLLib::$link, FALSE);
+  }
+  static function FinishTransaction() 
+  {
+    mysqli_commit(SQLLib::$link);
+    mysqli_autocommit(SQLLib::$link, TRUE);
+  }
+  static function CancelTransaction() 
+  {
+    mysqli_rollback(SQLLib::$link);
+    mysqli_autocommit(SQLLib::$link, TRUE);
+  }
 }
 
-class SQLSelect {
+class SQLTrans 
+{
+  var $rollback;
+  function __construct() {
+    SQLLib::StartTransaction();
+    $rollback = false;
+  }
+  function Rollback() {
+    $this->rollback = true;
+  }
+  function __destruct() {
+    if (!$rollback)
+      SQLLib::FinishTransaction();
+    else
+      SQLLib::CancelTransaction();
+  }
+}
+
+class SQLSelect 
+{
   var $fields;
   var $tables;
   var $conditions;
@@ -117,7 +174,8 @@ class SQLSelect {
   var $limit;
   var $offset;
 
-  function SQLSelect() {
+  function SQLSelect()
+	{
     $this->fields = array();
     $this->tables = array();
     $this->conditions = array();
@@ -127,34 +185,42 @@ class SQLSelect {
     $this->limit = NULL;
     $this->offset = NULL;
   }
-  function AddTable($s) {
+  function AddTable($s) 
+  {
     $this->tables[] = $s;
   }
-  function AddField($s) {
+  function AddField($s) 
+  {
     $this->fields[] = $s;
   }
-  function AddJoin($type,$table,$condition) {
+  function AddJoin($type,$table,$condition) 
+  {
     $o = new stdClass();
     $o->type = $type;
     $o->table = $table;
     $o->condition = $condition;
     $this->joins[] = $o;
   }
-  function AddWhere($s) {
-    $this->conditions[] = $s;
+  function AddWhere($s) 
+  {
+    $this->conditions[] = "(".$s.")";
   }
-  function AddOrder($s) {
+  function AddOrder($s) 
+  {
     $this->orders[] = $s;
   }
-  function AddGroup($s) {
+  function AddGroup($s) 
+  {
     $this->groups[] = $s;
   }
-  function SetLimit( $limit, $offset = NULL ) {
+  function SetLimit( $limit, $offset = NULL ) 
+  {
     $this->limit = $limit;
     if ($offset !== NULL)
       $this->offset = $offset;
   }
-  function GetQuery() {
+  function GetQuery()
+	{
     if (!count($this->tables))
       throw new Exception("[sqlselect] No tables specified!");
 
@@ -188,7 +254,8 @@ class SQLSelect {
   }
 }
 
-function sprintf_esc() {
+function sprintf_esc()
+{
   $args = func_get_args();
   reset($args);
   next($args);
@@ -199,7 +266,8 @@ function sprintf_esc() {
 }
 
 function nop($s) { return $s; }
-function clearArray($a) {
+function clearArray($a) 
+{
   $ar = array();
   $qcb = get_magic_quotes_gpc() ? "stripslashes" : "nop";
   foreach ($a as $k=>$v)

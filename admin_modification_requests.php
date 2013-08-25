@@ -14,11 +14,17 @@ class PouetBoxAdminModificationRequests extends PouetBox
   function PouetBoxAdminModificationRequests( )
   {
     parent::__construct();
+    $this->uniqueID = "pouetbox_adminreq";
     $this->title = "process the following requests";
   }
   function Commit($data)
   {
     global $currentUser;
+
+    $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob,approved from modification_requests where id = %d",$data["requestID"]));
+    if ($req->approved !== NULL)
+      return array("this request was already processed");
+      
     if ($data["requestDeny"])
     {
       $a = array();
@@ -29,23 +35,26 @@ class PouetBoxAdminModificationRequests extends PouetBox
       return array();
     }
     
-    $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob from modification_requests where id = %d",$data["requestID"]));
     $reqData = unserialize($req->requestBlob);
-    switch ($req->requestType)
+    global $REQUESTTYPES;
+    if ($REQUESTTYPES[$req->requestType])
     {
-      case "prod_add_link":
-        $a = array();
-        $a["prod"] = $req->itemID;
-        $a["type"] = $reqData["newLinkKey"];
-        $a["link"] = $reqData["newLink"];
-        SQLLib::InsertRow("downloadlinks",$a);
-        break;
+      $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
+      if ($errors) return $errors;
+
+      gloperator_log( $REQUESTTYPES[$req->requestType]::GetItemType(), $req->itemID, $req->requestType, $reqData );
     }
+    else
+    {
+      return array("no such request type!");
+    }
+
     $a = array();
     $a["gloperatorID"] = $currentUser->id;
     $a["approved"] = 1;
     $a["approveDate"] = date("Y-m-d H:i:s");
     SQLLib::UpdateRow("modification_requests",$a,"id=".(int)$data["requestID"]);
+
     return array();
   }
   function LoadFromDB()
@@ -89,40 +98,26 @@ class PouetBoxAdminModificationRequests extends PouetBox
         case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
       }
       echo "</td>\n";
-      echo "    <td>".$REQUESTTYPES[$r->requestType]."</td>\n";
+      echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
       echo "    <td>";
       $data = unserialize($r->requestBlob);
-      switch ($r->requestType)
-      {
-        case "prod_add_link":
-          {
-            echo _html($data["newLinkKey"])." - ";
-            echo "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
-          } break;
-        case "prod_change_link":
-          {
-            $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
-            echo "<b>old</b>: ";
-            echo _html($row->type)." - ";
-            echo "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
-            echo "<br/><b>new</b>: ";
-            echo _html($data["newLinkKey"])." - ";
-            echo "<a href='"._html($data["newLink"])."'>"._html($data["newLink"])."</a>";
-          } break;
-        case "prod_remove_link":
-          {
-            $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
-            echo _html($row->type)." - ";
-            echo "<a href='"._html($row->link)."'>"._html($row->link)."</a>";
-            echo "<br/><b>reason</b>: ";
-            echo _html($data["reason"]);
-          } break;
-      }
+      
+      global $REQUESTTYPES;
+      if ($REQUESTTYPES[$r->requestType])
+        echo $REQUESTTYPES[$r->requestType]::Display($data);
+      
       echo "</td>\n";
       echo "<td>";
+      
+      printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
       printf("  <input type='hidden' name='requestID' value='%d'/>",$r->id);
       printf("  <input type='submit' name='requestAccept' value='accept !'/>");
       printf("  <input type='submit' name='requestDeny' value='deny !'/>");
+      printf("  <input type='hidden' name='%s' value='%s'/>\n",PouetFormProcessor::fieldName,"adminModReq");
+      printf("</form>\n\n\n");
+      
       echo "</td>\n";
       echo "  </tr>\n";
     }
@@ -132,11 +127,10 @@ class PouetBoxAdminModificationRequests extends PouetBox
 
 
 $form = new PouetFormProcessor();
-
-$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"], true );
+$form->renderForm = false;
 
 $box = new PouetBoxAdminModificationRequests( );
-$form->Add( "party", $box );
+$form->Add( "adminModReq", $box );
 
 $form->SetSuccessURL( "admin_modification_requests.php", true );
 

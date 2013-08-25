@@ -79,6 +79,7 @@ class PouetBoxCDCUser extends PouetBox {
     $lastCategory = "";
     foreach ($this->cdcs as $row)
     {
+      if (!$row->prod) continue;
       $p = $row->prod;
       echo "<tr>\n";
       echo "<td>\n";

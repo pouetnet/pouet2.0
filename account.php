@@ -78,7 +78,9 @@ class PouetBoxAccount extends PouetBox
 //        $query->AddField("users.".$v);
       $query->AddWhere(sprintf_esc("users.id = %d",get_login_id()));
       $query->SetLimit(1);
-      $this->user = reset( $query->perform() );
+
+      $s = $query->perform();
+      $this->user = reset( $s );
 
       $this->sceneID = $this->user->GetSceneIDData( false );
 
@@ -231,6 +233,8 @@ class PouetBoxAccount extends PouetBox
     }
     else
     {
+      if (POUET_TEST)
+        unset($this->fieldsSceneID["captcha"]);
       $this->fieldsSceneID["login"]["required"] = true;
     }
 
@@ -268,17 +272,16 @@ class PouetBoxAccount extends PouetBox
       else if (strcmp($data["password"],$data["password2"])!=0)
         $errors[] = "passwords don't match, sorry!";
       else
-        $params["password"] = ($data["password"]);
+        $params["password"] = $params["password2"] = ($data["password"]);
     }
 
-/*
+    $params["firstname"] = $data["firstname"];
+    $params["lastname"] = $data["lastname"];
+
     if (strstr($data["email"],"@")===false)
       $errors[] = "invalid email";
     else
       $params["email"] = $data["email"];
-*/
-    $params["firstname"] = $data["firstname"];
-    $params["lastname"] = $data["lastname"];
 
     if ($params)
     {
@@ -325,7 +328,7 @@ class PouetBoxAccount extends PouetBox
       $sql[$k] = trim($data[$k]);
     }
 
-    if (!file_exists(POUET_CONTENT_LOCAL."avatars/".$sql["avatar"]))
+    if (!file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
 
     SQLLib::UpdateRow("users",$sql,"id=".(int)get_login_id());
@@ -374,14 +377,17 @@ class PouetBoxAccount extends PouetBox
   {
     $errors = array();
 
-    $resp = recaptcha_check_answer (CAPTCHA_PRIVATEKEY,
-                                    $_SERVER["REMOTE_ADDR"],
-                                    $_POST["recaptcha_challenge_field"],
-                                    $_POST["recaptcha_response_field"]);
-    if (!$resp->is_valid)
+    if (!POUET_TEST)
     {
-      $errors[] = "wrong funny letters, sorry!";
-      return $errors;
+      $resp = recaptcha_check_answer (CAPTCHA_PRIVATEKEY,
+                                      $_SERVER["REMOTE_ADDR"],
+                                      $_POST["recaptcha_challenge_field"],
+                                      $_POST["recaptcha_response_field"]);
+      if (!$resp->is_valid)
+      {
+        $errors[] = "wrong funny letters, sorry!";
+        return $errors;
+      }
     }
 
     if (strlen($data["password"]) < 6)
@@ -466,7 +472,7 @@ class PouetBoxAccount extends PouetBox
     $sql["lastip"] = $_SERVER["REMOTE_ADDR"];
     $sql["lasthost"] = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
 
-    if (!file_exists("avatars/".$sql["avatar"]))
+    if (!file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
     SQLLib::InsertRow("users",$sql);
 
@@ -488,15 +494,10 @@ class PouetBoxAccount extends PouetBox
       $errors[] = "nick too short!";
       return $errors;
     }
-/*
-    if (!preg_match("/^[a-zA-Z0-9][a-zA-Z0-9._\\-\\+]*@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$/",$data["email"]))
-    {
-      $errors[] = "invalid email address";
-      return $errors;
-    }
-*/
+
     if (!$errors)
     {
+      $this->LoadFromDB();
       if (get_login_id())
       {
         $errors = $this->ParsePostLoggedIn( $data );
@@ -506,7 +507,7 @@ class PouetBoxAccount extends PouetBox
         $errors = $this->ParsePostNewUser( $data );
       }
     }
-    $this->LoadFromDB();
+//    $this->LoadFromDB();
     return $errors;
   }
 
@@ -541,44 +542,92 @@ class PouetBoxAccount extends PouetBox
   }
 };
 
+class PouetBoxAccountModificationRequests extends PouetBox
+{
+  function PouetBoxAccountModificationRequests( )
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_accountreq";
+    $this->title = "your most recent modification requests";
+  }
+  function LoadFromDB()
+  {
+    global $currentUser;
+    
+    $s = new BM_Query("modification_requests");
+    $s->AddField("modification_requests.id");
+    $s->AddField("modification_requests.requestType");
+    $s->AddField("modification_requests.itemID");
+    $s->AddField("modification_requests.itemType");
+    $s->AddField("modification_requests.requestBlob");
+    $s->AddField("modification_requests.requestDate");
+    $s->AddField("modification_requests.approved");
+    //$s->Attach(array("modification_requests"=>"gloperatorID"),array("users as gloperator"=>"id"));
+    $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
+    $s->AddOrder("requestDate desc");
+    $s->SetLimit(10);
+    $this->requests = $s->perform();
+  }
+  function Render()
+  {
+    global $REQUESTTYPES;
+    echo "<table id='".$this->uniqueID."' class='boxtable'>\n";
+    echo "  <tr>\n";
+    echo "    <th colspan='4'>".$this->title."</th>\n";
+    echo "  </tr>\n";
+    echo "  <tr>\n";
+    echo "    <th>date</th>\n";
+    echo "    <th>item</th>\n";
+    echo "    <th>request</th>\n";
+    echo "    <th>approved?</th>\n";
+    echo "  </tr>\n";
+    foreach($this->requests as $r)
+    {
+      echo "  <tr>\n";
+      echo "    <td>".$r->requestDate."</td>\n";
+      echo "    <td>".$r->itemType.": ";
+      switch ($r->itemType)
+      {
+        case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
+      }
+      echo "</td>\n";
+      echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
+      echo "    <td>";
+      if ( $r->approved === NULL ) echo "pending";
+      else if ( $r->approved == 0 ) echo "no";
+      else if ( $r->approved == 1 ) echo "yes";
+      echo "</td>\n";
+      echo "  </tr>\n";
+    }
+    echo "</table>\n";
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
-$p = new PouetBoxAccount();
-$p->Load();
+$form = new PouetFormProcessor();
 
-$errors = array();
-if ($_POST)
-{
-  $errors = $p->ParsePostMessage( $_POST );
-}
+if (!get_login_id())
+  $form->successMessage = "registration complete! a confirmation mail will be sent to your address soon - you can't login until you confirmed your email address!";
+  
+$form->SetSuccessURL( "index.php", false );
+
+$form->Add( "account", new PouetBoxAccount() );
+if (get_login_id())
+  $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
+
+$form->Process();
+
 $TITLE = "account!";
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-echo "<form action='account.php' method='post'>\n";
 
-if (count($errors))
-{
-  $msg = new PouetBoxModalMessage( true );
-  $msg->classes[] = "errorbox";
-  $msg->title = "An error has occured:";
-  $msg->message = "<ul><li>".implode("</li><li>",$errors)."</li></ul>";
-  $msg->Render();
-}
-else if ($success)
-{
-  $msg = new PouetBoxModalMessage( true );
-  $msg->classes[] = "successbox";
-  $msg->title = "Success!";
-  $msg->message = $success;
-  $msg->Render();
-}
+$form->Display();
 
-if($p) $p->Render();
-
-echo "</form>\n";
 echo "</div>\n";
 
 ?>

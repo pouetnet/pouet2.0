@@ -1,4 +1,6 @@
 <?
+error_reporting(E_ALL & ~E_NOTICE);
+
 define("POUET_ROOT_LOCAL",dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
@@ -14,6 +16,7 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");

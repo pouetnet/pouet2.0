@@ -288,6 +288,7 @@ function get_bbsnfo_url( $id )
   return sprintf(POUET_CONTENT_URL . "othernfo/%d.nfo",$id);
 }
 
+define("FIXMETHREAD_ID",1024);
 define("NO_PARTY_ID",1024);
 define("POUET_CACHE_MAX",25);
 if (POUET_TEST)

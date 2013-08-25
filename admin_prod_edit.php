@@ -164,7 +164,6 @@ class PouetBoxAdminDeleteProd extends PouetBox
   }
   function Commit($data)
   {
-    SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM downloadlinks WHERE prod=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM comments WHERE which=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM nfos WHERE prod=%d",$this->prod->id));
@@ -176,6 +175,8 @@ class PouetBoxAdminDeleteProd extends PouetBox
     SQLLib::Query(sprintf_esc("DELETE FROM prods_refs WHERE prod=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE prod=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM cdc WHERE which=%d",$this->prod->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM credits WHERE prodID=%d",$this->prod->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->prod->id));
 
     @unlink( get_local_nfo_path( (int)$this->prod->id ) );
     foreach( array( "jpg","gif","png" ) as $v )
@@ -671,7 +672,8 @@ document.observe("dom:loaded",function(){
       new Autocompleter(tr.down(".userID"), {
         "dataUrl":"./ajax_users.php",
         "processRow": function(item) {
-          return "<img class='avatar' src='<?=POUET_CONTENT_URL?>/avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML();
+          return "<img class='avatar' src='<?=POUET_CONTENT_URL?>/avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
+
         }
       });
     }

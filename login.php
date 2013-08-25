@@ -40,7 +40,7 @@ switch( (int)$rv["returnCode"] )
       $user = PouetUser::Spawn( $user->id );
     }
 
-    if ( $user->level == "banned" )
+    if ( $user->IsBanned() )
     {
   		redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
     }

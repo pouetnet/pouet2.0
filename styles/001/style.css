@@ -1564,6 +1564,11 @@ input.autocompleteSearch {
     z-index: 10;
 }
 
+.autocompleteList li .glops
+{
+  color: #9999AA;
+}
+
 #watchlistFrm {
   display: inline;
 }

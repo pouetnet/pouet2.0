@@ -94,6 +94,8 @@ class PouetBoxPartyView extends PouetBox
     $this->party = PouetParty::spawn($_GET["which"]);
     if (!$this->party) return;
 
+    $this->party->addeduser= PouetUser::spawn( $this->party->added );
+    
     if (isset($_GET["when"]))
     {
       $this->year = $_GET["when"];

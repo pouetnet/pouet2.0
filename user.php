@@ -318,6 +318,7 @@ class PouetBoxUserMain extends PouetBox
   function GetBBSPosts( $limit = null )
   {
     $s = new BM_Query("bbs_posts");
+    $s->AddField("bbs_posts.id as postID");
     $s->AddJoin("left","bbs_topics","bbs_topics.id = bbs_posts.topic");
     $s->AddField("bbs_topics.id");
     $s->AddField("bbs_topics.topic");
@@ -596,7 +597,8 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->posts as $p)
       {
         echo "<li>";
-        echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+        //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+        echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
         echo "</li>";
       }
       echo "</ul>";
