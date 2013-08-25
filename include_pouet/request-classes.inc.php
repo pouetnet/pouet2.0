@@ -128,8 +128,12 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {     
-    if (!SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"])))
+    $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"]));
+    if (!$row)
       return array("nice try :|");
+
+    if (strcasecmp($row->link,$input["newLink"])===0 && strcasecmp($row->type,$input["newLinkKey"])===0)
+      return array("you didn't change anything :|");
 
     $myurl = parse_url($input["newLink"]);
     if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
@@ -367,8 +371,12 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {     
-    if (!SQLLib::selectRow(sprintf_esc("select * from credits where prodID = %d and id = %d",$_REQUEST["prod"],$input["creditID"])))
+    $row = SQLLib::selectRow(sprintf_esc("select * from credits where prodID = %d and id = %d",$_REQUEST["prod"],$input["creditID"]));
+    if (!$row)
       return array("nice try :|");
+
+    if (strcasecmp($row->role,$input["userRole"])===0 && $row->userID == $input["userID"])
+      return array("you didn't change anything :|");
 
     if (!SQLLib::selectRow(sprintf_esc("select * from users where id = %d",$input["userID"])))
       return array("nice try :|");
