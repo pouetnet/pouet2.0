@@ -20,6 +20,11 @@ class PouetBoxAdminModificationRequests extends PouetBox
   function Commit($data)
   {
     global $currentUser;
+
+    $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob,approved from modification_requests where id = %d",$data["requestID"]));
+    if ($req->approved)
+      return array("this request was already approved");
+      
     if ($data["requestDeny"])
     {
       $a = array();
@@ -30,13 +35,16 @@ class PouetBoxAdminModificationRequests extends PouetBox
       return array();
     }
     
-    $req = SQLLib::SelectRow(sprintf_esc("select itemID,requestType,requestBlob from modification_requests where id = %d",$data["requestID"]));
     $reqData = unserialize($req->requestBlob);
     global $REQUESTTYPES;
     if ($REQUESTTYPES[$req->requestType])
     {
       $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
       if ($errors) return $errors;
+    }
+    else
+    {
+      return array("no such request type!");
     }
     $a = array();
     $a["gloperatorID"] = $currentUser->id;

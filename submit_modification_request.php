@@ -44,6 +44,10 @@ class PouetBoxModificationRequest extends PouetBox
       $error = $REQUESTTYPES[ $_POST["requestType"] ]::ValidateRequest($data,$post);
       if ($error) return $error;
     }
+    else
+    {
+      return array("no such request type!");
+    }
     $a = array();
     $a["requestType"] = $data["requestType"];
     if($_REQUEST["prod"])
@@ -130,6 +134,10 @@ class PouetBoxModificationRequest extends PouetBox
       if ($REQUESTTYPES[ $_POST["requestType"] ])
       {
         $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields,$js);
+      }
+      else
+      {
+        $error = "no such request type !";
       }
 
       if ($fields && !$error)

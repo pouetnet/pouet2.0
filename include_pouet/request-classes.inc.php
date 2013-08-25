@@ -356,7 +356,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
       $s->AddWhere(sprintf_esc("prodID = %d",$data["prod"]));
       $l = $s->perform();
       foreach($l as $v)
-        $links[$v->id] = sprintf("%s [%s]",_html($v->user->nickname),_html($v->role));
+        $links[$v->id] = sprintf("%s [%s]",$v->user->nickname,$v->role);
       if (!$links)
         return "this prod has no credits to change !";
       $fields = array(
@@ -448,7 +448,7 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
     $s->AddWhere(sprintf_esc("prodID = %d",$data["prod"]));
     $l = $s->perform();
     foreach($l as $v)
-      $links[$v->id] = sprintf("%s [%s]",_html($v->user->nickname),_html($v->role));
+      $links[$v->id] = sprintf("%s [%s]",$v->user->nickname,$v->role);
       
     if (!$links)
       return "this prod has no credits to remove !";
