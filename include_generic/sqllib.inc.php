@@ -203,7 +203,7 @@ class SQLSelect
   }
   function AddWhere($s) 
   {
-    $this->conditions[] = $s;
+    $this->conditions[] = "(".$s.")";
   }
   function AddOrder($s) 
   {
