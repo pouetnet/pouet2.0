@@ -251,6 +251,7 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
       ),
       "userRole" => array(
         "name"=>"user's role",
+        "info"=>"Please separate roles with commas, e.g. 'Code, graphics, music'",
       ),
       "finalStep" => array(
         "type"=>"hidden",
@@ -272,6 +273,9 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
   { 
     if (!SQLLib::selectRow(sprintf_esc("select * from users where id = %d",$input["userID"])))
       return array("nice try :|");
+
+    if (SQLLib::selectRow(sprintf_esc("select * from credits where prodID = %d and userID = %d",$_REQUEST["prod"],$input["userID"])))
+      return array("there's already a credit for this user !");
 
     if (!$input["userRole"])
       return array("roles are important !");
@@ -331,6 +335,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
         "userRole" => array(
           "name"=>"user's role",
           "value"=>$l->role,
+          "info"=>"Please separate roles with commas, e.g. 'Code, graphics, music'",
         ),
         "finalStep" => array(
           "type"=>"hidden",
@@ -342,7 +347,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
       $js .= "  new Autocompleter($('userID'), {\n";
       $js .= "    'dataUrl':'./ajax_users.php',\n";
       $js .= "    'processRow': function(item) {\n";
-    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
+      $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
       $js .= "    }\n";
       $js .= "  });\n";
       $js .= "});\n";
