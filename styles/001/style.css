@@ -23,6 +23,7 @@ a:hover {
 }
 img {
   -moz-force-broken-image-icon: 1;
+  border: 0px;
 }
 input, select, option {
   font-size : 9pt;

@@ -291,6 +291,7 @@ class PouetBoxProdMain extends PouetBox {
     echo "<div class='outerbar'><div class='innerbar' style='width: ".$pop."%'>&nbsp;<span>".$pop."%</span></div></div>\n";
 
     $year = substr($this->prod->date,0,4);
+    echo "<div class='awards'>";
     foreach($this->awards as $award)
     {
     	printf("<a href='./sceneorg.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
@@ -299,6 +300,7 @@ class PouetBoxProdMain extends PouetBox {
         $award->category,
         $award->category);
     }
+    echo "</div>";
   }
   function RenderAverage() {
     $p = "isok";
