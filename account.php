@@ -118,6 +118,13 @@ class PouetBoxAccount extends PouetBox
         "required"=>true,
         "value"=> $this->sceneID["email"],
       ),
+      "url"=>array(
+        "info"=>"to get slashdotted on reddit",
+        "required"=>true,
+        "type"=>"url",
+        "name"=>"website url",
+        "value"=> $this->sceneID["url"],
+      ),
       "captcha"=>array(
         "info"=>"real sceners are proficient in the skill of reading letters",
         "name"=>"captcha thingy",
@@ -277,6 +284,7 @@ class PouetBoxAccount extends PouetBox
 
     $params["firstname"] = $data["firstname"];
     $params["lastname"] = $data["lastname"];
+    $params["url"] = $data["url"];
 
     if (strstr($data["email"],"@")===false)
       $errors[] = "invalid email";
@@ -440,6 +448,7 @@ class PouetBoxAccount extends PouetBox
       "lastname" => ($data["lastname"]),
       "nickname" => $data["nickname"],
       "email" => $data["email"],
+      "url" => $data["url"],
       "password" => ($data["password"]),
       "password2" => ($data["password2"]),
       "ip" => $_SERVER["REMOTE_ADDR"],
