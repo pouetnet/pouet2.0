@@ -120,7 +120,6 @@ class PouetBoxAccount extends PouetBox
       ),
       "url"=>array(
         "info"=>"to get slashdotted on reddit",
-        "required"=>true,
         "type"=>"url",
         "name"=>"website url",
         "value"=> $this->sceneID["url"],
