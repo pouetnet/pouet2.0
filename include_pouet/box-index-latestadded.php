@@ -31,7 +31,6 @@ class PouetBoxLatestAdded extends PouetBoxCachable {
   function LoadFromDB() {
     $s = new BM_Query("prods");
     $s->AddOrder("prods.quand desc");
-    $s->attach("added",array("users as user"=>"id"));
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
     PouetCollectPlatforms($this->data);
@@ -49,7 +48,7 @@ class PouetBoxLatestAdded extends PouetBoxCachable {
       if (get_setting("indexwhoaddedprods"))
       {
         echo "<span class='rowuser'>\n";
-        echo $p->user->PrintLinkedAvatar();
+        echo $p->addeduser->PrintLinkedAvatar();
         echo "</span>\n";
       }
       echo "</li>\n";
