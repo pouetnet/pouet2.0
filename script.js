@@ -263,16 +263,22 @@ function InstrumentAdminEditorForAjax( parentElement, formAction, _options )
 var timerDensity = 50;
 var timeCrossfade = 500;
 var timeWait = 1000;
-function fadeSuccess()
+function fadeOverlays()
 {
   var step = 1.0 / (timeCrossfade * 1.0 / timerDensity);
-  $("successOverlay").style.opacity = parseFloat($("successOverlay").style.opacity) - step;
-  if ($("successOverlay").style.opacity <= step + 0.01) // wahey chrome precision!
-  {
-    $("successOverlay").remove();
-    return;
-  }
-  setTimeout(fadeSuccess,timerDensity);
+  var elements = ["successOverlay","errorOverlay"];
+  elements.each(function(item){
+    if (!$(item)) return;
+    item = $(item);
+    
+    item.style.opacity = parseFloat(item.style.opacity) - step;
+    if (item.style.opacity <= step + 0.01) // wahey chrome precision!
+    {
+      item.remove();
+      return;
+    }
+  });
+  setTimeout(fadeOverlays,timerDensity);
 }
 
 function fireSuccessOverlay()
@@ -280,7 +286,15 @@ function fireSuccessOverlay()
   if (!$("successOverlay"))
     document.body.insert(new Element("div",{"id":"successOverlay"}).update("Success !"));
   $("successOverlay").style.opacity = "1.0";
-  setTimeout(fadeSuccess,timeWait + timerDensity);
+  setTimeout(fadeOverlays,timeWait + timerDensity);
+}
+
+function fireErrorOverlay( errors )
+{
+  if (!$("errorOverlay"))
+    document.body.insert(new Element("div",{"id":"errorOverlay"}).update( errors ));
+  $("errorOverlay").style.opacity = "1.0";
+  setTimeout(fadeOverlays,timeWait + timerDensity);
 }
 
 document.observe("dom:loaded",function(){

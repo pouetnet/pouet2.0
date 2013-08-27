@@ -26,6 +26,10 @@ class PouetFormProcessor
     $this->successURL = $url;
     $this->redirectOnSuccess = $redirect;
   }
+  function GetErrors()
+  {
+    return $this->errors;
+  }
   function Process()
   {
     $this->errors = array();

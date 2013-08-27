@@ -1367,8 +1367,7 @@ input.autocompleteSearch {
     margin: 30px;
 }
 
-#successOverlay {
-    background: none repeat scroll 0 0 #228830;
+#successOverlay, #errorOverlay {
     border: 1px solid black;
     font-size: 120%;
     font-weight: bold;
@@ -1379,6 +1378,12 @@ input.autocompleteSearch {
     text-align: center;
     top: 200px;
     width: 300px;
+}
+#successOverlay {
+    background: #228830;
+}
+#errorOverlay {
+    background: #882230;
 }
 
 #pouetbox_sceneorgawards h2 {

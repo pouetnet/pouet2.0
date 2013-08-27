@@ -122,6 +122,36 @@ class PouetBoxAdminModificationRequests extends PouetBox
       echo "  </tr>\n";
     }
     echo "</table>\n";
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $$("#pouetbox_adminreq input[type='submit']").invoke("observe","click",function(e){ e.element().setAttribute("clicked","true"); });
+  $$("#pouetbox_adminreq form").invoke("observe","submit",function(e){
+    e.stop();
+    var opt = Form.serializeElements( e.element().select("input[type='hidden']"), {hash:true} );
+    opt["partial"] = true;
+    opt[ e.element().select("input[type='submit'][clicked='true']").first().name ] = true;
+    new Ajax.Request( e.element().action, {
+      method: e.element().method,
+      parameters: opt,
+      onSuccess: function(transport) {
+        if (transport.responseJSON.success)
+        {
+          e.element().up("tr").remove();
+          fireSuccessOverlay();
+        }
+        else
+        {
+          fireErrorOverlay( transport.responseJSON.errors.join("<br/>") );
+        }
+      }
+    });
+  });
+});
+//-->
+</script>
+<?
   }
 }
 
@@ -132,10 +162,31 @@ $form->renderForm = false;
 $box = new PouetBoxAdminModificationRequests( );
 $form->Add( "adminModReq", $box );
 
-$form->SetSuccessURL( "admin_modification_requests.php", true );
-
 if ($currentUser && $currentUser->CanEditItems())
-  $form->Process();
+{
+  if ($_POST["partial"])
+  {
+    $form->SetSuccessURL( "", false );
+    $form->Process();
+    $response = array();
+    if ($form->GetErrors())
+    {
+      $response["errors"] = $form->GetErrors();
+    }
+    else
+    {
+      $response["success"] = true;
+    }
+    header("Content-type: application/json; charset=utf-8");
+    echo json_encode($response);
+    exit();
+  }
+  else
+  {
+    $form->SetSuccessURL( "admin_modification_requests.php", true );
+    $form->Process();
+  }
+}
 
 $TITLE = "process modification requests";
 
