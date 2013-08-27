@@ -570,6 +570,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
     $s->AddField("modification_requests.requestBlob");
     $s->AddField("modification_requests.requestDate");
     $s->AddField("modification_requests.approved");
+    $s->AddField("modification_requests.comment");
     //$s->Attach(array("modification_requests"=>"gloperatorID"),array("users as gloperator"=>"id"));
     $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
@@ -602,9 +603,9 @@ class PouetBoxAccountModificationRequests extends PouetBox
       echo "</td>\n";
       echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
       echo "    <td>";
-      if ( $r->approved === NULL ) echo "pending";
-      else if ( $r->approved == 0 ) echo "no";
-      else if ( $r->approved == 1 ) echo "yes";
+      if ( $r->approved === NULL ) echo "<b>pending</b>";
+      else if ( $r->approved == 0 ) echo "<b>no</b> :: "._html($r->comment);
+      else if ( $r->approved == 1 ) echo "<b>yes</b>";
       echo "</td>\n";
       echo "  </tr>\n";
     }
