@@ -129,6 +129,7 @@ document.observe("dom:loaded",function(){
   $$("#pouetbox_adminreq input[type='submit']").invoke("observe","click",function(e){ e.element().setAttribute("clicked","true"); });
   $$("#pouetbox_adminreq form").invoke("observe","submit",function(e){
     e.stop();
+    e.element().select("input[type='submit']").invoke("setAttribute","disabled",true);
     var opt = Form.serializeElements( e.element().select("input[type='hidden']"), {hash:true} );
     opt["partial"] = true;
     opt[ e.element().select("input[type='submit'][clicked='true']").first().name ] = true;
