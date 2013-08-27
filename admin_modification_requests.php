@@ -136,7 +136,7 @@ document.observe("dom:loaded",function(){
     if (reqAction == "requestDeny")
     {
       reason = prompt("Enter the reason why you want to deny this request");
-      if (reason == null)
+      if (reason == null || !reason.length)
         return;
     }
     e.element().select("input[type='submit']").invoke("setAttribute","disabled",true);
