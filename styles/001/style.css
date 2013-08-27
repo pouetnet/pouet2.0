@@ -1540,13 +1540,19 @@ input.autocompleteSearch {
   margin: 2px 8px;
 }
 
-#pouetbox_login .loggedin {
+#pouetbox_login .content {
   text-align: center;
 }
 
 #pouetbox_login .loggedin .user {
   padding: 0px;
   background: none;
+  font-weight: bold;
+}
+
+#pouetbox_login .notifications
+{
+  background: #557799;
   font-weight: bold;
 }
 
