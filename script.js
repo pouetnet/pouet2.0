@@ -281,10 +281,10 @@ function fadeOverlays()
   setTimeout(fadeOverlays,timerDensity);
 }
 
-function fireSuccessOverlay()
+function fireSuccessOverlay( msg )
 {
   if (!$("successOverlay"))
-    document.body.insert(new Element("div",{"id":"successOverlay"}).update("Success !"));
+    document.body.insert(new Element("div",{"id":"successOverlay"}).update( msg ? msg : "Success !"));
   $("successOverlay").style.opacity = "1.0";
   setTimeout(fadeOverlays,timeWait + timerDensity);
 }

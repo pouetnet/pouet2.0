@@ -139,7 +139,7 @@ document.observe("dom:loaded",function(){
         if (transport.responseJSON.success)
         {
           e.element().up("tr").remove();
-          fireSuccessOverlay();
+          fireSuccessOverlay( transport.responseJSON.success == "accepted" ? "request accepted !" : "request denied !");
         }
         else
         {
@@ -175,7 +175,7 @@ if ($currentUser && $currentUser->CanEditItems())
     }
     else
     {
-      $response["success"] = true;
+      $response["success"] = $_POST["requestAccept"] ? "accepted" : "denied";
     }
     header("Content-type: application/json; charset=utf-8");
     echo json_encode($response);
