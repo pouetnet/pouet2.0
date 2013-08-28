@@ -513,8 +513,6 @@ td.date {
   margin: 10px auto;
   background: black;
   border: 1px solid black;
-  border-collapse: separate;
-  border-spacing: 1px;
 }
 
 #pouetbox_prodmain #alltimerank {
@@ -531,6 +529,9 @@ td.date {
   border-collapse: collapse;
   text-align: left;
 }
+#pouetbox_prodmain #partytable th {
+  background: #224488;
+}
 
 #pouetbox_prodmain #partytable td {
   padding: 1px;
@@ -545,26 +546,54 @@ td.date {
   list-style: none;
 }
 
-#pouetbox_prodmain th {
+#pouetbox_prodmain .header {
   background: #224488;
   padding: 3px;
+  font-weight: bold;
+}
+
+#pouetbox_prodmain #prodbox {
+    border-collapse: separate;
+    clear: both;
+    display: table;
+    margin: 1px 0;
+    width: 100%;
+}
+#pouetbox_prodmain #proddata {
+  display: table-cell;
+}
+#pouetbox_prodmain #proddata > table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 1px;
+  margin: -1px -1px -1px 0;
+}
+#pouetbox_prodmain #screenshot {
+  display: table-cell;
+  text-align:center;
+  vertical-align: middle;
+  background: #446688;
 }
 
 #pouetbox_prodmain td {
   background: #446688;
   padding: 2px;
 }
+#pouetbox_prodmain #credits, 
 #pouetbox_prodmain td.r2 {
   background: #557799;
+  text-align: center;
 }
-
+#pouetbox_prodmain .foot {
+  margin: 0px;
+  margin-top: 1px;
+}
 #pouetbox_prodmain big {
   font-size: 18px;
   font-weight: bold;
 }
 
 #pouetbox_prodmain #title {
-  float:left;
 }
 #pouetbox_prodmain #otherlinks {
   float:right;
@@ -595,14 +624,6 @@ td.date {
 
 #pouetbox_prodmain #links #mainDownloadLink {
     font-weight: bold;
-}
-#pouetbox_prodmain #screenshot {
-  text-align:center;
-  vertical-align: middle;
-/*
-  width: 400px;
-  height: 300px;
-*/
 }
 
 #pouetbox_prodmain .foot {
