@@ -783,6 +783,7 @@ td.date {
 
 #pouetbox_usermain .content {
   min-height: 170px;
+  min-width: 400px;
 }
 
 #pouetbox_usermain .bigavatar {
