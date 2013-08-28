@@ -22,9 +22,9 @@ class PouetProd extends BM_Class {
 
   function onFinishedPopulate() {
     $this->groups = array();
-    if ($this->group1) $this->groups[] = $this->group1;
-    if ($this->group2) $this->groups[] = $this->group2;
-    if ($this->group3) $this->groups[] = $this->group3;
+    if ($this->group1) $this->groups[] = $this->group1; unset($this->group1);
+    if ($this->group2) $this->groups[] = $this->group2; unset($this->group2);
+    if ($this->group3) $this->groups[] = $this->group3; unset($this->group3);
 
     $this->types = explode(",",$this->type);
     if ($this->party && $this->party->id != NO_PARTY_ID)

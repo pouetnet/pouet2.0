@@ -108,9 +108,9 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $this->fields["name"]["value"] = $prod->name;
     $this->fields["download"]["value"] = $prod->download;
 
-    $this->fields["group1"]["value"] = $prod->group1->id;
-    $this->fields["group2"]["value"] = $prod->group2->id;
-    $this->fields["group3"]["value"] = $prod->group3->id;
+    $n = 1;
+    foreach($prod->groups as $g)
+      $this->fields["group".$n++]["value"] = $g->id;
 
     $this->fields["releaseDate"]["value"] = $prod->date;
 

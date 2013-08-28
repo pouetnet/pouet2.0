@@ -53,7 +53,7 @@ echo "<div id='content' class='frontpage'>\n";
 
 foreach($boxes as $bar=>$boxlist)
 {
-  $st = microtime_float();
+  $timer["bar_".$bar]["start"] = microtime_float();
   echo "  <div id='"._html($bar)."'>\n";
   foreach($boxlist as $box)
   {
@@ -68,7 +68,7 @@ foreach($boxes as $bar=>$boxlist)
     $p->Render();
   }
   echo "  </div>\n";
-  printf("<!-- presentation of %s took %f-->\n",$bar,microtime_float() - $st);
+  $timer["bar_".$bar]["end"] = microtime_float();
 }
 
 echo "</div>\n";

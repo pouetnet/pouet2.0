@@ -30,6 +30,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
       $a = array();
       $a["gloperatorID"] = $currentUser->id;
       $a["approved"] = 0;
+      $a["comment"] = $data["comment"];
       $a["approveDate"] = date("Y-m-d H:i:s");
       SQLLib::UpdateRow("modification_requests",$a,"id=".(int)$data["requestID"]);
       return array();
@@ -122,6 +123,47 @@ class PouetBoxAdminModificationRequests extends PouetBox
       echo "  </tr>\n";
     }
     echo "</table>\n";
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $$("#pouetbox_adminreq input[type='submit']").invoke("observe","click",function(e){ e.element().setAttribute("clicked","true"); });
+  $$("#pouetbox_adminreq form").invoke("observe","submit",function(e){
+    e.stop();
+    
+    var reqAction = e.element().select("input[type='submit'][clicked='true']").first().name;
+    var reason = null;
+    if (reqAction == "requestDeny")
+    {
+      reason = prompt("Enter the reason why you want to deny this request");
+      if (reason == null || !reason.length)
+        return;
+    }
+    e.element().select("input[type='submit']").invoke("setAttribute","disabled",true);
+    var opt = Form.serializeElements( e.element().select("input[type='hidden']"), {hash:true} );
+    opt["partial"] = true;
+    opt["comment"] = reason;
+    opt[ reqAction ] = true;
+    new Ajax.Request( e.element().action, {
+      method: e.element().method,
+      parameters: opt,
+      onSuccess: function(transport) {
+        if (transport.responseJSON.success)
+        {
+          e.element().up("tr").remove();
+          fireSuccessOverlay( transport.responseJSON.success == "accepted" ? "request accepted !" : "request denied !");
+        }
+        else
+        {
+          fireErrorOverlay( transport.responseJSON.errors.join("<br/>") );
+        }
+      }
+    });
+  });
+});
+//-->
+</script>
+<?
   }
 }
 
@@ -132,10 +174,31 @@ $form->renderForm = false;
 $box = new PouetBoxAdminModificationRequests( );
 $form->Add( "adminModReq", $box );
 
-$form->SetSuccessURL( "admin_modification_requests.php", true );
-
 if ($currentUser && $currentUser->CanEditItems())
-  $form->Process();
+{
+  if ($_POST["partial"])
+  {
+    $form->SetSuccessURL( "", false );
+    $form->Process();
+    $response = array();
+    if ($form->GetErrors())
+    {
+      $response["errors"] = $form->GetErrors();
+    }
+    else
+    {
+      $response["success"] = $_POST["requestAccept"] ? "accepted" : "denied";
+    }
+    header("Content-type: application/json; charset=utf-8");
+    echo json_encode($response);
+    exit();
+  }
+  else
+  {
+    $form->SetSuccessURL( "admin_modification_requests.php", true );
+    $form->Process();
+  }
+}
 
 $TITLE = "process modification requests";
 

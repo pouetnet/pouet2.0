@@ -34,24 +34,6 @@ class PouetBoxLogin extends PouetBox {
       echo "</div>\n";
       echo "<div class='foot'><input type='submit' value='Submit'/></div>";
       echo "</form>\n";
-      /*
-?>
-<script type="text/javascript">
-var loginClicked = false;
-function loginResetFields()
-{
-  if (!loginClicked)
-  {
-    $("loginusername").value = "";
-    $("loginpassword").value = "";
-  }
-  loginClicked = true;
-}
-$("loginusername").observe("focus",loginResetFields);
-$("loginpassword").observe("focus",loginResetFields);
-</script>
-<?
-    */
     } else {
       global $currentUser;
       echo "<div class='content loggedin'>\n";
@@ -59,6 +41,22 @@ $("loginpassword").observe("focus",loginResetFields);
       echo $currentUser->PrintLinkedAvatar()." ";
       echo $currentUser->PrintLinkedName();
       echo "</div>\n";
+      if ($currentUser->IsGloperator())
+      {
+        $req = SQLLib::SelectRow("select count(*) as c from modification_requests where approved is null")->c;
+        if ($req)
+        {
+          echo "<div class='content notifications'>\n";
+          echo "[ <a href='admin_modification_requests.php' class='adminlink'>";
+          echo $req;
+          if ($req==1)
+            echo " request waiting!";
+          else
+            echo " requests waiting!";
+          echo "</a> ]";
+          echo "</div>\n";
+        }
+      }
       echo "<div class='foot'>\n";
       echo "<a href='account.php'>account</a> ::\n";
       echo "<a href='logout.php'>logout</a>\n";

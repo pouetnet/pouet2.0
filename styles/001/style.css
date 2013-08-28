@@ -779,11 +779,11 @@ td.date {
   border: 0px;
 }
 #pouetbox_usermain {
-  width: 50%;
 }
 
 #pouetbox_usermain .content {
   min-height: 170px;
+  min-width: 400px;
 }
 
 #pouetbox_usermain .bigavatar {
@@ -1367,8 +1367,7 @@ input.autocompleteSearch {
     margin: 30px;
 }
 
-#successOverlay {
-    background: none repeat scroll 0 0 #228830;
+#successOverlay, #errorOverlay {
     border: 1px solid black;
     font-size: 120%;
     font-weight: bold;
@@ -1379,6 +1378,12 @@ input.autocompleteSearch {
     text-align: center;
     top: 200px;
     width: 300px;
+}
+#successOverlay {
+    background: #228830;
+}
+#errorOverlay {
+    background: #882230;
 }
 
 #pouetbox_sceneorgawards h2 {
@@ -1539,13 +1544,19 @@ input.autocompleteSearch {
   margin: 2px 8px;
 }
 
-#pouetbox_login .loggedin {
+#pouetbox_login .content {
   text-align: center;
 }
 
 #pouetbox_login .loggedin .user {
   padding: 0px;
   background: none;
+  font-weight: bold;
+}
+
+#pouetbox_login .notifications
+{
+  background: #557799;
   font-weight: bold;
 }
 
