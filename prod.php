@@ -352,8 +352,9 @@ class PouetBoxProdMain extends PouetBox {
 
     $timer[$this->uniqueID." render"]["start"] = microtime_float();
 
-    echo "<div id='pouetbox_prodmain' class='pouettbl'>\n";
-    echo "<div class='header'>\n";
+    echo "<table id='pouetbox_prodmain'>\n";
+    echo "<tr>\n";
+    echo "<th colspan='3'>\n";
     echo " <span id='title'><big>"._html($this->prod->name)."</big>";
     if ($this->prod->groups)
       echo " by ".$this->prod->RenderGroupsLong();
@@ -372,12 +373,11 @@ class PouetBoxProdMain extends PouetBox {
       printf(" <small>[<a class='submitadditional' href='submit_prod_info.php?which=%d'>+nfo</a>]</small>",$this->prod->id);
     }
     printf("</div>");
-    echo "</div>\n";
+    echo "</th>\n";
+    echo "</tr>\n";
 
-    echo "<div id='prodbox'>\n";
-    echo "<div id='screenshot'>".$this->RenderScreenshot()."</div>\n";
-    echo "<div id='proddata'>\n";
-    echo "<table>\n";
+    echo "<tr>\n";
+    echo " <td rowspan='3' id='screenshot'>".$this->RenderScreenshot()."</td>\n";
     echo " <td colspan='2'>\n";
     $this->RenderDetails();
     echo " </td>\n";
@@ -400,25 +400,25 @@ class PouetBoxProdMain extends PouetBox {
     $this->RenderLinks();
     echo " </td>\n";
     echo "</tr>\n";
-    echo "</table>\n";
-    echo "</div>\n";
-    echo "</div>\n";
 
     if ($this->credits)
     {
-      echo "<div id='credits' colspan='3' class='r2'>";
+      echo "<tr>\n";
+      echo " <td id='credits' colspan='3' class='r2'>";
       $this->RenderCredits();
-      echo "</div>\n";
+      echo "</td>\n";
+      echo "</tr>\n";
     }
 
 
     if($this->prod->addeduser)
     {
-      echo " <div class='foot' colspan='3'>added on the ".$this->prod->quand." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
-      echo "</div>\n";
+      echo "<tr>\n";
+      echo " <td class='foot' colspan='3'>added on the ".$this->prod->quand." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
+      echo "</tr>\n";
     }
 
-    echo "</div>\n";
+    echo "</table>\n";
     $timer[$this->uniqueID." render"]["end"] = microtime_float();
   }
 
