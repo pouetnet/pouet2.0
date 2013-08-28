@@ -51,11 +51,11 @@ echo "<div id='content' class='frontpage'>\n";
 
 foreach($boxes as $bar=>$boxlist)
 {
-  $st = microtime_float();
+  $timer["bar_".$bar]["start"] = microtime_float();
   echo "  <div id='"._html($bar)."'>\n";
   foreach($boxlist as $box)
   {
-    if ($box["limit"]===0)
+    if (isset($box["limit"]) && (int)$box["limit"]==0)
       continue;
     $class = "PouetBox".$box["box"];
     $p = new $class();
@@ -64,7 +64,7 @@ foreach($boxes as $bar=>$boxlist)
     $p->Render();
   }
   echo "  </div>\n";
-  printf("<!-- presentation of %s took %f-->\n",$bar,microtime_float() - $st);
+  $timer["bar_".$bar]["end"] = microtime_float();
 }
 
 echo "</div>\n";

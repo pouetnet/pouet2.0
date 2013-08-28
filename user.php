@@ -64,6 +64,12 @@ class PouetBoxUserMain extends PouetBox
       $this->nfos = $this->GetNFOsAdded( $_GET["show"]=="nfos" ? null : get_setting("usernfos") );
     }
 
+    $this->credits = array();
+    if (!$_GET["show"] || $_GET["show"]=="credits")
+    {
+      $this->credits = $this->GetCredits( $_GET["show"]=="credits" ? null : 10 );
+    }
+
     $this->firstComments = array();
     if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
     {
@@ -85,7 +91,7 @@ class PouetBoxUserMain extends PouetBox
     $this->comments = array();
     if ($_GET["show"]=="demoblog")
     {
-      $this->comments = $this->GetCommentsAdded( 10, $_GET["page"] );
+      $this->comments = $this->GetDemoblog( $_GET["page"] );
     }
 
     $this->agreeRulez = array();
@@ -122,7 +128,7 @@ class PouetBoxUserMain extends PouetBox
     echo "<img src='".POUET_CONTENT_URL."/avatars/"._html($this->user->avatar)."' alt='avatar'/> ";
     echo "<span>"._html($this->user->nickname)."</span> information";
 
-    if ($currentUser && $currentUser->IsAdministrator())
+    if ($currentUser && $currentUser->IsModerator())
     {
       printf(" [<a href='admin_user_edit.php?who=%d' class='adminlink'>edit</a>]\n",$this->id);
     }
@@ -229,6 +235,25 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
+  function GetCredits( $limit = null )
+  {
+    $s = new BM_Query(" credits");
+    $s->AddField("credits.role");
+    $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf("credits.userID = %d",$this->id));
+    $s->AddOrder("credits_prod.quand desc");
+    if ($limit)
+      $s->SetLimit( $limit );
+
+    $data = $s->perform();
+
+    $a = array();
+    foreach($data as $v) $a[] = &$v->prod;
+    PouetCollectPlatforms($a);
+    PouetCollectAwards($a);
+
+    return $data;
+  }
   function GetFirstCommentsAdded( $limit = null )
   {
     $s = new BM_Query("prods");
@@ -293,6 +318,7 @@ class PouetBoxUserMain extends PouetBox
   function GetBBSPosts( $limit = null )
   {
     $s = new BM_Query("bbs_posts");
+    $s->AddField("bbs_posts.id as postID");
     $s->AddJoin("left","bbs_topics","bbs_topics.id = bbs_posts.topic");
     $s->AddField("bbs_topics.id");
     $s->AddField("bbs_topics.topic");
@@ -316,7 +342,7 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
-  function GetCommentsAdded( $limit, $page )
+  function GetDemoblog( $page )
   {
     $s = new BM_Query("comments");
     $s->AddField("count(*) as c");
@@ -330,7 +356,16 @@ class PouetBoxUserMain extends PouetBox
     $s->AddOrder("comments.quand desc");
     //$s->AddJoin("left","comments","prods.id = comments.which");
     $s->Attach(array("comments"=>"which"),array("prods as prod"=>"id"));
-    $s->AddWhere(sprintf("comments.who = %d",$this->id));
+    $s->AddWhere(sprintf_esc("comments.who = %d",$this->id));
+    if ($_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
+    if ($_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
+    if ($_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
+
+    $limit = 10;
+    if ($_GET["com"]) $limit = (int)$_GET["com"];
+    $limit = min($limit,100);
+    $limit = max($limit,1);
+    if ($_GET["com"]==-1) $limit = $this->postcount;
 
     $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
@@ -377,20 +412,24 @@ class PouetBoxUserMain extends PouetBox
     if ($this->user->im_type)
       $this->AddRow($this->user->im_type,$this->user->im_id);
 
-    echo "<li class='header'>portals:</li>\n";
-    if ($this->user->csdb)
-      echo $this->AddRow("csdb","<a href='http://csdb.dk/scener/?id=".$this->user->csdb."'>profile</a>",true);
-    if ($this->user->slengpung)
-      echo $this->AddRow("slengpung","<a href='http://www.slengpung.com/?userid=".$this->user->slengpung."'>pictures</a>",true);
-    if ($this->user->zxdemo)
-      echo $this->AddRow("zxdemo","<a href='http://zxdemo.org/author.php?id=".$this->user->zxdemo."'>profile</a>",true);
+    if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo)
+    {
+      echo "<li class='header'>portals:</li>\n";
+      if ($this->user->csdb)
+        echo $this->AddRow("csdb","<a href='http://csdb.dk/scener/?id=".$this->user->csdb."'>profile</a>",true);
+      if ($this->user->slengpung)
+        echo $this->AddRow("slengpung","<a href='http://www.slengpung.com/?userid=".$this->user->slengpung."'>pictures</a>",true);
+      if ($this->user->zxdemo)
+        echo $this->AddRow("zxdemo","<a href='http://zxdemo.org/author.php?id=".$this->user->zxdemo."'>profile</a>",true);
+    }
 
     if ($this->cdcProds)
     {
       echo "<li class='header'>cdcs:</li>\n";
       $x = 1;
       foreach($this->cdcProds as $v)
-        $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
+        if ($v->prod)
+          $this->AddRow("cdc #".($x++),$v->prod->RenderSingleRow(),true);
     }
 
     echo "</ul>\n";
@@ -515,6 +554,25 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
+    if ($this->credits)
+    {
+      echo "<div class='contribheader'>contributions to prods";
+      echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
+      echo "</div>\n";
+      echo "<ul class='boxlist'>";
+      foreach($this->credits as $p)
+      {
+        echo "<li>";
+        echo $p->prod->RenderTypeIcons();
+        echo $p->prod->RenderPlatformIcons();
+        echo $p->prod->RenderSingleRow()." ";
+        echo $p->prod->RenderAwards();
+        echo " [".$p->role."]";
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
+
     if ($this->topics)
     {
       echo "<div class='contribheader'>latest bbs topics";
@@ -542,7 +600,8 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->posts as $p)
       {
         echo "<li>";
-        echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+        //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+        echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
         echo "</li>";
       }
       echo "</ul>";
@@ -587,7 +646,7 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->comments as $c)
       {
         $p = $c->prod;
-        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "");
+        $rating = $c->rating>0 ? "rulez" : ($c->rating<0 ? "sucks" : "isok");
         echo "<li class='blogprod'>";
         echo $p->RenderTypeIcons();
         echo $p->RenderPlatformIcons();

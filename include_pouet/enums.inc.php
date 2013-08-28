@@ -16,14 +16,4 @@ $AFFILIATIONS_INVERSE = array(
   "related" => "related from",
 );
 
-$THREAD_CATEGORIES = array(
-  0 => "general",
-  2 => "gfx",
-  3 => "code",
-  4 => "music",
-  5 => "parties",
-  6 => "offtopic",
-  1 => "residue",
-);
-
 ?>

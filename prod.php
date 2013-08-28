@@ -56,7 +56,7 @@ class PouetBoxProdMain extends PouetBox {
     PouetCollectPlatforms( $a );
 
     if ($this->prod->boardID)
-      $this->board = SQLLib::SelectRow(sprintf_esc("SELECT * FROM bbses WHERE id = %d",$this->prod->boardID));
+      $this->board = SQLLib::SelectRow(sprintf_esc("SELECT * FROM boards WHERE id = %d",$this->prod->boardID));
 
     $s = new BM_Query();
     $s->AddField("added");
@@ -99,6 +99,13 @@ class PouetBoxProdMain extends PouetBox {
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
 
     $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
+
+    $s = new BM_Query("credits");
+    $s->AddField("credits.role");
+    $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
+    $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $s->AddOrder("credits.role");
+    $this->credits = $s->perform();
 
     $this->downloadLinks = array();
     if ($this->prod->sceneorg)
@@ -284,6 +291,7 @@ class PouetBoxProdMain extends PouetBox {
     echo "<div class='outerbar'><div class='innerbar' style='width: ".$pop."%'>&nbsp;<span>".$pop."%</span></div></div>\n";
 
     $year = substr($this->prod->date,0,4);
+    echo "<div class='awards'>";
     foreach($this->awards as $award)
     {
     	printf("<a href='./sceneorg.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
@@ -292,6 +300,7 @@ class PouetBoxProdMain extends PouetBox {
         $award->category,
         $award->category);
     }
+    echo "</div>";
   }
   function RenderAverage() {
     $p = "isok";
@@ -323,7 +332,20 @@ class PouetBoxProdMain extends PouetBox {
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
   }
-
+  function RenderCredits()
+  {
+    echo "<ul>";
+    foreach($this->credits as $v)
+    {
+//      $user = PouetUser::Spawn($k);
+      echo "<li>";
+      echo $v->user->PrintLinkedAvatar()." ";
+      echo $v->user->PrintLinkedName();
+      echo " ["._html($v->role)."]";
+      echo "</li>";
+    }
+    echo "</ul>";
+  }
   function Render()
   {
     global $currentUser;
@@ -378,6 +400,16 @@ class PouetBoxProdMain extends PouetBox {
     $this->RenderLinks();
     echo " </td>\n";
     echo "</tr>\n";
+
+    if ($this->credits)
+    {
+      echo "<tr>\n";
+      echo " <td id='credits' colspan='3' class='r2'>";
+      $this->RenderCredits();
+      echo "</td>\n";
+      echo "</tr>\n";
+    }
+
 
     if($this->prod->addeduser)
     {
@@ -512,8 +544,9 @@ class PouetBoxProdSubmitChanges extends PouetBox {
     echo "<p>if this prod is a fake, some info is false or the download link is broken,</p>";
     echo "<p>do not post about it in the comments, it will get lost.</p>";
     //echo "instead, <a href='mailto:pouet@neuromatrice.net?subject=about%20prod%20number%20".$this->id."'>email</a> or <a href='topic.php?which=1024'>post</a> about it.";
-    echo "<p>instead, <a href='topic.php?which=1024'>post</a> about it here ! [<a href='gloperator_log.php?which=".$this->id."&amp;what=prod'>previous edits</a>]</p>";
-    //echo "<p>instead, <a href='submit_modification_request.php?prod=".$this->id."'>click here</a> !</p>";
+    //echo "<p>instead, <a href='topic.php?which=1024'>post</a> about it here ! [<a href='gloperator_log.php?which=".$this->id."&amp;what=prod'>previous edits</a>]</p>";
+    echo "<p>instead, <a href='submit_modification_request.php?prod=".$this->id."'>click here</a> !</p>";
+    echo "<p>[<a href='gloperator_log.php?which=".$this->id."&amp;what=prod'>previous edits</a>]</p>";
   }
 
 };

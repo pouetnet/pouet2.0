@@ -23,6 +23,7 @@ a:hover {
 }
 img {
   -moz-force-broken-image-icon: 1;
+  border: 0px;
 }
 input, select, option {
   font-size : 9pt;
@@ -329,6 +330,7 @@ td.date {
   padding-bottom: 2px;
   background: #224488 url("http://content.pouet.net/gfx/titles/stats.gif") top left no-repeat;
   background-position:2px 2px;
+  text-align: left;
 }
 #pouetbox_stats td:nth-child(2), 
 #pouetbox_stats th:nth-child(2) {
@@ -773,13 +775,15 @@ td.date {
 #pouetbox_affilbutton .content {
   text-align: center;
 }
-
+#pouetbox_affilbutton img {
+  border: 0px;
+}
 #pouetbox_usermain {
-  width: 50%;
 }
 
 #pouetbox_usermain .content {
   min-height: 170px;
+  min-width: 400px;
 }
 
 #pouetbox_usermain .bigavatar {
@@ -1363,8 +1367,7 @@ input.autocompleteSearch {
     margin: 30px;
 }
 
-#successOverlay {
-    background: none repeat scroll 0 0 #228830;
+#successOverlay, #errorOverlay {
     border: 1px solid black;
     font-size: 120%;
     font-weight: bold;
@@ -1375,6 +1378,12 @@ input.autocompleteSearch {
     text-align: center;
     top: 200px;
     width: 300px;
+}
+#successOverlay {
+    background: #228830;
+}
+#errorOverlay {
+    background: #882230;
 }
 
 #pouetbox_sceneorgawards h2 {
@@ -1397,6 +1406,9 @@ input.autocompleteSearch {
 }
 #pouetbox_buttons h2 {
   clear: both;
+}
+#pouetbox_buttons img {
+  border: 0px;
 }
 #pouetbox_buttons li {
   margin: 3px; 
@@ -1428,6 +1440,7 @@ input.autocompleteSearch {
   font-weight: bold;
   margin: 0px 1px;
   padding: 3px;
+  text-transform: lowercase;
 }
 
 #pouetbox_faq dd {
@@ -1514,4 +1527,52 @@ input.autocompleteSearch {
 
 #pouetbox_modalmessage .content h3 {
   margin: 15px;
+}
+
+#credits ul {
+  list-style: none;
+  text-align: left;
+  padding: 2px;
+}
+
+#credits ul li {
+  display: inline-block;
+  margin: 2px 8px;
+}
+
+#pouetbox_login .content {
+  text-align: center;
+}
+
+#pouetbox_login .loggedin .user {
+  padding: 0px;
+  background: none;
+  font-weight: bold;
+}
+
+#pouetbox_login .notifications
+{
+  background: #557799;
+  font-weight: bold;
+}
+
+#testbanner {
+    background: none repeat scroll 0 0 #AA5555;
+    border: 2px solid black;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 60px;
+    opacity: 0.8;
+    padding: 10px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    top: 10px;
+    width: 60px;
+    z-index: 10;
+}
+
+.autocompleteList li .glops
+{
+  color: #9999AA;
 }

@@ -11,7 +11,7 @@ class PouetUser extends BM_Class {
   function PrintLinkedName() {
     $classes = array("user");
     if ((time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
-    if ($this->level == "banned") $classes[] = "banned";
+    if ($this->IsBanned()) $classes[] = "banned";
     //return "<a href='user.php?who=".(int)$this->id."' class='".implode(" ",$classes)."'>"._html($this->nickname)."</a>";
     return sprintf("<a href='user.php?who=%d' class='%s'>%s</a>",$this->id,implode(" ",$classes),_html($this->nickname));
   }

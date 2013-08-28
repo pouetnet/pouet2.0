@@ -60,7 +60,7 @@ class Formifier {
           foreach($v["fields"] as $k=>$f)
           {
             $sel = "";
-            if ($v["value"])
+            if (isset($v["value"]))
             {
               $match = $v["assoc"] ? $k : $f;
               if ($v["multiple"])

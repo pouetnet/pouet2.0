@@ -2,10 +2,10 @@
 class PouetParty extends BM_Class {
   static function getTable () { return "parties"; }
   static function getFields() { return array("id","name","web"); }
-  static function getExtendedFields() { return array("quand"); }
+  static function getExtendedFields() { return array("quand","added"); }
   static function onAttach( &$node, &$query )
   {
-    $node->attach( $query, "added", array("users as addeduser"=>"id"));
+//    $node->attach( $query, "added", array("users as addeduser"=>"id"));
   }
   function PrintLinked($year = null) {
     if ($this->id == NO_PARTY_ID) return "";

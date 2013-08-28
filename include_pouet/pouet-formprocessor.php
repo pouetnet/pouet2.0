@@ -5,7 +5,9 @@ class PouetFormProcessor
   private $errors;
   private $successURL;
   private $redirectOnSuccess;
-
+  public $renderForm = true;
+  public $successMessage = "see what you've done";
+  
   const fieldName = "formProcessorAction";
 
   function PouetFormProcessor()
@@ -23,6 +25,10 @@ class PouetFormProcessor
   {
     $this->successURL = $url;
     $this->redirectOnSuccess = $redirect;
+  }
+  function GetErrors()
+  {
+    return $this->errors;
   }
   function Process()
   {
@@ -67,7 +73,7 @@ class PouetFormProcessor
         $msg->classes[] = "successbox";
         $msg->title = "Success!";
         if ($this->successURL)
-          $msg->message = "<a href='"._html($this->successURL)."'>see what you've done</a>";
+          $msg->message = "<a href='"._html($this->successURL)."'>".$this->successMessage."</a>";
         else
           $msg->message = "<a href='".POUET_ROOT_URL."'>go back to the front page</a>";
         $msg->Render();
@@ -79,14 +85,20 @@ class PouetFormProcessor
       foreach($this->objects as $key=>$object)
       {
         $object->Load();
-        printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
-
-        $csrf = new CSRFProtect();
-        $csrf->PrintToken();
-
-        printf("  <input type='hidden' name='%s' value='%s'/>\n",self::fieldName,_html($key));
+        if ($this->renderForm)
+        {
+          printf("<form action='%s' method='post' enctype='multipart/form-data'>\n",_html(selfPath()));
+          $csrf = new CSRFProtect();
+          $csrf->PrintToken();
+        }
+        
         $object->Render();
-        printf("</form>\n\n\n");
+  
+        if ($this->renderForm)
+        {
+          printf("  <input type='hidden' name='%s' value='%s'/>\n",self::fieldName,_html($key));
+          printf("</form>\n\n\n");
+        }
       }
     }
   }

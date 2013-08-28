@@ -104,6 +104,7 @@ class PouetBoxAdmin extends PouetBox {
       echo "</form>";
       echo "</li>\n";
     }
+    echo "  <li><a href='admin_modification_requests.php'>process modification requests</a></li>";
     echo "</ul>\n";
     echo "</div>\n";
   }

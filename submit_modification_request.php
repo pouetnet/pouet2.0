@@ -2,12 +2,6 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 
-if (!POUET_TEST)
-{
-  header("Location: index.php");
-  exit();
-}
-
 class PouetBoxModificationRequest extends PouetBox
 {
   function PouetBoxModificationRequest()
@@ -17,12 +11,6 @@ class PouetBoxModificationRequest extends PouetBox
     $this->title = "submit a change request";
     $this->formifier = new Formifier();
     $this->fields = array();
-    $this->fieldsRequestTypes = array(
-      "prod_add_link" => "add a new extra link to a prod",
-      "prod_change_link" => "change an existing extra link",
-      //"prod_change_field" => "change basic info about a prod",
-      "prod_del" => "delete a prod",
-    );
   }
 
   function Validate( $data )
@@ -42,15 +30,28 @@ class PouetBoxModificationRequest extends PouetBox
 
   function Commit($data)
   {
+    $post = array();
+
+    global $REQUESTTYPES;
+    if ($REQUESTTYPES[ $_POST["requestType"] ])
+    {
+      $error = $REQUESTTYPES[ $_POST["requestType"] ]::ValidateRequest($data,$post);
+      if ($error) return $error;
+    }
+    else
+    {
+      return array("no such request type!");
+    }
     $a = array();
     $a["requestType"] = $data["requestType"];
     if($_REQUEST["prod"])
+    {
       $a["itemID"] = (int)$_REQUEST["prod"];
+      $a["itemType"] = "prod";
+    }
     $a["requestDate"] = date("Y-m-d H:i:s");
     $a["userID"] = get_login_id();
 
-    $post = $data;
-    unset($post["requestType"]);
     $a["requestBlob"] = serialize($post);
 
     global $reqID;
@@ -60,14 +61,23 @@ class PouetBoxModificationRequest extends PouetBox
   }
   function LoadFromDB()
   {
-     $this->fields = array(
+    $this->fields = array(
       "requestType"=>array(
         "type"=>"select",
-        "fields"=>$this->fieldsRequestTypes,
         "name"=>"whatchu want",
         "assoc"=>true,
       ),
     );
+
+    global $REQUESTTYPES;
+    
+    foreach($REQUESTTYPES as $k=>$v)
+    {
+      if ($_REQUEST["prod"] && $v::GetItemType()=="prod") $this->fields["requestType"]["fields"][$k] = $v::Describe();
+    }
+    
+    $this->fields["requestType"]["fields"]["other"] = "other request...";
+    
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
@@ -76,6 +86,8 @@ class PouetBoxModificationRequest extends PouetBox
 
   function Render()
   {
+    $error = "";
+    
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
 
@@ -84,20 +96,21 @@ class PouetBoxModificationRequest extends PouetBox
     {
       $prod = PouetProd::Spawn($_REQUEST["prod"]);
       if (!$prod) die("no such prod!");
-      echo _html($prod->name);
-      if ($prod->groups)
-        echo " by ".$prod->RenderGroupsPlain();
+      echo $prod->RenderSingleRowShort();
     }
     echo "</h2>\n";
 
+    $error = "";
     if(!$_POST["requestType"])
     {
       echo "  <div class='content'>\n";
-      foreach($this->fields["requestType"]["fields"] as $k=>$v)
+      if(count($this->fields["requestType"]["fields"]))
+        $this->formifier->RenderForm( $this->fields );
+      else
       {
-        if (!$prod || ($prod && strpos($k,"prod")!==0)) unset($this->fields["requestType"]["fields"]);
+        echo "you need to select something to request about first !";
+        $error = " ";
       }
-      $this->formifier->RenderForm( $this->fields );
       echo "  </div>\n";
     }
     else
@@ -109,92 +122,53 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  <h2>more data</h2>\n";
       echo "  <div class='content'>\n";
       $fields = array();
-      switch($_POST["requestType"])
+      
+      $js = "";
+      global $REQUESTTYPES;
+      if ($REQUESTTYPES[ $_POST["requestType"] ])
       {
-        case "prod_add_link":
-          $fields = array(
-            "newLinkKey" => array(
-              "name"=>"link description (youtube, source, linux port, etc)",
-            ),
-            "newLink" => array(
-              "name"=>"link url",
-            ),
-            "finalStep" => array(
-              "type"=>"hidden",
-              "value"=>1,
-            ),
-          );
-          break;
-        case "prod_change_link":
-          if ($_POST["linkID"])
-          {
-            $l = SQLLib::SelectRow(sprintf_esc("select * from downloadlinks where id = %d",$_POST["linkID"]));
-            $fields = array(
-              "linkID" => array(
-                "type"=>"hidden",
-                "value"=>(int)$_POST["linkID"],
-              ),
-              "type" => array(
-                "type"=>"text",
-                "value"=>$l->type,
-              ),
-              "link" => array(
-                "type"=>"link",
-                "value"=>$l->link,
-              ),
-              "finalStep" => array(
-                "type"=>"hidden",
-                "value"=>1,
-              ),
-            );
-          }
-          else
-          {
-            $l = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$prod->id));
-            foreach($l as $v)
-              $links[$v->id] = sprintf("[%s] %s",$v->type,$v->link);
-            $fields = array(
-              "linkID" => array(
-                "name"=>"select link",
-                "type"=>"select",
-                "fields"=>$links,
-                "assoc"=>true,
-              ),
-            );
-          }
-          break;
-        case "prod_del":
-          {
-            $fields = array(
-              "reason" => array(
-                "name"=>"why should this prod be deleted",
-                "type"=>"textarea",
-                "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
-              ),
-              "finalStep" => array(
-                "type"=>"hidden",
-                "value"=>1,
-              ),
-            );
-          } break;
+        $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields,$js);
       }
-      if ($fields)
+      else
+      {
+        $error = "no such request type !";
+      }
+
+      if ($fields && !$error)
       {
         foreach($_POST as $k=>$v)
           if ($fields[$k])
             $fields[$k]["value"] = $v;
         $this->formifier->RenderForm($fields);
       }
+      if ($error)
+        echo $error;
       echo "  </div>\n";
 
     }
-
-    echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
+    
+    if ($js)
+    {
+      echo "<script type='text/javascript'>\n";
+      echo "<!--\n";
+      echo $js;
+      echo "//-->\n";
+      echo "</script>\n";
+    }
+  
+    if (!$error)
+      echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
   }
 };
 
 $TITLE = "submit a modification request";
+
+if ($_POST["requestType"] == "other")
+{
+  redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
+  exit();
+}
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
@@ -203,7 +177,12 @@ echo "<div id='content'>\n";
 
 $form = new PouetFormProcessor();
 
-$form->SetSuccessURL( "", false );
+$form->successMessage = "your request was recorded and will be processed by a glöperator eventually !";
+
+if ($_REQUEST["prod"])
+  $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
+else
+  $form->SetSuccessURL( "", false );
 
 $form->Add( "logo", new PouetBoxModificationRequest() );
 
@@ -215,12 +194,6 @@ else
 if (get_login_id())
 {
   $form->Display();
-?>
-<script type="text/javascript">
-document.observe("dom:loaded",function(){
-});
-</script>
-<?
 }
 else
 {
