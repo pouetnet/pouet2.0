@@ -70,6 +70,7 @@ class PouetPlacing {
     if ($p==1) $suf = "st";
     if ($n==11) $suf = "th";
     if ($n==12) $suf = "th";
+    if ($n==13) $suf = "th";
     return $this->ranking."<span class='ordinal'>".$suf."</span>";
   }
   function PrintResult() {
