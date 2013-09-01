@@ -25,6 +25,7 @@ class PouetBoxPartyHeader extends PouetBox
     $rows = SQLLib::selectRows(sprintf("SELECT invitationyear FROM prods WHERE invitation = %d GROUP BY invitationyear",$this->party->id));
     foreach($rows as $v)
       $this->years[$v->invitationyear] = true;
+    ksort($this->years);
   }
 
   function RenderContent()
