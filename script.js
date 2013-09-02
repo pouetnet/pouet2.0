@@ -473,7 +473,7 @@ function Youtubify( e )
 
   document.observe("dom:loaded", function ()
   {
-    textarea = $("message") || $$("[name='comment']")[0];
+    textarea = $$("#pouetbox_bbspost textarea, #pouetbox_prodpost textarea")[0];
 
     // Require IE9+ and other supporting browsers.
     if(!textarea || !("selectionStart" in textarea)) {
