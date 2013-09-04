@@ -1586,7 +1586,7 @@ input.autocompleteSearch {
 }
 #watchlistFrm input[type='submit']
 {
-  background: url("http://content.pouet.net/gfx/watchlist-on.gif") top left no-repeat;
+  background: url("http://content.pouet.net/gfx/watchlist-on.png") top left no-repeat;
   width: 16px;
   height: 16px;
   overflow: hidden;
@@ -1598,9 +1598,9 @@ input.autocompleteSearch {
 }
 #watchlistFrm input[type='submit'].add
 {
-  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-off.gif");
+  background: url("http://content.pouet.net/gfx/watchlist-off.png");
 }
 #watchlistFrm input[type='submit'].remove
 {
-  background: url("http://fakocka.hopto.org/pouetcontent/gfx/watchlist-on.gif");
+  background: url("http://content.pouet.net/gfx/watchlist-on.png");
 }
