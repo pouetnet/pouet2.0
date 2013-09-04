@@ -273,7 +273,7 @@ function fadeOverlays()
     item = $(item);
     
     item.style.opacity = parseFloat(item.style.opacity) - step;
-    console.log(item.style.opacity);
+    //console.log(item.style.opacity);
     if (item.style.opacity <= step + 0.01) // wahey chrome precision!
     {
       item.remove();
@@ -290,7 +290,7 @@ function fireSuccessOverlay( msg )
   if (!$("successOverlay"))
     document.body.insert(new Element("div",{"id":"successOverlay"}).update( msg ? msg : "Success !"));
   $("successOverlay").style.opacity = "1.0";
-  console.log(timeWait + timerDensity);
+  //console.log(timeWait + timerDensity);
   setTimeout(fadeOverlays,timeWait + timerDensity);
 }
 
