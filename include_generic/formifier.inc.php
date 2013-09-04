@@ -96,9 +96,15 @@ class Formifier {
         case "number":
           echo "    <input type='number'";
           if (isset($v["min"]))
+          {
             echo " min='"._html((int)$v["min"])."'";
+            $v["value"] = max((int)$v["value"],(int)$v["min"]);
+          }
           if (isset($v["max"]))
+          {
             echo " max='"._html((int)$v["max"])."'";
+            $v["value"] = min((int)$v["value"],(int)$v["max"]);
+          }
           echo " name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
         case "url":

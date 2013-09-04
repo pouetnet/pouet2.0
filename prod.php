@@ -412,7 +412,17 @@ document.observe("dom:loaded",function(){
     }
     if (file_exists(get_local_nfo_path($this->id)))
     {
-      printf("[<a href='prod_nfo.php?which=%d'>nfo</a>]\n",$this->id);
+      $isAmiga = false;
+      foreach($this->prod->platforms as $v)
+      {
+        global $PLATFORMS;
+        if (stristr($PLATFORMS[$v]["name"],"amiga")!==false)
+          $isAmiga = true;
+      }
+      if ($isAmiga)
+        printf("[<a href='prod_nfo.php?which=%d&amp;font=4'>nfo</a>]\n",$this->id);
+      else
+        printf("[<a href='prod_nfo.php?which=%d'>nfo</a>]\n",$this->id);
     }
     else if ($currentUser && $currentUser->CanSubmitItems())
     {

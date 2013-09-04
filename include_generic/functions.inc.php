@@ -125,6 +125,8 @@ function CheckReferrer( $ref )
   return true;
 }
 
+// the reason we need this is because the "normal" move_uploaded_file function
+// breaks the ACL flags: https://bugs.php.net/bug.php?id=65057
 function move_uploaded_file_fake( $src, $dst )
 {
   if (!is_uploaded_file($src)) return false;
