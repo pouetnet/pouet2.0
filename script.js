@@ -297,7 +297,7 @@ function fireSuccessOverlay( msg )
 function fireErrorOverlay( errors )
 {
   if (!$("errorOverlay"))
-    document.body.insert(new Element("div",{"id":"errorOverlay"}).update( errors ));
+    document.body.insert(new Element("div",{"id":"errorOverlay"}).update( errors ? errors : "There was an error :(" ));
   $("errorOverlay").style.opacity = "1.0";
   setTimeout(fadeOverlays,timeWait + timerDensity);
 }

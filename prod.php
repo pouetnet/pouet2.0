@@ -347,8 +347,15 @@ document.observe("dom:loaded",function(){
       method: "post",
       parameters: opt,
       onSuccess: function(transport) {
-        fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
-        $("watchlistFrm").update( transport.responseText );
+        if (transport.responseText.length)
+        {
+          fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
+          $("watchlistFrm").update( transport.responseText );
+        }
+        else
+        {
+          fireErrorOverlay();
+        }
       }
     });
   });
@@ -642,8 +649,11 @@ if ($main->prod)
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
 
 $csrf = new CSRFProtect();
-if ($_POST["wlAction"] && $csrf->ValidateToken() && $currentUser)
+if ($_POST["wlAction"] && $currentUser)
 {
+  if (!$csrf->ValidateToken())
+    exit();
+  
   if ($_POST["wlAction"]=="removeFromWatchlist")
   {
     SQLLib::Query(sprintf_esc("delete from watchlist where prodID = %d and userID = %d",$prodid,$currentUser->id));
