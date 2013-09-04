@@ -38,7 +38,7 @@ class PouetBoxWatchlist extends PouetBox {
     $s->AddOrder("c.quand desc");
     $s->AddField("c.id as commentID");
     $s->SetLimit((int)$this->limit);
-    echo $s->getQuery();
+    
     $this->data = $s->perform();
   }
 
