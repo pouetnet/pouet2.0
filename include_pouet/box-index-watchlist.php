@@ -25,6 +25,8 @@ class PouetBoxWatchlist extends PouetBox {
     if (!$currentUser) return;
     
     $ids = SQLLib::SelectRows(sprintf_esc("select prodID from watchlist where userID = %d",$currentUser->id));
+    if (!count($ids)) return;
+    
     $i = array();
     foreach($ids as $v) $i[] = $v->prodID;
     
