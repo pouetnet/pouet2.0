@@ -42,7 +42,7 @@ $boxes = array(
     array("box"=>"Stats"          ,"limit"=>get_setting("indexstats")),
     array("box"=>"AffilButton"    ,"limit"=>get_setting("indexlinks")),
     array("box"=>"LatestComments" ,"limit"=>get_setting("indexlatestcomments")),
-    array("box"=>"Watchlist"      ,"limit"=>5,"loggedInOnly"=>true),
+    array("box"=>"Watchlist"      ,"limit"=>get_setting("indexwatchlist"),"loggedInOnly"=>true),
     array("box"=>"LatestParties"  ,"limit"=>get_setting("indexlatestparties")),
     array("box"=>"UpcomingParties"),
     array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")),

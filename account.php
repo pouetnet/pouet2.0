@@ -20,6 +20,7 @@ $namesNumeric = array(
   "indexlatestcomments" => "front page - latest comments",
   "indexlatestparties" => "front page - latest parties",
   "indexbbstopics" => "front page - bbs topics",
+  "indexwatchlist" => "front page - watchlist",
   "bbsbbstopics" => "bbs page - bbs topics",
   "prodlistprods" => "prodlist page - prods",
   "userlistusers" => "userlist page - users",
