@@ -347,6 +347,7 @@ document.observe("dom:loaded",function(){
       method: "post",
       parameters: opt,
       onSuccess: function(transport) {
+        fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
         $("watchlistFrm").update( transport.responseText );
       }
     });
