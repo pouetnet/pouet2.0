@@ -31,7 +31,7 @@ class PouetBoxWatchlist extends PouetBox {
     foreach($ids as $v) $i[] = $v->prodID;
     
     $s = new BM_Query();
-    $s->AddTable(sprintf_esc("(select * from comments where comments.which in (%s) order by comments.quand desc limit 25) as c ",implode($i)));
+    $s->AddTable(sprintf_esc("(select * from comments where comments.which in (%s) order by comments.quand desc limit 25) as c ",implode(",",$i)));
     $s->attach(array("c"=>"which"),array("prods as prod"=>"id"));
     $s->attach(array("c"=>"who"),array("users as user"=>"id"));
     $s->AddGroup("c.which");
