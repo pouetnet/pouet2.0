@@ -133,7 +133,7 @@ class PouetBoxAccount extends PouetBox
         "name"=>"country",
         "assoc"=>true,
         "fields"=>$COUNTRIES,
-        "value"=> $this->sceneID["countryTLD"],
+        "value"=> $this->sceneID["countryTLD"] ? $this->sceneID["countryTLD"] : strtoupper(substr(gethostbyaddr($_SERVER["REMOTE_ADDR"]),-2)),
       ),
       "captcha"=>array(
         "info"=>"real sceners are proficient in the skill of reading letters",
