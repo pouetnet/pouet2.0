@@ -123,6 +123,8 @@ class Formifier {
       if ($v["info"])
         echo "    <span>"._html($v["info"]).($v["required"]?" [<span class='req'>req</span>]":"")."</span>\n";
       echo "  </div>\n";
+      if ($v["infoAfter"])
+        echo "    <p class='infoAfter'>"._html($v["infoAfter"])."</p>\n";
     }
     echo "  </div>\n";
   }

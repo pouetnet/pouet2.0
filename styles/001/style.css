@@ -1209,6 +1209,12 @@ tr.sortable th #sort_thumbdown {
   font-style: italic;
   padding: 5px;
 }
+.formifier .infoAfter {
+  font-style: italic;
+  margin-left: 160px;
+  padding: 5px 5px 10px;
+  width: 400px;
+}
 .formifier .row > input {
   width: 250px;
 }
