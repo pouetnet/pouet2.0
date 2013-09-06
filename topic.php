@@ -13,7 +13,7 @@ if ($_GET["post"]) // setting-independent post lookup
     $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from bbs_posts, (SELECT @rowID:=0) as init where topic = %d",$topicID);
     $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
 
-    redirect(sprintf("topic.php?which=%d&page=%d#c%d",$topicID,(int)($row->rowID / $POSTS_PER_PAGE) + 1,$_GET["post"]));
+    redirect(sprintf("topic.php?which=%d&page=%d#c%d",$topicID,(int)(($row->rowID - 1) / $POSTS_PER_PAGE) + 1,$_GET["post"]));
     exit();
   }
 }

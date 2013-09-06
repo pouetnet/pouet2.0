@@ -19,7 +19,7 @@ if ($_GET["post"]) // setting-independent post lookup
     {
       $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from comments, (SELECT @rowID:=0) as init where which = %d",$prodID);
       $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
-      redirect(sprintf("prod.php?which=%d&page=%d#c%d",$prodID,(int)($row->rowID / get_setting("prodcomments")) + 1,$_GET["post"]));
+      redirect(sprintf("prod.php?which=%d&page=%d#c%d",$prodID,(int)(($row->rowID - 1) / get_setting("prodcomments")) + 1,$_GET["post"]));
     }
     exit();
   }
