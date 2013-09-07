@@ -346,6 +346,7 @@ function Youtubify( e )
 {
   "use strict"; // See http://daringfireball.net/2010/07/improved_regex_for_matching_urls
   var textarea, buttons, url = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/i;
+  var protocol = /^[A-Z_a-z]+:\/\//;
 
   // Replaces the selected text in a textarea with the given text optionally highlighting a subset
   // of the replacement text based on insets from the start and end of the replacement text.
@@ -384,6 +385,32 @@ function Youtubify( e )
     }
   }
 
+  function linkAltEdit ()
+  {
+    var text = getText(), start = "[url=", end = "[/url]";
+
+    if (text)
+    {
+      if (url.test(text))
+      {
+        if (!protocol.test(text))
+        {
+          text = "http://" + text;
+        }
+        replaceText(start + text + "]" + this.smpl + end, this.newl, start.length + text.length + 1, end.length);
+      }
+      else
+      {
+        replaceText(start + this.text + "]" + text + end, this.newl, start.length, end.length + text.length + 1);
+      }
+    }
+    else
+    {
+      text = start + this.text + "]" + this.smpl + end;
+      replaceText(text, this.newl, start.length, 1 + this.smpl.length + end.length);
+    }
+  }
+
   function listEdit ()
   {
     var text = getText(), start = this.code[0], end = this.code[1];
@@ -411,33 +438,27 @@ function Youtubify( e )
   }, {
     name: "Link",
     code: [ "[url]", "[/url]" ],
-    text: "http://example.com"
+    text: "http://example.com",
+    click: function ()
+    {
+      var text = getText();
+
+      if (url.test(text) && !protocol.test(text))
+      {
+        this.smpl = text;
+        linkAltEdit.call(this);
+      }
+      else
+      {
+        simpleEdit.call(this);
+      }
+    }
   }, {
     "class": "link_alt",
     name: "Link with alternate text",
     text: "http://example.com",
     smpl: "linky",
-    click: function ()
-    {
-      var text = getText(), start = "[url=", end = "[/url]";
-
-      if (text)
-      {
-        if (url.test(text))
-        {
-          replaceText(start + text + "]" + this.smpl + end, start.length + text.length + 1, end.length);
-        }
-        else
-        {
-          replaceText(start + this.text + "]" + text + end, start.length, end.length + text.length + 1);
-        }
-      }
-      else
-      {
-        text = start + this.text + "]" + this.smpl + end;
-        replaceText(text, start.length, 1 + this.smpl.length + end.length);
-      }
-    }
+    click: linkAltEdit
   }, {
     name: "Email",
     code: [ "[email]", "[/email]" ],
