@@ -620,6 +620,12 @@ td.date {
 .ordinal {
   color: #CCCCCC;
 }
+
+#pouetbox_prodnfo.asciiviewer {
+    display: block;
+    max-width: 900px;
+}
+
 .asciiviewer .content {
     padding: 5px;
 }
@@ -637,6 +643,7 @@ td.date {
 
 .asciiviewer pre {
   text-shadow: 4px 4px #224466;
+  white-space: pre-wrap;
 }
 .asciiviewer pre::-moz-selection { text-shadow: none; background: white; color: #224466; }
 .asciiviewer pre::-webkit-selection { text-shadow: none; background: white; color: #224466; }
@@ -779,6 +786,7 @@ td.date {
   border: 0px;
 }
 #pouetbox_usermain {
+  max-width: 900px;
 }
 
 #pouetbox_usermain .content {
