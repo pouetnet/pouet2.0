@@ -139,12 +139,15 @@ class lastRSS {
 	// -------------------------------------------------------------------
 	function Parse ($rss_url) {
 		// Open and load RSS file
-		if ($f = @fopen($rss_url, 'r')) {
+		$rss_content = sideload( $rss_url, array("timeout"=>2) );
+		if ($rss_content) {
+		  /*
 			$rss_content = '';
 			while (!feof($f)) {
 				$rss_content .= fgets($f, 4096);
 			}
 			fclose($f);
+			*/
 
 			//debuglog(var_export($rss_content,true));
 

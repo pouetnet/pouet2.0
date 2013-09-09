@@ -200,6 +200,27 @@ function process_ascii( $text )
   return $utf8;
 }
 
+function sideload( $url, $options = array() )
+{
+  $curl = curl_init();
+
+  $header = array();
+
+  curl_setopt($curl, CURLOPT_URL, $url);
+  curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+  curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+  if ($options["timeout"])
+    curl_setopt($curl, CURLOPT_TIMEOUT, (int)$options["timeout"]);
+  curl_setopt($curl, CURLOPT_NOPROGRESS, true);
+  curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+  
+  $html = curl_exec($curl);
+  curl_close($curl);
+
+  return $html;
+} 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )
