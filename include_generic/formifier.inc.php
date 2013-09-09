@@ -29,12 +29,12 @@ class Formifier {
             list($year,$month,) = sscanf($v["value"],"%d-%d-%d");
           }
           echo "    <div class='formdate'>\n";
-          echo "    <select name='".$k."_month' id='".$k."_month'/>\n";
+          echo "    <select name='".$k."_month' id='".$k."_month'>\n";
           echo "      <option></option>\n";
           for($x=1; $x<=12; $x++)
             echo "      <option value='".$x."'".($month==$x?" selected='selected'":"").">".date("F",mktime(0,0,0,$x,15))."</option>\n";
           echo "    </select>\n";
-          echo "    <select name='".$k."_year' id='".$k."_year'/>\n";
+          echo "    <select name='".$k."_year' id='".$k."_year'>\n";
           echo "      <option></option>\n";
           for($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--)
             echo "      <option".($year==$x?" selected='selected'":"").">".$x."</option>\n";
@@ -43,7 +43,7 @@ class Formifier {
           break;
         case "avatar":
           echo "    <div id='avatarlist'>\n";
-          echo "    <select name='".$k."' id='".$k."'/>\n";
+          echo "    <select name='".$k."' id='".$k."'>\n";
           global $avatars;
           if (!$v["value"])
             $v["value"] = basename( $avatars[ array_rand($avatars) ] );
@@ -56,7 +56,7 @@ class Formifier {
           echo "    </div>\n";
           break;
         case "select":
-          echo "    <select name='".$k.($v["multiple"]?"[]":"")."' id='".$k."'".($v["multiple"]?" multiple='multiple'":"")."/>\n";
+          echo "    <select name='".$k.($v["multiple"]?"[]":"")."' id='".$k."'".($v["multiple"]?" multiple='multiple'":"").">\n";
           foreach($v["fields"] as $k=>$f)
           {
             $sel = "";
