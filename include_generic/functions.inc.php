@@ -207,11 +207,11 @@ function sideload( $url, $options = array() )
   $header = array();
 
   curl_setopt($curl, CURLOPT_URL, $url);
-  curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+  @curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
   curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-  if ($options["timeout"])
-    curl_setopt($curl, CURLOPT_TIMEOUT, (int)$options["timeout"]);
+  if ($options["connectTimeout"])
+    curl_setopt($curl, CURLOPT_TIMEOUT, (int)$options["connectTimeout"]);
   curl_setopt($curl, CURLOPT_NOPROGRESS, true);
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
   
