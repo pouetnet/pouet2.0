@@ -494,14 +494,14 @@ function Youtubify( e )
 
   document.observe("dom:loaded", function ()
   {
-    textarea = $$("#pouetbox_bbspost textarea, #pouetbox_prodpost textarea")[0];
+    textarea = $$("#pouetbox_bbsopen textarea, #pouetbox_bbspost textarea, #pouetbox_prodpost textarea")[0];
 
     // Require IE9+ and other supporting browsers.
     if(!textarea || !("selectionStart" in textarea)) {
       return;
     }
 
-    var list, i, button, li, img, box = (window.pouetbox_bbspost || window.pouetbox_prodpost);
+    var list, i, button, li, img, box = (window.pouetbox_bbsopen || window.pouetbox_bbspost || window.pouetbox_prodpost);
     if (box)
     {
       list = document.createElement("ul");
