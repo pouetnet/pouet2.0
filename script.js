@@ -345,8 +345,8 @@ function Youtubify( e )
 (function ()
 {
   "use strict"; // See http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-  var textarea, buttons, url = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/i;
-  var protocol = /^[A-Z_a-z]+:\/\//;
+  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/i;
+  var protocol = /^\s*[A-Z_a-z]+:\/\//;
 
   // Replaces the selected text in a textarea with the given text optionally highlighting a subset
   // of the replacement text based on insets from the start and end of the replacement text.
@@ -397,6 +397,7 @@ function Youtubify( e )
         {
           text = "http://" + text;
         }
+        text = text.strip();
         replaceText(start + text + "]" + this.smpl + end, this.newl, start.length + text.length + 1, end.length);
       }
       else
@@ -445,7 +446,7 @@ function Youtubify( e )
 
       if (url.test(text) && !protocol.test(text))
       {
-        this.smpl = text;
+        this.smpl = text.strip();
         linkAltEdit.call(this);
       }
       else
