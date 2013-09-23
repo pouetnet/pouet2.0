@@ -435,6 +435,25 @@ class PouetBoxUserMain extends PouetBox
     echo "</ul>\n";
     echo "</div>\n";
 
+    if ($this->credits)
+    {
+      echo "<div class='contribheader'>contributions to prods";
+      echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
+      echo "</div>\n";
+      echo "<ul class='boxlist'>";
+      foreach($this->credits as $p)
+      {
+        echo "<li>";
+        echo $p->prod->RenderTypeIcons();
+        echo $p->prod->RenderPlatformIcons();
+        echo $p->prod->RenderSingleRow()." ";
+        echo $p->prod->RenderAwards();
+        echo " [".$p->role."]";
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
+
     if (!$_GET["show"] && $this->user->stats["ud"])
       echo "<div class='contribheader'>United Devices contribution <span>".$this->user->stats["ud"]." glöps</span></div>\n";
 
@@ -549,25 +568,6 @@ class PouetBoxUserMain extends PouetBox
         echo $p->RenderPlatformIcons();
         echo $p->RenderSingleRow();
         echo $p->RenderAwards();
-        echo "</li>";
-      }
-      echo "</ul>";
-    }
-
-    if ($this->credits)
-    {
-      echo "<div class='contribheader'>contributions to prods";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
-      echo "</div>\n";
-      echo "<ul class='boxlist'>";
-      foreach($this->credits as $p)
-      {
-        echo "<li>";
-        echo $p->prod->RenderTypeIcons();
-        echo $p->prod->RenderPlatformIcons();
-        echo $p->prod->RenderSingleRow()." ";
-        echo $p->prod->RenderAwards();
-        echo " [".$p->role."]";
         echo "</li>";
       }
       echo "</ul>";
