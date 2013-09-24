@@ -338,3 +338,196 @@ function Youtubify( e )
   });
 }
 
+
+
+
+
+(function ()
+{
+  "use strict"; // See http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/i;
+  var protocol = /^\s*[A-Z_a-z]+:\/\//;
+
+  // Replaces the selected text in a textarea with the given text optionally highlighting a subset
+  // of the replacement text based on insets from the start and end of the replacement text.
+  function replaceText (text, sinset, einset)
+  {
+    var start = textarea.selectionStart, end = textarea.selectionEnd;
+
+    textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+
+    if (typeof sinset === "number" && typeof einset === "number") {
+      textarea.setSelectionRange(start + sinset, start + text.length - einset);
+    }
+    else
+    {
+      textarea.setSelectionRange(start + text.length, start + text.length);
+    }
+    textarea.focus();
+  }
+
+  function getText ()
+  {
+    return textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+  }
+
+  // Puts proper bb-code around selected text and places the cursor after it,
+  // or inserts some bb-code-surrounded dummy text and selects the dummy text.
+  function simpleEdit ()
+  {
+    var text = getText(), start = this.code[0], end = this.code[1];
+
+    if (text) {
+      replaceText(start + text + end);
+    }
+    else {
+      replaceText(start + this.text + end, start.length, end.length);
+    }
+  }
+
+  function linkAltEdit ()
+  {
+    var text = getText(), start = "[url=", end = "[/url]";
+
+    if (text)
+    {
+      if (url.test(text))
+      {
+        if (!protocol.test(text))
+        {
+          text = "http://" + text;
+        }
+        text = text.strip();
+        replaceText(start + text + "]" + this.smpl + end, start.length + text.length + 1, end.length);
+      }
+      else
+      {
+        replaceText(start + this.text + "]" + text + end, start.length, end.length + text.length + 1);
+      }
+    }
+    else
+    {
+      text = start + this.text + "]" + this.smpl + end;
+      replaceText(text, start.length, 1 + this.smpl.length + end.length);
+    }
+  }
+
+  function listEdit ()
+  {
+    var text = getText(), start = this.code[0], end = this.code[1];
+
+    if (text)
+    {
+      text = start + text.replace(/(?:^|\n)([^\n]+)/g, "[*]$1\n") + end;
+      replaceText(text, text.length + 1, 0);
+    }
+    else
+    {
+      text = start + this.text + end;
+      replaceText(text, start.length + 3, end.length + 1);
+    }
+  }
+
+  buttons = [ {
+    name: "Bold",
+    code: [ "[b]", "[/b]" ],
+    text: "bold text"
+  }, {
+    name: "Italic",
+    code: [ "[i]", "[/i]" ],
+    text: "italic text"
+  }, {
+    name: "Link",
+    code: [ "[url]", "[/url]" ],
+    text: "http://example.com",
+    click: function ()
+    {
+      var text = getText();
+
+      if (url.test(text) && !protocol.test(text))
+      {
+        this.smpl = text.strip();
+        linkAltEdit.call(this);
+      }
+      else
+      {
+        simpleEdit.call(this);
+      }
+    }
+  }, {
+    "class": "link_alt",
+    name: "Link w/ text",
+    text: "http://example.com",
+    smpl: "linky",
+    click: linkAltEdit
+  }/*, {
+    name: "Email",
+    code: [ "[email]", "[/email]" ],
+    text: "example@example.com"
+  }*/, {
+    name: "Image",
+    code: [ "[img]", "[/img]" ],
+    text: "http://example.com/image.png"
+  }, {
+    name: "Quote",
+    code: [ "[quote]", "[/quote]" ],
+    text: "quoted text"
+  }, {
+    name: "Code",
+    code: [ "[code]", "[/code]" ],
+    text: "// code comment"
+  }, {
+    name: "Bullet list",
+    more: true,
+    code: [ "[list]\n", "[/list]" ],
+    text: "[*]list item\n",
+    click: listEdit
+  }, {
+    name: "Alpha list",
+    more: true,
+    code: [ "[list=A]\n", "[/list]" ],
+    text: "[*]A is for alligator\n",
+    click: listEdit
+  }, {
+    name: "Numbered list",
+    more: true,
+    code: [ "[list=1]\n", "[/list]" ],
+    text: "[*]list item\n",
+    click: listEdit
+  } ];
+
+  document.observe("dom:loaded", function ()
+  {
+    textarea = $$("#pouetbox_bbsopen textarea, #pouetbox_bbspost textarea, #pouetbox_prodpost textarea")[0];
+
+    // Require IE9+ and other supporting browsers.
+    if(!textarea || !("selectionStart" in textarea)) {
+      return;
+    }
+
+    var list = document.createElement("ul");
+    list.id = "pouet_bb_editor";
+
+    var sublist = document.createElement("ul");
+
+    buttons.each(function (button)
+    {
+      var li = document.createElement("li");
+      li.innerHTML = button.name;
+      li.onclick = function ()
+      {
+        (button.click || simpleEdit).call(button);
+      };
+
+      var parent = (button.more ? sublist : list);
+      parent.appendChild(li);
+      parent.appendChild(document.createTextNode(" "));
+    });
+
+    list.insertAdjacentHTML("beforeend", "<li>more...</li>");
+    list.lastChild.appendChild(sublist);
+
+    textarea.nextSibling.nextSibling.appendChild(list);
+  });
+}());
+
