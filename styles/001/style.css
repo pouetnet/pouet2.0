@@ -981,6 +981,48 @@ td.date {
   background: url("http://content.pouet.net/gfx/previewdxm.gif") top left no-repeat;
 }
 
+/* Styles for the bb-code "editor" buttons toolbar. */
+#pouet_bb_editor {
+  list-style-type: none;
+  display: inline;
+  margin-left: 1.25em;
+  padding: 0 3px;
+}
+
+#pouet_bb_editor > li {
+  display: inline;
+  position: relative;
+  padding: 0 3px;
+}
+
+#pouet_bb_editor li {
+  margin: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#pouet_bb_editor > li:last-child:hover ul {
+  display: block;
+}
+
+#pouet_bb_editor ul {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  padding-bottom: .5em;
+  background: #446688;
+  border: 1px solid black;
+  border-bottom: none;
+}
+
+#pouet_bb_editor ul li {
+  list-style-type: none;
+  padding: 0 1em;
+  white-space: nowrap;
+}
+/* end toolbar styles */
+
 .bbs_code, .bbs_quote {
 	margin-left: 2em;
 	margin-right: 2em;

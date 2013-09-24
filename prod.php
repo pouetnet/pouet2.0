@@ -249,12 +249,13 @@ class PouetBoxProdMain extends PouetBox {
     if ($this->prod->invitation)
     {
       $invitationParty = PouetParty::Spawn( $this->prod->invitation );
-      global $AFFILIATIONS_ORIGINAL;
-      global $AFFILIATIONS_INVERSE;
-      echo " <tr>\n";
-      echo "  <td>invitation for :</td>\n";
-      echo "  <td>".$invitationParty->PrintLinked($this->prod->invitationyear)."</td>\n";
-      echo " </tr>\n";
+      if ($invitationParty)
+      {
+        echo " <tr>\n";
+        echo "  <td>invitation for :</td>\n";
+        echo "  <td>".$invitationParty->PrintLinked($this->prod->invitationyear)."</td>\n";
+        echo " </tr>\n";
+      }
     }
     if ($this->board)
     {
