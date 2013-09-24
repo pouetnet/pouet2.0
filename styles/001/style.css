@@ -982,69 +982,43 @@ td.date {
 }
 
 /* Styles for the bb-code "editor" buttons toolbar. */
-#pouetbox_bbspost, #pouetbox_prodpost {
-  position: relative;
-}
-
-#pouetbox_bbspost ul, #pouetbox_prodpost ul {
+#pouet_bb_editor {
   list-style-type: none;
-  position: absolute;
-  left: 100%;
+  float: right;
   padding: 0 3px;
-  background: #f0f0f0;
-  border: 1px solid black;
-  border-left: none;
 }
 
-#pouetbox_bbspost li, #pouetbox_prodpost li {
-  width: 16px;
-  overflow: hidden;
-  text-indent: 100%;
+#pouet_bb_editor > li {
+  display: inline;
+  position: relative;
+  padding: 0 3px;
+}
+
+#pouet_bb_editor li {
+  margin: 0;
+  text-decoration: underline;
   cursor: pointer;
 }
 
-.bb_editor_bold {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-bold.png);
+#pouet_bb_editor > li:last-child:hover ul {
+  display: block;
 }
 
-.bb_editor_italic {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-italic.png);
+#pouet_bb_editor ul {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  padding-bottom: .5em;
+  background: #446688;
+  border: 1px solid black;
+  border-bottom: none;
 }
 
-.bb_editor_link {
-  background: url(http://content.pouet.net/gfx/bb_editor/chain.png);
-}
-
-.bb_editor_link_alt {
-  background: url(http://content.pouet.net/gfx/bb_editor/chain--pencil.png);
-}
-
-.bb_editor_email {
-  background: url(http://content.pouet.net/gfx/bb_editor/mail-at-sign.png);
-}
-
-.bb_editor_image {
-  background: url(http://content.pouet.net/gfx/bb_editor/image.png);
-}
-
-.bb_editor_quote {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-quotation.png);
-}
-
-.bb_editor_code {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-code.png);
-}
-
-.bb_editor_bulleted_list {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-list.png);
-}
-
-.bb_editor_alphabet_list {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-list-alphabetical.png);
-}
-
-.bb_editor_numbered_list {
-  background: url(http://content.pouet.net/gfx/bb_editor/edit-list-ordered.png);
+#pouet_bb_editor ul li {
+  list-style-type: none;
+  padding: 0 1em;
+  white-space: nowrap;
 }
 /* end toolbar styles */
 

@@ -398,17 +398,17 @@ function Youtubify( e )
           text = "http://" + text;
         }
         text = text.strip();
-        replaceText(start + text + "]" + this.smpl + end, this.newl, start.length + text.length + 1, end.length);
+        replaceText(start + text + "]" + this.smpl + end, start.length + text.length + 1, end.length);
       }
       else
       {
-        replaceText(start + this.text + "]" + text + end, this.newl, start.length, end.length + text.length + 1);
+        replaceText(start + this.text + "]" + text + end, start.length, end.length + text.length + 1);
       }
     }
     else
     {
       text = start + this.text + "]" + this.smpl + end;
-      replaceText(text, this.newl, start.length, 1 + this.smpl.length + end.length);
+      replaceText(text, start.length, 1 + this.smpl.length + end.length);
     }
   }
 
@@ -456,15 +456,15 @@ function Youtubify( e )
     }
   }, {
     "class": "link_alt",
-    name: "Link with alternate text",
+    name: "Link w/ text",
     text: "http://example.com",
     smpl: "linky",
     click: linkAltEdit
-  }, {
+  }/*, {
     name: "Email",
     code: [ "[email]", "[/email]" ],
     text: "example@example.com"
-  }, {
+  }*/, {
     name: "Image",
     code: [ "[img]", "[/img]" ],
     text: "http://example.com/image.png"
@@ -477,17 +477,20 @@ function Youtubify( e )
     code: [ "[code]", "[/code]" ],
     text: "// code comment"
   }, {
-    name: "Bulleted list",
+    name: "Bullet list",
+    more: true,
     code: [ "[list]\n", "[/list]" ],
     text: "[*]list item\n",
     click: listEdit
   }, {
-    name: "Alphabet list",
+    name: "Alpha list",
+    more: true,
     code: [ "[list=A]\n", "[/list]" ],
     text: "[*]A is for alligator\n",
     click: listEdit
   }, {
     name: "Numbered list",
+    more: true,
     code: [ "[list=1]\n", "[/list]" ],
     text: "[*]list item\n",
     click: listEdit
@@ -502,31 +505,29 @@ function Youtubify( e )
       return;
     }
 
-    var list, i, button, li, img, box = (window.pouetbox_bbsopen || window.pouetbox_bbspost || window.pouetbox_prodpost);
-    if (box)
+    var list = document.createElement("ul");
+    list.id = "pouet_bb_editor";
+
+    var sublist = document.createElement("ul");
+
+    buttons.each(function (button)
     {
-      list = document.createElement("ul");
-      list.style.top = textarea.offsetTop + "px";
-
-      for (i = 0; i < buttons.length; i++)
+      var li = document.createElement("li");
+      li.innerHTML = button.name;
+      li.onclick = function ()
       {
-        button = buttons[i];
-
-        li = document.createElement("li");
-        li.className = "bb_editor_" + (button["class"] || button.name.replace(/ /g, "_").toLowerCase());
-        li.title = button.name;
-        li.innerHTML = button.name;
-        li.onclick = function ()
-        {
-          (button.click || simpleEdit).call(button);
-        };
-
-        list.appendChild(li);
+        (button.click || simpleEdit).call(button);
       };
 
-      box.appendChild(list);
-      textarea.style.height = box.lastChild.offsetHeight + "px"; // purely aesthetics
-    }
+      var parent = (button.more ? sublist : list);
+      parent.appendChild(li);
+      parent.appendChild(document.createTextNode(" "));
+    });
+
+    list.insertAdjacentHTML("beforeend", "<li>more...</li>");
+    list.lastChild.appendChild(sublist);
+
+    textarea.nextSibling.nextSibling.appendChild(list);
   });
 }());
 
