@@ -984,7 +984,8 @@ td.date {
 /* Styles for the bb-code "editor" buttons toolbar. */
 #pouet_bb_editor {
   list-style-type: none;
-  float: right;
+  display: inline;
+  margin-left: 1.25em;
   padding: 0 3px;
 }
 
