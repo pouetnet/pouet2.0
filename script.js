@@ -331,6 +331,7 @@ function Youtubify( e )
           {
             var s = transport.responseJSON.entry.title.$t;
             item.update( s.escapeHTML() );
+            item.addClassName("youtube");
           }
         },
       });
@@ -340,7 +341,7 @@ function Youtubify( e )
 
 
 
-
+/* BBCODE helper script by AMcBain */
 
 (function ()
 {
