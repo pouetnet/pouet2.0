@@ -29,37 +29,37 @@ class PouetBoxUserMain extends PouetBox
     $this->cdcProds = $s->perform();
 
     $this->logos = array();
-    if (!$_GET["show"] || $_GET["show"]=="logos")
+    if ($_GET["show"]=="logos")
     {
       $this->logos = $this->GetLogosAdded( $_GET["show"]=="logos"? null : get_setting("userlogos") );
     }
 
     $this->prods = array();
-    if (!$_GET["show"] || $_GET["show"]=="prods")
+    if ($_GET["show"]=="prods")
     {
       $this->prods = $this->GetProdsAdded( $_GET["show"]=="prods"? null : get_setting("userprods") );
     }
 
     $this->groups = array();
-    if (!$_GET["show"] || $_GET["show"]=="groups")
+    if ($_GET["show"]=="groups")
     {
       $this->groups = $this->GetGroupsAdded( $_GET["show"]=="groups"? null : get_setting("usergroups") );
     }
 
     $this->parties = array();
-    if (!$_GET["show"] || $_GET["show"]=="parties")
+    if ($_GET["show"]=="parties")
     {
       $this->parties = $this->GetPartiesAdded( $_GET["show"]=="parties"? null : get_setting("userparties") );
     }
 
     $this->shots = array();
-    if (!$_GET["show"] || $_GET["show"]=="screenshots")
+    if ($_GET["show"]=="screenshots")
     {
       $this->shots = $this->GetScreenshotsAdded( $_GET["show"]=="screenshots"? null : get_setting("userscreenshots") );
     }
 
     $this->nfos = array();
-    if (!$_GET["show"] || $_GET["show"]=="nfos")
+    if ($_GET["show"]=="nfos")
     {
       $this->nfos = $this->GetNFOsAdded( $_GET["show"]=="nfos" ? null : get_setting("usernfos") );
     }
@@ -73,17 +73,17 @@ class PouetBoxUserMain extends PouetBox
     $this->firstComments = array();
     if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
     {
-      $this->firstComments = $this->GetFirstCommentsAdded( /*$_GET["show"]=="comments" ? null :*/ get_setting("usercomments") );
+      //$this->firstComments = $this->GetFirstCommentsAdded( /*$_GET["show"]=="comments" ? null :*/ get_setting("usercomments") );
     }
 
     $this->topics = array();
-    if (!$_GET["show"] || $_GET["show"]=="topics")
+    if ($_GET["show"]=="topics")
     {
       $this->topics = $this->GetBBSTopics( $_GET["show"]=="topics" ? null : get_setting("usercomments") );
     }
 
     $this->posts = array();
-    if (!$_GET["show"] || $_GET["show"]=="posts")
+    if ($_GET["show"]=="posts")
     {
       $this->posts = $this->GetBBSPosts( $_GET["show"]=="posts" ? null : get_setting("usercomments") );
     }
