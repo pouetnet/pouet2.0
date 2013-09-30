@@ -98,6 +98,7 @@ class PouetBoxProdPost extends PouetBox {
 
     @unlink("cache/pouetbox_latestcomments.cache");
     @unlink("cache/pouetbox_topmonth.cache");
+    @unlink("cache/pouetbox_stats.cache");
 
     return array();
   }
