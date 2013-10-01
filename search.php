@@ -580,7 +580,7 @@ if ($_GET["what"])
   if ($results)
   {
     $results->Load();
-    if (count($results->count) == 1)
+    if ($results->count == 1)
     {
       header("Location: " . $results->GetForwardURL());
       exit();
