@@ -1,6 +1,11 @@
 <footer>
-<a href="index.php">pouët.net</a> 2.0 &copy; 2000-<?=date("Y")?> <a href="groups.php?which=5">mandarine</a> - hosted on <a href="http://www.scene.org/">scene.org</a><br />
-send comments and bug reports to <a href="mailto:webmaster@pouet.net">webmaster@pouet.net</a><br />
+
+<a href="index.php">pouët.net</a> 2.0 &copy; 2000-<?=date("Y")?> <a href="groups.php?which=5">mandarine</a>
+- hosted on <a href="http://www.scene.org/">scene.org</a>
+- follow us on <a href="https://twitter.com/pouetdotnet">twitter</a><br />
+
+send comments and bug reports to <a href="mailto:webmaster@pouet.net">webmaster@pouet.net</a>
+or <a href="https://github.com/pouetnet/pouet2.0/">github</a><br />
 <?
 $timer["html"]["end"] = microtime_float();
 $timer["page"]["end"] = microtime_float();
