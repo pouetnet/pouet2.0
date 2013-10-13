@@ -393,6 +393,7 @@ document.observe("dom:loaded",function(){
     foreach($this->credits as $v)
     {
 //      $user = PouetUser::Spawn($k);
+      if (!$v->user) continue;
       echo "<li>";
       echo $v->user->PrintLinkedAvatar()." ";
       echo $v->user->PrintLinkedName();
