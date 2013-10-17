@@ -620,6 +620,12 @@ td.date {
 .ordinal {
   color: #CCCCCC;
 }
+
+#pouetbox_prodnfo.asciiviewer {
+    display: block;
+    max-width: 900px;
+}
+
 .asciiviewer .content {
     padding: 5px;
 }
@@ -637,6 +643,7 @@ td.date {
 
 .asciiviewer pre {
   text-shadow: 4px 4px #224466;
+  white-space: pre-wrap;
 }
 .asciiviewer pre::-moz-selection { text-shadow: none; background: white; color: #224466; }
 .asciiviewer pre::-webkit-selection { text-shadow: none; background: white; color: #224466; }
@@ -779,6 +786,7 @@ td.date {
   border: 0px;
 }
 #pouetbox_usermain {
+  max-width: 900px;
 }
 
 #pouetbox_usermain .content {
@@ -972,6 +980,48 @@ td.date {
 #pouetbox_bbspost #submitPreview {
   background: url("http://content.pouet.net/gfx/previewdxm.gif") top left no-repeat;
 }
+
+/* Styles for the bb-code "editor" buttons toolbar. */
+#pouet_bb_editor {
+  list-style-type: none;
+  display: inline;
+  margin-left: 1.25em;
+  padding: 0 3px;
+}
+
+#pouet_bb_editor > li {
+  display: inline;
+  position: relative;
+  padding: 0 3px;
+}
+
+#pouet_bb_editor li {
+  margin: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#pouet_bb_editor > li:last-child:hover ul {
+  display: block;
+}
+
+#pouet_bb_editor ul {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  padding-bottom: .5em;
+  background: #446688;
+  border: 1px solid black;
+  border-bottom: none;
+}
+
+#pouet_bb_editor ul li {
+  list-style-type: none;
+  padding: 0 1em;
+  white-space: nowrap;
+}
+/* end toolbar styles */
 
 .bbs_code, .bbs_quote {
 	margin-left: 2em;
@@ -1208,6 +1258,12 @@ tr.sortable th #sort_thumbdown {
 .formifier .row > span {
   font-style: italic;
   padding: 5px;
+}
+.formifier .infoAfter {
+  font-style: italic;
+  margin-left: 160px;
+  padding: 5px 5px 10px;
+  width: 400px;
 }
 .formifier .row > input {
   width: 250px;
@@ -1529,6 +1585,10 @@ input.autocompleteSearch {
   margin: 15px;
 }
 
+#avgstats li {
+  display: inline;
+}
+
 #credits ul {
   list-style: none;
   text-align: left;
@@ -1575,4 +1635,28 @@ input.autocompleteSearch {
 .autocompleteList li .glops
 {
   color: #9999AA;
+}
+
+#watchlistFrm {
+  display: inline;
+}
+#watchlistFrm input[type='submit']
+{
+  background: url("http://content.pouet.net/gfx/watchlist-on.png") top left no-repeat;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  text-indent: -90px;
+  border: 0px;
+  cursor: hand;
+  cursor: pointer;
+  color: transparent;
+}
+#watchlistFrm input[type='submit'].add
+{
+  background: url("http://content.pouet.net/gfx/watchlist-off.png");
+}
+#watchlistFrm input[type='submit'].remove
+{
+  background: url("http://content.pouet.net/gfx/watchlist-on.png");
 }

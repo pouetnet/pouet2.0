@@ -45,7 +45,7 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
 
   function LoadFromDB()
   {
-    $this->rssBitfellasNews = $this->rss->get('http://bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
+    $this->rssBitfellasNews = $this->rss->get('http://www.bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
   }
 
   function LoadFromCachedData($data) {
@@ -64,7 +64,7 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
   function Render()
   {
     if (!$this->rssBitfellasNews) {
-    	printf('Error: Unable to open BitFeed!');
+    	printf('Error: Unable to open BitFeed !');
     } else {
       $p = new PouetBoxNews();
       for($i=0; $i < $this->limit; $i++)

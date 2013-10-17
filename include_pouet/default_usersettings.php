@@ -45,6 +45,7 @@ $TEST = array(
    'displayimages' => 1,
    'indexbbsnoresidue' => 1,
    'prodcomments' => -1,
+   'indexwatchlist' => 5,
 );
 $DEFAULT_USERSETTINGS = new stdClass();
 foreach($TEST as $k=>$v) $DEFAULT_USERSETTINGS->$k = $v;

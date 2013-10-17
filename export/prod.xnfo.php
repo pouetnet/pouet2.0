@@ -42,7 +42,7 @@ foreach($rows as $row)
 foreach($prod->placings as $p)
 {
   $release = $xml->demo->addChild("release");
-  $release->addChild("party",$p->party->name)->addAttribute("url",$p->party->web);
+  $release->addChild("party",_html($p->party->name))->addAttribute("url",_html($p->party->web));
   $release->addChild("date",$p->year);
   $release->addChild("rank",$p->ranking);
   $release->addChild("compo",$p->compo);

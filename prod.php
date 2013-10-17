@@ -19,7 +19,7 @@ if ($_GET["post"]) // setting-independent post lookup
     {
       $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from comments, (SELECT @rowID:=0) as init where which = %d",$prodID);
       $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
-      redirect(sprintf("prod.php?which=%d&page=%d#c%d",$prodID,(int)($row->rowID / get_setting("prodcomments")) + 1,$_GET["post"]));
+      redirect(sprintf("prod.php?which=%d&page=%d#c%d",$prodID,(int)(($row->rowID - 1) / get_setting("prodcomments")) + 1,$_GET["post"]));
     }
     exit();
   }
@@ -249,12 +249,13 @@ class PouetBoxProdMain extends PouetBox {
     if ($this->prod->invitation)
     {
       $invitationParty = PouetParty::Spawn( $this->prod->invitation );
-      global $AFFILIATIONS_ORIGINAL;
-      global $AFFILIATIONS_INVERSE;
-      echo " <tr>\n";
-      echo "  <td>invitation for :</td>\n";
-      echo "  <td>".$invitationParty->PrintLinked($this->prod->invitationyear)."</td>\n";
-      echo " </tr>\n";
+      if ($invitationParty)
+      {
+        echo " <tr>\n";
+        echo "  <td>invitation for :</td>\n";
+        echo "  <td>".$invitationParty->PrintLinked($this->prod->invitationyear)."</td>\n";
+        echo " </tr>\n";
+      }
     }
     if ($this->board)
     {
@@ -306,14 +307,68 @@ class PouetBoxProdMain extends PouetBox {
     $p = "isok";
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
-    echo "<img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />&nbsp;".sprintf("%.2f",$this->prod->voteavg)."\n";
+    echo "<ul id='avgstats'>";
+    echo "<li><img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />&nbsp;".sprintf("%.2f",$this->prod->voteavg)."</li>\n";
     $cdcs = count($this->userCDCs);
     if ($this->isPouetCDC) $cdcs++;
     if ($cdcs)
     {
-      echo "<img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."\n";
+      echo "<li><img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."</li>\n";
     }
-    printf("<div id='alltimerank'>alltime top: #%s</div>",$this->prod->rank ? (int)$this->prod->rank : "n/a");
+    
+    global $currentUser;
+    if ($currentUser)
+    {
+      echo "<li>";
+      echo "<form action='prod.php?which=".$this->prod->id."' method='post' id='watchlistFrm'>";
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+      
+      $row = SQLLib::SelectRow(sprintf_esc("select * from watchlist where prodID = %d and userID = %d",$this->prod->id,$currentUser->id));
+      if ($row)
+      {
+        echo "<input type='hidden' name='wlAction' value='removeFromWatchlist'>";
+        echo "<input type='submit' value='remove from watchlist' class='remove'/>";
+      }
+      else
+      {
+        echo "<input type='hidden' name='wlAction' value='addToWatchlist'>";
+        echo "<input type='submit' value='add to watchlist' class='add'/>";
+      }
+      echo "</form>";
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $("watchlistFrm").observe("submit",function(e){
+    e.stop();
+    var opt = Form.serializeElements( $("watchlistFrm").select("input"), {hash:true} );
+    opt["partial"] = true;
+    new Ajax.Request( $("watchlistFrm").action, {
+      method: "post",
+      parameters: opt,
+      onSuccess: function(transport) {
+        if (transport.responseText.length)
+        {
+          fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
+          $("watchlistFrm").update( transport.responseText );
+        }
+        else
+        {
+          fireErrorOverlay();
+        }
+      }
+    });
+  });
+});
+//-->
+</script>
+<?
+      echo "</li>\n";
+    }
+    
+    echo "</ul>";
+    printf("<div id='alltimerank'>alltime top: %s</div>",$this->prod->rank ? "#".(int)$this->prod->rank : "n/a");
   }
   function RenderThumbs() {
     echo "<ul>\n";
@@ -338,6 +393,7 @@ class PouetBoxProdMain extends PouetBox {
     foreach($this->credits as $v)
     {
 //      $user = PouetUser::Spawn($k);
+      if (!$v->user) continue;
       echo "<li>";
       echo $v->user->PrintLinkedAvatar()." ";
       echo $v->user->PrintLinkedName();
@@ -366,7 +422,17 @@ class PouetBoxProdMain extends PouetBox {
     }
     if (file_exists(get_local_nfo_path($this->id)))
     {
-      printf("[<a href='prod_nfo.php?which=%d'>nfo</a>]\n",$this->id);
+      $isAmiga = false;
+      foreach($this->prod->platforms as $v)
+      {
+        global $PLATFORMS;
+        if (stristr($PLATFORMS[$v]["name"],"amiga")!==false)
+          $isAmiga = true;
+      }
+      if ($isAmiga)
+        printf("[<a href='prod_nfo.php?which=%d&amp;font=4'>nfo</a>]\n",$this->id);
+      else
+        printf("[<a href='prod_nfo.php?which=%d'>nfo</a>]\n",$this->id);
     }
     else if ($currentUser && $currentUser->CanSubmitItems())
     {
@@ -583,6 +649,38 @@ $main = new PouetBoxProdMain($prodid);
 $main->Load();
 if ($main->prod)
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+
+$csrf = new CSRFProtect();
+if ($_POST["wlAction"] && $currentUser)
+{
+  if (!$csrf->ValidateToken())
+    exit();
+  
+  if ($_POST["wlAction"]=="removeFromWatchlist")
+  {
+    SQLLib::Query(sprintf_esc("delete from watchlist where prodID = %d and userID = %d",$prodid,$currentUser->id));
+  }
+  else if ($_POST["wlAction"]=="addToWatchlist")
+  {
+    $a = array("prodID"=>$prodid,"userID"=>$currentUser->id);
+    SQLLib::InsertRow("watchlist",$a);
+  }
+  if ($_POST["partial"])
+  {
+    $csrf->PrintToken();
+    if ($_POST["wlAction"]=="addToWatchlist")
+    {
+      echo "<input type='hidden' name='wlAction' value='removeFromWatchlist'>";
+      echo "<input type='submit' value='remove from watchlist' class='remove'/>";
+    }
+    else if ($_POST["wlAction"]=="removeFromWatchlist")
+    {
+      echo "<input type='hidden' name='wlAction' value='addToWatchlist'>";
+      echo "<input type='submit' value='add to watchlist' class='add'/>";
+    }
+    exit();
+  }
+}
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");

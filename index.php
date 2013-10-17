@@ -3,6 +3,7 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/box-login.php");
 require_once("include_pouet/box-index-bbs-latest.php");
 require_once("include_pouet/box-index-cdc.php");
+require_once("include_pouet/box-index-watchlist.php");
 require_once("include_pouet/box-index-latestadded.php");
 require_once("include_pouet/box-index-latestreleased.php");
 require_once("include_pouet/box-index-latestcomments.php");
@@ -41,6 +42,7 @@ $boxes = array(
     array("box"=>"Stats"          ,"limit"=>get_setting("indexstats")),
     array("box"=>"AffilButton"    ,"limit"=>get_setting("indexlinks")),
     array("box"=>"LatestComments" ,"limit"=>get_setting("indexlatestcomments")),
+    array("box"=>"Watchlist"      ,"limit"=>get_setting("indexwatchlist"),"loggedInOnly"=>true),
     array("box"=>"LatestParties"  ,"limit"=>get_setting("indexlatestparties")),
     array("box"=>"UpcomingParties"),
     array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")),
@@ -56,6 +58,8 @@ foreach($boxes as $bar=>$boxlist)
   foreach($boxlist as $box)
   {
     if (isset($box["limit"]) && (int)$box["limit"]==0)
+      continue;
+    if ($box["loggedInOnly"] && !$currentUser)
       continue;
     $class = "PouetBox".$box["box"];
     $p = new $class();

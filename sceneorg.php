@@ -44,6 +44,7 @@ class PouetBoxSceneOrgAwards extends PouetBox {
         echo "<tr id='".str_replace(" ","",$lastYear.$lastCategory)."'><th colspan='3' class='category'>".$lastCategory."</th></tr>\n";
       }
       $p = $row->prod;
+      if (!$p) continue;
       echo "<tr>\n";
       echo "<td>\n";
       echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";

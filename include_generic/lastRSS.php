@@ -68,7 +68,7 @@ class lastRSS {
 				$result = $this->Parse($rss_url);
 				if (!$result || $result['items_count']<1) {
 				  // new version unreachable, still use cache!
-  				$result = unserialize(join('', file($cache_file)));
+  				$result = unserialize(@join('', @file($cache_file)));
   				// set 'cached' to 1 only if cached file is correct
   				if ($result) $result['cached'] = 1;
 				} else {
@@ -139,12 +139,15 @@ class lastRSS {
 	// -------------------------------------------------------------------
 	function Parse ($rss_url) {
 		// Open and load RSS file
-		if ($f = @fopen($rss_url, 'r')) {
+		$rss_content = sideload( $rss_url, array("connectTimeout"=>5) );
+		if ($rss_content) {
+		  /*
 			$rss_content = '';
 			while (!feof($f)) {
 				$rss_content .= fgets($f, 4096);
 			}
 			fclose($f);
+			*/
 
 			//debuglog(var_export($rss_content,true));
 

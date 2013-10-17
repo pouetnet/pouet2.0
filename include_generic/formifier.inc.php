@@ -29,12 +29,12 @@ class Formifier {
             list($year,$month,) = sscanf($v["value"],"%d-%d-%d");
           }
           echo "    <div class='formdate'>\n";
-          echo "    <select name='".$k."_month' id='".$k."_month'/>\n";
+          echo "    <select name='".$k."_month' id='".$k."_month'>\n";
           echo "      <option></option>\n";
           for($x=1; $x<=12; $x++)
             echo "      <option value='".$x."'".($month==$x?" selected='selected'":"").">".date("F",mktime(0,0,0,$x,15))."</option>\n";
           echo "    </select>\n";
-          echo "    <select name='".$k."_year' id='".$k."_year'/>\n";
+          echo "    <select name='".$k."_year' id='".$k."_year'>\n";
           echo "      <option></option>\n";
           for($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--)
             echo "      <option".($year==$x?" selected='selected'":"").">".$x."</option>\n";
@@ -43,7 +43,7 @@ class Formifier {
           break;
         case "avatar":
           echo "    <div id='avatarlist'>\n";
-          echo "    <select name='".$k."' id='".$k."'/>\n";
+          echo "    <select name='".$k."' id='".$k."'>\n";
           global $avatars;
           if (!$v["value"])
             $v["value"] = basename( $avatars[ array_rand($avatars) ] );
@@ -56,7 +56,7 @@ class Formifier {
           echo "    </div>\n";
           break;
         case "select":
-          echo "    <select name='".$k.($v["multiple"]?"[]":"")."' id='".$k."'".($v["multiple"]?" multiple='multiple'":"")."/>\n";
+          echo "    <select name='".$k.($v["multiple"]?"[]":"")."' id='".$k."'".($v["multiple"]?" multiple='multiple'":"").">\n";
           foreach($v["fields"] as $k=>$f)
           {
             $sel = "";
@@ -96,9 +96,15 @@ class Formifier {
         case "number":
           echo "    <input type='number'";
           if (isset($v["min"]))
+          {
             echo " min='"._html((int)$v["min"])."'";
+            $v["value"] = max((int)$v["value"],(int)$v["min"]);
+          }
           if (isset($v["max"]))
+          {
             echo " max='"._html((int)$v["max"])."'";
+            $v["value"] = min((int)$v["value"],(int)$v["max"]);
+          }
           echo " name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
         case "url":
@@ -117,6 +123,8 @@ class Formifier {
       if ($v["info"])
         echo "    <span>"._html($v["info"]).($v["required"]?" [<span class='req'>req</span>]":"")."</span>\n";
       echo "  </div>\n";
+      if ($v["infoAfter"])
+        echo "    <p class='infoAfter'>"._html($v["infoAfter"])."</p>\n";
     }
     echo "  </div>\n";
   }

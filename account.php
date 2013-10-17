@@ -1,6 +1,7 @@
 <?
 require_once("bootstrap.inc.php");
 require_once("include_generic/recaptchalib.php");
+require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/default_usersettings.php");
 
@@ -20,6 +21,7 @@ $namesNumeric = array(
   "indexlatestcomments" => "front page - latest comments",
   "indexlatestparties" => "front page - latest parties",
   "indexbbstopics" => "front page - bbs topics",
+  "indexwatchlist" => "front page - watchlist",
   "bbsbbstopics" => "bbs page - bbs topics",
   "prodlistprods" => "prodlist page - prods",
   "userlistusers" => "userlist page - users",
@@ -67,6 +69,7 @@ class PouetBoxAccount extends PouetBox
 
   function LoadFromDB()
   {
+    global $COUNTRIES;
     $this->cdcs = array();
     if (get_login_id())
     {
@@ -83,7 +86,7 @@ class PouetBoxAccount extends PouetBox
       $this->user = reset( $s );
 
       $this->sceneID = $this->user->GetSceneIDData( false );
-
+      
       $rows = SQLLib::SelectRows(sprintf_esc("select cdc from users_cdcs where user=%d",get_login_id()));
       foreach($rows as $r)
         $this->cdcs[] = $r->cdc;
@@ -123,6 +126,14 @@ class PouetBoxAccount extends PouetBox
         "type"=>"url",
         "name"=>"website url",
         "value"=> $this->sceneID["url"],
+      ),
+      "country"=>array(
+        "info"=>"where your parties at",
+        "type"=>"select",
+        "name"=>"country",
+        "assoc"=>true,
+        "fields"=>$COUNTRIES,
+        "value"=> $this->sceneID["countryTLD"] ? $this->sceneID["countryTLD"] : strtoupper(substr(gethostbyaddr($_SERVER["REMOTE_ADDR"]),-2)),
       ),
       "captcha"=>array(
         "info"=>"real sceners are proficient in the skill of reading letters",
@@ -284,6 +295,7 @@ class PouetBoxAccount extends PouetBox
     $params["firstname"] = $data["firstname"];
     $params["lastname"] = $data["lastname"];
     $params["url"] = $data["url"];
+    $params["country"] = $data["country"];
 
     if (strstr($data["email"],"@")===false)
       $errors[] = "invalid email";
@@ -448,6 +460,7 @@ class PouetBoxAccount extends PouetBox
       "nickname" => $data["nickname"],
       "email" => $data["email"],
       "url" => $data["url"],
+      "country" => $data["country"],
       "password" => ($data["password"]),
       "password2" => ($data["password2"]),
       "ip" => $_SERVER["REMOTE_ADDR"],

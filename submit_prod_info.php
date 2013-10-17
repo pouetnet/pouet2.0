@@ -89,8 +89,12 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 
     if ($this->fields["releaseDate"])
     {
-      if ($data["releaseDate_month"] && $data["releaseDate_year"])
+      if ($data["releaseDate_month"] && $data["releaseDate_year"] && checkdate( (int)$data["releaseDate_month"], 15, (int)$data["releaseDate_year"]) )
         $sql["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
+      else if ($data["releaseDate_year"])
+        $sql["date"] = sprintf("%04d-00-15",$data["releaseDate_year"]);
+      else
+        $sql["date"] = null;
     }
 
     if ($this->fields["partyCompo"])
