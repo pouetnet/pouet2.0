@@ -13,6 +13,12 @@ body {
   margin: 0px;
   padding: 0px;
 }
+#content {
+  display: block;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
 #pouetbox_bbsview {
   display: block;
   width: 100%;
@@ -20,4 +26,7 @@ body {
 }
 #logo {
   display: none;
+}
+#screenshot img {
+  max-width: 300px;
 }

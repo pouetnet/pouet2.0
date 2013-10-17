@@ -353,7 +353,7 @@ class PouetBoxProdMain extends PouetBox {
     $timer[$this->uniqueID." render"]["start"] = microtime_float();
 
     echo "<table id='pouetbox_prodmain'>\n";
-    echo "<tr>\n";
+    echo "<tr id='prodheader'>\n";
     echo "<th colspan='3'>\n";
     echo " <span id='title'><big>"._html($this->prod->name)."</big>";
     if ($this->prod->groups)
@@ -616,6 +616,26 @@ if ($main->prod)
 
   $p = new PouetBoxProdPost($prodid);
   $p->Render();
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  var isMobile = screen.width <= 480;
+  
+  if (isMobile)
+  {
+    var data = $("screenshot").innerHTML;
+    $("screenshot").remove();
+    
+    var td = new Element("td",{"colspan":2,"id":"screenshot"}); td.update(data);
+    var tr = new Element("tr"); tr.insert(td);
+    
+    $("prodheader").parentNode.insertBefore( tr, $("prodheader").nextSibling);
+  }
+});
+//-->
+</script>
+<?  
 }
 else
 {
