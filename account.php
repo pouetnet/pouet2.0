@@ -5,6 +5,8 @@ require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/default_usersettings.php");
 
+$COUNTRIES = array_merge(array(""),$COUNTRIES);
+
 $avatars = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
 
 $success = null;
