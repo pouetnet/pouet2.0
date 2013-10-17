@@ -26,6 +26,8 @@ class PouetBoxSubmitProd extends PouetBox
 
     $this->years = array("");
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
+    $this->yearsFuture = array("");
+    for ($x=date("Y")+2; $x>=POUET_EARLIEST_YEAR; $x--) $this->yearsFuture[$x] = $x;
   }
 
   function Validate( $data )
@@ -347,7 +349,7 @@ class PouetBoxSubmitProd extends PouetBox
       "invitationYear"=>array(
         "name"=>"invitation year",
         "type"=>"select",
-        "fields"=>$this->years,
+        "fields"=>$this->yearsFuture,
       ),
       "boardID"=>array(
         "name"=>"bbs affiliation",
