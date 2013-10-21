@@ -290,7 +290,10 @@ class PouetBoxSubmitProd extends PouetBox
       "download"=>array(
         "type"=>"url",
         "name"=>"download url",
-        "infoAfter"=>"this has to be a link to a downloadable file, not to a website or a video version ! one-click hosting sites will be dealt with extreme prejudice - if it's not a direct link to the file on the first click, it will get deleted ! (scene.org links are an exception)",
+        "infoAfter"=>"this has to be a link to a downloadable file, not to a website or a video version !".
+        	" ad-ridden \"one-click\" hosting links will be dealt with extreme prejudice -".
+        	" if it's not a direct link to the file on the first click, it will get deleted !".
+        	" (scene.org links are an exception)",
         "info"=>" ",
         "required"=>true,
       ),
