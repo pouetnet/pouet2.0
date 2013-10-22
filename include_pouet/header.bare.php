@@ -13,7 +13,7 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="alternate" href="export/lastprodsadded.rss.php" type="application/rss+xml" title="pouët.net: last prods added">
   <link rel="alternate" href="export/lastbbsposts.rss.php" type="application/rss+xml" title="pouët.net: last bbs posts">
 
-  <link rel="stylesheet" type="text/css" href="styles/001/style.css?<?=filemtime("styles/001/style.css")?>" media="screen" />
+  <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime("styles/001/style.css")?>" media="screen" />
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
   <script type="text/javascript" src="./jsonp.js"></script>
