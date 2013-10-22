@@ -26,6 +26,8 @@ class PouetBoxSubmitProd extends PouetBox
 
     $this->years = array("");
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
+    $this->yearsFuture = array("");
+    for ($x=date("Y")+2; $x>=POUET_EARLIEST_YEAR; $x--) $this->yearsFuture[$x] = $x;
   }
 
   function Validate( $data )
@@ -288,7 +290,10 @@ class PouetBoxSubmitProd extends PouetBox
       "download"=>array(
         "type"=>"url",
         "name"=>"download url",
-        "infoAfter"=>"this has to be a link to a downloadable file, not to a website or a video version ! if it's not downloadable, it will get deleted ! (scene.org links are an exception)",
+        "infoAfter"=>"this has to be a link to a downloadable file, not to a website or a video version !".
+        	" ad-ridden \"one-click\" hosting links will be dealt with extreme prejudice -".
+        	" if it's not a direct link to the file on the first click, it will get deleted !".
+        	" (scene.org links are an exception)",
         "info"=>" ",
         "required"=>true,
       ),
@@ -347,7 +352,7 @@ class PouetBoxSubmitProd extends PouetBox
       "invitationYear"=>array(
         "name"=>"invitation year",
         "type"=>"select",
-        "fields"=>$this->years,
+        "fields"=>$this->yearsFuture,
       ),
       "boardID"=>array(
         "name"=>"bbs affiliation",

@@ -12,7 +12,7 @@ class PouetBoxLogoVote extends PouetBox {
   }
 
   function RenderContent() {
-    echo "<img src=".POUET_CONTENT_URL."gfx/logos/"._html($this->logo->file)." alt='logo'/>";
+    echo "<img src=".POUET_CONTENT_URL."logos/"._html($this->logo->file)." alt='logo'/>";
 	}
   function RenderFooter() {
     echo "  <div class='foot'>";

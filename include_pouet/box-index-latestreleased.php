@@ -51,7 +51,7 @@ class PouetBoxLatestReleased extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='prodlist.php?order=added'>more</a>...</div>\n";
+    echo "  <div class='foot'><a href='prodlist.php?order=release'>more</a>...</div>\n";
     echo "</div>\n";
   }
 };

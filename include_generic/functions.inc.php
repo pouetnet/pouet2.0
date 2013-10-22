@@ -178,7 +178,7 @@ function selfPath()
 }
 function rootRelativePath()
 {
-  $path = (substr(POUET_ROOT_URL,0,4) == "https") ? "https://" : "http://";
+  $path = (substr(POUET_ROOT_URL,0,5) == "https") ? "https://" : "http://";
   $path .= $_SERVER["HTTP_HOST"];
   $path .= $_SERVER["REQUEST_URI"];
   return substr($path,strlen(POUET_ROOT_URL));
