@@ -446,7 +446,7 @@ class PouetBoxUserMain extends PouetBox
       {
         echo "<li>";
         echo "<div class='logo'>";
-        echo "<img src='".POUET_CONTENT_URL."gfx/logos/"._html($l->file)."' alt=''/>";
+        echo "<img src='".POUET_CONTENT_URL."logos/"._html($l->file)."' alt=''/>";
         echo "<span class='logovotes'>current votes: "._html($l->vote_count)."</span>";
         echo "</div>";
         echo "</li>";

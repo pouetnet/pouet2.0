@@ -23,7 +23,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
   }
 
   function RenderContent() {
-    echo "<a href='"._html($this->data->url)."'><img src='".POUET_CONTENT_URL."/gfx/buttons/".$this->data->img."' title='"._html($this->data->alt)."' alt='"._html($this->data->alt)."'/></a>";
+    echo "<a href='"._html($this->data->url)."'><img src='".POUET_CONTENT_URL."/buttons/".$this->data->img."' title='"._html($this->data->alt)."' alt='"._html($this->data->alt)."'/></a>";
   }
 
   function RenderFooter() {

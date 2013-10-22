@@ -31,7 +31,7 @@ class PouetBoxButtons extends PouetBox {
         echo "<ul>\n";
         $type = $b->type;
       }
-      echo "  <li><a href='"._html($b->url)."'><img src='".POUET_CONTENT_URL."/gfx/buttons/".$b->img."' title='"._html($b->alt)."' alt='"._html($b->alt)."'/></a></li>\n";
+      echo "  <li><a href='"._html($b->url)."'><img src='".POUET_CONTENT_URL."/buttons/".$b->img."' title='"._html($b->alt)."' alt='"._html($b->alt)."'/></a></li>\n";
     }
     echo "</ul>\n";
     echo "</div>\n";
