@@ -1,4 +1,7 @@
 <?
+if ($_GET["forceDesktop"]==1) $_COOKIE["noMobile"] = 1;
+if ($_GET["enableMobile"]==1) $_COOKIE["noMobile"] = 0;
+
 header("Content-type: text/html; charset=utf-8");
 ?>
 <!DOCTYPE html>
@@ -14,16 +17,22 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="alternate" href="export/lastbbsposts.rss.php" type="application/rss+xml" title="pouët.net: last bbs posts">
 
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
-  <?if ($currentUser && $currentUser->IsAdministrator()){?>
+  <?if (!$_COOKIE["noMobile"] && (POUET_TEST || ($currentUser && $currentUser->IsAdministrator()))) {?>
   <link rel="stylesheet" media="only screen and (max-device-width: 480px) and (min-device-width: 320px)" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
-  
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
   <?}?>
 
+  <script type="text/javascript">
+  <!--
+    var Pouet = {};
+    Pouet.isMobile = <?=$_COOKIE["noMobile"]?"false":"true"?> && (screen.width <= 480);
+  //-->
+  </script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
   <script type="text/javascript" src="./jsonp.js"></script>
   <script type="text/javascript" src="./autocompleter.js"></script>
   <script type="text/javascript" src="./script.js"></script>
+  
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="description" content="pouët.net - your online demoscene resource"/>

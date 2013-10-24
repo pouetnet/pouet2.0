@@ -718,9 +718,7 @@ if ($main->prod)
 <script type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
-  var isMobile = screen.width <= 480;
-  
-  if (isMobile)
+  if (Pouet.isMobile)
   {
     var data = $("screenshot").innerHTML;
     $("screenshot").remove();
