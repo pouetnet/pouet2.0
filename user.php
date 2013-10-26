@@ -220,7 +220,7 @@ class PouetBoxUserMain extends PouetBox
   function GetNFOsAdded( $limit = null )
   {
     $s = new BM_Query("prods");
-    $s->AddOrder("nfos.added.desc");
+    $s->AddOrder("nfos.added desc");
     $s->AddJoin("left","nfos","prods.id = nfos.prod");
     $s->AddWhere(sprintf("nfos.user = %d",$this->id));
     if ($limit)
