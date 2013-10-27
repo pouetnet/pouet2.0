@@ -221,21 +221,21 @@ function sideload( $url, $options = array() )
   return $html;
 } 
 
-function validateDownloadLink( $url )
+function validateLink( $url )
 {
   $errormessage = array();
   
   if(!$url)
   {
-	  $errormessage[]="no download link?!";
+	  $errormessage[]="no link?!";
 	  return $errormessage;
 	}
 
   $myurl=parse_url($url);
-  if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-    $errormessage[] = "only http/https and ftp protocols are supported for the download link";
+
   if(strlen($myurl["host"])==0)
     $errormessage[] = "missing hostname in the download link";
+
   if(strstr($myurl["host"],"back2roots"))
     $errormessage[] = "back2roots does not allow download from outside, find another host please";
   if(strstr($myurl["host"],"intro-inferno"))
@@ -263,6 +263,28 @@ function validateDownloadLink( $url )
     if(strstr($myurl["host"],$v))
       $errormessage[] = "seriously, get better hosting";
 
+  if(strstr($myurl["path"],"incoming"))
+    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
+  if(strstr($myurl["host"],"scene.org") && strstr($myurl["query"],"incoming"))
+    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
+  if( ((($myurl["port"])!=80) && (($myurl["port"])!=0)) && ((strlen($myurl["user"])>0) || (strlen($myurl["pass"])>0)) )
+    $errormessage[] = "no private FTP please";
+
+  return $errormessage;
+}
+function validateDownloadLink( $url )
+{
+  if(!$url)
+  {
+	  return array("no download link?!");
+	}
+
+  $errormessage = validateLink( $url );
+  
+  $myurl=parse_url($url);
+  if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
+    $errormessage[] = "only http/https and ftp protocols are supported for the download link";
+
   if(strstr($myurl["host"],"youtube") || strstr($myurl["host"],"youtu.be"))
     $errormessage[] = "FUCK YOUTUBE - BINARY OR GTFO";
 
@@ -283,12 +305,6 @@ function validateDownloadLink( $url )
     if(strstr($myurl["host"],"www.untergrund.net"))
      $errormessage[] = "scamp says: godverdom!! link to ftp.untergrund.net instead!";
   }
-  if(strstr($myurl["path"],"incoming"))
-    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
-  if(strstr($myurl["host"],"scene.org") && strstr($myurl["query"],"incoming"))
-    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
-  if( ((($myurl["port"])!=80) && (($myurl["port"])!=0)) && ((strlen($myurl["user"])>0) || (strlen($myurl["pass"])>0)) )
-    $errormessage[] = "no private FTP please";
   if(!basename($myurl["path"]))
     $errormessage[] = "no file? no prod!";
     
