@@ -19,7 +19,7 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
   <?if (!$_COOKIE["noMobile"] && (POUET_TEST || ($currentUser && $currentUser->IsAdministrator()))) {?>
   <link rel="stylesheet" media="only screen and (max-device-width: 480px) and (min-device-width: 320px)" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
-  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
   <?}?>
 
   <script type="text/javascript">
