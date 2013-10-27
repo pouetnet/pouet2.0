@@ -79,36 +79,7 @@ echo "</div>\n";
 document.observe("dom:loaded",function(){
   if (Pouet.isMobile)
   {
-    $$(".pouettbl").each(function(box){
-      if (!box.down("h2,h3"))
-        return;
-      
-      var header = box.down("h2,h3");
-      var elements = header.nextSiblings();
-      
-      var container = new Element("div",{"class":"collapseContainer"});
-      
-      elements.each(function(i){ container.insert(i); });
-      
-      container.hide();
-      box.insert(container);
-      
-      var toggle = new Element("span",{"class":"collapseToggle"}).update("show");
-      header.insert( toggle );
-      
-      header.observe("click",function(){
-        if (toggle.innerHTML == "show")
-        {
-          toggle.update("hide");
-          container.show();
-        }
-        else
-        {
-          toggle.update("show");
-          container.hide();
-        }
-      });      
-    });
+    collapsibleHeaders( $$(".pouettbl") );
   }
 });
 //-->
