@@ -46,11 +46,9 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {
-    $myurl = parse_url($input["newLink"]);
-    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-      return array("only http/https and ftp protocols are supported for links");
-    if($myurl["host"]=="")
-      return array("something went really wrong with the url");
+    $errors = validateLink($input["newLink"]);
+    if ($errors)
+      return $errors;
       
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
@@ -128,18 +126,16 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {     
+    $errors = validateLink($input["newLink"]);
+    if ($errors)
+      return $errors;
+
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"]));
     if (!$row)
       return array("nice try :|");
 
     if (strcasecmp($row->link,$input["newLink"])===0 && strcasecmp($row->type,$input["newLinkKey"])===0)
       return array("you didn't change anything :|");
-
-    $myurl = parse_url($input["newLink"]);
-    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-      return array("only http/https and ftp protocols are supported for links");
-    if($myurl["host"]=="")
-      return array("something went really wrong with the url");
 
     $output["linkID"] = $input["linkID"];
     $output["newLink"] = $input["newLink"];
@@ -547,6 +543,10 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {     
+    $errors = validateDownloadLink($input["downloadLink"]);
+    if ($errors)
+      return $errors;
+
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
     if (!$prod)
       return array("nice try :|");
