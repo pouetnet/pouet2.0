@@ -1,6 +1,6 @@
 <?
-if ($_GET["forceDesktop"]==1) $_COOKIE["noMobile"] = 1;
-if ($_GET["enableMobile"]==1) $_COOKIE["noMobile"] = 0;
+if ($_GET["forceDesktop"]==1) setcookie("noMobile",1);
+if ($_GET["enableMobile"]==1) setcookie("noMobile",0);
 
 header("Content-type: text/html; charset=utf-8");
 ?>
