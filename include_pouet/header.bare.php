@@ -17,14 +17,20 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="alternate" href="export/lastbbsposts.rss.php" type="application/rss+xml" title="pouët.net: last bbs posts">
 
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
-  <?if (!$_COOKIE["noMobile"] && (POUET_TEST || ($currentUser && $currentUser->IsAdministrator()))) {?>
+  <?if ( !$_COOKIE["noMobile"] ) {?>
   <link rel="stylesheet" media="only screen and (max-device-width: 480px) and (min-device-width: 320px)" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
   <?}?>
 
   <script type="text/javascript">
   <!--
-    var pixelWidth = screen.width * (window.devicePixelRatio ? window.devicePixelRatio : 1);
+    var pixelWidth = screen.width;
+/*
+    if ( navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/iPad/i) )
+      pixelWidth *= (window.devicePixelRatio ? window.devicePixelRatio : 1);
+*/
     var Pouet = {};
     Pouet.isMobile = <?=$_COOKIE["noMobile"]?"false":"true"?> && (pixelWidth <= 480);
   //-->
