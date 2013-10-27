@@ -24,8 +24,9 @@ header("Content-type: text/html; charset=utf-8");
 
   <script type="text/javascript">
   <!--
+    var pixelWidth = screen.width * (window.devicePixelRatio ? window.devicePixelRatio : 1);
     var Pouet = {};
-    Pouet.isMobile = <?=$_COOKIE["noMobile"]?"false":"true"?> && (screen.width <= 480);
+    Pouet.isMobile = <?=$_COOKIE["noMobile"]?"false":"true"?> && (pixelWidth <= 480);
   //-->
   </script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
