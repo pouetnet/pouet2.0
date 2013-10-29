@@ -79,7 +79,7 @@ echo "</div>\n";
 document.observe("dom:loaded",function(){
   if (Pouet.isMobile)
   {
-    collapsibleHeaders( $$(".pouettbl") );
+    CollapsibleHeaders( $$(".pouettbl") );
   }
 });
 //-->

@@ -37,6 +37,7 @@ header("Content-type: text/html; charset=utf-8");
   </script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
   <script type="text/javascript" src="./jsonp.js"></script>
+  <script type="text/javascript" src="./cookie.js"></script>
   <script type="text/javascript" src="./autocompleter.js"></script>
   <script type="text/javascript" src="./script.js"></script>
   

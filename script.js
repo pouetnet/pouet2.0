@@ -532,7 +532,7 @@ function Youtubify( e )
   });
 }());
 
-function collapsibleHeaders( elements )
+function CollapsibleHeaders( elements )
 {
   elements.each(function(box){
     if (!box.down("h2,h3"))
@@ -545,22 +545,36 @@ function collapsibleHeaders( elements )
     
     elements.each(function(i){ container.insert(i); });
     
-    container.hide();
     box.insert(container);
     
-    var toggle = new Element("span",{"class":"collapseToggle"}).update("show");
+    var toggle = new Element("span",{"class":"collapseToggle"});
     header.insert( toggle );
+
+    Cookie.init({name: 'pouetHeadersShown'});
+    if (box.id && Cookie.getData(box.id))
+    {
+      toggle.update("hide");
+      container.show();
+    }
+    else
+    {
+      toggle.update("show");
+      container.hide();
+    }    
     
+    var _box = box;
     header.observe("click",function(){
       if (toggle.innerHTML == "show")
       {
         toggle.update("hide");
         container.show();
+        if (_box && _box.id) Cookie.setData(_box.id,true);
       }
       else
       {
         toggle.update("show");
         container.hide();
+        if (_box && _box.id) Cookie.setData(_box.id,false);
       }
     });      
   });
