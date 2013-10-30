@@ -261,7 +261,7 @@ function validateLink( $url )
   );
   foreach ($shithosts as $v)
     if(strstr($myurl["host"],$v))
-      $errormessage[] = "seriously, get better hosting";
+      $errormessage[] = "seriously, get better hosting - read the FAQ on how!";
 
   if(strstr($myurl["path"],"incoming"))
     $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
