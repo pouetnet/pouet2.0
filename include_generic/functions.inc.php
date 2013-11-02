@@ -235,6 +235,8 @@ function validateLink( $url )
 
   if(strlen($myurl["host"])==0)
     $errormessage[] = "missing hostname in the download link";
+  if(strstr($myurl["host"],".")===false)
+    $errormessage[] = "invalid hostname";
 
   if(strstr($myurl["host"],"back2roots"))
     $errormessage[] = "back2roots does not allow download from outside, find another host please";
