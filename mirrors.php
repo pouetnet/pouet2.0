@@ -23,11 +23,11 @@ class PouetBoxMirrors extends PouetBox {
 
 
     $somepos = strrpos(basename($this->prod->download), ".");
-  	if ($pos === false) { // not found means it is extensionless, cool for amiga stuff
-  	  $extensionless = basename($this->prod->download);
-  	} else { //lets strip the extension to help searches for prods of morons who insist in using .rar instead of .zip
-  	  $extensionless = substr(basename($this->prod->download), 0, $somepos);
-  	}
+    if ($pos === false) { // not found means it is extensionless, cool for amiga stuff
+      $extensionless = basename($this->prod->download);
+    } else { //lets strip the extension to help searches for prods using .rar instead of .zip
+      $extensionless = substr(basename($this->prod->download), 0, $somepos);
+    }
 
     $extensionless = rawurlencode($extensionless);
 
@@ -38,6 +38,7 @@ class PouetBoxMirrors extends PouetBox {
     $links["http://www.filesearching.com/cgi-bin/s?q=".$extensionless.""] = $this->prod->name . " on filesearching.com";
     $links["http://www.filemirrors.com/search.src?file=".$extensionless.""] = $this->prod->name . " on filemirrors";
     $links["http://hornet.scene.org/cgi-bin/scene-search.cgi?search=".$extensionless.""] = $this->prod->name . " on the hornet archive";
+    $links["http://web.archive.org/web/*/".$this->prod->download] = $this->prod->name." on the wayback machine";
 
     global $PLATFORMS;
     $hasAmiga = false;
@@ -61,7 +62,7 @@ class PouetBoxMirrors extends PouetBox {
     foreach($links as $url=>$desc)
       printf("<li><a href='%s'>%s</a></li>",_html($url),_html($desc));
     echo "</ul>\n";
-	}
+  }
   function RenderFooter() {
     echo "  <div class='foot'><a href='prod.php?which=".$this->prod->id."'>back to "._html($this->prod->name)."</a></div>\n";
     echo "</div>\n";
