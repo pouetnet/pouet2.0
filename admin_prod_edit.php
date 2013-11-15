@@ -429,13 +429,13 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
     {
       SQLLib::UpdateRow("downloadlinks",$a,"id=".(int)$data["editLinkID"]);
       $a["id"] = $data["editLinkID"];
-      gloperator_log( "prod", (int)$this->prod->id, "prod_link_add", array("id"=>$a["id"]) );
+      gloperator_log( "prod", (int)$this->prod->id, "prod_link_edit", array("id"=>$a["id"]) );
     }
     else
     {
       $a["prod"] = $this->prod->id;
       $a["id"] = SQLLib::InsertRow("downloadlinks",$a);
-      gloperator_log( "prod", (int)$this->prod->id, "prod_link_edit", array("id"=>$a["id"]) );
+      gloperator_log( "prod", (int)$this->prod->id, "prod_link_add", array("id"=>$a["id"]) );
     }
     if ($data["partial"])
     {
