@@ -23,7 +23,7 @@ header("Content-type: text/html; charset=utf-8");
   <!--
     var pixelWidth = screen.width;
     var Pouet = {};
-    Pouet.isMobile = <?=POUET_MOBILE?:"false""true"?>;
+    Pouet.isMobile = <?=POUET_MOBILE?"true":"false"?>;
   //-->
   </script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
