@@ -319,7 +319,7 @@ document.observe("dom:loaded",function(){
 
 function Youtubify( e )
 {
-  e.select("a").each(function(item){
+  e.select("a:not(.usera)").each(function(item){
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
     {
@@ -335,6 +335,13 @@ function Youtubify( e )
           }
         },
       });
+      return;
+    }
+    var host = item.href.match(/:\/\/(.*?)\//);
+    if (host)
+    {
+      item.update( host[1].escapeHTML() );
+      return;
     }
   });
 }
