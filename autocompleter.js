@@ -6,6 +6,7 @@ Autocompleter = Class.create({
       keyValue: true,
       dropdown: false,
       lockSelect: true,
+      width: null,
     },options || {}); 
     var instance = this;
     
@@ -204,7 +205,7 @@ Autocompleter = Class.create({
         instance.autoCompleteList.setStyle({
           "top" :(instance.searchBox.cumulativeOffset().top + instance.searchBox.getLayout().get("height") + 4) + "px",
           "left":instance.searchBox.cumulativeOffset().left + "px",
-          "width":instance.searchBox.getLayout().get("width") + "px",
+          "width":(instance.options.width == null ? instance.searchBox.getLayout().get("width") : parseInt(instance.options.width,10)) + "px",
         });
         results.each(function(item){
           var func = instance.options.processRow || function(item) { return item.name.escapeHTML() };

@@ -4,21 +4,23 @@ require_once("bootstrap.inc.php");
 header("Content-type: application/json; charset=utf-8");
 
 $sql = new SQLSelect();
-$sql->AddField("id");
-$sql->AddField("name");
+$sql->AddField("prods.id");
+$sql->AddField("prods.name");
+$sql->AddField("groups.name as groupName");
+$sql->AddJoin("left","groups","groups.id = prods.group1");
 $sql->AddTable("prods");
 
 $r = array();
 if ($_POST["search"])
 {
-  $sql->AddWhere(sprintf_esc("name like '%%%s%%'",_like($_POST["search"])));
-  $sql->AddOrder(sprintf_esc("if(name='%s',1,2), views desc, name",$_POST["search"]));
+  $sql->AddWhere(sprintf_esc("prods.name like '%%%s%%'",_like($_POST["search"])));
+  $sql->AddOrder(sprintf_esc("if(prods.name='%s',1,2), prods.views desc, prods.name",$_POST["search"]));
   $sql->SetLimit(10);
   $r = SQLLib::selectRows( $sql->GetQuery() );
 }
 else if ($_POST["id"])
 {
-  $sql->AddWhere(sprintf_esc("id = %d",$_POST["id"]));
+  $sql->AddWhere(sprintf_esc("prods.id = %d",$_POST["id"]));
   $sql->SetLimit(1);
   $r = SQLLib::selectRows( $sql->GetQuery() );
 }

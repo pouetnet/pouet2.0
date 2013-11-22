@@ -679,7 +679,13 @@ document.observe("dom:loaded",function(){
   for (var i=1; i<10; i++)
   {
     if (!$("cdc"+i)) continue;
-    new Autocompleter($("cdc"+i), {"dataUrl":"./ajax_prods.php"});
+    new Autocompleter($("cdc"+i), {
+      "dataUrl":"./ajax_prods.php",
+      "width":320,
+      "processRow": function(item) {
+        return item.name.escapeHTML() + " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+      }
+    });
   }
 });
 //-->
