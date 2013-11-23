@@ -683,7 +683,9 @@ document.observe("dom:loaded",function(){
       "dataUrl":"./ajax_prods.php",
       "width":320,
       "processRow": function(item) {
-        return item.name.escapeHTML() + " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+        var s = item.name.escapeHTML();
+        if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+        return s;
       }
     });
   }
