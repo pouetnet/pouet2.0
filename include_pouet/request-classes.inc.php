@@ -14,7 +14,7 @@ class PouetRequestClassBase
   static function ValidateRequest($input,&$output) { $output = $input; return array(); }
 
   // return HTML string
-  static function Display($data) { return ""; }
+  static function Display($itemID, $data) { return ""; }
 
   // return error array on error, empty array on success
   static function Process($itemID,$reqData) { return array(); }
@@ -46,18 +46,16 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {
-    $myurl = parse_url($input["newLink"]);
-    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-      return array("only http/https and ftp protocols are supported for links");
-    if($myurl["host"]=="")
-      return array("something went really wrong with the url");
+    $errors = validateLink($input["newLink"]);
+    if ($errors)
+      return $errors;
       
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $s =  _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
@@ -128,6 +126,10 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {     
+    $errors = validateLink($input["newLink"]);
+    if ($errors)
+      return $errors;
+
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"]));
     if (!$row)
       return array("nice try :|");
@@ -135,19 +137,13 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     if (strcasecmp($row->link,$input["newLink"])===0 && strcasecmp($row->type,$input["newLinkKey"])===0)
       return array("you didn't change anything :|");
 
-    $myurl = parse_url($input["newLink"]);
-    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-      return array("only http/https and ftp protocols are supported for links");
-    if($myurl["host"]=="")
-      return array("something went really wrong with the url");
-
     $output["linkID"] = $input["linkID"];
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = "<b>old</b>: ";
@@ -219,7 +215,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = _html($row->type)." - ";
@@ -285,7 +281,7 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $user = PouetUser::Spawn($data["userID"]);
     $s = "";
@@ -396,7 +392,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
@@ -491,7 +487,7 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
     return array(); 
   }
 
-  static function Display($data) 
+  static function Display($itemID, $data) 
   { 
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
@@ -522,6 +518,65 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
 };
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
+{
+  static function GetItemType() { return "prod"; }
+  static function Describe() { return "change download link"; }
+  
+  static function GetFields($data,&$fields,&$js) 
+  {
+    $prod = PouetProd::Spawn( $data["prod"] );
+    $fields = array(
+      "downloadLink" => array(
+        "name"=>"enter new download link",
+        "type"=>"url",
+        "value"=>$prod->download,
+      ),
+      "finalStep" => array(
+        "type"=>"hidden",
+        "value"=>1,
+      ),
+    );
+  }
+
+  static function ValidateRequest($input,&$output) 
+  {     
+    $errors = validateDownloadLink($input["downloadLink"]);
+    if ($errors)
+      return $errors;
+
+    $prod = PouetProd::Spawn( $_REQUEST["prod"] );
+    if (!$prod)
+      return array("nice try :|");
+
+    if (strcasecmp($prod->download,$input["downloadLink"])===0)
+      return array("you didn't change anything :|");
+
+    $output["downloadLink"] = $input["downloadLink"];
+    return array(); 
+  }
+
+  static function Display($itemID, $data) 
+  { 
+    $prod = PouetProd::Spawn( $itemID );
+    $s = "<b>old</b>: ";
+    $s .= "<a href='"._html($prod->download)."'>"._html(shortify_cut($prod->download,50))."</a>";
+    $s .= "<br/><b>new</b>: ";
+    $s .= "<a href='"._html($data["downloadLink"])."'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
+    return $s;
+  }
+
+  static function Process($itemID, $reqData) 
+  {
+    $a = array();
+    $a["download"] = $reqData["downloadLink"];
+    SQLLib::UpdateRow("prods",$a,"id=".(int)$itemID);
+    return array();
+  }
+};
+
 $REQUESTTYPES = array(
   "prod_add_link" => "PouetRequestClassAddLink",
   "prod_change_link" => "PouetRequestClassChangeLink",
@@ -530,5 +585,7 @@ $REQUESTTYPES = array(
   "prod_add_credit" => "PouetRequestClassAddCredit",
   "prod_change_credit" => "PouetRequestClassChangeCredit",
   "prod_remove_credit" => "PouetRequestClassRemoveCredit",
+
+  "prod_change_downloadlink" => "PouetRequestClassChangeDownloadLink",
 );
 ?>

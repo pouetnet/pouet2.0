@@ -26,6 +26,8 @@ class PouetBoxSubmitProd extends PouetBox
 
     $this->years = array("");
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
+    $this->yearsFuture = array("");
+    for ($x=date("Y")+2; $x>=POUET_EARLIEST_YEAR; $x--) $this->yearsFuture[$x] = $x;
   }
 
   function Validate( $data )
@@ -50,72 +52,10 @@ class PouetBoxSubmitProd extends PouetBox
   	  return $errormessage;
   	}
 
-    if(!$data["download"])
-    {
-  	  $errormessage[]="no download link?!";
-  	  return $errormessage;
-  	}
+    $e = validateDownloadLink( $data["download"] );
+    if (count($e))
+      $errormessage = array_merge($errormessage,$e);
 
-    $myurl=parse_url($data["download"]);
-    if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
-      $errormessage[] = "only http/https and ftp protocols are supported for the download link";
-    if(strlen($myurl["host"])==0)
-      $errormessage[] = "missing hostname in the download link";
-    if(strstr($myurl["host"],"back2roots"))
-      $errormessage[] = "back2roots does not allow download from outside, find another host please";
-    if(strstr($myurl["host"],"intro-inferno"))
-      $errormessage[] = "\"stop linking to intro-inferno, you turds :)\" /reed/";
-
-    if(strstr($myurl["host"],"geocities"))
-      $errormessage[] = "please get proper hosting (e.g. untergrund or scene.org) without traffic limits";
-    if(strstr($myurl["host"],"docs.google"))
-      $errormessage[] = "please get proper, permanent hosting";
-
-    $shithosts = array(
-      "rapidshare",
-      "depositfiles",
-      "megaupload",
-      "filefactory",
-      "sendspace",
-      "netload",
-      "mediafire",
-      "megashare",
-      "uploading.com",
-      "mirrorcreator",
-      "multiupload",
-    );
-    foreach ($shithosts as $v)
-      if(strstr($myurl["host"],$v))
-        $errormessage[] = "seriously, get better hosting";
-
-    if(strstr($myurl["host"],"youtube") || strstr($myurl["host"],"youtu.be"))
-      $errormessage[] = "FUCK YOUTUBE - BINARY OR GTFO";
-
-    // ** apparently this is needed for csdb - still think its a bad idea
-    //if(strstr($myurl["path"],".php") && !strstr($myurl["host"],"scene.org"))
-    //  $errormessage[] = "please link to the file directly";
-
-    if(strstr($myurl["path"],".txt"))
-      $errormessage[] = "NO TEXTFILES.";
-
-    if(strstr($myurl["host"],"untergrund.net"))
-    {
-      for ($x=1; $x<=5; $x++)
-       if(strstr($myurl["host"],"ftp".$x.".untergrund.net"))
-        $errormessage[] = "scamp says: link to ftp.untergrund.net not ftp".$x.".untergrund.net!!";
-      if ($myurl["scheme"]=="http")
-       $errormessage[] = "scamp says: no link to untergrund.net via http please!";
-      if(strstr($myurl["host"],"www.untergrund.net"))
-       $errormessage[] = "scamp says: godverdom!! link to ftp.untergrund.net instead!";
-    }
-    if(strstr($myurl["path"],"incoming"))
-      $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
-    if(strstr($myurl["host"],"scene.org") && strstr($myurl["query"],"incoming"))
-      $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
-    if( ((($myurl["port"])!=80) && (($myurl["port"])!=0)) && ((strlen($myurl["user"])>0) || (strlen($myurl["pass"])>0)) )
-      $errormessage[] = "no private FTP please";
-    if(!basename($myurl["path"]))
-      $errormessage[] = "no file? no prod!";
 
     if( ($data["releaseDate_month"]&&$data["releaseDate_year"]) )
     {
@@ -288,7 +228,10 @@ class PouetBoxSubmitProd extends PouetBox
       "download"=>array(
         "type"=>"url",
         "name"=>"download url",
-        "infoAfter"=>"this has to be a link to a downloadable file, not to a website or a video version ! if it's not downloadable, it will get deleted ! (scene.org links are an exception)",
+        "infoAfter"=>"<b>important !</b><br/>this has to be a link to a downloadable file, not to a website or a video version !".
+        	" ad-ridden \"one-click\" hosting links will be dealt with extreme prejudice -".
+        	" if it's not a direct link to the file on the first click, it will get deleted !".
+        	" (scene.org links are an exception - <a href='http://www.pouet.net/faq.php#faq37'>read the faq</a> if you're confused)",
         "info"=>" ",
         "required"=>true,
       ),
@@ -347,7 +290,7 @@ class PouetBoxSubmitProd extends PouetBox
       "invitationYear"=>array(
         "name"=>"invitation year",
         "type"=>"select",
-        "fields"=>$this->years,
+        "fields"=>$this->yearsFuture,
       ),
       "boardID"=>array(
         "name"=>"bbs affiliation",

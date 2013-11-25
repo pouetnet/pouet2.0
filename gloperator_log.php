@@ -36,12 +36,21 @@ class PouetBoxGloperatorLog extends PouetBox {
       echo "  <td>".$r->gloperator->PrintLinkedAvatar()." ".$r->gloperator->PrintLinkedname()."</td>\n";
       echo "  <td>"._html($r->action)."</td>\n";
       echo "  <td>";
-      switch($r->action)
+      
+      global $REQUESTTYPES;
+      if ($REQUESTTYPES[$r->action])
       {
-        default:
-          {
-            echo "&nbsp;\n";
-          } break;
+        echo $REQUESTTYPES[$r->action]::Display( $_GET["what"], json_decode($r->additionalData,true) ); 
+      }
+      else
+      {
+        switch($r->action)
+        {
+          default:
+            {
+              echo "&nbsp;\n";
+            } break;
+        }
       }
       echo "</td>";
       echo "</tr>\n";

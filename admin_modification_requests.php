@@ -105,7 +105,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
       
       global $REQUESTTYPES;
       if ($REQUESTTYPES[$r->requestType])
-        echo $REQUESTTYPES[$r->requestType]::Display($data);
+        echo $REQUESTTYPES[$r->requestType]::Display($r->itemID,$data);
       
       echo "</td>\n";
       echo "<td>";

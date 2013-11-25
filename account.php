@@ -5,6 +5,8 @@ require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/default_usersettings.php");
 
+$COUNTRIES = array_merge(array(""),$COUNTRIES);
+
 $avatars = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
 
 $success = null;
@@ -677,7 +679,15 @@ document.observe("dom:loaded",function(){
   for (var i=1; i<10; i++)
   {
     if (!$("cdc"+i)) continue;
-    new Autocompleter($("cdc"+i), {"dataUrl":"./ajax_prods.php"});
+    new Autocompleter($("cdc"+i), {
+      "dataUrl":"./ajax_prods.php",
+      "width":320,
+      "processRow": function(item) {
+        var s = item.name.escapeHTML();
+        if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+        return s;
+      }
+    });
   }
 });
 //-->

@@ -319,7 +319,7 @@ document.observe("dom:loaded",function(){
 
 function Youtubify( e )
 {
-  e.select("a").each(function(item){
+  e.select("li a:not(.usera)").each(function(item){
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
     {
@@ -331,16 +331,24 @@ function Youtubify( e )
           {
             var s = transport.responseJSON.entry.title.$t;
             item.update( s.escapeHTML() );
+            item.addClassName("youtube");
           }
         },
       });
+      return;
+    }
+    var host = item.href.match(/:\/\/(.*?)\//);
+    if (host)
+    {
+      item.update( host[1].escapeHTML() );
+      return;
     }
   });
 }
 
 
 
-
+/* BBCODE helper script by AMcBain */
 
 (function ()
 {
@@ -531,3 +539,50 @@ function Youtubify( e )
   });
 }());
 
+function CollapsibleHeaders( elements )
+{
+  elements.each(function(box){
+    if (!box.down("h2,h3"))
+      return;
+    
+    var header = box.down("h2,h3");
+    var elements = header.nextSiblings();
+    
+    var container = new Element("div",{"class":"collapseContainer"});
+    
+    elements.each(function(i){ container.insert(i); });
+    
+    box.insert(container);
+    
+    var toggle = new Element("span",{"class":"collapseToggle"});
+    header.insert( toggle );
+
+    Cookie.init({name: 'pouetHeadersShown'});
+    if (box.id && Cookie.getData(box.id))
+    {
+      toggle.update("hide");
+      container.show();
+    }
+    else
+    {
+      toggle.update("show");
+      container.hide();
+    }    
+    
+    var _box = box;
+    header.observe("click",function(){
+      if (toggle.innerHTML == "show")
+      {
+        toggle.update("hide");
+        container.show();
+        if (_box && _box.id) Cookie.setData(_box.id,true);
+      }
+      else
+      {
+        toggle.update("show");
+        container.hide();
+        if (_box && _box.id) Cookie.setData(_box.id,false);
+      }
+    });      
+  });
+}

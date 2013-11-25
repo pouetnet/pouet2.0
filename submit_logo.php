@@ -45,7 +45,7 @@ class PouetBoxSubmitLogo extends PouetBox
     if(!preg_match("/^[a-z0-9_-]{1,32}\.(gif|jpg|jpeg|png)$/",$filename))
       $errormessage[]="please give a senseful filename devoid of dumb characters, kthx? (nothing but alphanumerics, dash and underscore is allowed, 32 chars max)";
 
-    if(file_exists(POUET_CONTENT_LOCAL . "/gfx/logos/".$filename))
+    if(file_exists(POUET_CONTENT_LOCAL . "/logos/".$filename))
       $errormessage[]="this filename already exists on the server";
 
     if (count($errormessage))
@@ -59,7 +59,7 @@ class PouetBoxSubmitLogo extends PouetBox
 
     $filename = strtolower( basename( $_FILES["logo"]["name"] ) );
 
-    move_uploaded_file_fake( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/gfx/logos/".$filename );
+    move_uploaded_file_fake( $_FILES["logo"]["tmp_name"], POUET_CONTENT_LOCAL . "/logos/".$filename );
 
     $a = array();
     $a["author1"] = $currentUser->id;

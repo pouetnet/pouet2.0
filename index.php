@@ -73,6 +73,18 @@ foreach($boxes as $bar=>$boxlist)
 
 echo "</div>\n";
 
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  if (Pouet.isMobile)
+  {
+    CollapsibleHeaders( $$(".pouettbl") );
+  }
+});
+//-->
+</script>
+<?
 require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
 ?>

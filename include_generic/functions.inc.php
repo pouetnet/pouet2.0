@@ -178,7 +178,7 @@ function selfPath()
 }
 function rootRelativePath()
 {
-  $path = (substr(POUET_ROOT_URL,0,4) == "https") ? "https://" : "http://";
+  $path = (substr(POUET_ROOT_URL,0,5) == "https") ? "https://" : "http://";
   $path .= $_SERVER["HTTP_HOST"];
   $path .= $_SERVER["REQUEST_URI"];
   return substr($path,strlen(POUET_ROOT_URL));
@@ -221,6 +221,97 @@ function sideload( $url, $options = array() )
   return $html;
 } 
 
+function validateLink( $url )
+{
+  $errormessage = array();
+  
+  if(!$url)
+  {
+	  $errormessage[]="no link?!";
+	  return $errormessage;
+	}
+
+  $myurl=parse_url($url);
+
+  if(strlen($myurl["host"])==0)
+    $errormessage[] = "missing hostname in the download link";
+  if(strstr($myurl["host"],".")===false)
+    $errormessage[] = "invalid hostname";
+
+  if(strstr($myurl["host"],"back2roots"))
+    $errormessage[] = "back2roots does not allow download from outside, find another host please";
+  if(strstr($myurl["host"],"intro-inferno"))
+    $errormessage[] = "\"stop linking to intro-inferno, you turds :)\" /reed/";
+
+  if(strstr($myurl["host"],"geocities"))
+    $errormessage[] = "please get proper hosting (e.g. untergrund or scene.org) without traffic limits";
+  if(strstr($myurl["host"],"docs.google"))
+    $errormessage[] = "please get proper, permanent hosting";
+
+  $shithosts = array(
+    "rapidshare",
+    "depositfiles",
+    "megaupload",
+    "filefactory",
+    "sendspace",
+    "netload",
+    "mediafire",
+    "megashare",
+    "uploading.com",
+    "mirrorcreator",
+    "multiupload",
+  );
+  foreach ($shithosts as $v)
+    if(strstr($myurl["host"],$v))
+      $errormessage[] = "seriously, get better hosting - read the FAQ on how!";
+
+  if(strstr($myurl["path"],"incoming"))
+    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
+  if(strstr($myurl["host"],"scene.org") && strstr($myurl["query"],"incoming"))
+    $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
+  if( ((($myurl["port"])!=80) && (($myurl["port"])!=0)) && ((strlen($myurl["user"])>0) || (strlen($myurl["pass"])>0)) )
+    $errormessage[] = "no private FTP please";
+
+  return $errormessage;
+}
+function validateDownloadLink( $url )
+{
+  if(!$url)
+  {
+	  return array("no download link?!");
+	}
+
+  $errormessage = validateLink( $url );
+  
+  $myurl=parse_url($url);
+  if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
+    $errormessage[] = "only http/https and ftp protocols are supported for the download link";
+
+  if(strstr($myurl["host"],"youtube") || strstr($myurl["host"],"youtu.be"))
+    $errormessage[] = "FUCK YOUTUBE - BINARY OR GTFO";
+
+  // ** apparently this is needed for csdb - still think its a bad idea
+  //if(strstr($myurl["path"],".php") && !strstr($myurl["host"],"scene.org"))
+  //  $errormessage[] = "please link to the file directly";
+
+  if(strstr($myurl["path"],".txt"))
+    $errormessage[] = "NO TEXTFILES.";
+
+  if(strstr($myurl["host"],"untergrund.net"))
+  {
+    for ($x=1; $x<=5; $x++)
+     if(strstr($myurl["host"],"ftp".$x.".untergrund.net"))
+      $errormessage[] = "scamp says: link to ftp.untergrund.net not ftp".$x.".untergrund.net!!";
+    if ($myurl["scheme"]=="http")
+     $errormessage[] = "scamp says: no link to untergrund.net via http please!";
+    if(strstr($myurl["host"],"www.untergrund.net"))
+     $errormessage[] = "scamp says: godverdom!! link to ftp.untergrund.net instead!";
+  }
+  if(!basename($myurl["path"]))
+    $errormessage[] = "no file? no prod!";
+    
+  return $errormessage;
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

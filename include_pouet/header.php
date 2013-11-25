@@ -41,7 +41,7 @@ if (get_setting("logos"))
     );
 ?>
   <div id='logo'>
-    <a href="./index.php"><img src="<?=POUET_CONTENT_URL?>gfx/logos/<?=$logo->file?>" alt="logo"/></a>
+    <a href="./index.php"><img src="<?=POUET_CONTENT_URL?>logos/<?=$logo->file?>" alt="logo"/></a>
     <p>logo done by <?=$credit?> :: <?=$random_quotes[ array_rand($random_quotes) ]?></p>
   </div>
 <?
