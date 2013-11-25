@@ -136,7 +136,7 @@ if ($view->topic)
       $msg = new PouetBoxModalMessage( true );
       $msg->uniqueID = "pouetbox_fixmewarning";
       $msg->classes[] = "errorbox";
-      $msg->title = "want to add a new youtube link ?";
+      $msg->title = "want to add or update a link ?";
       $msg->message = "we've made a new automated edit request system to modify prods - if you just want to add credits or links to prods, go to the prod page and click the edit link at the bottom!";
       $msg->Render();
     }
