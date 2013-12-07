@@ -18,7 +18,7 @@ class PouetBoxLogin extends PouetBox {
   function RenderBody() {
     if (!get_login_id())
     {
-      echo "<form action='".POUET_ROOT_PATH."login.php' method='post'>\n";
+      echo "<form action='".POUET_ROOT_URL_SECURE."login.php' method='post'>\n";
 
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
