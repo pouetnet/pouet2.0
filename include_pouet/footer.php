@@ -1,7 +1,7 @@
 <footer>
 
 <ul>
-  <li><a href='<?=(POUET_MOBILE?POUET_ROOT_URL_STANDARD:POUET_ROOT_URL_MOBILE).$_SERVER["REQUEST_URI"]?>'>switch to <?=(POUET_MOBILE?"desktop":"mobile")?> version</a></li>
+  <li><a href="//<?=(POUET_MOBILE?POUET_WEB_HOSTNAME:POUET_MOBILE_HOSTNAME).$_SERVER["REQUEST_URI"]?>">switch to <?=(POUET_MOBILE?"desktop":"mobile")?> version</a></li>
   <li>
     <a href="index.php">pouët.net</a> 2.0 &copy; 2000-<?=date("Y")?> <a href="groups.php?which=5">mandarine</a>
     - hosted on <a href="http://www.scene.org/">scene.org</a>
