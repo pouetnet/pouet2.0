@@ -90,7 +90,7 @@ class Formifier {
           break;
         case "captcha":
           echo "    <div>\n";
-          echo recaptcha_get_html(CAPTCHA_PUBLICKEY);
+          echo recaptcha_get_html( CAPTCHA_PUBLICKEY, null, true );
           echo "    </div>\n";
           break;
         case "number":

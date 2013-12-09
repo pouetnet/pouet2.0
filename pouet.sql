@@ -302,7 +302,8 @@ CREATE TABLE `comments` (
   KEY `who` (`who`),
   KEY `rating` (`rating`),
   KEY `quand` (`quand`),
-  KEY `whichwho` (`who`,`which`)
+  KEY `whichwho` (`who`,`which`),
+  KEY `which_quand` (`which`,`quand`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

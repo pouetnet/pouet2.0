@@ -26,9 +26,9 @@ switch( (int)$rv["returnCode"] )
     $user = PouetUser::Spawn( (int)$rv["user"]["id"] );
     if (!$user || !$user->id)
     {
-      $entry = glob("./avatars/*.gif");
+      $entry = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
       $r = $entry[array_rand($entry)];
-      $a = str_replace("./avatars/","",$r);
+      $a = basename($r);
 
       $user = new PouetUser();
       $user->id = (int)$rv["user"]["id"];

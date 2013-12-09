@@ -214,17 +214,17 @@ function sideload( $url, $options = array() )
     curl_setopt($curl, CURLOPT_TIMEOUT, (int)$options["connectTimeout"]);
   curl_setopt($curl, CURLOPT_NOPROGRESS, true);
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-  
+
   $html = curl_exec($curl);
   curl_close($curl);
 
   return $html;
-} 
+}
 
 function validateLink( $url )
 {
   $errormessage = array();
-  
+
   if(!$url)
   {
 	  $errormessage[]="no link?!";
@@ -282,7 +282,7 @@ function validateDownloadLink( $url )
 	}
 
   $errormessage = validateLink( $url );
-  
+
   $myurl=parse_url($url);
   if(($myurl["scheme"]!="http")&&($myurl["scheme"]!="ftp")&&($myurl["scheme"]!="https"))
     $errormessage[] = "only http/https and ftp protocols are supported for the download link";
@@ -309,7 +309,7 @@ function validateDownloadLink( $url )
   }
   if(!basename($myurl["path"]))
     $errormessage[] = "no file? no prod!";
-    
+
   return $errormessage;
 }
 ///////////////////////////////////////////////////////////////////////////////
