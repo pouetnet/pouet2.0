@@ -1,12 +1,12 @@
 <?
-class PouetRequestClassBase 
+class PouetRequestClassBase
 {
   // return the type of atomic item this request handles (can be "prod", "group" or "party")
   static function GetItemType() { return ""; }
 
   // return human-readable description of operation
   static function Describe() { return ""; }
-  
+
   // return error string on error, empty string / null / false / etc. on success
   static function GetFields($data,&$fields,&$js) { return ""; }
 
@@ -26,8 +26,8 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "add a new extra link to a prod"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     $fields = array(
       "newLinkKey" => array(
@@ -44,26 +44,26 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
     );
   }
 
-  static function ValidateRequest($input,&$output) 
+  static function ValidateRequest($input,&$output)
   {
     $errors = validateLink($input["newLink"]);
     if ($errors)
       return $errors;
-      
+
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $s =  _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
-  { 
+  static function Process($itemID, $reqData)
+  {
     $a = array();
     $a["prod"] = $itemID;
     $a["type"] = $reqData["newLinkKey"];
@@ -79,8 +79,8 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change an existing extra link"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     if ($data["linkID"])
     {
@@ -124,8 +124,8 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     }
   }
 
-  static function ValidateRequest($input,&$output) 
-  {     
+  static function ValidateRequest($input,&$output)
+  {
     $errors = validateLink($input["newLink"]);
     if ($errors)
       return $errors;
@@ -140,11 +140,11 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $output["linkID"] = $input["linkID"];
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = "<b>old</b>: ";
     $s .= _html($row->type)." - ";
@@ -155,7 +155,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
+  static function Process($itemID, $reqData)
   {
     $a = array();
     $a["type"] = $reqData["newLinkKey"];
@@ -172,16 +172,16 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "remove an existing extra link"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     $l = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$data["prod"]));
     foreach($l as $v)
       $links[$v->id] = sprintf("[%s] %s",$v->type,$v->link);
-      
+
     if (!$links)
       return "this prod has no extra links to remove !";
-      
+
     $fields = array(
       "linkID" => array(
         "name"=>"select link you want removed",
@@ -202,8 +202,8 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
     );
   }
 
-  static function ValidateRequest($input,&$output) 
-  {     
+  static function ValidateRequest($input,&$output)
+  {
     if (!SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"])))
       return array("nice try :|");
 
@@ -212,11 +212,11 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
 
     $output["linkID"] = $input["linkID"];
     $output["reason"] = $input["reason"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
     $s = _html($row->type)." - ";
     $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
@@ -225,8 +225,8 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
-  { 
+  static function Process($itemID, $reqData)
+  {
     SQLLib::Query(sprintf_esc("delete from downloadlinks where id=%d",$reqData["linkID"]));
     return array();
   }
@@ -238,8 +238,8 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "add a new credit to a prod"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     $fields = array(
       "userID" => array(
@@ -254,19 +254,19 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
         "value"=>1,
       ),
     );
-    
+
     $js  = "document.observe('dom:loaded',function(){";
     $js .= "  new Autocompleter($('userID'), {\n";
     $js .= "    'dataUrl':'./ajax_users.php',\n";
     $js .= "    'processRow': function(item) {\n";
-    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
+    $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
     $js .= "    }\n";
     $js .= "  });\n";
     $js .= "});\n";
   }
 
-  static function ValidateRequest($input,&$output) 
-  { 
+  static function ValidateRequest($input,&$output)
+  {
     if (!SQLLib::selectRow(sprintf_esc("select * from users where id = %d",$input["userID"])))
       return array("nice try :|");
 
@@ -278,11 +278,11 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
 
     $output["userID"] = $input["userID"];
     $output["userRole"] = $input["userRole"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $user = PouetUser::Spawn($data["userID"]);
     $s = "";
     if ($user)
@@ -294,8 +294,8 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
-  { 
+  static function Process($itemID, $reqData)
+  {
     $a = array();
     $a["prodID"] = $itemID;
     $a["userID"] = $reqData["userID"];
@@ -312,8 +312,8 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change an existing credit"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     if ($data["creditID"])
     {
@@ -343,7 +343,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
       $js .= "  new Autocompleter($('userID'), {\n";
       $js .= "    'dataUrl':'./ajax_users.php',\n";
       $js .= "    'processRow': function(item) {\n";
-      $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."/avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
+      $js .= "      return \"<img class='avatar' src='".POUET_CONTENT_URL."avatars/\" + item.avatar.escapeHTML() + \"'/> \" + item.name.escapeHTML() + \" <span class='glops'>\"+item.glops+\" glöps</span>\";\n";
       $js .= "    }\n";
       $js .= "  });\n";
       $js .= "});\n";
@@ -371,8 +371,8 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     }
   }
 
-  static function ValidateRequest($input,&$output) 
-  {     
+  static function ValidateRequest($input,&$output)
+  {
     $row = SQLLib::selectRow(sprintf_esc("select * from credits where prodID = %d and id = %d",$_REQUEST["prod"],$input["creditID"]));
     if (!$row)
       return array("nice try :|");
@@ -389,11 +389,11 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     $output["creditID"] = $input["creditID"];
     $output["userID"] = $input["userID"];
     $output["userRole"] = $input["userRole"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
@@ -402,7 +402,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     $s->SetLimit(1);
     $l = $s->perform();
     $row = reset($l);
-  
+
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
     $s = "<b>old</b>: ";
     if ($row->user)
@@ -423,7 +423,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
+  static function Process($itemID, $reqData)
   {
     $a = array();
     $a["userID"] = $reqData["userID"];
@@ -439,8 +439,8 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "remove an existing credit"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
@@ -450,10 +450,10 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
     $l = $s->perform();
     foreach($l as $v)
       $links[$v->id] = sprintf("%s [%s]",$v->user->nickname,$v->role);
-      
+
     if (!$links)
       return "this prod has no credits to remove !";
-      
+
     $fields = array(
       "creditID" => array(
         "name"=>"select credit you want removed",
@@ -474,8 +474,8 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
     );
   }
 
-  static function ValidateRequest($input,&$output) 
-  {     
+  static function ValidateRequest($input,&$output)
+  {
     if (!SQLLib::selectRow(sprintf_esc("select * from credits where prodID = %d and id = %d",$_REQUEST["prod"],$input["creditID"])))
       return array("nice try :|");
 
@@ -484,11 +484,11 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
 
     $output["creditID"] = $input["creditID"];
     $output["reason"] = $input["reason"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
@@ -497,7 +497,7 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
     $s->SetLimit(1);
     $l = $s->perform();
     $row = reset($l);
-  
+
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
     $s = "<b>old</b>: ";
     if ($row->user)
@@ -506,12 +506,12 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
       $s .= $row->user->PrintLinkedName();
     }
     $s .= " - "._html($row->role);
-    
+
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
-  { 
+  static function Process($itemID, $reqData)
+  {
     SQLLib::Query(sprintf_esc("delete from credits where id=%d",$reqData["creditID"]));
     return array();
   }
@@ -524,8 +524,8 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change download link"; }
-  
-  static function GetFields($data,&$fields,&$js) 
+
+  static function GetFields($data,&$fields,&$js)
   {
     $prod = PouetProd::Spawn( $data["prod"] );
     $fields = array(
@@ -541,8 +541,8 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     );
   }
 
-  static function ValidateRequest($input,&$output) 
-  {     
+  static function ValidateRequest($input,&$output)
+  {
     $errors = validateDownloadLink($input["downloadLink"]);
     if ($errors)
       return $errors;
@@ -555,11 +555,11 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
       return array("you didn't change anything :|");
 
     $output["downloadLink"] = $input["downloadLink"];
-    return array(); 
+    return array();
   }
 
-  static function Display($itemID, $data) 
-  { 
+  static function Display($itemID, $data)
+  {
     $prod = PouetProd::Spawn( $itemID );
     $s = "<b>old</b>: ";
     $s .= "<a href='"._html($prod->download)."'>"._html(shortify_cut($prod->download,50))."</a>";
@@ -568,7 +568,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     return $s;
   }
 
-  static function Process($itemID, $reqData) 
+  static function Process($itemID, $reqData)
   {
     $a = array();
     $a["download"] = $reqData["downloadLink"];
@@ -581,7 +581,7 @@ $REQUESTTYPES = array(
   "prod_add_link" => "PouetRequestClassAddLink",
   "prod_change_link" => "PouetRequestClassChangeLink",
   "prod_remove_link" => "PouetRequestClassRemoveLink",
-  
+
   "prod_add_credit" => "PouetRequestClassAddCredit",
   "prod_change_credit" => "PouetRequestClassChangeCredit",
   "prod_remove_credit" => "PouetRequestClassRemoveCredit",

@@ -33,7 +33,7 @@ class PouetBoxAvatarGallery extends PouetBox
 
     echo "<ul id='avatargallery'>\n";
     foreach($g as $v)
-      printf("  <li><img src='".POUET_CONTENT_URL."/avatars/%s' alt='%s' title='%s'/></li>\n",basename($v),basename($v),basename($v));
+      printf("  <li><img src='".POUET_CONTENT_URL."avatars/%s' alt='%s' title='%s'/></li>\n",basename($v),basename($v),basename($v));
     echo "</ul>\n";
 
     echo "  </div>\n";
