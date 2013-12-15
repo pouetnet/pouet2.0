@@ -95,13 +95,13 @@ class PouetBoxUserMain extends PouetBox
     }
 
     $this->agreeRulez = array();
-    if (!$_GET["show"])
+    if ($_GET["show"]=="otherstats")
     {
       $this->agreeRulez = $this->GetThumbAgreers( get_setting("userrulez"), 1 );
     }
 
     $this->agreeSucks = array();
-    if (!$_GET["show"])
+    if ($_GET["show"]=="otherstats")
     {
       $this->agreeSucks = $this->GetThumbAgreers( get_setting("usersucks"), -1 );
     }
@@ -438,7 +438,8 @@ class PouetBoxUserMain extends PouetBox
     if ($this->credits)
     {
       echo "<div class='contribheader'>contributions to prods";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
+      if ($_GET["show"]!="credits")
+        echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->credits as $p)
@@ -457,9 +458,15 @@ class PouetBoxUserMain extends PouetBox
     if (!$_GET["show"] && $this->user->stats["ud"])
       echo "<div class='contribheader'>United Devices contribution <span>".$this->user->stats["ud"]." glöps</span></div>\n";
 
+    if (!$_GET["show"] || $this->logos)
+    {
+      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
+      if ($_GET["show"]!="logos")
+        echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->logos)
     {
-      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span> [<a href='user.php?who=".$this->id."&amp;show=logos'>show all</a>]</div>\n";
       echo "<ul class='boxlist' id='logolist'>";
       foreach($this->logos as $l)
       {
@@ -473,9 +480,15 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
+    if (!$_GET["show"] || $this->prods)
+    {
+      echo "<div class='contribheader'>latest added prods <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
+      if ($_GET["show"]!="prods")
+        echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->prods)
     {
-      echo "<div class='contribheader'>latest added prods <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> [<a href='user.php?who=".$this->id."&amp;show=prods'>show all</a>]</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->prods as $p)
       {
@@ -490,9 +503,15 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
+    if (!$_GET["show"] || $this->groups)
+    {
+      echo "<div class='contribheader'>latest added groups <span>".$this->user->stats["groups"]." glöps</span> ";
+      if ($_GET["show"]!="groups")
+        echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->groups)
     {
-      echo "<div class='contribheader'>latest added groups <span>".$this->user->stats["groups"]." glöps</span> [<a href='user.php?who=".$this->id."&amp;show=groups'>show all</a>]</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->groups as $g)
       {
@@ -504,9 +523,15 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
+    if (!$_GET["show"] || $this->parties)
+    {
+      echo "<div class='contribheader'>latest added parties <span>".$this->user->stats["parties"]." glöps</span> ";
+      if ($_GET["show"]!="parties")
+        echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->parties)
     {
-      echo "<div class='contribheader'>latest added parties <span>".$this->user->stats["parties"]." glöps</span> [<a href='user.php?who=".$this->id."&amp;show=parties'>show all</a>]</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->parties as $p)
       {
@@ -518,9 +543,15 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
+    if (!$_GET["show"] || $this->shots)
+    {
+      echo "<div class='contribheader'>latest added screenshots <span>".$this->user->stats["screenshots"]." glöps</span> ";
+      if ($_GET["show"]!="screenshots")
+        echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->shots)
     {
-      echo "<div class='contribheader'>latest added screenshots <span>".$this->user->stats["screenshots"]." glöps</span> [<a href='user.php?who=".$this->id."&amp;show=screenshots'>show all</a>]</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->shots as $p)
       {
@@ -535,9 +566,15 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
+    if (!$_GET["show"] || $this->nfos)
+    {
+      echo "<div class='contribheader'>latest added nfos <span>".$this->user->stats["nfos"]." glöps</span> ";
+      if ($_GET["show"]!="nfos")
+        echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
+      echo "</div>\n";
+    }
     if ($this->nfos)
     {
-      echo "<div class='contribheader'>latest added nfos <span>".$this->user->stats["nfos"]." glöps</span> [<a href='user.php?who=".$this->id."&amp;show=nfos'>show all</a>]</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->nfos as $p)
       {
@@ -552,12 +589,18 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
+    if (!$_GET["show"] || $this->firstComments)
+    {
+      echo "<div class='contribheader'>latest comments <span>".$this->user->stats["comments"]." glöps</span>";
+      //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
+      if ($_GET["show"]!="demoblog")
+        echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
+      if ($_GET["show"]!="otherstats")
+        echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
+      echo "</div>\n";
+    }
     if ($this->firstComments)
     {
-      echo "<div class='contribheader'>latest 1st comments <span>".$this->user->stats["comments"]." glöps</span>";
-      //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show all</a>]";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
-      echo "</div>\n";
       echo "<ul class='boxlist'>";
       foreach($this->firstComments as $p)
       {
@@ -573,12 +616,15 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
-    if ($this->topics)
+    if (!$_GET["show"] || $this->topics)
     {
       echo "<div class='contribheader'>latest bbs topics";
       if ($this->topicCount)
         echo " <span>".$this->topicCount." topics</span>";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show all</a>]</div>\n";
+      echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]</div>\n";
+    }
+    if ($this->topics)
+    {
       echo "<ul class='boxlist'>";
       foreach($this->topics as $t)
       {
@@ -590,12 +636,17 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if ($this->posts)
+    if (!$_GET["show"] || $this->posts)
     {
       echo "<div class='contribheader'>latest bbs posts";
       if ($this->postCount)
         echo " <span>".$this->postCount." posts</span>";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show all</a>]</div>\n";
+      if ($_GET["show"]!="posts")        
+        echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
+      echo "</div>\n";
+    }
+    if ($this->posts)
+    {
       echo "<ul class='boxlist'>";
       foreach($this->posts as $p)
       {
@@ -608,38 +659,41 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if ($this->agreeRulez)
+    if ($_GET["show"]=="otherstats")
     {
       echo "<div class='contribheader'>top thumb up agreers";
       echo "</div>\n";
-      echo "<ul class='boxlist'>";
-      foreach($this->agreeRulez as $p)
+      if ($this->agreeRulez)
       {
-        echo "<li>";
-        echo $p->u2->PrintLinkedAvatar()." ";
-        echo $p->u2->PrintLinkedName()." ";
-        echo "(".$p->c." prods)";
-        echo "</li>";
+        echo "<ul class='boxlist'>";
+        foreach($this->agreeRulez as $p)
+        {
+          echo "<li>";
+          echo $p->u2->PrintLinkedAvatar()." ";
+          echo $p->u2->PrintLinkedName()." ";
+          echo "(".$p->c." prods)";
+          echo "</li>";
+        }
+        echo "</ul>";
       }
-      echo "</ul>";
-    }
-
-    if ($this->agreeSucks)
-    {
+  
       echo "<div class='contribheader'>top thumb down agreers";
       echo "</div>\n";
-      echo "<ul class='boxlist'>";
-      foreach($this->agreeSucks as $p)
+      if ($this->agreeSucks)
       {
-        echo "<li>";
-        echo $p->u2->PrintLinkedAvatar()." ";
-        echo $p->u2->PrintLinkedName()." ";
-        echo "(".$p->c." prods)";
-        echo "</li>";
+        echo "<ul class='boxlist'>";
+        foreach($this->agreeSucks as $p)
+        {
+          echo "<li>";
+          echo $p->u2->PrintLinkedAvatar()." ";
+          echo $p->u2->PrintLinkedName()." ";
+          echo "(".$p->c." prods)";
+          echo "</li>";
+        }
+        echo "</ul>";
       }
-      echo "</ul>";
     }
-
+    
     if ($this->comments)
     {
       echo "<ul class='boxlist' id='demoblog'>";
