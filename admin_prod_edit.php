@@ -672,7 +672,7 @@ document.observe("dom:loaded",function(){
       new Autocompleter(tr.down(".userID"), {
         "dataUrl":"./ajax_users.php",
         "processRow": function(item) {
-          return "<img class='avatar' src='<?=POUET_CONTENT_URL?>/avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
+          return "<img class='avatar' src='<?=POUET_CONTENT_URL?>avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
 
         }
       });
