@@ -712,9 +712,9 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
   }
   function Commit($data)
   {
-    if ($data["delRelation"])
+    if ($data["delAffil"])
     {
-      SQLLib::Query("delete from affiliatedprods where id=".(int)$data["delRelation"]);
+      SQLLib::Query("delete from affiliatedprods where id=".(int)$data["delAffil"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_rel_del" );
       return array();
     }
@@ -724,10 +724,10 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
     $a["type"] = $type;
     $a["original"]   = $direction == "o" ? $this->prod->id : $data["prod"];
     $a["derivative"] = $direction == "d" ? $this->prod->id : $data["prod"];
-    if ($data["editRelationID"])
+    if ($data["editAffilID"])
     {
-      SQLLib::UpdateRow("affiliatedprods",$a,"id=".(int)$data["editRelationID"]);
-      $a["id"] = $data["editRelationID"];
+      SQLLib::UpdateRow("affiliatedprods",$a,"id=".(int)$data["editAffilID"]);
+      $a["id"] = $data["editAffilID"];
       gloperator_log( "prod", (int)$this->prod->id, "prod_rel_edit", array("id"=>$a["id"]) );
     }
     else
