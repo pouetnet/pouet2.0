@@ -2,69 +2,67 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/pouet-user.php");
 
-$csrf = new CSRFProtect();
-if (!$csrf->ValidateToken())
-  redirect("error.php?e=".rawurlencode("Who are you and where did you come from ?"));
+//$csrf = new CSRFProtect();
+if ($_GET["error"])
+  redirect("error.php?e=".rawurlencode( $_GET["error_description"] ));
 
-session_regenerate_id(true);
-
-$_SESSION = array();
+if (!$_GET["code"])
+{
+  $_SESSION["stateTest"] = rand(0,0x7FFFFFFF);
+  $sceneID->SetState( $_SESSION["stateTest"] );
+  $sceneID->PerformAuthRedirect();
+  exit();
+}
 
 $rv = null;
 $err = "";
 try
 {
-  $rv = $sceneID->login( $_POST["login"], $_POST["password"], $_POST["permanent"]=="on")->asAssoc();
-} catch(SceneIdException $e) {
-  $err = "[SceneID error] ".$e->GetMessage();
-}
+  $sceneID->SetState( $_SESSION["stateTest"] );
+  $sceneID->ProcessAuthResponse();
 
-switch( (int)$rv["returnCode"] )
-{
-	case 30: {
+  session_regenerate_id(true);
+  $_SESSION = array();
 
-    $user = PouetUser::Spawn( (int)$rv["user"]["id"] );
-    if (!$user || !$user->id)
-    {
-      $entry = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
-      $r = $entry[array_rand($entry)];
-      $a = basename($r);
+  $user = json_decode( $sceneID->Me() );
 
-      $user = new PouetUser();
-      $user->id = (int)$rv["user"]["id"];
-      $user->nickname = $rv["user"]["nickname"];
-      $user->avatar = $a;
+  $user = PouetUser::Spawn( (int)$user->user->id );
+  if (!$user || !$user->id)
+  {
+    $entry = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
+    $r = $entry[array_rand($entry)];
+    $a = basename($r);
 
-      $user->Create();
+    $user = new PouetUser();
+    $user->id = (int)$user->user->id;
+    $user->nickname = $user->user->username;
+    $user->avatar = $a;
 
-      $user = PouetUser::Spawn( $user->id );
-    }
+    $user->Create();
 
-    if ( $user->IsBanned() )
-    {
-  		redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
-    }
+    $user = PouetUser::Spawn( $user->id );
+  }
 
-    $_SESSION["user"] = $user;
+  if ( $user->IsBanned() )
+  {
+		redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
+  }
 
-    $_SESSION["settings"] = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$_SESSION["user"]->id));
+  $_SESSION["user"] = $user;
+
+  $_SESSION["settings"] = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$_SESSION["user"]->id));
 /*
-	  setcookie($rv["cookie"]["name"],
-	            $rv["cookie"]["value"],
-	            $rv["cookie"]["expires"],
-              $rv["cookie"]["path"], "pouet.net");
+  setcookie($rv["cookie"]["name"],
+            $rv["cookie"]["value"],
+            $rv["cookie"]["expires"],
+            $rv["cookie"]["path"], "pouet.net");
 */
-    redirect( basename($_POST["return"]?$_POST["return"]:"index.php") );
-	} break;
-
-	case NULL:
-	case FALSE:
-	case -1: {
-		redirect("error.php?e=".rawurlencode($err ? $err : "Couldn't connect SceneID. :("));
-	} break;
-
-	default: {
-		redirect("error.php?e=".rawurlencode($rv["returnMessage"]));
-	} break;
+  redirect( basename($_POST["return"]?$_POST["return"]:"index.php") );
+  
 }
+catch(SceneID3Exception $e) 
+{
+	redirect("error.php?e=".rawurlencode( $e->GetMessage() ));
+}
+
 ?>

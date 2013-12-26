@@ -7,7 +7,7 @@ if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
 
 require_once( POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/sqllib.inc.php");
-require_once( POUET_ROOT_LOCAL . "/include_generic/sceneid.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/sceneid3.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
@@ -36,8 +36,12 @@ session_set_cookie_params($lifetime, POUET_ROOT_PATH, POUET_COOKIE_DOMAIN);
 @session_start();
 
 $sceneID = null;
-if (class_exists("SceneId"))
-  $sceneID = SceneId::Factory(SCENEID_USER, SCENEID_PASS, SCENEID_URL);
+if (class_exists("SceneID3"))
+  $sceneID = new SceneID3( array(
+    "clientID" => SCENEID_USER,
+    "clientSecret" => md5(SCENEID_PASS),
+    "redirectURI" => POUET_ROOT_URL . "login.php",
+  ) );
 
 $currentUser = NULL;
 if (get_login_id())

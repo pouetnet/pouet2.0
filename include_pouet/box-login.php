@@ -18,6 +18,7 @@ class PouetBoxLogin extends PouetBox {
   function RenderBody() {
     if (!get_login_id())
     {
+      /*
       echo "<form action='".POUET_ROOT_URL_SECURE."login.php' method='post'>\n";
 
       $csrf = new CSRFProtect();
@@ -34,6 +35,11 @@ class PouetBoxLogin extends PouetBox {
       echo "</div>\n";
       echo "<div class='foot'><input type='submit' value='Submit'/></div>";
       echo "</form>\n";
+      */
+      echo "<div class='content r1 center'>\n";
+      echo "<a href='login.php'>login via sceneID</a>";
+      echo "</div>\n";
+      
     } else {
       global $currentUser;
       echo "<div class='content loggedin'>\n";
