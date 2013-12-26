@@ -35,7 +35,7 @@ try
 
     $user = new PouetUser();
     $user->id = (int)$user->user->id;
-    $user->nickname = $user->user->username;
+    $user->nickname = $user->user->display_name;
     $user->avatar = $a;
 
     $user->Create();
@@ -49,14 +49,8 @@ try
   }
 
   $_SESSION["user"] = $user;
-
   $_SESSION["settings"] = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$_SESSION["user"]->id));
-/*
-  setcookie($rv["cookie"]["name"],
-            $rv["cookie"]["value"],
-            $rv["cookie"]["expires"],
-            $rv["cookie"]["path"], "pouet.net");
-*/
+
   redirect( basename($_POST["return"]?$_POST["return"]:"index.php") );
   
 }

@@ -6,7 +6,6 @@ if (get_setting($menusetting))
 ?>
 <nav>
   <ul>
-   <li><a href="account.php">Account</a></li>
    <li><a href="prodlist.php">Prods</a></li>
    <li><a href="groups.php">Groups</a></li>
    <li><a href="parties.php">Parties</a></li>

@@ -65,28 +65,35 @@ class PouetUser extends BM_Class {
           return unserialize( $this->sceneIDData );
       }
     }
-    global $sceneID;
-    try
-    {
-      $rv = $sceneID->getUserInfoById( $this->id )->asAssoc();
-    }
-    catch(SceneIdException $e)
-    {
-      return NULL;
-    }
+
+    /*
 
     if ((int)$rv["returnCode"] == 10)
     {
       //if ($cached)
-      {
-        SQLLib::UpdateRow("users",array(
-          "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),
-          "sceneIDData"=>serialize($rv["user"])
-        ),sprintf_esc("id=%d",$this->id));
-      }
       return $rv["user"];
     }
     else
+    {
+      return NULL;
+    }
+    */
+
+    global $sceneID;
+    try
+    {
+      $data = $sceneID->Me();
+
+      {
+        SQLLib::UpdateRow("users",array(
+          "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),
+          "sceneIDData"=>serialize($data["user"])
+        ),sprintf_esc("id=%d",$this->id));
+      }
+
+      return json_decode($data);
+    }
+    catch(SceneID3Exception $e)
     {
       return NULL;
     }
