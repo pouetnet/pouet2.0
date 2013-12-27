@@ -82,8 +82,11 @@ class PouetUser extends BM_Class {
     global $sceneID;
     try
     {
-      $data = $sceneID->Me();
-
+      //if (!get_login_id())
+      {
+        $sceneID->GetClientCredentialsToken();
+      }
+      $data = $sceneID->User( $this->id );
       {
         SQLLib::UpdateRow("users",array(
           "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),
@@ -91,11 +94,11 @@ class PouetUser extends BM_Class {
         ),sprintf_esc("id=%d",$this->id));
       }
 
-      return json_decode($data);
+      return $data;
     }
     catch(SceneID3Exception $e)
     {
-      return NULL;
+      return die($e->getMessage());
     }
   }
 

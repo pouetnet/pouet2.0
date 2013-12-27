@@ -90,11 +90,12 @@ class PouetBoxAccount extends PouetBox
     $rows = SQLLib::SelectRows(sprintf_esc("select cdc from users_cdcs where user=%d",get_login_id()));
     foreach($rows as $r)
       $this->cdcs[] = $r->cdc;
-
+      
+    /*
     $this->fieldsSceneID = array(
       "login"=>array(
         "info"=>"which word can you type very fast ?",
-        "value"=> $this->sceneID["login"],
+        "value"=> $this->sceneID["first_name"]." ".$this->sceneID["last_name"],
       ),
       "captcha"=>array(
         "info"=>"real sceners are proficient in the skill of reading letters",
@@ -102,6 +103,8 @@ class PouetBoxAccount extends PouetBox
         "type"=>"captcha",
       ),
     );
+    */
+    
     $this->fieldsPouet = array(
       "nickname"=>array(
         "info"=>"how do you look on IRC ?",
@@ -140,8 +143,8 @@ class PouetBoxAccount extends PouetBox
     );
     $this->fieldsCDC = array();
 
-    $this->fieldsSceneID["login"]["type"] = "static";
-    unset($this->fieldsSceneID["captcha"]);
+    //$this->fieldsSceneID["login"]["type"] = "static";
+    //unset($this->fieldsSceneID["captcha"]);
 
     $glop = POUET_CDC_MINGLOP;
     for ($x=1; $x < 10; $x++)
@@ -213,7 +216,7 @@ class PouetBoxAccount extends PouetBox
       {
         if ($this->fieldsPouet[$k]) $this->fieldsPouet[$k]["value"] = $v;
         if ($this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
-        if ($this->fieldsSceneID[$k]) $this->fieldsSceneID[$k]["value"] = $v;
+        //if ($this->fieldsSceneID[$k]) $this->fieldsSceneID[$k]["value"] = $v;
         if ($this->fieldsSettings[$k]) $this->fieldsSettings[$k]["value"] = $v;
       }
     }
@@ -345,10 +348,12 @@ class PouetBoxAccount extends PouetBox
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "  <h2>".$this->title."</h2>\n";
+    /*
     echo "  <div class='accountsection content'>\n";
     $this->formifier->RenderForm( $this->fieldsSceneID );
     echo "  </div>\n";
     echo "  <h2>pou&euml;t things</h2>\n";
+    */
     echo "  <div class='accountsection content'>\n";
     $this->formifier->RenderForm( $this->fieldsPouet );
     echo "  </div>\n";
