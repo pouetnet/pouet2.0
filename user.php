@@ -621,7 +621,9 @@ class PouetBoxUserMain extends PouetBox
       echo "<div class='contribheader'>bbs topics opened";
       if ($this->topicCount)
         echo " <span>".$this->topicCount." topics</span>";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]</div>\n";
+      if ($_GET["show"]!="topics")
+        echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
+      echo "</div>\n";
     }
     if ($this->topics)
     {
