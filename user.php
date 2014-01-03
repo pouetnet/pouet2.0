@@ -460,7 +460,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->logos)
     {
-      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
+      echo "<div class='contribheader'>logos added <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
       if ($_GET["show"]!="logos")
         echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
       echo "</div>\n";
@@ -482,7 +482,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->prods)
     {
-      echo "<div class='contribheader'>latest added prods <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
+      echo "<div class='contribheader'>prods added <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
       if ($_GET["show"]!="prods")
         echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
       echo "</div>\n";
@@ -505,7 +505,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->groups)
     {
-      echo "<div class='contribheader'>latest added groups <span>".$this->user->stats["groups"]." glöps</span> ";
+      echo "<div class='contribheader'>groups added <span>".$this->user->stats["groups"]." glöps</span> ";
       if ($_GET["show"]!="groups")
         echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
       echo "</div>\n";
@@ -525,7 +525,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->parties)
     {
-      echo "<div class='contribheader'>latest added parties <span>".$this->user->stats["parties"]." glöps</span> ";
+      echo "<div class='contribheader'>parties added <span>".$this->user->stats["parties"]." glöps</span> ";
       if ($_GET["show"]!="parties")
         echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
       echo "</div>\n";
@@ -545,7 +545,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->shots)
     {
-      echo "<div class='contribheader'>latest added screenshots <span>".$this->user->stats["screenshots"]." glöps</span> ";
+      echo "<div class='contribheader'>screenshots added <span>".$this->user->stats["screenshots"]." glöps</span> ";
       if ($_GET["show"]!="screenshots")
         echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
       echo "</div>\n";
@@ -568,7 +568,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->nfos)
     {
-      echo "<div class='contribheader'>latest added nfos <span>".$this->user->stats["nfos"]." glöps</span> ";
+      echo "<div class='contribheader'>nfos added <span>".$this->user->stats["nfos"]." glöps</span> ";
       if ($_GET["show"]!="nfos")
         echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
       echo "</div>\n";
@@ -591,7 +591,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->firstComments)
     {
-      echo "<div class='contribheader'>latest comments <span>".$this->user->stats["comments"]." glöps</span>";
+      echo "<div class='contribheader'>comments <span>".$this->user->stats["comments"]." glöps</span>";
       //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
       if ($_GET["show"]!="demoblog")
         echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
@@ -618,7 +618,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->topics)
     {
-      echo "<div class='contribheader'>latest bbs topics";
+      echo "<div class='contribheader'>bbs topics opened";
       if ($this->topicCount)
         echo " <span>".$this->topicCount." topics</span>";
       echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]</div>\n";
@@ -638,7 +638,7 @@ class PouetBoxUserMain extends PouetBox
 
     if (!$_GET["show"] || $this->posts)
     {
-      echo "<div class='contribheader'>latest bbs posts";
+      echo "<div class='contribheader'>bbs posts";
       if ($this->postCount)
         echo " <span>".$this->postCount." posts</span>";
       if ($_GET["show"]!="posts")        
