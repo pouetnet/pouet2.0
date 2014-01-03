@@ -245,7 +245,7 @@ class PouetBoxUserMain extends PouetBox
     if ($limit)
       $s->SetLimit( $limit );
 
-    $data = $s->perform();
+    $data = $s->performWithCalcRows( $this->totalProds );
 
     $a = array();
     foreach($data as $v) $a[] = &$v->prod;
@@ -437,7 +437,7 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->credits)
     {
-      echo "<div class='contribheader'>contributions to prods";
+      echo "<div class='contribheader'>contributions to prods <span>".$this->totalProds." prods</span>";
       if ($_GET["show"]!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
