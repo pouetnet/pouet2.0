@@ -11,14 +11,6 @@ class PouetBoxGroupMain extends PouetBox
     $this->uniqueID = "pouetbox_groupmain";
     $this->id = (int)$id;
   }
-
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("groups.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -112,7 +104,7 @@ class PouetBoxGroupMain extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
       if ($key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
