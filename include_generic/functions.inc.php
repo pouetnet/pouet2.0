@@ -312,6 +312,23 @@ function validateDownloadLink( $url )
 
   return $errormessage;
 }
+
+function adjust_query( $param ) 
+{
+  $query = array_merge($_GET,$param);
+  $url = parse_url($_SERVER["REQUEST_URI"]);
+  return _html( $url["path"] . "?" . http_build_query($query));
+}
+function adjust_query_header( $param ) 
+{
+  $query = array_merge($_GET,$param);
+  unset( $query["reverse"] );
+  if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
+    $query["reverse"] = 1;
+  $url = parse_url($_SERVER["REQUEST_URI"]);
+  return _html( $url["path"] . "?" . http_build_query($query));
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

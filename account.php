@@ -241,8 +241,10 @@ class PouetBoxAccount extends PouetBox
       }
       // exceptions!
       $this->fieldsSettings["topicposts"]["min"] = 1;
+      $this->fieldsSettings["indexojnews"]["max"] = 10;
       $this->fieldsSettings["displayimages"]["fields"] = array(0=>"links",1=>"images");
       $this->fieldsSettings["indexbbsnoresidue"]["fields"] = array(0=>"shown",1=>"hidden");
+      
 
       $this->fieldsSettings["prodcomments"]["name"] = "prod page - number of comments";
       $this->fieldsSettings["prodcomments"]["type"] = "select";
