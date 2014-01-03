@@ -40,7 +40,7 @@ foreach($data as $item)
     "title"     => $item->name,
     "link"      => POUET_ROOT_URL . "prod.php?which=" . $item->id,
     "pubDate"   => date("r",strtotime($item->quand)),
-    "enclosure" => POUET_CONTENT_URL . find_screenshot($item->id),
+    "enclosure" => find_screenshot($item->id),
   ));
 }
 
