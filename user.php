@@ -637,7 +637,7 @@ class PouetBoxUserMain extends PouetBox
       }
     }
 
-    if ($this->topicCount)
+    //if ($this->topicCount)
     {
       if (!$this->show || $this->topics)
       {
@@ -662,7 +662,7 @@ class PouetBoxUserMain extends PouetBox
       }
     }
 
-    if ($this->postCount)
+    //if ($this->postCount)
     {
       if (!$this->show || $this->posts)
       {
