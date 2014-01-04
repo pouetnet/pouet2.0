@@ -115,7 +115,7 @@ class PouetBoxSubmitAvatar extends PouetBox
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='content'>\n";
 
-    echo "<div id='avatarexample'><img src='".POUET_CONTENT_URL."gfx/example.gif'/></div>\n";
+    //echo "<div id='avatarexample'><img src='".POUET_CONTENT_URL."gfx/example.gif'/></div>\n";
     echo "in order to upload a new avatar, make sure to follow those rules:<br>";
     echo "<ul>";
     echo "<li>it's a <b>.gif</b> file</li>";
