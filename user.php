@@ -4,13 +4,14 @@ require_once("include_generic/recaptchalib.php");
 
 class PouetBoxUserMain extends PouetBox
 {
-  function PouetBoxUserMain($id) {
+  function PouetBoxUserMain($id,$show) {
     parent::__construct();
     $this->uniqueID = "pouetbox_usermain";
     $this->title = "";
     $this->id = (int)$id;
 
     $this->paginator = new PouetPaginator();
+    $this->show = $show;
   }
 
   function LoadFromDB() {
@@ -29,79 +30,79 @@ class PouetBoxUserMain extends PouetBox
     $this->cdcProds = $s->perform();
 
     $this->logos = array();
-    if ($_GET["show"]=="logos")
+    if ($this->show=="logos")
     {
-      $this->logos = $this->GetLogosAdded( $_GET["show"]=="logos"? null : get_setting("userlogos") );
+      $this->logos = $this->GetLogosAdded( $this->show=="logos"? null : get_setting("userlogos") );
     }
 
     $this->prods = array();
-    if ($_GET["show"]=="prods")
+    if ($this->show=="prods")
     {
-      $this->prods = $this->GetProdsAdded( $_GET["show"]=="prods"? null : get_setting("userprods") );
+      $this->prods = $this->GetProdsAdded( $this->show=="prods"? null : get_setting("userprods") );
     }
 
     $this->groups = array();
-    if ($_GET["show"]=="groups")
+    if ($this->show=="groups")
     {
-      $this->groups = $this->GetGroupsAdded( $_GET["show"]=="groups"? null : get_setting("usergroups") );
+      $this->groups = $this->GetGroupsAdded( $this->show=="groups"? null : get_setting("usergroups") );
     }
 
     $this->parties = array();
-    if ($_GET["show"]=="parties")
+    if ($this->show=="parties")
     {
-      $this->parties = $this->GetPartiesAdded( $_GET["show"]=="parties"? null : get_setting("userparties") );
+      $this->parties = $this->GetPartiesAdded( $this->show=="parties"? null : get_setting("userparties") );
     }
 
     $this->shots = array();
-    if ($_GET["show"]=="screenshots")
+    if ($this->show=="screenshots")
     {
-      $this->shots = $this->GetScreenshotsAdded( $_GET["show"]=="screenshots"? null : get_setting("userscreenshots") );
+      $this->shots = $this->GetScreenshotsAdded( $this->show=="screenshots"? null : get_setting("userscreenshots") );
     }
 
     $this->nfos = array();
-    if ($_GET["show"]=="nfos")
+    if ($this->show=="nfos")
     {
-      $this->nfos = $this->GetNFOsAdded( $_GET["show"]=="nfos" ? null : get_setting("usernfos") );
+      $this->nfos = $this->GetNFOsAdded( $this->show=="nfos" ? null : get_setting("usernfos") );
     }
 
     $this->credits = array();
-    if (!$_GET["show"] || $_GET["show"]=="credits")
+    if (!$this->show || $this->show=="credits")
     {
-      $this->credits = $this->GetCredits( $_GET["show"]=="credits" ? null : 10 );
+      $this->credits = $this->GetCredits( $this->show=="credits" ? null : 10 );
     }
 
     $this->firstComments = array();
-    if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
+    if (!$this->show/* || $this->show=="comments"*/)
     {
-      //$this->firstComments = $this->GetFirstCommentsAdded( /*$_GET["show"]=="comments" ? null :*/ get_setting("usercomments") );
+      //$this->firstComments = $this->GetFirstCommentsAdded( /*$this->show=="comments" ? null :*/ get_setting("usercomments") );
     }
 
     $this->topics = array();
-    if ($_GET["show"]=="topics")
+    if ($this->show=="topics")
     {
-      $this->topics = $this->GetBBSTopics( $_GET["show"]=="topics" ? null : get_setting("usercomments") );
+      $this->topics = $this->GetBBSTopics( $this->show=="topics" ? null : get_setting("usercomments") );
     }
 
     $this->posts = array();
-    if ($_GET["show"]=="posts")
+    if ($this->show=="posts")
     {
-      $this->posts = $this->GetBBSPosts( $_GET["show"]=="posts" ? null : get_setting("usercomments") );
+      $this->posts = $this->GetBBSPosts( $this->show=="posts" ? null : get_setting("usercomments") );
     }
 
     $this->comments = array();
-    if ($_GET["show"]=="demoblog")
+    if ($this->show=="demoblog")
     {
       $this->comments = $this->GetDemoblog( $_GET["page"] );
     }
 
     $this->agreeRulez = array();
-    if ($_GET["show"]=="otherstats")
+    if ($this->show=="otherstats")
     {
       $this->agreeRulez = $this->GetThumbAgreers( get_setting("userrulez"), 1 );
     }
 
     $this->agreeSucks = array();
-    if ($_GET["show"]=="otherstats")
+    if ($this->show=="otherstats")
     {
       $this->agreeSucks = $this->GetThumbAgreers( get_setting("usersucks"), -1 );
     }
@@ -438,7 +439,7 @@ class PouetBoxUserMain extends PouetBox
     if ($this->credits)
     {
       echo "<div class='contribheader'>contributions to prods <span>".$this->totalProds." prods</span>";
-      if ($_GET["show"]!="credits")
+      if ($this->show!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
       echo "<ul class='boxlist'>";
@@ -455,13 +456,13 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
-    if (!$_GET["show"] && $this->user->stats["ud"])
+    if (!$this->show && $this->user->stats["ud"])
       echo "<div class='contribheader'>United Devices contribution <span>".$this->user->stats["ud"]." glöps</span></div>\n";
 
-    if (!$_GET["show"] || $this->logos)
+    if (!$this->show || $this->logos)
     {
       echo "<div class='contribheader'>logos added <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
-      if ($_GET["show"]!="logos")
+      if ($this->show!="logos")
         echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
       echo "</div>\n";
     }
@@ -480,10 +481,10 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
-    if (!$_GET["show"] || $this->prods)
+    if (!$this->show || $this->prods)
     {
       echo "<div class='contribheader'>prods added <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
-      if ($_GET["show"]!="prods")
+      if ($this->show!="prods")
         echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
       echo "</div>\n";
     }
@@ -503,10 +504,10 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->groups)
+    if (!$this->show || $this->groups)
     {
       echo "<div class='contribheader'>groups added <span>".$this->user->stats["groups"]." glöps</span> ";
-      if ($_GET["show"]!="groups")
+      if ($this->show!="groups")
         echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
       echo "</div>\n";
     }
@@ -523,10 +524,10 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->parties)
+    if (!$this->show || $this->parties)
     {
       echo "<div class='contribheader'>parties added <span>".$this->user->stats["parties"]." glöps</span> ";
-      if ($_GET["show"]!="parties")
+      if ($this->show!="parties")
         echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
       echo "</div>\n";
     }
@@ -543,10 +544,10 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->shots)
+    if (!$this->show || $this->shots)
     {
       echo "<div class='contribheader'>screenshots added <span>".$this->user->stats["screenshots"]." glöps</span> ";
-      if ($_GET["show"]!="screenshots")
+      if ($this->show!="screenshots")
         echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
       echo "</div>\n";
     }
@@ -566,10 +567,10 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->nfos)
+    if (!$this->show || $this->nfos)
     {
       echo "<div class='contribheader'>nfos added <span>".$this->user->stats["nfos"]." glöps</span> ";
-      if ($_GET["show"]!="nfos")
+      if ($this->show!="nfos")
         echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
       echo "</div>\n";
     }
@@ -589,13 +590,13 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->firstComments)
+    if (!$this->show || $this->firstComments)
     {
       echo "<div class='contribheader'>comments <span>".$this->user->stats["comments"]." glöps</span>";
       //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
-      if ($_GET["show"]!="demoblog")
+      if ($this->show!="demoblog")
         echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
-      if ($_GET["show"]!="otherstats")
+      if ($this->show!="otherstats")
         echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
       echo "</div>\n";
     }
@@ -616,12 +617,12 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
-    if (!$_GET["show"] || $this->topics)
+    if (!$this->show || $this->topics)
     {
       echo "<div class='contribheader'>bbs topics opened";
       if ($this->topicCount)
         echo " <span>".$this->topicCount." topics</span>";
-      if ($_GET["show"]!="topics")
+      if ($this->show!="topics")
         echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
       echo "</div>\n";
     }
@@ -638,12 +639,12 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if (!$_GET["show"] || $this->posts)
+    if (!$this->show || $this->posts)
     {
       echo "<div class='contribheader'>bbs posts";
       if ($this->postCount)
         echo " <span>".$this->postCount." posts</span>";
-      if ($_GET["show"]!="posts")        
+      if ($this->show!="posts")        
         echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
       echo "</div>\n";
     }
@@ -661,7 +662,7 @@ class PouetBoxUserMain extends PouetBox
       $this->paginator->RenderNavbar();
     }
 
-    if ($_GET["show"]=="otherstats")
+    if ($this->show=="otherstats")
     {
       echo "<div class='contribheader'>top thumb up agreers";
       echo "</div>\n";
@@ -729,7 +730,7 @@ class PouetBoxUserMain extends PouetBox
   }
 };
 
-$p = new PouetBoxUserMain( (int)$_GET["who"] );
+$p = new PouetBoxUserMain( (int)$_GET["who"], $_GET["show"] );
 $p->Load();
 
 if ($p->user)
