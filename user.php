@@ -238,7 +238,7 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetCredits( $limit = null )
   {
-    $s = new BM_Query(" credits");
+    $s = new BM_Query("credits");
     $s->AddField("credits.role");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
@@ -252,6 +252,17 @@ class PouetBoxUserMain extends PouetBox
     foreach($data as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
     PouetCollectAwards($a);
+
+    $s = new BM_Query("credits");
+    $s->AddField("sum(voteup) as up");
+    $s->AddField("sum(votedown) as down");
+    $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf("credits.userID = %d",$this->id));
+    $s->AddOrder("credits_prod.quand desc");
+    $data2 = $s->perform();
+    
+    $this->totalCreditsThumbUp = $data2[0]->up;
+    $this->totalCreditsThumbDown = $data2[0]->down;
 
     return $data;
   }
@@ -438,7 +449,8 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->credits && $this->totalProds)
     {
-      echo "<div class='contribheader'>contributions to prods <span>".$this->totalProds." prods</span>";
+      echo "<div class='contribheader'>contributions to prods ";
+      echo "<span>".$this->totalProds." prods (".$this->totalCreditsThumbUp." thumbs up, ".$this->totalCreditsThumbDown." thumbs down)</span>";
       if ($this->show!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
