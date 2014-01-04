@@ -475,6 +475,14 @@ document.observe("dom:loaded",function(){
       echo "</td>\n";
       echo "</tr>\n";
     }
+    else if ($currentUser)
+    {
+      echo "<tr>\n";
+      echo " <td id='credits' colspan='3' class='r2'>";
+      echo " <p>this prod has no credits assigned yet! <a href='submit_modification_request.php?prod=".$this->id."'>click here</a> to add some !</p>";
+      echo "</td>\n";
+      echo "</tr>\n";
+    }
 
 
     if($this->prod->addeduser)
