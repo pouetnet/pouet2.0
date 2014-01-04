@@ -436,7 +436,7 @@ class PouetBoxUserMain extends PouetBox
     echo "</ul>\n";
     echo "</div>\n";
 
-    if ($this->credits)
+    if ($this->credits && $this->totalProds)
     {
       echo "<div class='contribheader'>contributions to prods <span>".$this->totalProds." prods</span>";
       if ($this->show!="credits")
@@ -459,209 +459,235 @@ class PouetBoxUserMain extends PouetBox
     if (!$this->show && $this->user->stats["ud"])
       echo "<div class='contribheader'>United Devices contribution <span>".$this->user->stats["ud"]." glöps</span></div>\n";
 
-    if (!$this->show || $this->logos)
+    if ($this->user->stats["logos"])
     {
-      echo "<div class='contribheader'>logos added <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
-      if ($this->show!="logos")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->logos)
-    {
-      echo "<ul class='boxlist' id='logolist'>";
-      foreach($this->logos as $l)
+      if (!$this->show || $this->logos)
       {
-        echo "<li>";
-        echo "<div class='logo'>";
-        echo "<img src='".POUET_CONTENT_URL."logos/"._html($l->file)."' alt=''/>";
-        echo "<span class='logovotes'>current votes: "._html($l->vote_count)."</span>";
-        echo "</div>";
-        echo "</li>";
+        echo "<div class='contribheader'>logos added <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
+        if ($this->show!="logos")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
+      if ($this->logos)
+      {
+        echo "<ul class='boxlist' id='logolist'>";
+        foreach($this->logos as $l)
+        {
+          echo "<li>";
+          echo "<div class='logo'>";
+          echo "<img src='".POUET_CONTENT_URL."logos/"._html($l->file)."' alt=''/>";
+          echo "<span class='logovotes'>current votes: "._html($l->vote_count)."</span>";
+          echo "</div>";
+          echo "</li>";
+        }
+        echo "</ul>";
+      }
     }
 
-    if (!$this->show || $this->prods)
+    if ($this->user->stats["prods"])
     {
-      echo "<div class='contribheader'>prods added <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
-      if ($this->show!="prods")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->prods)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->prods as $p)
+      if (!$this->show || $this->prods)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>prods added <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
+        if ($this->show!="prods")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->prods)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->prods as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+    }
+    
+    if ($this->user->stats["groups"])
+    {
+      if (!$this->show || $this->groups)
+      {
+        echo "<div class='contribheader'>groups added <span>".$this->user->stats["groups"]." glöps</span> ";
+        if ($this->show!="groups")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
+        echo "</div>\n";
+      }
+      if ($this->groups)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->groups as $g)
+        {
+          echo "<li>";
+          echo $g->RenderLong();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$this->show || $this->groups)
+    if ($this->user->stats["parties"])
     {
-      echo "<div class='contribheader'>groups added <span>".$this->user->stats["groups"]." glöps</span> ";
-      if ($this->show!="groups")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->groups)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->groups as $g)
+      if (!$this->show || $this->parties)
       {
-        echo "<li>";
-        echo $g->RenderLong();
-        echo "</li>";
+        echo "<div class='contribheader'>parties added <span>".$this->user->stats["parties"]." glöps</span> ";
+        if ($this->show!="parties")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->parties)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->parties as $p)
+        {
+          echo "<li>";
+          echo $p->PrintLinked();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$this->show || $this->parties)
+    if ($this->user->stats["screenshots"])
     {
-      echo "<div class='contribheader'>parties added <span>".$this->user->stats["parties"]." glöps</span> ";
-      if ($this->show!="parties")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->parties)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->parties as $p)
+      if (!$this->show || $this->shots)
       {
-        echo "<li>";
-        echo $p->PrintLinked();
-        echo "</li>";
+        echo "<div class='contribheader'>screenshots added <span>".$this->user->stats["screenshots"]." glöps</span> ";
+        if ($this->show!="screenshots")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->shots)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->shots as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$this->show || $this->shots)
+    if ($this->user->stats["nfos"])
     {
-      echo "<div class='contribheader'>screenshots added <span>".$this->user->stats["screenshots"]." glöps</span> ";
-      if ($this->show!="screenshots")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->shots)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->shots as $p)
+      if (!$this->show || $this->nfos)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>nfos added <span>".$this->user->stats["nfos"]." glöps</span> ";
+        if ($this->show!="nfos")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->nfos)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->nfos as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+    }
+    if ($this->user->stats["comments"])
+    {
+      if (!$this->show || $this->firstComments)
+      {
+        echo "<div class='contribheader'>comments <span>".$this->user->stats["comments"]." glöps</span>";
+        //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
+        if ($this->show!="demoblog")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
+        if ($this->show!="otherstats")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
+        echo "</div>\n";
+      }
+      if ($this->firstComments)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->firstComments as $p)
+        {
+          $rating = $p->rating>0 ? "rulez" : ($p->rating<0 ? "sucks" : "isok");
+          echo "<li>";
+          echo "<span class='vote ".$rating."'>".$rating."</span>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+      }
     }
 
-    if (!$this->show || $this->nfos)
+    if ($this->topicCount)
     {
-      echo "<div class='contribheader'>nfos added <span>".$this->user->stats["nfos"]." glöps</span> ";
-      if ($this->show!="nfos")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->nfos)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->nfos as $p)
+      if (!$this->show || $this->topics)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>bbs topics opened";
+        if ($this->topicCount)
+          echo " <span>".$this->topicCount." topics</span>";
+        if ($this->show!="topics")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->topics)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->topics as $t)
+        {
+          echo "<li>";
+          echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> ("._html($t->category).")";
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$this->show || $this->firstComments)
+    if ($this->postCount)
     {
-      echo "<div class='contribheader'>comments <span>".$this->user->stats["comments"]." glöps</span>";
-      //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
-      if ($this->show!="demoblog")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
-      if ($this->show!="otherstats")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
-      echo "</div>\n";
-    }
-    if ($this->firstComments)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->firstComments as $p)
+      if (!$this->show || $this->posts)
       {
-        $rating = $p->rating>0 ? "rulez" : ($p->rating<0 ? "sucks" : "isok");
-        echo "<li>";
-        echo "<span class='vote ".$rating."'>".$rating."</span>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>bbs posts";
+        if ($this->postCount)
+          echo " <span>".$this->postCount." posts</span>";
+        if ($this->show!="posts")        
+          echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-    }
-
-    if (!$this->show || $this->topics)
-    {
-      echo "<div class='contribheader'>bbs topics opened";
-      if ($this->topicCount)
-        echo " <span>".$this->topicCount." topics</span>";
-      if ($this->show!="topics")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->topics)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->topics as $t)
+      if ($this->posts)
       {
-        echo "<li>";
-        echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> ("._html($t->category).")";
-        echo "</li>";
+        echo "<ul class='boxlist'>";
+        foreach($this->posts as $p)
+        {
+          echo "<li>";
+          //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+          echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
     }
-
-    if (!$this->show || $this->posts)
-    {
-      echo "<div class='contribheader'>bbs posts";
-      if ($this->postCount)
-        echo " <span>".$this->postCount." posts</span>";
-      if ($this->show!="posts")        
-        echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->posts)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->posts as $p)
-      {
-        echo "<li>";
-        //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
-        echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
-        echo "</li>";
-      }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
-    }
-
+    
     if ($this->show=="otherstats")
     {
       echo "<div class='contribheader'>top thumb up agreers";
