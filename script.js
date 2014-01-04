@@ -557,7 +557,7 @@ function CollapsibleHeaders( elements )
     var toggle = new Element("span",{"class":"collapseToggle"});
     header.insert( toggle );
 
-    Cookie.init({name: 'pouetHeadersShown'});
+    Cookie.init({name: 'pouetHeadersShown', expires: 365});
     if (box.id && Cookie.getData(box.id))
     {
       toggle.update("hide");
