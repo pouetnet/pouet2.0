@@ -34,11 +34,11 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
     $this->cacheTime = 60*15;
 
     $this->uniqueID = "pouetbox_news";
-    $this->rss = new lastRSS();
-    $this->rss->cache_dir = './cache';
-    $this->rss->cache_time = 5*60; // in seconds
-    $this->rss->CDATA = 'strip';
-    $this->rss->date_format = 'Y-m-d';
+    $this->rss = new lastRSS(array(
+      "cacheTime" => 5 * 60, // in seconds
+      "dateFormat" => "Y-m-d",
+      "stripHtml" => false,
+    ));
 
     $this->limit = 5;
   }

@@ -9,14 +9,17 @@ class PouetBoxUpcomingParties extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_upcomingparties";
     $this->title = "upcoming parties";
 
-    $this->rss = new lastRSS();
-    $this->rss->cache_dir = './cache';
-    $this->rss->cache_time = 5*60; // in seconds
-    $this->rss->CDATA = 'strip';
-    $this->rss->date_format = 'Y-m-d';
-    $this->rss->itemtags[] = "demopartynet:title";
-    $this->rss->itemtags[] = "demopartynet:startDate";
-    $this->rss->itemtags[] = "demopartynet:endDate";
+    $this->rss = new lastRSS(array(
+      "cacheTime" => 5 * 60, // in seconds
+      "dateFormat" => "Y-m-d",
+      "stripHtml" => false,
+    ));
+    $this->rss->setItemTags(array(
+      "link",
+      "demopartynet:title",
+      "demopartynet:startDate",
+      "demopartynet:titendDatele",
+    ));
   }
 
   function LoadFromCachedData($data) {

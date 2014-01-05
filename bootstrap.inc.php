@@ -12,7 +12,7 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/functions.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/libbb.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/orm.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
-require_once( POUET_ROOT_LOCAL . "/include_generic/lastRSS.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/LastRss.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
