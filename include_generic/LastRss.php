@@ -92,10 +92,7 @@ class LastRss
 	public function __construct( $options = array() )
 	{
 		foreach ($options as $name => $value) {
-			if (isset($this->$name))
-			{
-			  $this->$name = $value;
-			}
+			$this->$name = $value;
 		}
 	}
 
@@ -176,7 +173,7 @@ class LastRss
 			throw new Exception('CURL is not installed!');
 		}
 		$ch = curl_init();
-		curl_setopt_array($ch, $this->curlOptions);
+		@curl_setopt_array($ch, $this->curlOptions);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if (!($content = curl_exec($ch))) {
 			$this->lastError = sprintf(self::$downloadError, curl_error($ch));
