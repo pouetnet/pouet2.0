@@ -89,6 +89,12 @@ class PouetBoxUserMain extends PouetBox
       $this->posts = $this->GetBBSPosts( $this->show=="posts" ? null : get_setting("usercomments") );
     }
 
+    $this->requests = array();
+    //if ($this->show=="requests")
+    {
+      $this->requests = $this->GetModRequests( $this->show=="requests" ? null : 1 );
+    }
+
     $this->comments = array();
     if ($this->show=="demoblog")
     {
@@ -354,6 +360,19 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
+  function GetModRequests( $limit = null )
+  {
+    $s = new BM_Query("modification_requests");
+    $s->AddWhere(sprintf("modification_requests.userID = %d",$this->id));
+    $s->AddOrder("modification_requests.requestDate desc");
+    if ($limit)
+      $s->SetLimit( $limit );
+
+    $data = $s->performWithCalcRows( $this->totalRequests );
+  
+    return $data;
+  }
+  
   function GetDemoblog( $page )
   {
     $s = new BM_Query("comments");
@@ -649,6 +668,34 @@ class PouetBoxUserMain extends PouetBox
       }
     }
 
+    if ($this->user->stats["requestGlops"])
+    {
+      if (!$this->show || $this->nfos)
+      {
+        echo "<div class='contribheader'>requests made <span>".(int)$this->totalRequests." requests, ".$this->user->stats["requestGlops"]." glöps</span> ";
+        //if ($this->show!="requests")
+        //  echo "[<a href='user.php?who=".$this->id."&amp;show=requests'>show</a>]";
+        echo "</div>\n";
+      }
+      /*
+      if ($this->requests)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->nfos as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+      */
+    }
+    
     //if ($this->topicCount)
     {
       if (!$this->show || $this->topics)
