@@ -424,7 +424,7 @@ class PouetBoxUserMain extends PouetBox
     if ($this->user->im_type)
       $this->AddRow($this->user->im_type,$this->user->im_id);
 
-    if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo)
+    if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo || $this->user->demozoo)
     {
       echo "<li class='header'>portals:</li>\n";
       if ($this->user->csdb)
@@ -433,6 +433,8 @@ class PouetBoxUserMain extends PouetBox
         echo $this->AddRow("slengpung","<a href='http://www.slengpung.com/?userid=".$this->user->slengpung."'>pictures</a>",true);
       if ($this->user->zxdemo)
         echo $this->AddRow("zxdemo","<a href='http://zxdemo.org/author.php?id=".$this->user->zxdemo."'>profile</a>",true);
+      if ($this->user->demozoo)
+        echo $this->AddRow("demozoo","<a href='http://demozoo.org/sceners/".$this->user->demozoo."/'>profile</a>",true);
     }
 
     if ($this->cdcProds)

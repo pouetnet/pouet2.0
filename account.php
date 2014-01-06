@@ -178,6 +178,10 @@ class PouetBoxAccount extends PouetBox
         "info"=>"your zxdemo id, if you have one",
         "value"=>$this->user->zxdemo,
       ),
+      "demozoo"=>array(
+        "info"=>"your demozoo id, if you have one",
+        "value"=>$this->user->demozoo,
+      ),
     );
     $this->fieldsCDC = array();
 
