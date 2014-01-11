@@ -169,6 +169,8 @@ if ($_POST["requestType"] == "other")
   redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
   exit();
 }
+if (!$_POST["requestType"] && $_GET["requestType"])
+  $_POST["requestType"] = $_GET["requestType"];
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
