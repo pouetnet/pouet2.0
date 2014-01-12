@@ -18,7 +18,7 @@ class PouetBoxUpcomingParties extends PouetBoxCachable {
       "link",
       "demopartynet:title",
       "demopartynet:startDate",
-      "demopartynet:titendDatele",
+      "demopartynet:endDate",
     ));
   }
 
