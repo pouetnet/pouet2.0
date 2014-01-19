@@ -783,7 +783,14 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodaffil"), "prodAffil", {
     onRowLoad: function(tr){
-      new Autocompleter(tr.down(".prodID"), {"dataUrl":"./ajax_prods.php"});
+      new Autocompleter(tr.down(".prodID"), {
+        "dataUrl":"./ajax_prods.php",
+        "processRow": function(item) {
+          var s = item.name.escapeHTML();
+          if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+          return s;
+        }
+      });
     }
   } );
 });
