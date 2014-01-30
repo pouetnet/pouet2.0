@@ -698,13 +698,13 @@ class PouetBoxUserMain extends PouetBox
       */
     }
     
-    //if ($this->topicCount)
+    if ($this->user->stats["topics"])
     {
       if (!$this->show || $this->topics)
       {
         echo "<div class='contribheader'>bbs topics opened";
-        if ($this->topicCount)
-          echo " <span>".$this->topicCount." topics</span>";
+        if ($this->user->stats["topics"])
+          echo " <span>".$this->user->stats["topics"]." topics</span>";
         if ($this->show!="topics")
           echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
         echo "</div>\n";
@@ -723,13 +723,13 @@ class PouetBoxUserMain extends PouetBox
       }
     }
 
-    //if ($this->postCount)
+    if ($this->user->stats["posts"])
     {
       if (!$this->show || $this->posts)
       {
         echo "<div class='contribheader'>bbs posts";
-        if ($this->postCount)
-          echo " <span>".$this->postCount." posts</span>";
+        if ($this->user->stats["posts"])
+          echo " <span>".$this->user->stats["posts"]." posts</span>";
         if ($this->show!="posts")        
           echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
         echo "</div>\n";
