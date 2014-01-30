@@ -519,12 +519,19 @@ class PouetBoxProdComments extends PouetBox {
   var $id;
   var $topic;
   var $posts;
-  function PouetBoxProdComments($id) {
+  function PouetBoxProdComments($id,$main) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
     $this->id = (int)$id;
-
+    
+    $this->credits = array();
+    foreach($main->credits as $credit)
+    {
+      if(!$credit->user) continue;
+      $this->credits[] = $credit->user->id;
+    }
+    
     $this->paginator = new PouetPaginator();
   }
 
@@ -580,8 +587,13 @@ class PouetBoxProdComments extends PouetBox {
       $p = $c->comment;
       $p = parse_message($p);
 
+      $author = false;
+      if (array_search($c->user->id,$this->credits)!==false)
+        $author = true;
+        
       echo "<div class='content cite-".$c->user->id."' id='c".$c->id."'>".$p."</div>\n";
-      echo "<div class='foot'>\n";
+      
+      echo "<div class='foot".($author?" author":"")."'>\n";
       if ($c->rating)
         echo "<span class='vote ".$rating."'>".$rating."</span>";
       if ($main->userCDCs[$c->user->id])
@@ -705,7 +717,7 @@ if ($main->prod)
 
   if (get_setting("prodcomments")!=0)
   {
-    $p = new PouetBoxProdComments($prodid);
+    $p = new PouetBoxProdComments($prodid,$main);
     $p->Load();
     if($p->data)
       $p->Render();
