@@ -174,7 +174,7 @@ class LastRss
 		}
 		$ch = curl_init();
 		curl_setopt_array($ch, $this->curlOptions);
-		if (!ini_get('safe_mode'))
+		if (!ini_get('safe_mode') && !ini_get('open_basedir'))
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if (!($content = curl_exec($ch))) {
