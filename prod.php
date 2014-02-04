@@ -590,10 +590,12 @@ class PouetBoxProdComments extends PouetBox {
       $author = false;
       if (array_search($c->user->id,$this->credits)!==false)
         $author = true;
+
+      echo "<div class='comment cite-".$c->user->id."".($author?" author":"")."' id='c".$c->id."'>\n";
         
-      echo "<div class='content cite-".$c->user->id."' id='c".$c->id."'>".$p."</div>\n";
+      echo "  <div class='content'>".$p."</div>\n";
       
-      echo "<div class='foot".($author?" author":"")."'>\n";
+      echo "  <div class='foot'>\n";
       if ($c->rating)
         echo "<span class='vote ".$rating."'>".$rating."</span>";
       if ($main->userCDCs[$c->user->id])
@@ -606,6 +608,8 @@ class PouetBoxProdComments extends PouetBox {
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
 
       echo "</div>\n";
+      echo "</div>\n";
+      
     }
     $this->paginator->RenderNavbar();
   }
