@@ -114,7 +114,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
     $this->fields["releaseDate"]["value"] = $prod->date;
 
-    $this->fields["platform"]["value"] = $prod->platforms;
+    $this->fields["platform"]["value"] = array_keys($prod->platforms);
     $this->fields["type"]["value"] = $prod->types;
 
     if (count($prod->placings) > 0)

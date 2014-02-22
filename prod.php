@@ -425,8 +425,7 @@ document.observe("dom:loaded",function(){
       $isAmiga = false;
       foreach($this->prod->platforms as $v)
       {
-        global $PLATFORMS;
-        if (stristr($PLATFORMS[$v]["name"],"amiga")!==false)
+        if (stristr($v["name"],"amiga")!==false)
           $isAmiga = true;
       }
       if ($isAmiga)
