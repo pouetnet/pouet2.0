@@ -78,7 +78,10 @@ class PouetBoxBBSPost extends PouetBox {
     echo " <input type='hidden' name='which' value='".(int)$this->topic."'>\n";
     echo " <input type='hidden' name='type' value='post'>\n";
     echo " message:\n";
-    echo " <textarea name='message' id='message'></textarea>\n";
+    echo " <textarea name='message' id='message'>";
+    if ($this->topic == FIXMETHREAD_ID && $_GET["from"])
+      printf("There is a problem with [url=%sprod.php?which=%d]this prod[/url]: ...",POUET_ROOT_URL,$_GET["from"]);
+    echo "</textarea>\n";
     echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
     echo "</div>\n";
     echo "<div class='foot'>\n";

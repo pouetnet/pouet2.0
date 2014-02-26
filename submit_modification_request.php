@@ -166,7 +166,7 @@ $TITLE = "submit a modification request";
 
 if ($_POST["requestType"] == "other")
 {
-  redirect("topic.php?which=".(int)FIXMETHREAD_ID."#pouetbox_bbspost");
+  redirect("topic.php?which=".(int)FIXMETHREAD_ID."&from=".(int)$_REQUEST["prod"]."#pouetbox_bbspost");
   exit();
 }
 if (!$_POST["requestType"] && $_GET["requestType"])
