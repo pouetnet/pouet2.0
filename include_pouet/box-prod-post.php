@@ -25,7 +25,9 @@ class PouetBoxProdPost extends PouetBox {
     if (!$currentUser->CanPostInProdComments())
       return array("not allowed lol.");
 
-    $message = trim($post["comment"]);
+    $message = $post["comment"];
+    $message = str_replace(html_entity_decode('&shy;', 0, 'UTF-8'),"",$message);
+    $message = trim($message);
 
     if (!$message)
       return array("not too meaningful, is it...");
