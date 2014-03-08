@@ -11,6 +11,6 @@ Installation notes
 Credits (of sort)
 -----------------
 
-* "Based on" the original Pouet code at https://github.com/lra/pouet.net
+* "Based on" the original Pouet code at https://github.com/pouetnet/pouet0.9
 * Originally written by Gargaj / Conspiracy
 * Original ASCIIfier code by Rez / Eclipse
