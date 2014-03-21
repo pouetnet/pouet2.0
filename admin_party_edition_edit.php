@@ -74,7 +74,7 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
 $form = new PouetFormProcessor();
 
-$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"]."&amp;when=".(int)$_GET["when"], true );
+$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"]."&when=".(int)$_GET["when"], true );
 
 $box = new PouetBoxAdminEditPartyEdition( $_GET["which"],$_GET["when"] );
 $form->Add( "partyyear", $box );
