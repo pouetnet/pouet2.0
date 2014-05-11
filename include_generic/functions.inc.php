@@ -263,6 +263,8 @@ function validateLink( $url )
     "uploading.com",
     "mirrorcreator",
     "multiupload",
+    "tinyurl",
+    "bit.ly",
   );
   foreach ($shithosts as $v)
     if(strstr($myurl["host"],$v))
