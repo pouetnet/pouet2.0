@@ -337,6 +337,25 @@ function Youtubify( e )
       });
       return;
     }
+    
+    var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
+    if (pouetID)
+    {
+      var callback = "pouetcb";
+      new Ajax.JSONRequest("http://api.pouet.net/v1/prod/?id="+pouetID[1],{
+        method: "get",
+        onSuccess: function(transport) {
+          if (transport.responseJSON.success)
+          {
+            var s = transport.responseJSON.prod.name;
+            item.update( s.escapeHTML() );
+            item.addClassName("pouet");
+          }
+        },
+      });
+      return;
+    }
+    
     var host = item.href.match(/:\/\/(.*?)\//);
     if (host)
     {
