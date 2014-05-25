@@ -134,7 +134,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     if (!$row)
       return array("nice try :|");
 
-    if (strcasecmp($row->link,$input["newLink"])===0 && strcasecmp($row->type,$input["newLinkKey"])===0)
+    if (strcmp($row->link,$input["newLink"])===0 && strcasecmp($row->type,$input["newLinkKey"])===0)
       return array("you didn't change anything :|");
 
     $output["linkID"] = $input["linkID"];
@@ -551,7 +551,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     if (!$prod)
       return array("nice try :|");
 
-    if (strcasecmp($prod->download,$input["downloadLink"])===0)
+    if (strcmp($prod->download,$input["downloadLink"])===0)
       return array("you didn't change anything :|");
 
     $output["downloadLink"] = $input["downloadLink"];
