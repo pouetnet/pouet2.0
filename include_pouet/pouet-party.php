@@ -8,7 +8,7 @@ class PouetParty extends BM_Class {
 //    $node->attach( $query, "added", array("users as addeduser"=>"id"));
   }
   function PrintLinked($year = null) {
-    if ($this->id == NO_PARTY_ID) return "";
+    //if ($this->id == NO_PARTY_ID) return "";
     if ($this->id == 0) return "??";
     if ($year)
     {
@@ -22,7 +22,7 @@ class PouetParty extends BM_Class {
     }
   }
   function PrintShort($year = null) {
-    if ($this->id == NO_PARTY_ID) return "";
+    //if ($this->id == NO_PARTY_ID) return "";
     if ($this->id == 0) return "??";
     $s = shortify_cut($this->name,20);
     return sprintf("<a href='party.php?which=%d&amp;when=%d'>%s %d</a>",

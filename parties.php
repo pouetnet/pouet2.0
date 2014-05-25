@@ -84,7 +84,8 @@ class PouetBoxPartyList extends PouetBox
         else
           echo "  <td></td>\n";
         echo "  <td>\n";
-        echo "<a href='party.php?which=".$party->id."&amp;when=".$year."'>".$year."</a> ";
+        if ($year)
+          echo "<a href='party.php?which=".$party->id."&amp;when=".$year."'>".$year."</a> ";
         if($this->partylinks[$party->id][$year]->slengpung)
           echo " [<a href='http://www.slengpung.com/?eventid=".(int)$this->partylinks[$party->id][$year]->slengpung."'>slengpung</a>]";
         if($this->partylinks[$party->id][$year]->csdb)
