@@ -496,7 +496,7 @@ class PouetBoxUserMain extends PouetBox
     {
       if (!$this->show || $this->logos)
       {
-        echo "<div class='contribheader'>logos added <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
+        echo "<div class='contribheader'>logos added <span>".$this->user->stats["logosVote"]." x 20 = ".($this->user->stats["logosVote"] * 20)." glöps - downvoted logos don't get glöps</span>";
         if ($this->show!="logos")
           echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
         echo "</div>\n";
