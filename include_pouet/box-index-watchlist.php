@@ -19,6 +19,12 @@ class PouetBoxWatchlist extends PouetBox {
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
   }
+  
+  function IsVisibleLoggedOut() 
+  {
+    return false;
+  }
+
 
   function LoadFromDB() {
     global $currentUser;

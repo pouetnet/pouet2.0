@@ -80,6 +80,10 @@ class PouetBox {
     return ob_get_clean();
   }
 
+  function IsVisibleLoggedOut() {
+    return true;
+  }
+
   function LoadFromDB() { // override
   }
 
