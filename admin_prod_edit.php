@@ -148,11 +148,8 @@ class PouetBoxAdminDeleteProd extends PouetBox
 
     $this->prod = $prod;
 
-    $strings = array(
-      "CELEBRANDIL-VECTOR",
-      "MEKKA-SYMPOSIUM",
-    );
-    $this->checkString = $strings[ array_rand($strings) ];
+    global $verificationStrings;
+    $this->checkString = $verificationStrings[ array_rand($verificationStrings) ];
 
     $this->title = "delete this prod: ".$this->prod->RenderLink();
   }

@@ -16,4 +16,10 @@ $AFFILIATIONS_INVERSE = array(
   "related" => "related from",
 );
 
+$verificationStrings = array(
+  "CELEBRANDIL-VECTOR",
+  "MEKKA-SYMPOSIUM",
+  "MEDIA-ERROR",
+);
+
 ?>

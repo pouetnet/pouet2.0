@@ -43,6 +43,70 @@ class PouetBoxAdminEditParty extends PouetBoxSubmitParty
   }
 }
 
+class PouetBoxAdminDeleteParty extends PouetBox
+{
+  function PouetBoxAdminDeleteParty( $party )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_partydelete";
+
+    $this->classes[] = "errorbox";
+
+    $this->party = $party;
+
+    global $verificationStrings;
+    $this->checkString = $verificationStrings[ array_rand($verificationStrings) ];
+
+    $this->title = "delete this party: ".$party->PrintLinked();
+  }
+  function Validate($data)
+  {
+    if ($data["check"] != $data["checkOrig"])
+      return array("wrong verification string !");
+    return array();
+  }
+  function Commit($data)
+  {
+    SQLLib::Query(sprintf_esc("UPDATE prods SET party=0, party_year=0, partycompo='', party_place=0 WHERE party=%d",$this->party->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET invitation=0, invitationyear=0 WHERE invitation=%d",$this->party->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM partiesaka WHERE party1=%d OR party1=%d",$this->party->id,$this->party->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE party=%d",$this->party->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM partylinks WHERE party=%d",$this->party->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM parties WHERE id=%d",$this->party->id));
+    
+    gloperator_log( "party", (int)$this->party->id, "party_delete", get_object_vars($this->party) );
+
+    return array();
+  }
+  function RenderBody()
+  {
+    echo "<div class='content'/>";
+    echo "  <p>To make sure you want to delete <b>this</b> party, type \"".$this->checkString."\" here:</p>";
+    echo "  <input name='checkOrig' type='hidden' value='"._html($this->checkString)."'/>";
+    echo "  <input id='check' name='check' autocomplete='no'/>";
+    echo "</div>";
+    echo "<div class='foot'/>";
+    echo "  <input type='submit' value='Submit' />";
+    echo "</div>";
+    ?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  $("pouetbox_partydelete").up("form").observe("submit",function(e){
+    if ($F("check") != "<?=_js($this->checkString)?>")
+    {
+      alert("Enter the verification string!");
+      e.stop();
+      return;
+    }
+    if (!confirm("ARE YOU REALLY SURE YOU WANT TO DELETE \"<?=_js($this->party->name)?>\"?!"))
+      e.stop();
+  });
+});
+</script>
+    <?
+  }
+}
 
 $form = new PouetFormProcessor();
 
@@ -50,6 +114,8 @@ $form->SetSuccessURL( "party.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditParty( $_GET["which"] );
 $form->Add( "party", $box );
+
+$form->Add( "partydelete", new PouetBoxAdminDeleteParty( $box->party ) );
 
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
