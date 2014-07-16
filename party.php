@@ -56,8 +56,13 @@ class PouetBoxPartyHeader extends PouetBox
 
     if($this->partylinks->zxdemo)
       echo " [<a href='http://zxdemo.org/party.php?id=".(int)$this->partylinks->zxdemo."'>zxdemo</a>]";
+    //else if ($currentUser && $currentUser->CanSubmitItems())
+    //  printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
+
+    if($this->partylinks->demozoo)
+      echo " [<a href='http://demozoo.org/parties/".(int)$this->partylinks->demozoo."/'>demozoo</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
-      printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
+      printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+demozoo</a>]\n",$this->party->id,$this->year);
 
     if($this->partylinks->artcity)
       echo " [<a href='http://artcity.bitfellas.org/index.php?a=search&type=tag&text=".rawurlencode($this->partylinks->artcity)."'>artcity</a>]";

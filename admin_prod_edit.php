@@ -52,7 +52,8 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
-    $a["zxdemo"] = $data["zxdemoID"];
+    //$a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
     $a["party"] = $data["partyID"];
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
@@ -126,7 +127,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     }
 
     $this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
-    $this->fields["zxdemoID"]["value"] = $prod->zxdemo;
+    $this->fields["demozooID"]["value"] = $prod->demozoo;
     $this->fields["csdbID"]["value"] = $prod->csdb;
     $this->fields["invitationParty"]["value"] = $prod->invitation;
     $this->fields["invitationYear"]["value"] = $prod->invitationyear;

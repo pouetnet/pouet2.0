@@ -143,7 +143,8 @@ class PouetBoxSubmitProd extends PouetBox
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
-    $a["zxdemo"] = $data["zxdemoID"];
+    //$a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
     $a["party"] = $data["partyID"];
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
@@ -262,8 +263,8 @@ class PouetBoxSubmitProd extends PouetBox
       "sceneOrgID"=>array(
         "name"=>"scene.org ID",
       ),
-      "zxdemoID"=>array(
-        "name"=>"zxdemo ID",
+      "demozooID"=>array(
+        "name"=>"demozoo ID",
       ),
       "partyID"=>array(
         "name"=>"party",
@@ -365,7 +366,7 @@ class PouetBoxSubmitProd extends PouetBox
       echo "  </div>\n";
     }
 
-    $fields = array_select($this->fields,array("sceneOrgID","csdbID","zxdemoID","boardID"));
+    $fields = array_select($this->fields,array("sceneOrgID","csdbID","demozooID","boardID"));
     if ($fields)
     {
       echo "  <h2 id='othersites'>other sites</h2>\n";
