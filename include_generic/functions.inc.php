@@ -348,6 +348,14 @@ function _like( $s )
 {
   return addcslashes($s,"%_");
 }
+
+// this helps turning "empty" values into null (for foreign keys)
+// makes the code more "readable"
+function nullify( $v )
+{
+  return $v ? $v : NULL;
+}
+
 function redirect($path)
 {
   header("Location: ".POUET_ROOT_URL.$path);

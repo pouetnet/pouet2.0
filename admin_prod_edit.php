@@ -46,22 +46,21 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     if ($data["group2"]) $groups[] = (int)$data["group2"];
     if ($data["group3"]) $groups[] = (int)$data["group3"];
     $groups = array_unique($groups);
-    if (count($groups)) $a["group1"] = array_shift($groups); else $a["group1"] = 0;
-    if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = 0;
-    if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = 0;
+    if (count($groups)) $a["group1"] = array_shift($groups); else $a["group1"] = null;
+    if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = null;
+    if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = null;
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
     //$a["zxdemo"] = $data["zxdemoID"];
     $a["demozoo"] = $data["demozooID"];
-    $a["party"] = $data["partyID"];
+    $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
-    $a["invitation"] = $data["invitationParty"];
+    $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
-    $a["boardID"] = $data["boardID"];
-
+    $a["boardID"] = nullify($data["boardID"]);
     global $prodID;
     SQLLib::UpdateRow("prods",$a,"id=".(int)$this->id);
 
