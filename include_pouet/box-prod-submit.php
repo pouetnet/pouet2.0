@@ -145,13 +145,13 @@ class PouetBoxSubmitProd extends PouetBox
     $a["sceneorg"] = $data["sceneOrgID"];
     //$a["zxdemo"] = $data["zxdemoID"];
     $a["demozoo"] = $data["demozooID"];
-    $a["party"] = $data["partyID"];
+    $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
-    $a["invitation"] = $data["invitationParty"];
+    $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
-    $a["boardID"] = $data["boardID"];
+    $a["boardID"] = nullify($data["boardID"]);
 
     $this->prodID = SQLLib::InsertRow("prods",$a);
 
