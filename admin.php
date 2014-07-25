@@ -105,6 +105,10 @@ class PouetBoxAdmin extends PouetBox {
       echo "</li>\n";
     }
     echo "  <li><a href='admin_modification_requests.php'>process modification requests</a></li>";
+    if ($currentUser->IsModerator())
+    {
+      echo "  <li><a href='admin_faq.php'>edit faq items</a></li>";
+    }
     echo "</ul>\n";
     echo "</div>\n";
   }
