@@ -18,10 +18,13 @@ function pouetAdmin_recacheFrontPage()
 
 function pouetAdmin_recacheTopDemos()
 {
-
+  global $timer;
+  
+  // this needs to be made faster. a LOT faster.
   $total = array();
 
-  // this needs to be made faster. a LOT faster.
+  // list by views
+  $timer["recache_views"]["start"] = microtime_float();
   $i=0;
   $query="SELECT id,name,views FROM prods ORDER BY views DESC";
   $result = SQLLib::Query($query);
@@ -34,6 +37,7 @@ function pouetAdmin_recacheTopDemos()
   }
   $content .= "</ol>";
   $content .= "<h3>".$i." prod views loaded</h3>\n";
+  $timer["recache_views"]["end"] = microtime_float();
 
   $i=0;
   // Get the list of prod IDs ordered by the sum of their comment ratings
@@ -46,6 +50,7 @@ function pouetAdmin_recacheTopDemos()
   $sql->AddGroup("prods.id");
   $sql->AddOrder("SUM(comments.rating) DESC");
 
+  $timer["recache_votes"]["start"] = microtime_float();
   $result = SQLLib::Query( $sql->GetQuery() );
   $content .= "<ol>";
   while($tmp = SQLLib::Fetch($result)) {
@@ -56,18 +61,33 @@ function pouetAdmin_recacheTopDemos()
   }
   $content .= "</ol>";
   $content .= "<h3>".$i." vote counts loaded</h3>\n";
+  $timer["recache_votes"]["end"] = microtime_float();
 
+  $timer["recache_sort"]["start"] = microtime_float();
   asort($total);
+  $timer["recache_sort"]["end"] = microtime_float();
 
+  $timer["recache_update"]["start"] = microtime_float();
   $i=1;
   unset($tmp);
   unset($top_demos);
-  while ((list ($key, $val)=each($total))) {
-    $query="UPDATE prods SET rank=".$i." WHERE id=".$key;
-    SQLLib::Query($query);
+  $a = array();
+  while ((list ($key, $val)=each($total))) 
+  {
+    $a[] = array(
+      "id" => $key,
+      "rank" => $i,
+    );
+    if (count($a) == 100)
+    {
+      SQLLib::UpdateRowMulti("prods","id",$a);
+      $a = array();
+    }
     $i++;
   }
+  SQLLib::UpdateRowMulti("prods","id",$a);
   $content .= "<h3>".$i." prod rankings updated</h3>\n";
+  $timer["recache_update"]["end"] = microtime_float();
 
   @unlink('cache/pouetbox_topalltime.cache');
   @unlink('cache/pouetbox_topmonth.cache');
