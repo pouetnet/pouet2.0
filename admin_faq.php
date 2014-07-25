@@ -3,7 +3,7 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-party-submit.php");
 
-if ($currentUser && !$currentUser->CanEditItems())
+if ($currentUser && !$currentUser->IsModerator())
 {
   redirect("index.php");
   exit();
@@ -60,10 +60,12 @@ class PouetBoxAdminEditFAQ extends PouetBox
     $a["deprecated"] = $data["deprecated"] == "on";
     if ($data["faqID"])
     {
+      //gloperator_log( "faq", $data["faqID"], "faq_edit" );
       SQLLib::UpdateRow("faq",$a,"id=".(int)$data["faqID"]);
     }
     else
     {
+      //gloperator_log( "faq", 0, "faq_add" );
       SQLLib::InsertRow("faq",$a);
     }
 
@@ -158,7 +160,7 @@ if ($_GET["id"] || $_GET["new"]=="add")
 else
   $form->Add( "adminModFaq", new PouetBoxAdminEditFAQList( ) );
 
-if ($currentUser && $currentUser->CanEditItems())
+if ($currentUser && $currentUser->IsModerator())
 {
   $form->SetSuccessURL( "admin_faq.php", true );
   $form->Process();
