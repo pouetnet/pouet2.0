@@ -129,6 +129,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
     $this->fields["demozooID"]["value"] = $prod->demozoo;
     $this->fields["csdbID"]["value"] = $prod->csdb;
+    $this->fields["boardID"]["value"] = $prod->boardID;
     $this->fields["invitationParty"]["value"] = $prod->invitation;
     $this->fields["invitationYear"]["value"] = $prod->invitationyear;
 
