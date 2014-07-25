@@ -83,6 +83,7 @@ class PouetBoxAdmin extends PouetBox {
 
   function Render()
   {
+    global $currentUser;
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "<h2>i'm gonna wreck it !</h2>\n";
