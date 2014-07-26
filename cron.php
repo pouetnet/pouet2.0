@@ -1,5 +1,5 @@
 <?
-if(php_sapi_name() != "cli")
+if(php_sapi_name() != "cli" && !defined('STDIN'))
   die("commandline only!");
 
 // change to pouet root
