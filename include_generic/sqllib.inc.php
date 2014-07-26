@@ -94,7 +94,7 @@ class SQLLib {
     foreach($a as $k=>$v) {
       $keys[]="`".mysqli_real_escape_string(SQLLib::$link,$k)."`";
       if ($v!==NULL) $values[]="'".mysqli_real_escape_string(SQLLib::$link,$v)."'";
-      else           $values[]="''";
+      else           $values[]="null";
     }
 
     $cmd = sprintf("insert %s (%s) values (%s)",

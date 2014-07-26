@@ -137,9 +137,9 @@ class PouetBoxSubmitProd extends PouetBox
     if ($data["group2"]) $groups[] = (int)$data["group2"];
     if ($data["group3"]) $groups[] = (int)$data["group3"];
     $groups = array_unique($groups);
-    if (count($groups)) $a["group1"] = array_shift($groups);
-    if (count($groups)) $a["group2"] = array_shift($groups);
-    if (count($groups)) $a["group3"] = array_shift($groups);
+    $a["group1"] = nullify( array_shift($groups) );
+    $a["group2"] = nullify( array_shift($groups) );
+    $a["group3"] = nullify( array_shift($groups) );
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
