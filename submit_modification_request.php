@@ -179,7 +179,9 @@ echo "<div id='content'>\n";
 
 $form = new PouetFormProcessor();
 
-$form->successMessage = "your request was recorded and will be processed by a glöperator eventually !";
+$form->successMessage = 
+  "your request was recorded and will be processed by a glöperator eventually ! <br/>".
+  "you can keep track of the status of your requests <a href='account.php#pouetbox_accountreq'>on your accounts page</a> !";
 
 if ($_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
