@@ -100,6 +100,12 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
           "type"=>"url",
           "value"=>$l->link,
         ),
+        "reason" => array(
+          "name"=>"why should this link be changed",
+          "type"=>"textarea",
+          "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
+          "required"=>true,
+        ),
         "finalStep" => array(
           "type"=>"hidden",
           "value"=>1,
@@ -130,6 +136,9 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     if ($errors)
       return $errors;
 
+    if (!$input["reason"])
+      return array("no changing without a good reason !");
+
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where prod = %d and id = %d",$_REQUEST["prod"],$input["linkID"]));
     if (!$row)
       return array("nice try :|");
@@ -140,6 +149,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $output["linkID"] = $input["linkID"];
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
+    $output["reason"] = $input["reason"];
     return array();
   }
 
@@ -152,6 +162,8 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $s .= "<br/><b>new</b>: ";
     $s .= _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
+    $s .= "<br/><b>reason</b>: ";
+    $s .= _html($data["reason"]);
     return $s;
   }
 
@@ -534,6 +546,12 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
         "type"=>"url",
         "value"=>$prod->download,
       ),
+      "reason" => array(
+        "name"=>"why should this link be changed",
+        "type"=>"textarea",
+        "info"=>"moderator's note: abuse of this feature will result in retaliation. have a nice day.",
+        "required"=>true,
+      ),
       "finalStep" => array(
         "type"=>"hidden",
         "value"=>1,
@@ -547,6 +565,9 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     if ($errors)
       return $errors;
 
+    if (!$input["reason"])
+      return array("no changing without a good reason !");
+
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
     if (!$prod)
       return array("nice try :|");
@@ -555,6 +576,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
       return array("you didn't change anything :|");
 
     $output["downloadLink"] = $input["downloadLink"];
+    $output["reason"] = $input["reason"];
     return array();
   }
 
@@ -565,6 +587,9 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     $s .= "<a href='"._html($prod->download)."'>"._html(shortify_cut($prod->download,50))."</a>";
     $s .= "<br/><b>new</b>: ";
     $s .= "<a href='"._html($data["downloadLink"])."'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
+    $s .= "<br/><b>reason</b>: ";
+    $s .= _html($data["reason"]);
+   
     return $s;
   }
 
