@@ -15,7 +15,7 @@ class PouetBoxFAQ extends PouetBox {
 
   function RenderBody()
   {
-    echo "<div class='content'>\n";
+    echo "<div class='content' id='faq_toc'>\n";
     $lastType = "";
     foreach($this->entries as $e)
     {
@@ -62,6 +62,24 @@ $box->Load();
 $box->Render();
 
 echo "</div>\n";
+
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $("faq_toc").hide();
+  $$("dd").invoke("hide");
+  $$("dt").each(function(item){
+    item.setStyle({"cursor":"pointer"});
+    item.observe("click",function(ev){
+      ev.findElement("dt").nextSiblings().first().toggle();
+      ev.stop();
+    });
+  });
+});
+//-->
+</script>
+<?
 
 require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");
