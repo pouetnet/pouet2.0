@@ -41,7 +41,7 @@ class PouetBoxFAQ extends PouetBox {
           echo "</dl>\n";
         echo "<h2>:: "._html($e->category)."</h2>\n";
         $lastType = $e->category;
-        echo "<dl>\n";
+        echo "<dl class='faq'>\n";
       }
       echo "<dt id='faq"._html($e->id)."'>:: "._html($e->category)." :: ".$e->question."</dt>\n";
       echo "<dd>".$e->answer."</dd>\n";
@@ -68,13 +68,14 @@ echo "</div>\n";
 <!--
 document.observe("dom:loaded",function(){
   $("faq_toc").hide();
-  $$("dd").invoke("hide");
-  $$("dt").each(function(item){
+  $$(".faq > dd").invoke("hide");
+  $$(".faq > dt").each(function(item){
     item.update( "[<a href='#" + item.id + "'>#</a>] " + item.innerHTML );
     item.setStyle({"cursor":"pointer"});
     item.observe("click",function(ev){
       ev.findElement("dt").nextSiblings().first().toggle();
-      ev.stop();
+      if (!ev.findElement("a"))
+        ev.stop();
     });
   });
   
