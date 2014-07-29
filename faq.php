@@ -80,6 +80,7 @@ document.observe("dom:loaded",function(){
   
   var e = $$("dt#" + location.hash);
   if (e.length) e.first().nextSiblings().first().show();
+  var v = location.hash; location.hash = v; // force firefox
 });
 //-->
 </script>
