@@ -176,6 +176,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     unset($this->fields["sceneOrgID"]);
     unset($this->fields["zxdemoID"]);
     unset($this->fields["csdbID"]);
+    unset($this->fields["demozooID"]);
     unset($this->fields["invitationParty"]);
     unset($this->fields["invitationYear"]);
     if ( file_exists( get_local_nfo_path( $prod->id ) ) )
