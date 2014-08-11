@@ -232,12 +232,13 @@ class PouetBoxGroupList extends PouetBox
 
       $idstr = implode(",",$ids);
 
-      $prods = SQLLib::selectRows(sprintf("select id,name,type,group1,group2,group3 from prods where (group1 in (%s)) or (group2 in (%s)) or (group3 in (%s))",$idstr,$idstr,$idstr));
-      foreach($prods as $prod)
+      for ($x = 1; $x <= 3; $x++)
       {
-        if ($prod->group1) $this->prods[$prod->group1][$prod->id] = $prod;
-        if ($prod->group2) $this->prods[$prod->group2][$prod->id] = $prod;
-        if ($prod->group3) $this->prods[$prod->group3][$prod->id] = $prod;
+        $counts = SQLLib::selectRows(sprintf("select group".$x." as groupID, count(*) as c from prods where group".$x." in (%s) group by group".$x."",$idstr));
+        foreach($counts as $count)
+        {
+          $this->prods[$count->groupID] += $count->c;
+        }
       }
     }
 
@@ -254,18 +255,7 @@ class PouetBoxGroupList extends PouetBox
       echo "<tr>\n";
       echo "  <td class='groupname'>".$r->RenderFull()."</td>\n";
       echo "  <td>\n";
-      if ($this->prods[$r->id])
-      {
-        echo "    <ul>\n";
-        $prod = new PouetProd();
-        foreach($this->prods[$r->id] as $p)
-        {
-          foreach(get_object_vars($p) as $k=>$v) $prod->$k = $v;
-          $prod->types = explode(",",$prod->type);
-          echo "<li>".$prod->RenderTypeIcons().$prod->RenderLink()."</li>";
-        }
-        echo "    </ul>\n";
-      }
+      echo $this->prods[$r->id];
       echo "  </td>\n";
       echo "</tr>\n";
     }
