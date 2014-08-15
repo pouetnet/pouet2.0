@@ -81,7 +81,7 @@ class PouetBoxProdlist extends PouetBox
       "platform"=>"platform",
       "group"=>"group",
       "party"=>"release party",
-      "release"=>"release",
+      "release"=>"release date",
       "added"=>"added",
       "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
       "thumbpig"=>"<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />",
