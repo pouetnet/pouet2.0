@@ -425,7 +425,7 @@ document.observe("dom:loaded",function(){
     printf("<div id='nfo'>");
     if ($currentUser && $currentUser->CanEditItems())
     {
-      printf("[<a href='admin_prod_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
+      printf("[<a href='admin_prod_edit.php?which=%d' class='adminlink'>admin</a>]\n",$this->id);
     }
     if ($currentUser && $currentUser->CanSubmitItems())
     {
