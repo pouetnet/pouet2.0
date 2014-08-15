@@ -427,6 +427,10 @@ document.observe("dom:loaded",function(){
     {
       printf("[<a href='admin_prod_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
     }
+    if ($currentUser && $currentUser->CanSubmitItems())
+    {
+      printf("[<a href='submit_modification_request.php?prod=%d'>edit</a>]\n",$this->prod->id);
+    }
     if (file_exists(get_local_nfo_path($this->id)))
     {
       $isAmiga = false;
