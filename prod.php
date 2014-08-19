@@ -112,6 +112,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "scene.org";
+      $o->id = "sceneorgID";
       $o->link = "http://scene.org/file.php?id=".(int)$this->prod->sceneorg;
       $this->downloadLinks[] = $o;
     }
@@ -119,6 +120,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "csdb";
+      $o->id = "csdbID";
       $o->link = "http://csdb.dk/release/?id=".(int)$this->prod->csdb;
       $this->downloadLinks[] = $o;
     }
@@ -126,6 +128,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "zxdemo";
+      $o->id = "zxdemoID";
       $o->link = "http://zxdemo.org/item.php?id=".(int)$this->prod->zxdemo;
       $this->downloadLinks[] = $o;
     }
@@ -133,6 +136,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "demozoo";
+      $o->id = "demozooID";
       $o->link = "http://demozoo.org/productions/".(int)$this->prod->demozoo."/";
       $this->downloadLinks[] = $o;
     }
@@ -389,7 +393,7 @@ document.observe("dom:loaded",function(){
     echo "<li id='mainDownload'>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
     foreach ($this->downloadLinks as $link)
     {
-      echo "<li>[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
+      echo "<li".($link->id?" id='".$link->id."'":"").">[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
     }
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
