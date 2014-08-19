@@ -140,7 +140,7 @@ class PouetBoxProdMain extends PouetBox {
       $o->link = "http://demozoo.org/productions/".(int)$this->prod->demozoo."/";
       $this->downloadLinks[] = $o;
     }
-    $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d order by type",$this->id)));
+    $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$this->id)));
   }
 
   function RenderScreenshot() {
