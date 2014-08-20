@@ -838,12 +838,14 @@ $form = new PouetFormProcessor();
 $form->SetSuccessURL( "prod.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditProd( $_GET["which"] );
-$form->Add( "prod", $box );
-foreach($boxen as $class)
-  $form->Add( "prod" . $class::$slug, new $class($box->prod) );
-if ($currentUser && $currentUser->CanDeleteItems())
-  $form->Add( "prodDelete", new PouetBoxAdminDeleteProd($box->prod) );
-
+if ($box->prod)
+{
+  $form->Add( "prod", $box );
+  foreach($boxen as $class)
+    $form->Add( "prod" . $class::$slug, new $class($box->prod) );
+  if ($currentUser && $currentUser->CanDeleteItems())
+    $form->Add( "prodDelete", new PouetBoxAdminDeleteProd($box->prod) );
+}
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 
