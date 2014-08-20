@@ -20,6 +20,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $this->id = (int)$id;
 
     $this->prod = PouetProd::Spawn( $this->id );
+    if (!$this->prod) return;
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
