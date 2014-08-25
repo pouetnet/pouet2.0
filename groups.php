@@ -54,6 +54,11 @@ class PouetBoxGroupMain extends PouetBox
     PouetCollectPlatforms($this->prods);
     PouetCollectAwards($this->prods);
 
+    $s = new BM_Query("affiliatedboards");
+    $s->attach(array("affiliatedboards"=>"board"),array("boards as board"=>"id"));
+    $s->AddWhere(sprintf_esc("affiliatedboards.group=%d",$this->id));
+    $this->affil = $s->perform();
+
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
@@ -173,6 +178,17 @@ class PouetBoxGroupMain extends PouetBox
       else
         echo "<td>&nbsp;</td>";
 
+      echo "</tr>\n";
+    }
+    if ($this->affil)
+    {
+      echo "<tr>\n";
+      echo " <td colspan='9' class='affil'>";
+      echo " <ul>\n";
+      foreach($this->affil as $v)
+        echo sprintf("<li><a href='boards.php?which=%d'>%s</a> (%s)</li>",$v->id,_html($v->name),_html($v->type));
+      echo " </ul>\n";
+      echo " </td>\n";
       echo "</tr>\n";
     }
     echo "<tr>\n";
