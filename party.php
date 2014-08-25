@@ -193,7 +193,7 @@ class PouetBoxPartyView extends PouetBox
       "release"=>"release",
       "added"=>"added",
 */
-      "thumbup"=>"<img src=''".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
+      "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
       "thumbpig"=>"<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />",
       "thumbdown"=>"<img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />",
       "avg"=>"avg",
