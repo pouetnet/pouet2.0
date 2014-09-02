@@ -67,8 +67,8 @@ function adjustSubmitFormFields()
   if($("platform")) $A( $("platform").options ).each(function(item){
     if (item.selected)
     {
-      if (item.text.toLowerCase().indexOf("zx") != -1)
-        $("row_zxdemoID").show();
+//      if (item.text.toLowerCase().indexOf("zx") != -1)
+//        $("row_zxdemoID").show();
       if (item.text.toLowerCase().indexOf("commodore") != -1)
         $("row_csdbID").show();
       if (item.text.toLowerCase().indexOf("c64") != -1)
@@ -99,7 +99,7 @@ function PrepareSubmitForm()
 
   var fields = $A([
     "row_csdbID",
-    "row_zxdemoID",
+    //"row_zxdemoID",
     "row_invitationParty",
     "row_invitationYear",
     "row_boardID",
@@ -372,7 +372,7 @@ function Youtubify( e )
 (function ()
 {
   "use strict"; // See http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/i;
+  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?Â«Â»Â“Â”Â‘Â’]))/i;
   var protocol = /^\s*[A-Z_a-z]+:\/\//;
 
   // Replaces the selected text in a textarea with the given text optionally highlighting a subset
