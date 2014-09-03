@@ -29,7 +29,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     }
     if ($data["artcity"])
     {
-      if (preg_match("/[^a-zA-Z0-9@\,]/",$data["artcity"]))
+      if (preg_match("/[^a-zA-Z0-9@\,\s]/",$data["artcity"]))
         return array("that's not a valid artcity tag-collection!");
     }
     return array();
