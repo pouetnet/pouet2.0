@@ -30,6 +30,7 @@ class PouetBoxAdminEditUser extends PouetBox
   }
   function Commit($data)
   {
+    global $currentUser;
     $a = array();
     if ($currentUser->IsAdministrator() && array_search($data["level"],$this->levels)!==false)
       $a["level"] = $data["level"];
