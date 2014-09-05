@@ -70,7 +70,7 @@ class PouetBoxAdminEditUser extends PouetBox
     );
     if ($currentUser && !$currentUser->IsAdministrator())
     {
-      $v["level"]["type"] = "static";
+      $this->fields["level"]["type"] = "static";
     }
   }
   function Render()
