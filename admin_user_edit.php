@@ -68,8 +68,10 @@ class PouetBoxAdminEditUser extends PouetBox
         "value" => $this->user->permissionSubmitItems,
       ),
     );
-    if ($currentUser && !$currentUser->IsAdministrator())
-      foreach($this->fields as &$v) $v["level"] = "static";
+    if ($currentUser && !$currentUser->IsAdministrator())\
+    {
+      $v["level"]["type"] = "static";
+    }
   }
   function Render()
   {
