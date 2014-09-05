@@ -31,7 +31,7 @@ class PouetBoxAdminEditUser extends PouetBox
   function Commit($data)
   {
     $a = array();
-    if (array_search($data["level"],$this->levels)!==false)
+    if ($currentUser->IsAdministrator() && array_search($data["level"],$this->levels)!==false)
       $a["level"] = $data["level"];
     $a["permissionSubmitItems"] = $data["permissionSubmitItems"] == "on";
     SQLLib::UpdateRow("users",$a,"id=".(int)$this->user->id);
@@ -68,7 +68,7 @@ class PouetBoxAdminEditUser extends PouetBox
       ),
     );
     if ($currentUser && !$currentUser->IsAdministrator())
-      foreach($this->fields as &$v) $v["type"] = "static";
+      foreach($this->fields as &$v) $v["level"] = "static";
   }
   function Render()
   {
