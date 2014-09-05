@@ -1,7 +1,7 @@
 <?
 class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
-  static function getFields() { return array("id","nickname","level","avatar","glops","quand","lastLogin"); }
+  static function getFields() { return array("id","nickname","level","permissionSubmitItems","avatar","glops","quand","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
   function PrintLinkedAvatar() {
 //    return "<a href='user.php?who=".$this->id."' class='usera' title=\""._html($this->nickname)."\"><img src='".POUET_CONTENT_URL."avatars/".rawurlencode($this->avatar)."' alt=\""._html($this->nickname)."\" class='avatar'/></a>";
@@ -141,15 +141,7 @@ class PouetUser extends BM_Class {
   }
   function CanSubmitItems()
   {
-    $very_smart_people = array(
-      3254,
-      27338,
-      25511,
-      4627,
-      24880,
-      58309,
-    );
-    return array_search($this->id,$very_smart_people) === false;
+    return $this->permissionSubmitItems != 0;
   }
   function CanDeleteItems()
   {
