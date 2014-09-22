@@ -7,12 +7,14 @@ require_once("include_pouet/pouet-user.php");
 class PouetBoxProdPost extends PouetBox {
   var $prod;
   function PouetBoxProdPost($prod) {
+    global $currentUser;
+    
     parent::__construct();
     $this->prod = (int)$prod;
     $this->uniqueID = "pouetbox_prodpost";
     $this->title = "add a comment";
 
-    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$_SESSION["user"]->id,$this->prod));
+    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prod));
   }
 
   function Validate($post)
@@ -108,7 +110,7 @@ class PouetBoxProdPost extends PouetBox {
   function RenderBody() {
     global $currentUser;
 
-    if (!$_SESSION["user"]) {
+    if (!$currentUser) {
       require_once("box-login.php");
       $box = new PouetBoxLogin();
       $box->RenderBody();
