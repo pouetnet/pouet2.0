@@ -43,7 +43,7 @@ elseif ($_GET["results"])
 }
 elseif ($_GET["boardnfo"])
 {
-  $path = get_local_bbsnfo_path($_GET["boardnfo"]);
+  $path = get_local_boardnfo_path($_GET["boardnfo"]);
 }
 
 if(!$path || !file_exists($path))
