@@ -407,7 +407,7 @@ function get_local_partyresult_path( $id, $year )
   return sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
 }
 
-function get_local_bbsnfo_path( $id )
+function get_local_boardnfo_path( $id )
 {
   return sprintf(POUET_CONTENT_LOCAL . "othernfo/%d.nfo",$id);
 }
@@ -427,7 +427,7 @@ function get_partyresult_url( $id, $year )
   return sprintf(POUET_CONTENT_URL . "results/%d_%02d.txt",$id,$year%100);
 }
 
-function get_bbsnfo_url( $id )
+function get_boardnfo_url( $id )
 {
   return sprintf(POUET_CONTENT_URL . "othernfo/%d.nfo",$id);
 }
