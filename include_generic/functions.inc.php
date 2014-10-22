@@ -409,7 +409,7 @@ function get_local_partyresult_path( $id, $year )
 
 function get_local_boardnfo_path( $id )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "othernfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.nfo",$id);
 }
 
 function get_screenshot_url( $id, $ext )
@@ -429,7 +429,7 @@ function get_partyresult_url( $id, $year )
 
 function get_boardnfo_url( $id )
 {
-  return sprintf(POUET_CONTENT_URL . "othernfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_URL . "nfo_bbs/%d.nfo",$id);
 }
 
 define("FIXMETHREAD_ID",1024);
