@@ -16,6 +16,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
   function Validate($post)
   {
+    global $currentUser;
     $message = trim($post["message"]);
 
     if (!$message)
@@ -23,16 +24,17 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
     $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY quand DESC LIMIT 1");
 
-    if ($r->who == $_SESSION["user"]->id)
+    if ($r->who == $currentUser->id)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
   }
 
   function Commit($post)
   {
+    global $currentUser;
     $message = trim($post["message"]);
 
   	$a = array();
-  	$a["who"] = $_SESSION["user"]->id;
+  	$a["who"] = $currentUser->id;
   	$a["quand"] = date("Y-m-d H:i:s");
   	$a["message"] = $message;
 
@@ -92,7 +94,8 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     <?
   }
   function RenderFooter() {
-    if (!$_SESSION["user"]) {
+    global $currentUser;
+    if (!$currentUser) {
       echo "  <div class='foot'><a href='oneliner.php'>more</a>...</div>\n";
     } else {
       //$funnytext = "have fun";

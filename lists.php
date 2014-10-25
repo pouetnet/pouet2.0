@@ -55,7 +55,7 @@ class PouetBoxListsMain extends PouetBox
 
   function Render()
   {
-    global $currentUser,$PLATFORMS;
+    global $currentUser;
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
     echo "<div id='listsname'>\n";
     echo sprintf("<a href='lists.php?which=%d'>%s</a>",$this->id,_html($this->list->name));

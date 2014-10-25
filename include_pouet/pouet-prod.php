@@ -18,7 +18,7 @@ class PouetProd extends BM_Class {
   static function getTable () { return "prods"; }
   static function getFields() { return array("id","name","type","views","added","quand","date",
     "voteup","votepig","votedown","voteavg","download","partycompo","party_place","party_year"); }
-  static function getExtendedFields() { return array("sceneorg","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
+  static function getExtendedFields() { return array("sceneorg","demozoo","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
 
   function onFinishedPopulate() {
     $this->groups = array();
@@ -47,10 +47,9 @@ class PouetProd extends BM_Class {
     return $s;
   }
   function RenderPlatformIcons() {
-    global $PLATFORMS;
     $s = "<span class='platformiconlist'>";
     foreach($this->platforms as $t)
-      $s .= "<span class='platformi os_".$PLATFORMS[$t]["slug"]."' title='"._html($PLATFORMS[$t]["name"])."'>".$PLATFORMS[$t]["name"]."</span>\n";
+      $s .= "<span class='platformi os_".$t["slug"]."' title='"._html($$t["name"])."'>".$$t["name"]."</span>\n";
     $s .= "</span>";
     return $s;
   }
@@ -62,10 +61,9 @@ class PouetProd extends BM_Class {
     return $s;
   }
   function RenderPlatformNames() {
-    global $PLATFORMS;
     $s = "<ul>";
     foreach($this->platforms as $t)
-      $s .= "<li><a href='prodlist.php?platform[]=".rawurlencode($PLATFORMS[$t]["name"])."'><span class='platform os_".$PLATFORMS[$t]["slug"]."'>".$PLATFORMS[$t]["name"]."</span> ".$PLATFORMS[$t]["name"]."</a></li>\n";
+      $s .= "<li><a href='prodlist.php?platform[]=".rawurlencode($t["name"])."'><span class='platform os_".$t["slug"]."'>".$t["name"]."</span> ".$t["name"]."</a></li>\n";
     $s .= "</ul>";
     return $s;
   }
@@ -184,7 +182,8 @@ function PouetCollectPlatforms( &$prodArray )
     {
       if ($v->id == $r->prod)
       {
-        $v->platforms[] = $r->platform;
+        global $PLATFORMS;
+        $v->platforms[ $r->platform ] = $PLATFORMS[$r->platform];
         unset($r);
       }
     }

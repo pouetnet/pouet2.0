@@ -63,6 +63,7 @@ class PouetBoxSubmitLogo extends PouetBox
 
     $a = array();
     $a["author1"] = $currentUser->id;
+    $a["author2"] = NULL;
     $a["file"] = $filename;
     SQLLib::InsertRow("logos",$a);
 

@@ -94,7 +94,7 @@ class SQLLib {
     foreach($a as $k=>$v) {
       $keys[]="`".mysqli_real_escape_string(SQLLib::$link,$k)."`";
       if ($v!==NULL) $values[]="'".mysqli_real_escape_string(SQLLib::$link,$v)."'";
-      else           $values[]="''";
+      else           $values[]="null";
     }
 
     $cmd = sprintf("insert %s (%s) values (%s)",
@@ -127,6 +127,44 @@ class SQLLib {
     $cmd = sprintf("update %s set %s where %s",
       $table,implode(", ",$set),$where);
     SQLLib::Query($cmd);
+  }
+
+  /*
+  UpdateRowMulti allows batched updates on multiple rows at once.
+  
+  Syntax:
+  $tuples = array(
+    array( "keyColumn" => 1, "col1" => "abc", "col2" => "def" ),
+    array( "keyColumn" => 2, "col1" => "ghi", "col2" => "jkl" ),
+  );
+  $key = "keyColumn";
+  
+  NOTE: the first tuple defines keys. If your tuples are uneven, you're on your own.
+  */
+  static function UpdateRowMulti( $table, $key, $tuples )
+  {
+    if (!count($tuples))
+      return;
+    if (!is_array($tuples[0]))
+      throw new Exception("Has to be array!");
+  
+    $fields = array_keys( $tuples[0] );
+  
+    $sql = "UPDATE ".$table;
+    $keys = array();
+    foreach($fields as $field)
+    {
+      if ($field == $key) continue;
+      foreach($tuples as $tuple)
+        $cond .= sprintf_esc(" WHEN %d THEN '%s' ",$tuple[$key],$tuple[$field]);
+      $sql .= " SET `".$field."` = (CASE `".$key."` ".$cond." END)";
+    }
+    foreach($tuples as $tuple)
+      $keys[] = $tuple[$key];
+    $sql .= " WHERE `".$key."` IN (".implode(",",$keys).")";
+  
+    //echo $sql."\n\n";
+    SQLLib::Query($sql);
   }
 
   static function StartTransaction() 

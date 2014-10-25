@@ -17,7 +17,7 @@ $box = NULL;
 $thing = "";
 $data = "";
 
-if (!$_SESSION["user"]) {
+if (!$currentUser) {
 
   $message->message = "You got logged out somehow...";
 

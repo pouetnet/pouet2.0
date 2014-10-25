@@ -37,13 +37,6 @@ class PouetBoxSearchProd extends PouetBox
     $this->terms = $terms;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("search.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -130,9 +123,9 @@ class PouetBoxSearchProd extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
@@ -158,13 +151,6 @@ class PouetBoxSearchGroup extends PouetBox
     $this->terms = $terms;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("search.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -227,9 +213,9 @@ class PouetBoxSearchGroup extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
@@ -255,13 +241,6 @@ class PouetBoxSearchParty extends PouetBox
     $this->terms = $terms;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("search.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -320,9 +299,9 @@ class PouetBoxSearchParty extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
@@ -348,13 +327,6 @@ class PouetBoxSearchUser extends PouetBox
     $this->terms = $terms;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("search.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -414,9 +386,9 @@ class PouetBoxSearchUser extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
@@ -443,13 +415,6 @@ class PouetBoxSearchBBS extends PouetBox
     $this->terms = $terms;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("search.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -529,9 +494,9 @@ class PouetBoxSearchBBS extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)

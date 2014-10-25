@@ -98,7 +98,7 @@ class SceneId {
 		}
 
 		// Create stream context
-		$options = array('http' => array('method' => $this->method, 'content' => $content, 'header' => 'Content-Type: application/x-www-form-urlencoded'));
+		$options = array('http' => array('method' => $this->method, 'content' => $content, 'header' => 'Content-Type: application/x-www-form-urlencoded'), 'ssl'=>array('verify_peer' => false));
 		$context = stream_context_create($options);
 
 		// Open the connection with the given stream context

@@ -11,14 +11,6 @@ class PouetBoxGroupMain extends PouetBox
     $this->uniqueID = "pouetbox_groupmain";
     $this->id = (int)$id;
   }
-
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("groups.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -62,6 +54,11 @@ class PouetBoxGroupMain extends PouetBox
     PouetCollectPlatforms($this->prods);
     PouetCollectAwards($this->prods);
 
+    $s = new BM_Query("affiliatedboards");
+    $s->attach(array("affiliatedboards"=>"board"),array("boards as board"=>"id"));
+    $s->AddWhere(sprintf_esc("affiliatedboards.group=%d",$this->id));
+    $this->affil = $s->perform();
+
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
@@ -82,6 +79,8 @@ class PouetBoxGroupMain extends PouetBox
       echo sprintf(" [<a href='http://csdb.dk/group/?id=%d'>csdb</a>]",$this->group->csdb);
     if ($this->group->zxdemo)
       echo sprintf(" [<a href='http://zxdemo.org/author.php?id=%d'>zxdemo</a>]",$this->group->zxdemo);
+    if ($this->group->demozoo)
+      echo sprintf(" [<a href='http://demozoo.org/groups/%d/'>demozoo</a>]",$this->group->demozoo);
 
     printf(" [<a href='gloperator_log.php?which=%d&amp;what=group'>glöplog</a>]\n",$this->group->id);
 
@@ -112,7 +111,7 @@ class PouetBoxGroupMain extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
       if ($key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -181,6 +180,17 @@ class PouetBoxGroupMain extends PouetBox
 
       echo "</tr>\n";
     }
+    if ($this->affil)
+    {
+      echo "<tr>\n";
+      echo " <td colspan='9' class='affil'>";
+      echo " <ul>\n";
+      foreach($this->affil as $v)
+        echo sprintf("<li><a href='boards.php?which=%d'>%s</a> (%s)</li>",$v->id,_html($v->name),_html($v->type));
+      echo " </ul>\n";
+      echo " </td>\n";
+      echo "</tr>\n";
+    }
     echo "<tr>\n";
     echo " <td class='foot' colspan='9'>added on the ".$this->group->quand." by ".($this->addeduser?$this->addeduser->PrintLinkedName():"")." ".($this->addeduser?$this->addeduser->PrintLinkedAvatar():"")."</td>\n";
     echo "</tr>\n";
@@ -238,12 +248,13 @@ class PouetBoxGroupList extends PouetBox
 
       $idstr = implode(",",$ids);
 
-      $prods = SQLLib::selectRows(sprintf("select id,name,type,group1,group2,group3 from prods where (group1 in (%s)) or (group2 in (%s)) or (group3 in (%s))",$idstr,$idstr,$idstr));
-      foreach($prods as $prod)
+      for ($x = 1; $x <= 3; $x++)
       {
-        if ($prod->group1) $this->prods[$prod->group1][$prod->id] = $prod;
-        if ($prod->group2) $this->prods[$prod->group2][$prod->id] = $prod;
-        if ($prod->group3) $this->prods[$prod->group3][$prod->id] = $prod;
+        $counts = SQLLib::selectRows(sprintf("select group".$x." as groupID, count(*) as c from prods where group".$x." in (%s) group by group".$x."",$idstr));
+        foreach($counts as $count)
+        {
+          $this->prods[$count->groupID] += $count->c;
+        }
       }
     }
 
@@ -260,18 +271,7 @@ class PouetBoxGroupList extends PouetBox
       echo "<tr>\n";
       echo "  <td class='groupname'>".$r->RenderFull()."</td>\n";
       echo "  <td>\n";
-      if ($this->prods[$r->id])
-      {
-        echo "    <ul>\n";
-        $prod = new PouetProd();
-        foreach($this->prods[$r->id] as $p)
-        {
-          foreach(get_object_vars($p) as $k=>$v) $prod->$k = $v;
-          $prod->types = explode(",",$prod->type);
-          echo "<li>".$prod->RenderTypeIcons().$prod->RenderLink()."</li>";
-        }
-        echo "    </ul>\n";
-      }
+      echo $this->prods[$r->id];
       echo "  </td>\n";
       echo "</tr>\n";
     }

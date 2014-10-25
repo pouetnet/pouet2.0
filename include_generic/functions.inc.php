@@ -165,6 +165,9 @@ function parse_message( $p )
   $p = htmlspecialchars($p,ENT_QUOTES);
   $p = bbencode($p,true);
   $p = nl2br($p);
+  $p = preg_replace_callback("/<code>(.*?)<\/code>/ims",function($s){
+    return str_replace("<br />","",$s[0]);
+  },$p);
   $p = better_wordwrap($p,80," ");
   return $p;
 }
@@ -260,6 +263,8 @@ function validateLink( $url )
     "uploading.com",
     "mirrorcreator",
     "multiupload",
+    "tinyurl",
+    "bit.ly",
   );
   foreach ($shithosts as $v)
     if(strstr($myurl["host"],$v))
@@ -312,6 +317,23 @@ function validateDownloadLink( $url )
 
   return $errormessage;
 }
+
+function adjust_query( $param ) 
+{
+  $query = array_merge($_GET,$param);
+  $url = parse_url($_SERVER["REQUEST_URI"]);
+  return _html( $url["path"] . "?" . http_build_query($query));
+}
+function adjust_query_header( $param ) 
+{
+  $query = array_merge($_GET,$param);
+  unset( $query["reverse"] );
+  if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
+    $query["reverse"] = 1;
+  $url = parse_url($_SERVER["REQUEST_URI"]);
+  return _html( $url["path"] . "?" . http_build_query($query));
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )
@@ -326,6 +348,14 @@ function _like( $s )
 {
   return addcslashes($s,"%_");
 }
+
+// this helps turning "empty" values into null (for foreign keys)
+// makes the code more "readable"
+function nullify( $v )
+{
+  return $v ? $v : NULL;
+}
+
 function redirect($path)
 {
   header("Location: ".POUET_ROOT_URL.$path);
@@ -377,9 +407,9 @@ function get_local_partyresult_path( $id, $year )
   return sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
 }
 
-function get_local_bbsnfo_path( $id )
+function get_local_boardnfo_path( $id )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "othernfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.nfo",$id);
 }
 
 function get_screenshot_url( $id, $ext )
@@ -397,9 +427,9 @@ function get_partyresult_url( $id, $year )
   return sprintf(POUET_CONTENT_URL . "results/%d_%02d.txt",$id,$year%100);
 }
 
-function get_bbsnfo_url( $id )
+function get_boardnfo_url( $id )
 {
-  return sprintf(POUET_CONTENT_URL . "othernfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_URL . "nfo_bbs/%d.nfo",$id);
 }
 
 define("FIXMETHREAD_ID",1024);

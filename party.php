@@ -56,8 +56,13 @@ class PouetBoxPartyHeader extends PouetBox
 
     if($this->partylinks->zxdemo)
       echo " [<a href='http://zxdemo.org/party.php?id=".(int)$this->partylinks->zxdemo."'>zxdemo</a>]";
+    //else if ($currentUser && $currentUser->CanSubmitItems())
+    //  printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
+
+    if($this->partylinks->demozoo)
+      echo " [<a href='http://demozoo.org/parties/".(int)$this->partylinks->demozoo."/'>demozoo</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
-      printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
+      printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+demozoo</a>]\n",$this->party->id,$this->year);
 
     if($this->partylinks->artcity)
       echo " [<a href='http://artcity.bitfellas.org/index.php?a=search&type=tag&text=".rawurlencode($this->partylinks->artcity)."'>artcity</a>]";
@@ -173,14 +178,6 @@ class PouetBoxPartyView extends PouetBox
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("party.php?" . http_build_query($query));
-  }
-
   function Render()
   {
     echo "<table id='".$this->uniqueID."' class='boxtable'>\n";
@@ -196,9 +193,9 @@ class PouetBoxPartyView extends PouetBox
       "release"=>"release",
       "added"=>"added",
 */
-      "thumbup"=>"<img src='http://www.pouet.net/gfx/rulez.gif' alt='rulez' />",
-      "thumbpig"=>"<img src='http://www.pouet.net/gfx/isok.gif' alt='piggie' />",
-      "thumbdown"=>"<img src='http://www.pouet.net/gfx/sucks.gif' alt='sucks' />",
+      "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
+      "thumbpig"=>"<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />",
+      "thumbdown"=>"<img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />",
       "avg"=>"avg",
       "views"=>"popularity",
     );
@@ -213,7 +210,7 @@ class PouetBoxPartyView extends PouetBox
         foreach($headers as $key=>$text)
         {
           $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-            $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+            adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
           if ($key == "compo" && $this->sortByCompo) $out = "<th>".$p->partycompo."</th>";
@@ -245,7 +242,7 @@ class PouetBoxPartyView extends PouetBox
       $i = "isok";
       if ($p->voteavg < 0) $i = "sucks";
       if ($p->voteavg > 0) $i = "rulez";
-      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='http://www.pouet.net/gfx/".$i.".gif' alt='".$i."' /></td>\n";
+      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
 
       $pop = (int)($p->views * 100 / $this->maxviews);
       echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";

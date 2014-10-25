@@ -20,6 +20,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $this->id = (int)$id;
 
     $this->prod = PouetProd::Spawn( $this->id );
+    if (!$this->prod) return;
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
@@ -46,21 +47,21 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     if ($data["group2"]) $groups[] = (int)$data["group2"];
     if ($data["group3"]) $groups[] = (int)$data["group3"];
     $groups = array_unique($groups);
-    if (count($groups)) $a["group1"] = array_shift($groups); else $a["group1"] = 0;
-    if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = 0;
-    if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = 0;
+    if (count($groups)) $a["group1"] = array_shift($groups); else $a["group1"] = null;
+    if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = null;
+    if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = null;
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
-    $a["zxdemo"] = $data["zxdemoID"];
-    $a["party"] = $data["partyID"];
+    //$a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
+    $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
-    $a["invitation"] = $data["invitationParty"];
+    $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
-    $a["boardID"] = $data["boardID"];
-
+    $a["boardID"] = nullify($data["boardID"]);
     global $prodID;
     SQLLib::UpdateRow("prods",$a,"id=".(int)$this->id);
 
@@ -114,7 +115,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
     $this->fields["releaseDate"]["value"] = $prod->date;
 
-    $this->fields["platform"]["value"] = $prod->platforms;
+    $this->fields["platform"]["value"] = array_keys($prod->platforms);
     $this->fields["type"]["value"] = $prod->types;
 
     if (count($prod->placings) > 0)
@@ -126,8 +127,9 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     }
 
     $this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
-    $this->fields["zxdemoID"]["value"] = $prod->zxdemo;
+    $this->fields["demozooID"]["value"] = $prod->demozoo;
     $this->fields["csdbID"]["value"] = $prod->csdb;
+    $this->fields["boardID"]["value"] = $prod->boardID;
     $this->fields["invitationParty"]["value"] = $prod->invitation;
     $this->fields["invitationYear"]["value"] = $prod->invitationyear;
 
@@ -148,11 +150,8 @@ class PouetBoxAdminDeleteProd extends PouetBox
 
     $this->prod = $prod;
 
-    $strings = array(
-      "CELEBRANDIL-VECTOR",
-      "MEKKA-SYMPOSIUM",
-    );
-    $this->checkString = $strings[ array_rand($strings) ];
+    global $verificationStrings;
+    $this->checkString = $verificationStrings[ array_rand($verificationStrings) ];
 
     $this->title = "delete this prod: ".$this->prod->RenderLink();
   }
@@ -176,6 +175,7 @@ class PouetBoxAdminDeleteProd extends PouetBox
     SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE prod=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM cdc WHERE which=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM credits WHERE prodID=%d",$this->prod->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM watchlist WHERE prodID=%d",$this->prod->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->prod->id));
 
     @unlink( get_local_nfo_path( (int)$this->prod->id ) );
@@ -783,7 +783,14 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodaffil"), "prodAffil", {
     onRowLoad: function(tr){
-      new Autocompleter(tr.down(".prodID"), {"dataUrl":"./ajax_prods.php"});
+      new Autocompleter(tr.down(".prodID"), {
+        "dataUrl":"./ajax_prods.php",
+        "processRow": function(item) {
+          var s = item.name.escapeHTML();
+          if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+          return s;
+        }
+      });
     }
   } );
 });
@@ -831,12 +838,14 @@ $form = new PouetFormProcessor();
 $form->SetSuccessURL( "prod.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditProd( $_GET["which"] );
-$form->Add( "prod", $box );
-foreach($boxen as $class)
-  $form->Add( "prod" . $class::$slug, new $class($box->prod) );
-if ($currentUser && $currentUser->CanDeleteItems())
-  $form->Add( "prodDelete", new PouetBoxAdminDeleteProd($box->prod) );
-
+if ($box->prod)
+{
+  $form->Add( "prod", $box );
+  foreach($boxen as $class)
+    $form->Add( "prod" . $class::$slug, new $class($box->prod) );
+  if ($currentUser && $currentUser->CanDeleteItems())
+    $form->Add( "prodDelete", new PouetBoxAdminDeleteProd($box->prod) );
+}
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
 

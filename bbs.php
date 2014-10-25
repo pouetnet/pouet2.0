@@ -16,13 +16,6 @@ class PouetBoxBBSTopicList extends PouetBox
     $this->categories = $m[1];
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("bbs.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -85,7 +78,7 @@ class PouetBoxBBSTopicList extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th id='th_%s'><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $key,$this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
+        $key,adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -131,9 +124,9 @@ class PouetBoxBBSTopicList extends PouetBox
 
     $this->page = ((int)$_GET["page"] ? $_GET["page"] : 1);
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)

@@ -30,9 +30,11 @@ class PouetBoxAdminEditUser extends PouetBox
   }
   function Commit($data)
   {
+    global $currentUser;
     $a = array();
-    if (array_search($data["level"],$this->levels)!==false)
+    if ($currentUser->IsAdministrator() && array_search($data["level"],$this->levels)!==false)
       $a["level"] = $data["level"];
+    $a["permissionSubmitItems"] = $data["permissionSubmitItems"] == "on";
     SQLLib::UpdateRow("users",$a,"id=".(int)$this->user->id);
   }
   function LoadFromDB()
@@ -60,9 +62,16 @@ class PouetBoxAdminEditUser extends PouetBox
         "value" => $this->user->level,
         "fields" => $this->levels,
       ),
+      "permissionSubmitItems"=>array(
+        "name"=>"allow user to add items",
+        "type" => "checkbox",
+        "value" => $this->user->permissionSubmitItems,
+      ),
     );
     if ($currentUser && !$currentUser->IsAdministrator())
-      foreach($this->fields as &$v) $v["type"] = "static";
+    {
+      $this->fields["level"]["type"] = "static";
+    }
   }
   function Render()
   {

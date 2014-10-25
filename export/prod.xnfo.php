@@ -63,7 +63,7 @@ if (count($prod->groups))
 $xml->demo->addChild("support");
 $xml->demo->support->addChild("configuration");
 foreach($prod->platforms as $v)
-  $xml->demo->support->configuration->addChild("platform",_html($PLATFORMS[$v]["name"]))->addAttribute("type",_html($PLATFORMS[$v]["slug"]));
+  $xml->demo->support->configuration->addChild("platform",_html($v["name"]))->addAttribute("type",_html($v["slug"]));
 
 $xml->demo->addChild("download");
 $xml->demo->download->addChild("url",_html($prod->download))->addAttribute("type","download");

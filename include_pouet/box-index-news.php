@@ -34,11 +34,11 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
     $this->cacheTime = 60*15;
 
     $this->uniqueID = "pouetbox_news";
-    $this->rss = new lastRSS();
-    $this->rss->cache_dir = './cache';
-    $this->rss->cache_time = 5*60; // in seconds
-    $this->rss->CDATA = 'strip';
-    $this->rss->date_format = 'Y-m-d';
+    $this->rss = new lastRSS(array(
+      "cacheTime" => 5 * 60, // in seconds
+      "dateFormat" => "Y-m-d",
+      "stripHtml" => false,
+    ));
 
     $this->limit = 5;
   }
@@ -63,12 +63,14 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
 
   function Render()
   {
-    if (!$this->rssBitfellasNews) {
+    if (!$this->rssBitfellasNews['items']) {
     	printf('Error: Unable to open BitFeed !');
     } else {
       $p = new PouetBoxNews();
       for($i=0; $i < $this->limit; $i++)
       {
+        if (!$this->rssBitfellasNews['items'][$i]['title'])
+          continue;
         $p->content = $this->rssBitfellasNews['items'][$i]['description'];
         $p->title = $this->rssBitfellasNews['items'][$i]['title'];
         $p->link = $this->rssBitfellasNews['items'][$i]['link'];

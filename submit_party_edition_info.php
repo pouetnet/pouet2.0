@@ -38,8 +38,12 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
       $sql["csdb"] = $data["csdbID"];
     if ($this->fields["slengpungID"])
       $sql["slengpung"] = $data["slengpungID"];
+/*
     if ($this->fields["zxdemoID"])
       $sql["zxdemo"] = $data["zxdemoID"];
+*/
+    if ($this->fields["demozooID"])
+      $sql["demozoo"] = $data["demozooID"];
     if ($this->fields["artcity"])
       $sql["artcity"] = $data["artcity"];
 
@@ -76,8 +80,12 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
       unset($this->fields["csdbID"]);
     if ($this->links->slengpung)
       unset($this->fields["slengpungID"]);
+/*
     if ($this->links->zxdemo)
       unset($this->fields["zxdemoID"]);
+*/
+    if ($this->links->demozoo)
+      unset($this->fields["demozooID"]);
     if ($this->links->artcity)
       unset($this->fields["artcity"]);
     if (file_exists(get_local_partyresult_path($this->id,$this->year)))

@@ -112,6 +112,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "scene.org";
+      $o->id = "sceneorgID";
       $o->link = "http://scene.org/file.php?id=".(int)$this->prod->sceneorg;
       $this->downloadLinks[] = $o;
     }
@@ -119,6 +120,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "csdb";
+      $o->id = "csdbID";
       $o->link = "http://csdb.dk/release/?id=".(int)$this->prod->csdb;
       $this->downloadLinks[] = $o;
     }
@@ -126,10 +128,19 @@ class PouetBoxProdMain extends PouetBox {
     {
       $o = new stdClass();
       $o->type = "zxdemo";
+      $o->id = "zxdemoID";
       $o->link = "http://zxdemo.org/item.php?id=".(int)$this->prod->zxdemo;
       $this->downloadLinks[] = $o;
     }
-    $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select * from downloadlinks where prod = %d order by type",$this->id)));
+    if ($this->prod->demozoo)
+    {
+      $o = new stdClass();
+      $o->type = "demozoo";
+      $o->id = "demozooID";
+      $o->link = "http://demozoo.org/productions/".(int)$this->prod->demozoo."/";
+      $this->downloadLinks[] = $o;
+    }
+    $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$this->id)));
   }
 
   function RenderScreenshot() {
@@ -382,7 +393,7 @@ document.observe("dom:loaded",function(){
     echo "<li id='mainDownload'>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
     foreach ($this->downloadLinks as $link)
     {
-      echo "<li>[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
+      echo "<li".($link->id?" id='".$link->id."'":"").">[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
     }
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
@@ -418,15 +429,18 @@ document.observe("dom:loaded",function(){
     printf("<div id='nfo'>");
     if ($currentUser && $currentUser->CanEditItems())
     {
-      printf("[<a href='admin_prod_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
+      printf("[<a href='admin_prod_edit.php?which=%d' class='adminlink'>admin</a>]\n",$this->id);
+    }
+    if ($currentUser && $currentUser->CanSubmitItems())
+    {
+      printf("[<a href='submit_modification_request.php?prod=%d'>edit</a>]\n",$this->prod->id);
     }
     if (file_exists(get_local_nfo_path($this->id)))
     {
       $isAmiga = false;
       foreach($this->prod->platforms as $v)
       {
-        global $PLATFORMS;
-        if (stristr($PLATFORMS[$v]["name"],"amiga")!==false)
+        if (stristr($v["name"],"amiga")!==false)
           $isAmiga = true;
       }
       if ($isAmiga)
@@ -475,6 +489,14 @@ document.observe("dom:loaded",function(){
       echo "</td>\n";
       echo "</tr>\n";
     }
+    else if ($currentUser)
+    {
+      echo "<tr>\n";
+      echo " <td id='credits' colspan='3' class='r2'>";
+      echo " <p>this prod has no credits assigned yet! <a href='submit_modification_request.php?prod=".$this->id."&amp;requestType=prod_add_credit'>click here</a> to add some !</p>";
+      echo "</td>\n";
+      echo "</tr>\n";
+    }
 
 
     if($this->prod->addeduser)
@@ -511,12 +533,19 @@ class PouetBoxProdComments extends PouetBox {
   var $id;
   var $topic;
   var $posts;
-  function PouetBoxProdComments($id) {
+  function PouetBoxProdComments($id,$main) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
     $this->id = (int)$id;
-
+    
+    $this->credits = array();
+    foreach($main->credits as $credit)
+    {
+      if(!$credit->user) continue;
+      $this->credits[] = $credit->user->id;
+    }
+    
     $this->paginator = new PouetPaginator();
   }
 
@@ -572,8 +601,15 @@ class PouetBoxProdComments extends PouetBox {
       $p = $c->comment;
       $p = parse_message($p);
 
-      echo "<div class='content cite-".$c->user->id."' id='c".$c->id."'>".$p."</div>\n";
-      echo "<div class='foot'>\n";
+      $author = false;
+      if (array_search($c->user->id,$this->credits)!==false)
+        $author = true;
+
+      echo "<div class='comment cite-".$c->user->id."".($author?" author":"")."' id='c".$c->id."'>\n";
+        
+      echo "  <div class='content'>".$p."</div>\n";
+      
+      echo "  <div class='foot'>\n";
       if ($c->rating)
         echo "<span class='vote ".$rating."'>".$rating."</span>";
       if ($main->userCDCs[$c->user->id])
@@ -586,6 +622,8 @@ class PouetBoxProdComments extends PouetBox {
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
 
       echo "</div>\n";
+      echo "</div>\n";
+      
     }
     $this->paginator->RenderNavbar();
   }
@@ -697,7 +735,7 @@ if ($main->prod)
 
   if (get_setting("prodcomments")!=0)
   {
-    $p = new PouetBoxProdComments($prodid);
+    $p = new PouetBoxProdComments($prodid,$main);
     $p->Load();
     if($p->data)
       $p->Render();

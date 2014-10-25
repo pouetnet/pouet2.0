@@ -11,13 +11,6 @@ class PouetBoxProdlist extends PouetBox
     $this->uniqueID = "pouetbox_prodlist";
   }
 
-  function BuildURL( $param ) {
-    $query = array_merge($_GET,$param);
-    unset( $query["reverse"] );
-    if($param["order"] && $_GET["order"] == $param["order"] && !$_GET["reverse"])
-      $query["reverse"] = 1;
-    return _html("prodlist.php?" . http_build_query($query));
-  }
   function LoadFromDB() {
     $s = new SQLSelect();
 
@@ -88,7 +81,7 @@ class PouetBoxProdlist extends PouetBox
       "platform"=>"platform",
       "group"=>"group",
       "party"=>"release party",
-      "release"=>"release",
+      "release"=>"release date",
       "added"=>"added",
       "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
       "thumbpig"=>"<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />",
@@ -100,7 +93,7 @@ class PouetBoxProdlist extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $this->BuildURL(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
@@ -150,9 +143,9 @@ class PouetBoxProdlist extends PouetBox
     echo "<td class='nav' colspan=".(count($headers)-2).">\n";
 
     if ($this->page > 1)
-      echo "  <div class='prevpage'><a href='".$this->BuildURL(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
+      echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
-      echo "  <div class='nextpage'><a href='".$this->BuildURL(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
+      echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
     for ($x=1; $x<=($this->count / $perPage) + 1; $x++)

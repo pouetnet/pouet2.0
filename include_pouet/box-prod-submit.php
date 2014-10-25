@@ -137,20 +137,21 @@ class PouetBoxSubmitProd extends PouetBox
     if ($data["group2"]) $groups[] = (int)$data["group2"];
     if ($data["group3"]) $groups[] = (int)$data["group3"];
     $groups = array_unique($groups);
-    if (count($groups)) $a["group1"] = array_shift($groups);
-    if (count($groups)) $a["group2"] = array_shift($groups);
-    if (count($groups)) $a["group3"] = array_shift($groups);
+    $a["group1"] = nullify( array_shift($groups) );
+    $a["group2"] = nullify( array_shift($groups) );
+    $a["group3"] = nullify( array_shift($groups) );
 
     $a["csdb"] = $data["csdbID"];
     $a["sceneorg"] = $data["sceneOrgID"];
-    $a["zxdemo"] = $data["zxdemoID"];
-    $a["party"] = $data["partyID"];
+    //$a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
+    $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
     $a["partycompo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
-    $a["invitation"] = $data["invitationParty"];
+    $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
-    $a["boardID"] = $data["boardID"];
+    $a["boardID"] = nullify($data["boardID"]);
 
     $this->prodID = SQLLib::InsertRow("prods",$a);
 
@@ -262,8 +263,8 @@ class PouetBoxSubmitProd extends PouetBox
       "sceneOrgID"=>array(
         "name"=>"scene.org ID",
       ),
-      "zxdemoID"=>array(
-        "name"=>"zxdemo ID",
+      "demozooID"=>array(
+        "name"=>"demozoo ID",
       ),
       "partyID"=>array(
         "name"=>"party",
@@ -365,7 +366,7 @@ class PouetBoxSubmitProd extends PouetBox
       echo "  </div>\n";
     }
 
-    $fields = array_select($this->fields,array("sceneOrgID","csdbID","zxdemoID","boardID"));
+    $fields = array_select($this->fields,array("sceneOrgID","csdbID","demozooID","boardID"));
     if ($fields)
     {
       echo "  <h2 id='othersites'>other sites</h2>\n";

@@ -30,7 +30,8 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
     $a["acronym"] = $data["acronym"];
     $a["web"] = $data["website"];
     $a["csdb"] = $data["csdbID"];
-    $a["zxdemo"] = $data["zxdemoID"];
+//    $a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
     SQLLib::UpdateRow("groups",$a,"id=".$this->id);
 
     gloperator_log( "group", $this->id, "group_edit" );
@@ -47,7 +48,8 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
     $this->fields["acronym"]["value"] = $group->acronym;
     $this->fields["website"]["value"] = $group->web;
     $this->fields["csdbID"]["value"] = $group->csdb;
-    $this->fields["zxdemoID"]["value"] = $group->zxdemo;
+    //$this->fields["zxdemoID"]["value"] = $group->zxdemo;
+    $this->fields["demozooID"]["value"] = $group->demozoo;
   }
 }
 

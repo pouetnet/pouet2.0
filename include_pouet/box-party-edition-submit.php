@@ -29,7 +29,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     }
     if ($data["artcity"])
     {
-      if (preg_match("/[^a-zA-Z0-9\,]/",$data["artcity"]))
+      if (preg_match("/[^a-zA-Z0-9@\,\s]/",$data["artcity"]))
         return array("that's not a valid artcity tag-collection!");
     }
     return array();
@@ -39,7 +39,8 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     $a = array();
     $a["download"] = trim($data["download"]);
     $a["csdb"] = $data["csdbID"];
-    $a["zxdemo"] = $data["zxdemoID"];
+    //$a["zxdemo"] = $data["zxdemoID"];
+    $a["demozoo"] = $data["demozooID"];
     $a["slengpung"] = $data["slengpungID"];
     $a["artcity"] = $data["artcity"];
     SQLLib::InsertRow("partylinks",$a);
@@ -61,8 +62,13 @@ class PouetBoxSubmitPartyEdition extends PouetBox
       "csdbID"=>array(
         "name"=>"csdb id",
       ),
+/*
       "zxdemoID"=>array(
         "name"=>"zxdemo id",
+      ),
+*/
+      "demozooID"=>array(
+        "name"=>"demozoo id",
       ),
       "slengpungID"=>array(
         "name"=>"slengpung id",

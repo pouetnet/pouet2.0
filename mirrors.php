@@ -40,10 +40,9 @@ class PouetBoxMirrors extends PouetBox {
     $links["http://hornet.scene.org/cgi-bin/scene-search.cgi?search=".$extensionless.""] = $this->prod->name . " on the hornet archive";
     $links["http://web.archive.org/web/*/".$this->prod->download] = $this->prod->name." on the wayback machine";
 
-    global $PLATFORMS;
     $hasAmiga = false;
     foreach($this->prod->platforms as $v)
-      if (stristr($PLATFORMS[$v]["name"],"amiga")!==false)
+      if (stristr($v["name"],"amiga")!==false)
         $hasAmiga = true;
 
     if ($hasAmiga)

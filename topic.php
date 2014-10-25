@@ -137,8 +137,47 @@ if ($view->topic)
       $msg->uniqueID = "pouetbox_fixmewarning";
       $msg->classes[] = "errorbox";
       $msg->title = "want to add or update a link ?";
-      $msg->message = "we've made a new automated edit request system to modify prods - if you just want to add credits or links to prods, go to the prod page and click the edit link at the bottom!";
+      $msg->message = "we've made a new automated edit request system to modify prods - if you just want to add credits or links to prods, <b>go to the prod page and click the edit link at the bottom</b>!";
       $msg->Render();
+?>
+<style type="text/css">
+#pouetbox_fixmewarning.warn {
+  animation-duration: 0.5s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: linear;
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-name: blink;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-timing-function: linear;
+}
+@keyframes blink {
+    0% { padding-left: 10px; padding-right:  1px; }
+   50% { padding-left:  1px; padding-right: 10px; }
+  100% { padding-left: 10px; padding-right:  1px; }
+}
+@-webkit-keyframes blink {
+    0% { padding-left: 10px; padding-right:  1px; }
+   50% { padding-left:  1px; padding-right: 10px; }
+  100% { padding-left: 10px; padding-right:  1px; }
+}
+</style>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  var t = $$("textarea").first();
+  t.observe("keyup",function(){
+    if (t.value.indexOf("youtube.com")!=-1 || t.value.indexOf("youtu.be")!=-1)
+    {
+      $("pouetbox_fixmewarning").addClassName("warn");
+    }
+  });
+});
+//-->
+</script>
+<?
     }
     if ($view->topic->closed)
     {

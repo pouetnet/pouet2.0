@@ -4,13 +4,14 @@ require_once("include_generic/recaptchalib.php");
 
 class PouetBoxUserMain extends PouetBox
 {
-  function PouetBoxUserMain($id) {
+  function PouetBoxUserMain($id,$show) {
     parent::__construct();
     $this->uniqueID = "pouetbox_usermain";
     $this->title = "";
     $this->id = (int)$id;
 
     $this->paginator = new PouetPaginator();
+    $this->show = $show;
   }
 
   function LoadFromDB() {
@@ -29,79 +30,85 @@ class PouetBoxUserMain extends PouetBox
     $this->cdcProds = $s->perform();
 
     $this->logos = array();
-    if ($_GET["show"]=="logos")
+    if ($this->show=="logos")
     {
-      $this->logos = $this->GetLogosAdded( $_GET["show"]=="logos"? null : get_setting("userlogos") );
+      $this->logos = $this->GetLogosAdded( $this->show=="logos"? null : get_setting("userlogos") );
     }
 
     $this->prods = array();
-    if ($_GET["show"]=="prods")
+    if ($this->show=="prods")
     {
-      $this->prods = $this->GetProdsAdded( $_GET["show"]=="prods"? null : get_setting("userprods") );
+      $this->prods = $this->GetProdsAdded( $this->show=="prods"? null : get_setting("userprods") );
     }
 
     $this->groups = array();
-    if ($_GET["show"]=="groups")
+    if ($this->show=="groups")
     {
-      $this->groups = $this->GetGroupsAdded( $_GET["show"]=="groups"? null : get_setting("usergroups") );
+      $this->groups = $this->GetGroupsAdded( $this->show=="groups"? null : get_setting("usergroups") );
     }
 
     $this->parties = array();
-    if ($_GET["show"]=="parties")
+    if ($this->show=="parties")
     {
-      $this->parties = $this->GetPartiesAdded( $_GET["show"]=="parties"? null : get_setting("userparties") );
+      $this->parties = $this->GetPartiesAdded( $this->show=="parties"? null : get_setting("userparties") );
     }
 
     $this->shots = array();
-    if ($_GET["show"]=="screenshots")
+    if ($this->show=="screenshots")
     {
-      $this->shots = $this->GetScreenshotsAdded( $_GET["show"]=="screenshots"? null : get_setting("userscreenshots") );
+      $this->shots = $this->GetScreenshotsAdded( $this->show=="screenshots"? null : get_setting("userscreenshots") );
     }
 
     $this->nfos = array();
-    if ($_GET["show"]=="nfos")
+    if ($this->show=="nfos")
     {
-      $this->nfos = $this->GetNFOsAdded( $_GET["show"]=="nfos" ? null : get_setting("usernfos") );
+      $this->nfos = $this->GetNFOsAdded( $this->show=="nfos" ? null : get_setting("usernfos") );
     }
 
     $this->credits = array();
-    if (!$_GET["show"] || $_GET["show"]=="credits")
+    if (!$this->show || $this->show=="credits")
     {
-      $this->credits = $this->GetCredits( $_GET["show"]=="credits" ? null : 10 );
+      $this->credits = $this->GetCredits( $this->show=="credits" ? null : 10 );
     }
 
     $this->firstComments = array();
-    if (!$_GET["show"]/* || $_GET["show"]=="comments"*/)
+    if (!$this->show/* || $this->show=="comments"*/)
     {
-      //$this->firstComments = $this->GetFirstCommentsAdded( /*$_GET["show"]=="comments" ? null :*/ get_setting("usercomments") );
+      //$this->firstComments = $this->GetFirstCommentsAdded( /*$this->show=="comments" ? null :*/ get_setting("usercomments") );
     }
 
     $this->topics = array();
-    if ($_GET["show"]=="topics")
+    if ($this->show=="topics")
     {
-      $this->topics = $this->GetBBSTopics( $_GET["show"]=="topics" ? null : get_setting("usercomments") );
+      $this->topics = $this->GetBBSTopics( $this->show=="topics" ? null : get_setting("usercomments") );
     }
 
     $this->posts = array();
-    if ($_GET["show"]=="posts")
+    if ($this->show=="posts")
     {
-      $this->posts = $this->GetBBSPosts( $_GET["show"]=="posts" ? null : get_setting("usercomments") );
+      $this->posts = $this->GetBBSPosts( $this->show=="posts" ? null : get_setting("usercomments") );
+    }
+
+    $this->requests = array();
+    //if ($this->show=="requests")
+    {
+      $this->requests = $this->GetModRequests( $this->show=="requests" ? null : 1 );
     }
 
     $this->comments = array();
-    if ($_GET["show"]=="demoblog")
+    if ($this->show=="demoblog")
     {
       $this->comments = $this->GetDemoblog( $_GET["page"] );
     }
 
     $this->agreeRulez = array();
-    if ($_GET["show"]=="otherstats")
+    if ($this->show=="otherstats")
     {
       $this->agreeRulez = $this->GetThumbAgreers( get_setting("userrulez"), 1 );
     }
 
     $this->agreeSucks = array();
-    if ($_GET["show"]=="otherstats")
+    if ($this->show=="otherstats")
     {
       $this->agreeSucks = $this->GetThumbAgreers( get_setting("usersucks"), -1 );
     }
@@ -237,7 +244,7 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetCredits( $limit = null )
   {
-    $s = new BM_Query(" credits");
+    $s = new BM_Query("credits");
     $s->AddField("credits.role");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
@@ -245,12 +252,23 @@ class PouetBoxUserMain extends PouetBox
     if ($limit)
       $s->SetLimit( $limit );
 
-    $data = $s->perform();
+    $data = $s->performWithCalcRows( $this->totalProds );
 
     $a = array();
     foreach($data as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
     PouetCollectAwards($a);
+
+    $s = new BM_Query("credits");
+    $s->AddField("sum(voteup) as up");
+    $s->AddField("sum(votedown) as down");
+    $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf("credits.userID = %d",$this->id));
+    $s->AddOrder("credits_prod.quand desc");
+    $data2 = $s->perform();
+    
+    $this->totalCreditsThumbUp = $data2[0]->up;
+    $this->totalCreditsThumbDown = $data2[0]->down;
 
     return $data;
   }
@@ -342,6 +360,19 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
+  function GetModRequests( $limit = null )
+  {
+    $s = new BM_Query("modification_requests");
+    $s->AddWhere(sprintf("modification_requests.userID = %d",$this->id));
+    $s->AddOrder("modification_requests.requestDate desc");
+    if ($limit)
+      $s->SetLimit( $limit );
+
+    $data = $s->performWithCalcRows( $this->totalRequests );
+  
+    return $data;
+  }
+  
   function GetDemoblog( $page )
   {
     $s = new BM_Query("comments");
@@ -412,7 +443,7 @@ class PouetBoxUserMain extends PouetBox
     if ($this->user->im_type)
       $this->AddRow($this->user->im_type,$this->user->im_id);
 
-    if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo)
+    if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo || $this->user->demozoo)
     {
       echo "<li class='header'>portals:</li>\n";
       if ($this->user->csdb)
@@ -421,6 +452,8 @@ class PouetBoxUserMain extends PouetBox
         echo $this->AddRow("slengpung","<a href='http://www.slengpung.com/?userid=".$this->user->slengpung."'>pictures</a>",true);
       if ($this->user->zxdemo)
         echo $this->AddRow("zxdemo","<a href='http://zxdemo.org/author.php?id=".$this->user->zxdemo."'>profile</a>",true);
+      if ($this->user->demozoo)
+        echo $this->AddRow("demozoo","<a href='http://demozoo.org/sceners/".$this->user->demozoo."/'>profile</a>",true);
     }
 
     if ($this->cdcProds)
@@ -435,10 +468,11 @@ class PouetBoxUserMain extends PouetBox
     echo "</ul>\n";
     echo "</div>\n";
 
-    if ($this->credits)
+    if ($this->credits && $this->totalProds)
     {
-      echo "<div class='contribheader'>contributions to prods";
-      if ($_GET["show"]!="credits")
+      echo "<div class='contribheader'>contributions to prods ";
+      echo "<span>".$this->totalProds." prods (".$this->totalCreditsThumbUp." thumbs up, ".$this->totalCreditsThumbDown." thumbs down)</span>";
+      if ($this->show!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
       echo "<ul class='boxlist'>";
@@ -455,211 +489,267 @@ class PouetBoxUserMain extends PouetBox
       echo "</ul>";
     }
 
-    if (!$_GET["show"] && $this->user->stats["ud"])
+    if (!$this->show && $this->user->stats["ud"])
       echo "<div class='contribheader'>United Devices contribution <span>".$this->user->stats["ud"]." glöps</span></div>\n";
 
-    if (!$_GET["show"] || $this->logos)
+    if ($this->user->stats["logos"])
     {
-      echo "<div class='contribheader'>latest added logos <span>".$this->user->stats["logos"]." x 20 = ".($this->user->stats["logos"] * 20)." glöps - downvoted logos don't get glöps</span>";
-      if ($_GET["show"]!="logos")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->logos)
-    {
-      echo "<ul class='boxlist' id='logolist'>";
-      foreach($this->logos as $l)
+      if (!$this->show || $this->logos)
       {
-        echo "<li>";
-        echo "<div class='logo'>";
-        echo "<img src='".POUET_CONTENT_URL."logos/"._html($l->file)."' alt=''/>";
-        echo "<span class='logovotes'>current votes: "._html($l->vote_count)."</span>";
-        echo "</div>";
-        echo "</li>";
+        echo "<div class='contribheader'>logos added <span>".$this->user->stats["logosVote"]." x 20 = ".($this->user->stats["logosVote"] * 20)." glöps - downvoted logos don't get glöps</span>";
+        if ($this->show!="logos")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=logos'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
+      if ($this->logos)
+      {
+        echo "<ul class='boxlist' id='logolist'>";
+        foreach($this->logos as $l)
+        {
+          echo "<li>";
+          echo "<div class='logo'>";
+          echo "<img src='".POUET_CONTENT_URL."logos/"._html($l->file)."' alt=''/>";
+          echo "<span class='logovotes'>current votes: "._html($l->vote_count)."</span>";
+          echo "</div>";
+          echo "</li>";
+        }
+        echo "</ul>";
+      }
     }
 
-    if (!$_GET["show"] || $this->prods)
+    if ($this->user->stats["prods"])
     {
-      echo "<div class='contribheader'>latest added prods <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
-      if ($_GET["show"]!="prods")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->prods)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->prods as $p)
+      if (!$this->show || $this->prods)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>prods added <span>".$this->user->stats["prods"]." x 2 = ".($this->user->stats["prods"] * 2)." glöps</span> ";
+        if ($this->show!="prods")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=prods'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->prods)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->prods as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+    }
+    
+    if ($this->user->stats["groups"])
+    {
+      if (!$this->show || $this->groups)
+      {
+        echo "<div class='contribheader'>groups added <span>".$this->user->stats["groups"]." glöps</span> ";
+        if ($this->show!="groups")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
+        echo "</div>\n";
+      }
+      if ($this->groups)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->groups as $g)
+        {
+          echo "<li>";
+          echo $g->RenderLong();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$_GET["show"] || $this->groups)
+    if ($this->user->stats["parties"])
     {
-      echo "<div class='contribheader'>latest added groups <span>".$this->user->stats["groups"]." glöps</span> ";
-      if ($_GET["show"]!="groups")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=groups'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->groups)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->groups as $g)
+      if (!$this->show || $this->parties)
       {
-        echo "<li>";
-        echo $g->RenderLong();
-        echo "</li>";
+        echo "<div class='contribheader'>parties added <span>".$this->user->stats["parties"]." glöps</span> ";
+        if ($this->show!="parties")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->parties)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->parties as $p)
+        {
+          echo "<li>";
+          echo $p->PrintLinked();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$_GET["show"] || $this->parties)
+    if ($this->user->stats["screenshots"])
     {
-      echo "<div class='contribheader'>latest added parties <span>".$this->user->stats["parties"]." glöps</span> ";
-      if ($_GET["show"]!="parties")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=parties'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->parties)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->parties as $p)
+      if (!$this->show || $this->shots)
       {
-        echo "<li>";
-        echo $p->PrintLinked();
-        echo "</li>";
+        echo "<div class='contribheader'>screenshots added <span>".$this->user->stats["screenshots"]." glöps</span> ";
+        if ($this->show!="screenshots")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->shots)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->shots as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$_GET["show"] || $this->shots)
+    if ($this->user->stats["nfos"])
     {
-      echo "<div class='contribheader'>latest added screenshots <span>".$this->user->stats["screenshots"]." glöps</span> ";
-      if ($_GET["show"]!="screenshots")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=screenshots'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->shots)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->shots as $p)
+      if (!$this->show || $this->nfos)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>nfos added <span>".$this->user->stats["nfos"]." glöps</span> ";
+        if ($this->show!="nfos")
+          echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      if ($this->nfos)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->nfos as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+    }
+    if ($this->user->stats["comments"])
+    {
+      if (!$this->show || $this->firstComments)
+      {
+        echo "<div class='contribheader'>comments <span>".$this->user->stats["comments"]." glöps</span>";
+        //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
+        if ($this->show!="demoblog")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
+        if ($this->show!="otherstats")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
+        echo "</div>\n";
+      }
+      if ($this->firstComments)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->firstComments as $p)
+        {
+          $rating = $p->rating>0 ? "rulez" : ($p->rating<0 ? "sucks" : "isok");
+          echo "<li>";
+          echo "<span class='vote ".$rating."'>".$rating."</span>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+      }
     }
 
-    if (!$_GET["show"] || $this->nfos)
+    if ($this->user->stats["requestGlops"])
     {
-      echo "<div class='contribheader'>latest added nfos <span>".$this->user->stats["nfos"]." glöps</span> ";
-      if ($_GET["show"]!="nfos")
-        echo "[<a href='user.php?who=".$this->id."&amp;show=nfos'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->nfos)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->nfos as $p)
+      if (!$this->show || $this->nfos)
       {
-        echo "<li>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>requests made <span>".(int)$this->totalRequests." requests, ".$this->user->stats["requestGlops"]." glöps</span> ";
+        //if ($this->show!="requests")
+        //  echo "[<a href='user.php?who=".$this->id."&amp;show=requests'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
+      /*
+      if ($this->requests)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->nfos as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+      */
+    }
+    
+    if ($this->user->stats["topics"])
+    {
+      if (!$this->show || $this->topics)
+      {
+        echo "<div class='contribheader'>bbs topics opened";
+        if ($this->user->stats["topics"])
+          echo " <span>".$this->user->stats["topics"]." topics</span>";
+        if ($this->show!="topics")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]";
+        echo "</div>\n";
+      }
+      if ($this->topics)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->topics as $t)
+        {
+          echo "<li>";
+          echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> ("._html($t->category).")";
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
     }
 
-    if (!$_GET["show"] || $this->firstComments)
+    if ($this->user->stats["posts"])
     {
-      echo "<div class='contribheader'>latest comments <span>".$this->user->stats["comments"]." glöps</span>";
-      //echo " [<a href='user.php?who=".$this->id."&amp;show=comments'>show</a>]";
-      if ($_GET["show"]!="demoblog")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=demoblog'>demoblog</a>]";
-      if ($_GET["show"]!="otherstats")
-        echo " [<a href='user.php?who=".$this->id."&amp;show=otherstats'>other stats</a>]";
-      echo "</div>\n";
-    }
-    if ($this->firstComments)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->firstComments as $p)
+      if (!$this->show || $this->posts)
       {
-        $rating = $p->rating>0 ? "rulez" : ($p->rating<0 ? "sucks" : "isok");
-        echo "<li>";
-        echo "<span class='vote ".$rating."'>".$rating."</span>";
-        echo $p->RenderTypeIcons();
-        echo $p->RenderPlatformIcons();
-        echo $p->RenderSingleRow();
-        echo $p->RenderAwards();
-        echo "</li>";
+        echo "<div class='contribheader'>bbs posts";
+        if ($this->user->stats["posts"])
+          echo " <span>".$this->user->stats["posts"]." posts</span>";
+        if ($this->show!="posts")        
+          echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
+        echo "</div>\n";
       }
-      echo "</ul>";
-    }
-
-    if (!$_GET["show"] || $this->topics)
-    {
-      echo "<div class='contribheader'>latest bbs topics";
-      if ($this->topicCount)
-        echo " <span>".$this->topicCount." topics</span>";
-      echo " [<a href='user.php?who=".$this->id."&amp;show=topics'>show</a>]</div>\n";
-    }
-    if ($this->topics)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->topics as $t)
+      if ($this->posts)
       {
-        echo "<li>";
-        echo "<a href='topic.php?which=".$t->id."'>"._html($t->topic)."</a> ("._html($t->category).")";
-        echo "</li>";
+        echo "<ul class='boxlist'>";
+        foreach($this->posts as $p)
+        {
+          echo "<li>";
+          //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
+          echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
       }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
     }
-
-    if (!$_GET["show"] || $this->posts)
-    {
-      echo "<div class='contribheader'>latest bbs posts";
-      if ($this->postCount)
-        echo " <span>".$this->postCount." posts</span>";
-      if ($_GET["show"]!="posts")        
-        echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
-      echo "</div>\n";
-    }
-    if ($this->posts)
-    {
-      echo "<ul class='boxlist'>";
-      foreach($this->posts as $p)
-      {
-        echo "<li>";
-        //echo "<a href='topic.php?which=".$p->id."'>"._html($p->topic)."</a> ("._html($p->category).")";
-        echo "<a href='topic.php?post=".$p->postID."'>"._html($p->topic)."</a> ("._html($p->category).")";
-        echo "</li>";
-      }
-      echo "</ul>";
-      $this->paginator->RenderNavbar();
-    }
-
-    if ($_GET["show"]=="otherstats")
+    
+    if ($this->show=="otherstats")
     {
       echo "<div class='contribheader'>top thumb up agreers";
       echo "</div>\n";
@@ -727,7 +817,7 @@ class PouetBoxUserMain extends PouetBox
   }
 };
 
-$p = new PouetBoxUserMain( (int)$_GET["who"] );
+$p = new PouetBoxUserMain( (int)$_GET["who"], $_GET["show"] );
 $p->Load();
 
 if ($p->user)

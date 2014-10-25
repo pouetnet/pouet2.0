@@ -30,7 +30,8 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
     $sql["download"] = $data["download"];
     $sql["csdb"] = $data["csdbID"];
     $sql["slengpung"] = $data["slengpungID"];
-    $sql["zxdemo"] = $data["zxdemoID"];
+    //$sql["zxdemo"] = $data["zxdemoID"];
+    $sql["demozoo"] = $data["demozooID"];
     $sql["artcity"] = $data["artcity"];
 
     $links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
@@ -63,7 +64,8 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
     $this->fields["download"]["value"] = $this->links->download;
     $this->fields["csdbID"]["value"] = $this->links->csdb;
     $this->fields["slengpungID"]["value"] = $this->links->slengpung;
-    $this->fields["zxdemoID"]["value"] = $this->links->zxdemo;
+    //$this->fields["zxdemoID"]["value"] = $this->links->zxdemo;
+    $this->fields["demozooID"]["value"] = $this->links->demozoo;
     $this->fields["artcity"]["value"] = $this->links->artcity;
 
     foreach($_POST as $k=>$v)
@@ -74,7 +76,7 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
 $form = new PouetFormProcessor();
 
-$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"]."&amp;when=".(int)$_GET["when"], true );
+$form->SetSuccessURL( "party.php?which=".(int)$_GET["which"]."&when=".(int)$_GET["when"], true );
 
 $box = new PouetBoxAdminEditPartyEdition( $_GET["which"],$_GET["when"] );
 $form->Add( "partyyear", $box );
