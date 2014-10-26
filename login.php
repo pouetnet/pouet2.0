@@ -8,8 +8,6 @@ if ($_GET["error"])
 
 if (!$_GET["code"])
 {
-  $_SESSION["stateTest"] = rand(0,0x7FFFFFFF);
-  $sceneID->SetState( $_SESSION["stateTest"] );
   $sceneID->PerformAuthRedirect();
   exit();
 }
@@ -18,13 +16,15 @@ $rv = null;
 $err = "";
 try
 {
-  $sceneID->SetState( $_SESSION["stateTest"] );
   $sceneID->ProcessAuthResponse();
 
+  unset($_SESSION["user"]);
+  unset($_SESSION["settings"]);
+
   session_regenerate_id(true);
-  $_SESSION = array();
 
   $user = $sceneID->Me();
+
   if (!$user["success"] || !$user["user"]["id"])
   {
 		redirect("error.php?e=".rawurlencode("User not found."));
