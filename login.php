@@ -23,14 +23,14 @@ try
 
   session_regenerate_id(true);
 
-  $user = $sceneID->Me();
+  $SceneIDuser = $sceneID->Me();
 
-  if (!$user["success"] || !$user["user"]["id"])
+  if (!$SceneIDuser["success"] || !$SceneIDuser["user"]["id"])
   {
 		redirect("error.php?e=".rawurlencode("User not found."));
   }
   
-  $user = PouetUser::Spawn( (int)$user["user"]["id"] );
+  $user = PouetUser::Spawn( (int)$SceneIDuser["user"]["id"] );
   if (!$user || !$user->id)
   {
     $entry = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
@@ -38,8 +38,8 @@ try
     $a = basename($r);
 
     $user = new PouetUser();
-    $user->id = (int)$user["user"]["id"];
-    $user->nickname = $user["user"]["display_name"];
+    $user->id = (int)$SceneIDuser["user"]["id"];
+    $user->nickname = $SceneIDuser["user"]["display_name"];
     $user->avatar = $a;
 
     $user->Create();
