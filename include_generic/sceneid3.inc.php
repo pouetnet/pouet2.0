@@ -1,1 +1,0 @@
-../../sceneid/3.test/sceneid3.inc.php

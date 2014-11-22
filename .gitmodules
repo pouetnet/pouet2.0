@@ -1,0 +1,3 @@
+[submodule "include_generic/sceneid3"]
+	path = include_generic/sceneid3
+	url = git@bitbucket.org:sceneorg/sceneid3lib-php.git
