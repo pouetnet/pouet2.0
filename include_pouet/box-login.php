@@ -36,8 +36,8 @@ class PouetBoxLogin extends PouetBox {
       echo "<div class='foot'><input type='submit' value='Submit'/></div>";
       echo "</form>\n";
       */
-      echo "<div class='content'>\n";
-      echo "<a href='login.php'>login via<br/><img src='".POUET_CONTENT_URL."/gfx/sceneid.png' alt='SceneID'/></a>";
+      echo "<div class='content loggedout'>\n";
+      echo "<a href='login.php'>login via SceneID</a>";
       echo "</div>\n";
       
     } else {

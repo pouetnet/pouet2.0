@@ -462,7 +462,7 @@ else
   $form->SetSuccessURL( "index.php", false );
   
   $form->Add( "account", new PouetBoxAccount() );
-    $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
+  $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
   
   $form->Process();
   
