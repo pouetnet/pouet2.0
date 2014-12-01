@@ -32,12 +32,20 @@ if (POUET_TEST)
 $lifetime = 60 * 60 * 24 * 365;
 @ini_set('session.cookie_lifetime', $lifetime);
 
-session_name("POUETSESS2");
+session_name("POUETSESS3");
 session_set_cookie_params($lifetime, POUET_ROOT_PATH, POUET_COOKIE_DOMAIN);
 @session_start();
 
 $sceneID = null;
-if (class_exists("SceneID3"))
+if (class_exists("MySceneID"))
+{
+  $sceneID = new MySceneID( array(
+    "clientID" => SCENEID_USER,
+    "clientSecret" => SCENEID_PASS,
+    "redirectURI" => POUET_ROOT_URL . "login.php",
+  ) );
+}
+else if (class_exists("SceneID3"))
 {
   $sceneID = new SceneID3( array(
     "clientID" => SCENEID_USER,
