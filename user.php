@@ -418,9 +418,9 @@ class PouetBoxUserMain extends PouetBox
     echo $this->AddRow("level",$this->user->level);
 
     echo "<li class='header'>personal:</li>\n";
-    echo $this->AddRow("first name",$this->sceneID["firstname"]);
-    echo $this->AddRow("last name",$this->sceneID["lastname"]);
-    echo $this->AddRow("country",$this->sceneID["country"]);
+    echo $this->AddRow("first name",$this->sceneID["first_name"]);
+    echo $this->AddRow("last name",$this->sceneID["last_name"]);
+    //echo $this->AddRow("country",$this->sceneID["country"]);
 
     if ($this->sceneID["email"])
     {
