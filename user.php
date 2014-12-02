@@ -382,6 +382,7 @@ class PouetBoxUserMain extends PouetBox
 
     $s = new BM_Query("comments");
     $s->AddField("comments.rating");
+    $s->AddField("comments.id as commentID");
     $s->AddField("comments.quand as commentDate");
     $s->AddField("comments.comment");
     $s->AddOrder("comments.quand desc");
@@ -802,7 +803,7 @@ class PouetBoxUserMain extends PouetBox
         echo "</li>";
         echo "<li class='blogvote'>";
         echo "<span class='vote ".$rating."'>".$rating."</span>";
-        echo "added on the ".$c->commentDate;
+        echo "added on the <a href='prod.php?post=".$c->commentID."'>".$c->commentDate."</a>";
         echo "</li>";
       }
       echo "</ul>";
