@@ -28,7 +28,7 @@ class Formifier {
           {
             list($year,$month,) = sscanf($v["value"],"%d-%d-%d");
           }
-          echo "    <div class='formdate'>\n";
+          echo "    <div class='formdate' id='".$k."'>\n";
           echo "    <select name='".$k."_month' id='".$k."_month'>\n";
           echo "      <option></option>\n";
           for($x=1; $x<=12; $x++)
@@ -39,6 +39,20 @@ class Formifier {
           for($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--)
             echo "      <option".($year==$x?" selected='selected'":"").">".$x."</option>\n";
           echo "    </select>\n";
+?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  var i = new Element("a",{href:"#"}).update("this month");
+  i.observe("click",function(ev){
+    ev.stop();
+    $("<?=$k?>_month").selectedIndex = new Date().getMonth() + 1;
+    $("<?=$k?>_year").selectedIndex = 1;
+  });
+  $("<?=$k?>").insert(i);
+  i.insert({"before":"(","after":")"});
+});
+</script>
+<?          
           echo "    </div>\n";
           break;
         case "avatar":
