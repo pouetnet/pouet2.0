@@ -399,17 +399,41 @@ function get_local_screenshot_path( $id, $ext )
 
 function get_local_nfo_path( $id )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "nfo/%d.nfo",$id);
+  $oldPath = sprintf(POUET_CONTENT_LOCAL . "nfo/%d.nfo",$id);
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfos/%05d/%08d.txt",(int)($id/1000),$id);
+  if (file_exists($oldPath))
+  {
+    @mkdir(dirname($newPath));
+    @chmod(dirname($newPath),0775);
+    rename($oldPath,$newPath);
+  }
+  return $newPath;
 }
 
 function get_local_partyresult_path( $id, $year )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
+  $oldPath = sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/results/%04d/%08d.txt",$year,$id);
+  if (file_exists($oldPath))
+  {
+    @mkdir(dirname($newPath));
+    @chmod(dirname($newPath),0775);
+    rename($oldPath,$newPath);
+  }
+  return $newPath;
 }
 
 function get_local_boardnfo_path( $id )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.nfo",$id);
+  $oldPath = sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.txt",$id);
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfo_bbs/%04d/%08d.txt",(int)($id/1000),$id);
+  if (file_exists($oldPath))
+  {
+    @mkdir(dirname($newPath));
+    @chmod(dirname($newPath),0775);
+    rename($oldPath,$newPath);
+  }
+  return $newPath;
 }
 
 function get_screenshot_url( $id, $ext )
@@ -419,17 +443,17 @@ function get_screenshot_url( $id, $ext )
 
 function get_nfo_url( $id )
 {
-  return sprintf(POUET_CONTENT_URL . "nfo/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_URL . "files/nfos/%05d/%08d.txt",(int)($id/1000),$id);
 }
 
 function get_partyresult_url( $id, $year )
 {
-  return sprintf(POUET_CONTENT_URL . "results/%d_%02d.txt",$id,$year%100);
+  return sprintf(POUET_CONTENT_URL . "files/results/%04d/%08d.txt",$year,$id);
 }
 
 function get_boardnfo_url( $id )
 {
-  return sprintf(POUET_CONTENT_URL . "nfo_bbs/%d.nfo",$id);
+  return sprintf(POUET_CONTENT_URL . "files/nfo_bbs/%04d/%08d.txt",(int)($id/1000),$id);
 }
 
 define("FIXMETHREAD_ID",1024);
