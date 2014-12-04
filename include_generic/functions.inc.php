@@ -383,29 +383,38 @@ function get_setting( $s )
 
 function find_screenshot( $id )
 {
-  $ext = array(".jpg",".gif",".png");
-  foreach ($ext as $e) {
-    $p = "screenshots/".(int)$id.$e;
-    if(file_exists(POUET_CONTENT_LOCAL . "/" . $p))
-      return $p;
+  $extensions = array("jpg","gif","png");
+  foreach ($extensions as $ext) 
+  {
+    $oldPath = sprintf("screenshots/%d.%s",$id,$ext);
+    $newPath = sprintf("files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+    if (file_exists(POUET_CONTENT_LOCAL . $oldPath))
+    {
+      @mkdir(dirname(POUET_CONTENT_LOCAL . $newPath));
+      @chmod(dirname(POUET_CONTENT_LOCAL . $newPath),0775);
+      rename(POUET_CONTENT_LOCAL . $oldPath,POUET_CONTENT_LOCAL . $newPath);
+      return $newPath;
+    }
+    else if (file_exists(POUET_CONTENT_LOCAL . $newPath))
+      return $newPath;
   }
   return NULL;
 }
 
 function get_local_screenshot_path( $id, $ext )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "screenshots/%d.%s",$id,$ext);
+  return sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
 }
 
 function get_local_nfo_path( $id )
 {
   $oldPath = sprintf(POUET_CONTENT_LOCAL . "nfo/%d.nfo",$id);
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfos/%05d/%08d.txt",(int)($id/1000),$id);
-  if (file_exists($oldPath))
+  if (!file_exists($newPath))
   {
     @mkdir(dirname($newPath));
     @chmod(dirname($newPath),0775);
-    rename($oldPath,$newPath);
+    @rename($oldPath,$newPath);
   }
   return $newPath;
 }
@@ -414,11 +423,11 @@ function get_local_partyresult_path( $id, $year )
 {
   $oldPath = sprintf(POUET_CONTENT_LOCAL . "results/%d_%02d.txt",$id,$year%100);
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/results/%04d/%08d.txt",$year,$id);
-  if (file_exists($oldPath))
+  if (!file_exists($newPath))
   {
     @mkdir(dirname($newPath));
     @chmod(dirname($newPath),0775);
-    rename($oldPath,$newPath);
+    @rename($oldPath,$newPath);
   }
   return $newPath;
 }
@@ -427,18 +436,18 @@ function get_local_boardnfo_path( $id )
 {
   $oldPath = sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.txt",$id);
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfo_bbs/%04d/%08d.txt",(int)($id/1000),$id);
-  if (file_exists($oldPath))
+  if (!file_exists($newPath))
   {
     @mkdir(dirname($newPath));
     @chmod(dirname($newPath),0775);
-    rename($oldPath,$newPath);
+    @rename($oldPath,$newPath);
   }
   return $newPath;
 }
 
 function get_screenshot_url( $id, $ext )
 {
-  return sprintf(POUET_CONTENT_URL . "screenshots/%d.%s",$id,$ext);
+  return sprintf(POUET_CONTENT_URL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
 }
 
 function get_nfo_url( $id )
