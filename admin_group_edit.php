@@ -53,12 +53,80 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
   }
 }
 
+class PouetBoxAdminDeleteGroup extends PouetBox
+{
+  function PouetBoxAdminDeleteGroup( $group )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_groupdelete";
+
+    $this->classes[] = "errorbox";
+
+    $this->group = $group;
+
+    global $verificationStrings;
+    $this->checkString = $verificationStrings[ array_rand($verificationStrings) ];
+
+    $this->title = "delete this group: ".$group->RenderLong();
+  }
+  function Validate($data)
+  {
+    if ($data["check"] != $data["checkOrig"])
+      return array("wrong verification string !");
+    return array();
+  }
+  function Commit($data)
+  {
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group1=NULL WHERE group1=%d",$this->group->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group2=NULL WHERE group2=%d",$this->group->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group3=NULL WHERE group3=%d",$this->group->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM groupsaka WHERE group1=%d OR group2=%d",$this->group->id,$this->group->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM affiliatedboards WHERE `group`=%d",$this->group->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM groups WHERE id=%d",$this->group->id));
+    
+    gloperator_log( "group", (int)$this->group->id, "group_delete", get_object_vars($this->group) );
+
+    return array();
+  }
+  function RenderBody()
+  {
+    echo "<div class='content'/>";
+    echo "  <p>To make sure you want to delete <b>this</b> group, type \"".$this->checkString."\" here:</p>";
+    echo "  <input name='checkOrig' type='hidden' value='"._html($this->checkString)."'/>";
+    echo "  <input id='check' name='check' autocomplete='no'/>";
+    echo "</div>";
+    echo "<div class='foot'/>";
+    echo "  <input type='submit' value='Submit' />";
+    echo "</div>";
+    ?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  $("pouetbox_partydelete").up("form").observe("submit",function(e){
+    if ($F("check") != "<?=_js($this->checkString)?>")
+    {
+      alert("Enter the verification string!");
+      e.stop();
+      return;
+    }
+    if (!confirm("ARE YOU REALLY SURE YOU WANT TO DELETE \"<?=_js($this->group->name)?>\"?!"))
+      e.stop();
+  });
+});
+</script>
+    <?
+  }
+}
+
+
 $form = new PouetFormProcessor();
 
 $form->SetSuccessURL( "groups.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditGroup( $_GET["which"] );
 $form->Add( "group", $box );
+
+$form->Add( "groupdelete", new PouetBoxAdminDeleteGroup( $box->group ) );
 
 if ($currentUser && $currentUser->CanEditItems())
   $form->Process();
