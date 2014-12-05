@@ -403,7 +403,10 @@ function find_screenshot( $id )
 
 function get_local_screenshot_path( $id, $ext )
 {
-  return sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+  @mkdir(dirname($newPath));
+  @chmod(dirname($newPath),0775);
+  return $newPath;
 }
 
 function get_local_nfo_path( $id )
