@@ -438,7 +438,7 @@ function get_local_partyresult_path( $id, $year )
 function get_local_boardnfo_path( $id )
 {
   $oldPath = sprintf(POUET_CONTENT_LOCAL . "nfo_bbs/%d.txt",$id);
-  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfo_bbs/%04d/%08d.txt",(int)($id/1000),$id);
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfo_bbs/%05d/%08d.txt",(int)($id/1000),$id);
   if (!file_exists($newPath))
   {
     @mkdir(dirname($newPath));
@@ -465,7 +465,7 @@ function get_partyresult_url( $id, $year )
 
 function get_boardnfo_url( $id )
 {
-  return sprintf(POUET_CONTENT_URL . "files/nfo_bbs/%04d/%08d.txt",(int)($id/1000),$id);
+  return sprintf(POUET_CONTENT_URL . "files/nfo_bbs/%05d/%08d.txt",(int)($id/1000),$id);
 }
 
 define("FIXMETHREAD_ID",1024);
