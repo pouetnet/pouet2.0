@@ -37,7 +37,7 @@ session_set_cookie_params($lifetime, POUET_ROOT_PATH, POUET_COOKIE_DOMAIN);
 @session_start();
 
 $sceneID = null;
-if (class_exists("MySceneID"))
+if (POUET_TEST && class_exists("MySceneID"))
 {
   $sceneID = new MySceneID( array(
     "clientID" => SCENEID_USER,
