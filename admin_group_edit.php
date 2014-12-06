@@ -102,7 +102,7 @@ class PouetBoxAdminDeleteGroup extends PouetBox
     ?>
 <script type="text/javascript">
 document.observe("dom:loaded",function(){
-  $("pouetbox_partydelete").up("form").observe("submit",function(e){
+  $("pouetbox_groupdelete").up("form").observe("submit",function(e){
     if ($F("check") != "<?=_js($this->checkString)?>")
     {
       alert("Enter the verification string!");
