@@ -64,7 +64,7 @@ class PouetBoxLatestComments extends PouetBox {
       echo "</td>\n";
 
       echo "<td class='date'>\n";
-      echo dateDiffReadable( time(), $row->quand)." ago";
+      echo dateDiffReadable( time(), $row->addedDate)." ago";
       echo "</td>\n";
 
       echo "<td>\n";

@@ -38,7 +38,7 @@ class PouetBoxProdPost extends PouetBox {
     if (!$r)
       return array("you sneaky bastard you >_<");
 
-    $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY quand DESC LIMIT 1",$this->prod));
+    $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY addedDate DESC LIMIT 1",$this->prod));
 
     if ($r && $r->who == get_login_id() && $r->comment == $message)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
@@ -62,7 +62,7 @@ class PouetBoxProdPost extends PouetBox {
     }
 
   	$a = array();
-  	$a["quand"] = date("Y-m-d H:i:s");
+  	$a["addedDate"] = date("Y-m-d H:i:s");
   	$a["who"] = get_login_id();
   	$a["which"] = $this->prod;
   	$a["comment"] = $message;

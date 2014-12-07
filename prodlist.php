@@ -56,11 +56,11 @@ class PouetBoxProdlist extends PouetBox
       case "thumbdown": $s->AddOrder("prods.votedown ".$dir); break;
       case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
       case "views": $s->AddOrder("prods.views ".$dir); break;
-      case "added": $s->AddOrder("prods.quand ".$dir); break;
+      case "added": $s->AddOrder("prods.addedDate ".$dir); break;
       //default: $s->AddOrder("prods.date DESC"); $s->AddOrder("prods.quand DESC"); break;
     }
-    $s->AddOrder("prods.date ".$dir);
-    $s->AddOrder("prods.quand ".$dir);
+    $s->AddOrder("prods.releaseDate ".$dir);
+    $s->AddOrder("prods.addedDate ".$dir);
 
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 

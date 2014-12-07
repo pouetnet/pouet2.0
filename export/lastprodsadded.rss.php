@@ -8,7 +8,7 @@ $limit = min($limit,25);
 $limit = max($limit,5);
 
 $s = new BM_Query("prods");
-$s->AddOrder("prods.quand DESC");
+$s->AddOrder("prods.addedDate DESC");
 $s->attach("added",array("users as user"=>"id"));
 $s->SetLimit($limit);
 
@@ -39,7 +39,7 @@ foreach($data as $item)
   $rss->AddItem(array(
     "title"     => $item->name,
     "link"      => POUET_ROOT_URL . "prod.php?which=" . $item->id,
-    "pubDate"   => date("r",strtotime($item->quand)),
+    "pubDate"   => date("r",strtotime($item->addedDate)),
     "enclosure" => find_screenshot($item->id),
   ));
 }

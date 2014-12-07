@@ -68,8 +68,8 @@ class PouetBoxTopList extends PouetBox {
     $s = new BM_Query("prods");
     if ($_GET["days"])
     {
-      $s->AddOrder("(prods.views/((NOW()-prods.quand)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
-      $s->AddWhere(sprintf_esc("prods.quand > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
+      $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+      $s->AddWhere(sprintf_esc("prods.addedDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
     }
     else
     {

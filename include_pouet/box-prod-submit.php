@@ -122,13 +122,13 @@ class PouetBoxSubmitProd extends PouetBox
     $a["name"] = $data["name"];
     $a["download"] = $data["download"];
 
-    $a["added"] = get_login_id();
-    $a["quand"] = date("Y-m-d H:i:s");
+    $a["addedUser"] = get_login_id();
+    $a["addedDate"] = date("Y-m-d H:i:s");
 
     if( $data["releaseDate_year"] && $data["releaseDate_month"] && checkdate( (int)$data["releaseDate_month"], 15, (int)$data["releaseDate_year"]) )
-      $a["date"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
+      $a["releaseDate"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
     else if ($data["releaseDate_year"])
-      $a["date"] = sprintf("%04d-00-15",$data["releaseDate_year"]);
+      $a["releaseDate"] = sprintf("%04d-00-15",$data["releaseDate_year"]);
 
     $a["type"] = implode(",",$data["type"]);
 

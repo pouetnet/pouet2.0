@@ -38,8 +38,8 @@ class PouetBoxSubmitParty extends PouetBox
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["web"] = $data["website"];
-    $a["added"] = get_login_id();
-    $a["quand"] = date("Y-m-d H:i:s");
+    $a["addedUser"] = get_login_id();
+    $a["addedDate"] = date("Y-m-d H:i:s");
     $this->partyID = SQLLib::InsertRow("parties",$a);
 
     return array();
