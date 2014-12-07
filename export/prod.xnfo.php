@@ -77,7 +77,7 @@ $shot = find_screenshot($prod->id);
 if ($shot)
 {
   $xml->demo->addChild("screenshot");
-  $xml->demo->screenshot->addChild("url",_html(POUET_ROOT_URL.$shot));
+  $xml->demo->screenshot->addChild("url",_html(POUET_CONTENT_URL.$shot));
 }
 
 $dom = dom_import_simplexml($xml)->ownerDocument;
