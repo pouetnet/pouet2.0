@@ -26,9 +26,9 @@ class PouetBoxStats extends PouetBoxCachable {
   function LoadFromDB() {
     $a = array("prods", "groups", "parties", "boards", "users", "comments");
     foreach($this->fields as $v) {
-      $time = $v == "boards" ? "added" : "quand";
+      $field = $v == "users" ? "quand" : "addedDate";
   		$this->data[$v."_all"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v)->c;
-  		$this->data[$v."_24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$time."))<=3600*24")->c;
+  		$this->data[$v."_24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$field."))<=3600*24")->c;
     }
   }
 

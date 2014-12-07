@@ -20,19 +20,19 @@ class PouetBoxGroupMain extends PouetBox
     // not to boast or anything, but this is fucking beautiful.
 
     $sub = new SQLSelect();
-    $sub->AddField("comments.quand");
+    $sub->AddField("comments.addedDate");
     $sub->AddField("comments.who");
     $sub->AddField("comments.which");
     $sub->AddField("comments.rating");
     $sub->AddTable("comments");
     $sub->AddJoin("left","prods","prods.id = comments.which");
-    $sub->AddOrder("comments.quand desc");
+    $sub->AddOrder("comments.addedDate desc");
     $sub->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
     $s = new BM_Query("prods");
-    $s->AddField("cmts.quand as lastcomment");
+    $s->AddField("cmts.addedDate as lastcomment");
     $s->AddField("cmts.rating as lastcommentrating");
-    $s->AddJoin("left","(select quand,who,which,rating from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
+    $s->AddJoin("left","(select addedDate,who,which,rating from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
     $s->attach(array("cmts"=>"who"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
@@ -41,7 +41,7 @@ class PouetBoxGroupMain extends PouetBox
     {
       case "type": $s->AddOrder("prods.type ".($r?"DESC":"ASC")); break;
       case "party": $s->AddOrder("prods_party.name ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_year ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_place ".($r?"DESC":"ASC")); break;
-      case "release": $s->AddOrder("prods.date ".($r?"ASC":"DESC")); break;
+      case "release": $s->AddOrder("prods.releaseDate ".($r?"ASC":"DESC")); break;
       case "thumbup": $s->AddOrder("prods.voteup ".($r?"ASC":"DESC")); break;
       case "thumbpig": $s->AddOrder("prods.votepig ".($r?"ASC":"DESC")); break;
       case "thumbdown": $s->AddOrder("prods.votedown ".($r?"ASC":"DESC")); break;
@@ -192,7 +192,7 @@ class PouetBoxGroupMain extends PouetBox
       echo "</tr>\n";
     }
     echo "<tr>\n";
-    echo " <td class='foot' colspan='9'>added on the ".$this->group->quand." by ".($this->addeduser?$this->addeduser->PrintLinkedName():"")." ".($this->addeduser?$this->addeduser->PrintLinkedAvatar():"")."</td>\n";
+    echo " <td class='foot' colspan='9'>added on the ".$this->group->addedDate." by ".($this->addeduser?$this->addeduser->PrintLinkedName():"")." ".($this->addeduser?$this->addeduser->PrintLinkedAvatar():"")."</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
     return $s;

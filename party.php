@@ -84,7 +84,7 @@ class PouetBoxPartyHeader extends PouetBox
     foreach($this->years as $v=>$dummy)
       $y[] = "<a href='party.php?which=".rawurlencode($this->party->id)."&amp;when=".$v."'>".$v."</a>";
     echo "  <div class='yearselect'>".implode(" |\n",$y)."</div>\n";
-    echo "  <div class='foot'>added on the ".$this->party->quand." by ".$this->party->addeduser->PrintLinkedName()." ".$this->party->addeduser->PrintLinkedAvatar()."</div>\n";
+    echo "  <div class='foot'>added on the ".$this->party->addedDate." by ".$this->party->addeduser->PrintLinkedName()." ".$this->party->addeduser->PrintLinkedAvatar()."</div>\n";
     echo "</div>\n";
   }
 };
@@ -100,7 +100,7 @@ class PouetBoxPartyView extends PouetBox
     $this->party = PouetParty::spawn($_GET["which"]);
     if (!$this->party) return;
 
-    $this->party->addeduser= PouetUser::spawn( $this->party->added );
+    $this->party->addeduser = PouetUser::spawn( $this->party->addedUser );
     
     if (isset($_GET["when"]))
     {
@@ -159,7 +159,7 @@ class PouetBoxPartyView extends PouetBox
         // include invitations on top
         $inv = new BM_Query("prods");
         $inv->AddWhere( sprintf_esc("(prods.invitation = %d AND prods.invitationyear = %d)",$this->party->id,$this->year,$this->party->id,$this->year) );
-        $inv->AddOrder( "prods.quand" );
+        $inv->AddOrder( "prods.addedDate" );
         $prods = $inv->perform();
         foreach($prods as &$v)
         {

@@ -25,7 +25,7 @@ class PouetBoxLatestReleased extends PouetBoxCachable {
 
   function LoadFromDB() {
     $s = new BM_Query("prods");
-    $s->AddOrder("prods.date DESC,prods.quand DESC");
+    $s->AddOrder("prods.releaseDate DESC,prods.addedDate DESC");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
     PouetCollectPlatforms($this->data);

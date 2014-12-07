@@ -12,11 +12,11 @@ class PouetBoxLatestComments extends PouetBox {
   {
     $s = new BM_Query("comments");
     $s->AddField("comments.rating");
-    $s->AddField("comments.quand");
+    $s->AddField("comments.addedDate");
     $s->attach(array("comments"=>"which"),array("prods as prod"=>"id"));
     $s->attach(array("comments"=>"who"),array("users as user"=>"id"));
-    $s->AddOrder("comments.quand DESC");
-    $s->AddWhere(sprintf_esc("(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(comments.quand))<=(3600*%d)",get_setting("commentshours")));
+    $s->AddOrder("comments.addedDate DESC");
+    $s->AddWhere(sprintf_esc("(UNIX_TIMESTAMP()-UNIX_TIMESTAMP(comments.addedDate))<=(3600*%d)",get_setting("commentshours")));
     $this->comments = $s->perform();
 
     $a = array();

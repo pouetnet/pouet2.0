@@ -16,7 +16,7 @@ class PouetProd extends BM_Class {
     $this->awards = array();
   }
   static function getTable () { return "prods"; }
-  static function getFields() { return array("id","name","type","views","added","quand","date",
+  static function getFields() { return array("id","name","type","views","addedUser","addedDate","releaseDate",
     "voteup","votepig","votedown","voteavg","download","partycompo","party_place","party_year"); }
   static function getExtendedFields() { return array("sceneorg","demozoo","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
 
@@ -36,7 +36,7 @@ class PouetProd extends BM_Class {
     $node->attach( $query, "group2", array("groups as group2"=>"id"));
     $node->attach( $query, "group3", array("groups as group3"=>"id"));
     $node->attach( $query, "party", array("parties as party"=>"id"));
-    $node->attach( $query, "added", array("users as addeduser"=>"id"));
+    $node->attach( $query, "addedUser", array("users as addeduser"=>"id"));
   }
 
   function RenderTypeIcons() {
@@ -147,16 +147,16 @@ class PouetProd extends BM_Class {
   }
 
   function RenderReleaseDate() {
-    if (!$this->date || $this->date{0}=="0") return "";
-    if (substr($this->date,5,2)=="00")
-      return substr($this->date,0,4);
-    return strtolower(date("F Y",strtotime($this->date)));
+    if (!$this->releaseDate || $this->releaseDate{0}=="0") return "";
+    if (substr($this->releaseDate,5,2)=="00")
+      return substr($this->releaseDate,0,4);
+    return strtolower(date("F Y",strtotime($this->releaseDate)));
   }
   function RenderAddedDate() {
-    if (!$this->quand) return "";
-    if (substr($this->quand,5,2)=="00")
-      return substr($this->quand,0,4);
-    return strtolower(date("F Y",strtotime($this->quand)));
+    if (!$this->addedDate) return "";
+    if (substr($this->addedDate,5,2)=="00")
+      return substr($this->addedDate,0,4);
+    return strtolower(date("F Y",strtotime($this->addedDate)));
   }
   function RenderAsEntry() {
     echo "<span class='prodentry'>";

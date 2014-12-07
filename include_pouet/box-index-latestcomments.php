@@ -29,10 +29,10 @@ class PouetBoxLatestComments extends PouetBoxCachable {
 
   function LoadFromDB() {
     $s = new BM_Query();
-    $s->AddTable("(select * from comments order by comments.quand desc limit 25) as c");
+    $s->AddTable("(select * from comments order by comments.addedDate desc limit 25) as c");
     $s->attach(array("c"=>"which"),array("prods as prod"=>"id"));
     $s->attach(array("c"=>"who"),array("users as user"=>"id"));
-    $s->AddOrder("c.quand desc");
+    $s->AddOrder("c.addedDate desc");
     $s->AddField("c.id as commentID");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();

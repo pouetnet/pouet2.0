@@ -160,7 +160,7 @@ class PouetBoxUserMain extends PouetBox
   function GetProdsAdded( $limit = null )
   {
     $s = new BM_Query("prods");
-    $s->AddOrder("prods.quand desc");
+    $s->AddOrder("prods.addedDate desc");
     $s->AddWhere(sprintf("prods.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
@@ -177,7 +177,7 @@ class PouetBoxUserMain extends PouetBox
   function GetGroupsAdded( $limit = null )
   {
     $s = new BM_Query("groups");
-    $s->AddOrder("groups.quand desc");
+    $s->AddOrder("groups.addedDate desc");
     $s->AddWhere(sprintf("groups.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
@@ -193,7 +193,7 @@ class PouetBoxUserMain extends PouetBox
   function GetPartiesAdded( $limit = null )
   {
     $s = new BM_Query("parties");
-    $s->AddOrder("parties.quand desc");
+    $s->AddOrder("parties.addedDate desc");
     $s->AddWhere(sprintf("parties.added = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
@@ -248,7 +248,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddField("credits.role");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
-    $s->AddOrder("credits_prod.quand desc");
+    $s->AddOrder("credits_prod.addedDate desc");
     if ($limit)
       $s->SetLimit( $limit );
 
@@ -264,7 +264,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddField("sum(votedown) as down");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
-    $s->AddOrder("credits_prod.quand desc");
+    $s->AddOrder("credits_prod.addedDate desc");
     $data2 = $s->perform();
     
     $this->totalCreditsThumbUp = $data2[0]->up;
@@ -276,7 +276,7 @@ class PouetBoxUserMain extends PouetBox
   {
     $s = new BM_Query("prods");
     $s->AddField("comments.rating");
-    $s->AddOrder("comments.quand desc");
+    $s->AddOrder("comments.addedDate desc");
     $s->AddJoin("left","comments","prods.id = comments.which");
     $s->AddWhere(sprintf("comments.who = %d",$this->id));
     $s->AddGroup("prods.id");
@@ -383,9 +383,9 @@ class PouetBoxUserMain extends PouetBox
     $s = new BM_Query("comments");
     $s->AddField("comments.rating");
     $s->AddField("comments.id as commentID");
-    $s->AddField("comments.quand as commentDate");
+    $s->AddField("comments.addedDate as commentDate");
     $s->AddField("comments.comment");
-    $s->AddOrder("comments.quand desc");
+    $s->AddOrder("comments.addedDate desc");
     //$s->AddJoin("left","comments","prods.id = comments.which");
     $s->Attach(array("comments"=>"which"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("comments.who = %d",$this->id));
@@ -813,7 +813,7 @@ class PouetBoxUserMain extends PouetBox
   }
 
   function RenderFooter() {
-    echo "  <div class='foot'>account created on the ".$this->user->quand."</div>\n";
+    echo "  <div class='foot'>account created on the ".$this->user->addedDate."</div>\n";
     echo "</div>\n";
   }
 };

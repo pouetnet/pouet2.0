@@ -35,7 +35,7 @@ class PouetBoxLatestParties extends PouetBoxCachable {
     $s->AddWhere(sprintf_esc("parties.id != %d",NO_PARTY_ID));
     //$s->AddWhere(sprintf_esc("prods.id is not null");
     $s->AddGroup("prods.party,prods.party_year");
-    $s->AddOrder("prods.date desc, prods.id desc");
+    $s->AddOrder("prods.releaseDate desc, prods.id desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
     //PouetCollectPlatforms($this->data);

@@ -178,7 +178,7 @@ class PouetBoxProdMain extends PouetBox {
     echo " <tr>\n";
     echo "  <td>release date :</td>\n";
     echo "  <td>";
-    if ($this->prod->date && $this->prod->date{0}!="0")
+    if ($this->prod->releaseDate && $this->prod->releaseDate{0}!="0")
     {
       echo $this->prod->RenderReleaseDate();
     }
@@ -502,7 +502,7 @@ document.observe("dom:loaded",function(){
     if($this->prod->addeduser)
     {
       echo "<tr>\n";
-      echo " <td class='foot' colspan='3'>added on the ".$this->prod->quand." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
+      echo " <td class='foot' colspan='3'>added on the ".$this->prod->addedDate." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
       echo "</tr>\n";
     }
 
@@ -554,10 +554,10 @@ class PouetBoxProdComments extends PouetBox {
     $s->AddField("comments.id as id");
     $s->AddField("comments.comment as comment");
     $s->AddField("comments.rating as rating");
-    $s->AddField("comments.quand as quand");
+    $s->AddField("comments.addedDate as addedDate");
     $s->attach(array("comments"=>"who"),array("users as user"=>"id"));
     $s->AddTable("comments");
-    $s->AddOrder("comments.quand");
+    $s->AddOrder("comments.addedDate");
     $s->AddWhere("comments.which=".$this->id);
     $perPage = get_setting("prodcomments");
     if ($perPage != -1)
@@ -618,7 +618,7 @@ class PouetBoxProdComments extends PouetBox {
         unset($main->userCDCs[$c->user->id]);
       }
 
-      echo "added on the <a href='prod.php?post=".$c->id."'>".$c->quand."</a> by ";
+      echo "added on the <a href='prod.php?post=".$c->id."'>".$c->addedDate."</a> by ";
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
 
       echo "</div>\n";

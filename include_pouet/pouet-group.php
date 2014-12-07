@@ -1,7 +1,7 @@
 <?
 class PouetGroup extends BM_Class {
   static function getTable () { return "groups"; }
-  static function getFields() { return array("id","name","web","added","quand","acronym"); }
+  static function getFields() { return array("id","name","web","addedUser","addedDate","acronym"); }
   static function getExtendedFields() { return array("csdb","zxdemo","demozoo"); }
 
   static function onAttach( &$node, &$query )

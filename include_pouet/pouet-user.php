@@ -28,9 +28,9 @@ class PouetUser extends BM_Class {
   function CalculateGlops()
   {
     $glops = 0;
-    $this->stats["prods"]       = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM prods WHERE added=%d",$this->id))->c;
-    $this->stats["groups"]      = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM groups WHERE added=%d",$this->id))->c;
-    $this->stats["parties"]     = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM parties WHERE added=%d",$this->id))->c;
+    $this->stats["prods"]       = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM prods WHERE addedUser=%d",$this->id))->c;
+    $this->stats["groups"]      = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM groups WHERE addedUser=%d",$this->id))->c;
+    $this->stats["parties"]     = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM parties WHERE addedUser=%d",$this->id))->c;
     $this->stats["screenshots"] = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM screenshots WHERE user=%d",$this->id))->c;
     $this->stats["nfos"]        = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM nfos WHERE user=%d",$this->id))->c;
     $this->stats["comments"]    = SQLLib::SelectRow(sprintf_esc("SELECT COUNT(DISTINCT which) AS c  FROM comments WHERE who=%d",$this->id))->c;
