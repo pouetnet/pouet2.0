@@ -11,9 +11,9 @@ class PouetBoxCDCModerator extends PouetBox {
   function LoadFromDB()
   {
     $s = new BM_Query("cdc");
-    $s->AddField("cdc.quand");
+    $s->AddField("cdc.addedDate");
     $s->attach(array("cdc"=>"which"),array("prods as prod"=>"id"));
-    $s->AddOrder("cdc.quand desc");
+    $s->AddOrder("cdc.addedDate desc");
     $this->cdcs = $s->perform();
 
     $a = array();
@@ -42,7 +42,7 @@ class PouetBoxCDCModerator extends PouetBox {
       echo "</td>\n";
 
       echo "<td>\n";
-      echo $row->quand;
+      echo $row->addedDate;
       echo "</td>\n";
       echo "</tr>\n";
     }

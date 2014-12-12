@@ -14,7 +14,7 @@ class PouetBoxSceneOrgAwards extends PouetBox {
     $s->AddField("sceneorgrecommended.type");
     $s->AddField("sceneorgrecommended.category");
     $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(sceneorgrecommended_prod.date,'%Y') DESC");
+    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
     $s->AddOrder("sceneorgrecommended.category");
     $s->AddOrder("sceneorgrecommended.type");
     $s->AddWhere("sceneorgrecommended.type != 'viewingtip'");
@@ -33,9 +33,9 @@ class PouetBoxSceneOrgAwards extends PouetBox {
     $lastCategory = "";
     foreach ($this->sceneorg as $row)
     {
-      if ($lastYear != substr($row->prod->date,0,4))
+      if ($lastYear != substr($row->prod->releaseDate,0,4))
       {
-        $lastYear = substr($row->prod->date,0,4);
+        $lastYear = substr($row->prod->releaseDate,0,4);
         echo "<tr><th colspan='3' class='year'>".$lastYear."</th></tr>\n";
       }
       if ($lastCategory != $row->category)
@@ -78,7 +78,7 @@ class PouetBoxSceneOrgTips extends PouetBox {
     $s = new BM_Query("sceneorgrecommended");
     $s->AddField("sceneorgrecommended.type");
     $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(sceneorgrecommended_prod.date,'%Y') DESC");
+    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
     $s->AddWhere("sceneorgrecommended.type = 'viewingtip'");
     $this->sceneorg = $s->perform();
 
@@ -95,9 +95,9 @@ class PouetBoxSceneOrgTips extends PouetBox {
     $lastCategory = "";
     foreach ($this->sceneorg as $row)
     {
-      if ($lastYear != substr($row->prod->date,0,4))
+      if ($lastYear != substr($row->prod->releaseDate,0,4))
       {
-        $lastYear = substr($row->prod->date,0,4);
+        $lastYear = substr($row->prod->releaseDate,0,4);
         echo "<tr id='".$lastYear."'><th colspan='3' class='year'>".$lastYear."</th></tr>\n";
       }
       $p = $row->prod;

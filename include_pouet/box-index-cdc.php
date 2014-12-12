@@ -24,7 +24,7 @@ class PouetBoxCDC extends PouetBoxCachable {
     $s = new BM_Query();
     $s->AddTable("cdc");
     $s->attach(array("cdc"=>"which"),array("prods as prod"=>"id"));
-    $s->AddOrder("cdc.quand desc");
+    $s->AddOrder("cdc.addedDate desc");
     $s->SetLimit(1);
     list($this->data) = $s->perform();
 
