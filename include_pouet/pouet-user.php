@@ -1,7 +1,7 @@
 <?
 class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
-  static function getFields() { return array("id","nickname","level","permissionSubmitItems","avatar","glops","quand","lastLogin"); }
+  static function getFields() { return array("id","nickname","level","permissionSubmitItems","avatar","glops","registerDate","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
   function PrintLinkedAvatar() {
 //    return "<a href='user.php?who=".$this->id."' class='usera' title=\""._html($this->nickname)."\"><img src='".POUET_CONTENT_URL."avatars/".rawurlencode($this->avatar)."' alt=\""._html($this->nickname)."\" class='avatar'/></a>";
@@ -20,7 +20,7 @@ class PouetUser extends BM_Class {
     $a["id"] = $this->id;
     $a["nickname"] = $this->nickname;
     $a["avatar"] = $this->avatar;
-    $a["quand"] = date("Y-m-d H:i:s");
+    $a["registerDate"] = date("Y-m-d H:i:s");
     $a["lastip"] = $_SERVER["REMOTE_ADDR"];
     $a["lasthost"] = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
     SQLLib::InsertRow("users",$a);

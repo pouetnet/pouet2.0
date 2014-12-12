@@ -813,7 +813,7 @@ class PouetBoxUserMain extends PouetBox
   }
 
   function RenderFooter() {
-    echo "  <div class='foot'>account created on the ".$this->user->addedDate."</div>\n";
+    echo "  <div class='foot'>account created on the ".$this->user->registerDate."</div>\n";
     echo "</div>\n";
   }
 };

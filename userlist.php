@@ -27,7 +27,7 @@ class PouetBoxUserlist extends PouetBox
     switch($_GET["order"])
     {
       case "nickname": $s->AddOrder("users.nickname ".$dir); break;
-      case "age": $s->AddOrder("users.quand ".$dir); break;
+      case "age": $s->AddOrder("users.registerDate ".$dir); break;
       case "level": $s->AddOrder("users.level ".$dir); break;
       case "glops":
       default: $s->AddOrder("users.glops ".$dir); break;
@@ -72,7 +72,7 @@ class PouetBoxUserlist extends PouetBox
       echo "</td>\n";
 
       echo "<td class='date'>\n";
-      echo dateDiffReadableDays(time(),$p->quand);
+      echo dateDiffReadableDays(time(),$p->registerDate);
       echo "</td>\n";
 
       echo "<td>\n";
