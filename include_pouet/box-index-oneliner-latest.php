@@ -22,7 +22,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     if (!$message)
       return array("not too meaningful, is it...");
 
-    $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY quand DESC LIMIT 1");
+    $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY addedDate DESC LIMIT 1");
 
     if ($r->who == $currentUser->id)
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
@@ -35,7 +35,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
   	$a = array();
   	$a["who"] = $currentUser->id;
-  	$a["quand"] = date("Y-m-d H:i:s");
+  	$a["addedDate"] = date("Y-m-d H:i:s");
   	$a["message"] = $message;
 
     SQLLib::InsertRow("oneliner",$a);
@@ -60,7 +60,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
     $s->AddField("message");
     $s->AddTable("oneliner");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
-    //$s->AddOrder("oneliner.quand desc, oneliner.id desc");
+    //$s->AddOrder("oneliner.addedDate desc, oneliner.id desc");
     $s->AddOrder("oneliner.id desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
@@ -113,7 +113,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
       //$funnytext = "if garfield was a criminal, we would purchase him until afghanistan.";
       //$funnytext = "crashes indeed.. but wow! NOOON..";
       //$funnytext = "time is to unicode on the onliner";
-      $funnytext = "pouët 2.0: ünicøde иow шőrks in the σneliήer";
+      $funnytext = "pou\303\253t 2.0: \303\274nic\303\270de \320\270ow \321\210\305\221rks in the \317\203neli\316\256er";
 
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";
