@@ -1,5 +1,6 @@
 <?
-require_once("platforms.inc.php");
+require_once("enum-platforms.inc.php");
+require_once("enum-compotypes.inc.php");
 
 $AFFILIATIONS_ORIGINAL = array(
   "remix" => "remixed in",
