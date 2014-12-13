@@ -25,8 +25,8 @@ CREATE TABLE `affiliatedboards` (
   `type` enum('WHQ','member','EHQ','USHQ','HQ','dist') DEFAULT NULL,
   KEY `board` (`board`),
   KEY `group` (`group`),
-  CONSTRAINT `affiliatedboards_ibfk_2` FOREIGN KEY (`group`) REFERENCES `groups` (`id`),
-  CONSTRAINT `affiliatedboards_ibfk_1` FOREIGN KEY (`board`) REFERENCES `boards` (`id`)
+  CONSTRAINT `affiliatedboards_ibfk_1` FOREIGN KEY (`board`) REFERENCES `boards` (`id`),
+  CONSTRAINT `affiliatedboards_ibfk_2` FOREIGN KEY (`group`) REFERENCES `groups` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -45,8 +45,8 @@ CREATE TABLE `affiliatedprods` (
   PRIMARY KEY (`id`),
   KEY `original` (`original`),
   KEY `derivative` (`derivative`),
-  CONSTRAINT `affiliatedprods_ibfk_2` FOREIGN KEY (`derivative`) REFERENCES `prods` (`id`),
-  CONSTRAINT `affiliatedprods_ibfk_1` FOREIGN KEY (`original`) REFERENCES `prods` (`id`)
+  CONSTRAINT `affiliatedprods_ibfk_1` FOREIGN KEY (`original`) REFERENCES `prods` (`id`),
+  CONSTRAINT `affiliatedprods_ibfk_2` FOREIGN KEY (`derivative`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,11 +210,11 @@ CREATE TABLE `boards` (
   `closed` date DEFAULT NULL,
   `phonenumber` varchar(255) NOT NULL,
   `telnetip` varchar(255) NOT NULL,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `adder` int(10) NOT NULL DEFAULT '0',
+  `addedUser` int(10) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `adder` (`adder`),
-  CONSTRAINT `boards_ibfk_1` FOREIGN KEY (`adder`) REFERENCES `users` (`id`)
+  KEY `addedUser` (`addedUser`),
+  CONSTRAINT `boards_ibfk_1` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,8 +247,8 @@ CREATE TABLE `boards_platforms` (
   KEY `bbsb` (`board`),
   KEY `bbs` (`board`,`platform`),
   KEY `bbspl` (`platform`),
-  CONSTRAINT `boards_platforms_ibfk_2` FOREIGN KEY (`board`) REFERENCES `boards` (`id`),
-  CONSTRAINT `boards_platforms_ibfk_1` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`)
+  CONSTRAINT `boards_platforms_ibfk_1` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`),
+  CONSTRAINT `boards_platforms_ibfk_2` FOREIGN KEY (`board`) REFERENCES `boards` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -293,10 +293,10 @@ DROP TABLE IF EXISTS `cdc`;
 CREATE TABLE `cdc` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `which` int(10) NOT NULL DEFAULT '0',
-  `quand` date NOT NULL DEFAULT '0000-00-00',
+  `addedDate` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`),
   KEY `id` (`id`,`which`),
-  KEY `id_2` (`id`,`which`,`quand`),
+  KEY `id_2` (`id`,`which`,`addedDate`),
   KEY `which` (`which`),
   CONSTRAINT `cdc_ibfk_1` FOREIGN KEY (`which`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='coups de coeur';
@@ -315,16 +315,16 @@ CREATE TABLE `comments` (
   `who` int(10) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
   `rating` tinyint(2) NOT NULL DEFAULT '0',
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `which` (`which`),
   KEY `who` (`who`),
   KEY `rating` (`rating`),
-  KEY `quand` (`quand`),
+  KEY `quand` (`addedDate`),
   KEY `whichwho` (`who`,`which`),
-  KEY `which_quand` (`which`,`quand`),
-  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`who`) REFERENCES `users` (`id`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`which`) REFERENCES `prods` (`id`)
+  KEY `which_quand` (`which`,`addedDate`),
+  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`which`) REFERENCES `prods` (`id`),
+  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`who`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -343,8 +343,8 @@ CREATE TABLE `credits` (
   PRIMARY KEY (`id`),
   KEY `prodID` (`prodID`),
   KEY `userID` (`userID`),
-  CONSTRAINT `credits_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
-  CONSTRAINT `credits_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
+  CONSTRAINT `credits_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`),
+  CONSTRAINT `credits_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -378,7 +378,7 @@ CREATE TABLE `faq` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `question` varchar(255) NOT NULL,
   `answer` text NOT NULL,
-  `category` enum('general','pouet 2.0','syndication','BB Code') NOT NULL DEFAULT 'general',
+  `category` enum('welcome','demos','general','pouet 2.0','syndication','BB Code') NOT NULL DEFAULT 'general',
   `deprecated` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='the pou';
@@ -417,15 +417,15 @@ CREATE TABLE `groups` (
   `name` varchar(255) NOT NULL,
   `acronym` varchar(8) NOT NULL,
   `web` varchar(255) NOT NULL,
-  `added` int(10) NOT NULL DEFAULT '1',
+  `addedUser` int(10) NOT NULL DEFAULT '1',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `views` int(10) unsigned DEFAULT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `csdb` int(10) unsigned NOT NULL DEFAULT '0',
   `zxdemo` int(10) unsigned NOT NULL DEFAULT '0',
   `demozoo` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `added` (`added`),
-  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`added`) REFERENCES `users` (`id`)
+  KEY `added` (`addedUser`),
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -491,8 +491,8 @@ CREATE TABLE `lists` (
   PRIMARY KEY (`id`),
   KEY `adder` (`adder`),
   KEY `upkeeper` (`upkeeper`),
-  CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`upkeeper`) REFERENCES `users` (`id`),
-  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`adder`) REFERENCES `users` (`id`)
+  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`adder`) REFERENCES `users` (`id`),
+  CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`upkeeper`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -512,8 +512,8 @@ CREATE TABLE `logos` (
   PRIMARY KEY (`id`),
   KEY `author1` (`author1`),
   KEY `author2` (`author2`),
-  CONSTRAINT `logos_ibfk_2` FOREIGN KEY (`author2`) REFERENCES `users` (`id`),
-  CONSTRAINT `logos_ibfk_1` FOREIGN KEY (`author1`) REFERENCES `users` (`id`)
+  CONSTRAINT `logos_ibfk_1` FOREIGN KEY (`author1`) REFERENCES `users` (`id`),
+  CONSTRAINT `logos_ibfk_2` FOREIGN KEY (`author2`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -533,8 +533,8 @@ CREATE TABLE `logos_votes` (
   KEY `user` (`user`,`vote`),
   KEY `user_2` (`user`,`vote`,`logo`),
   KEY `logo` (`logo`),
-  CONSTRAINT `logos_votes_ibfk_2` FOREIGN KEY (`logo`) REFERENCES `logos` (`id`),
-  CONSTRAINT `logos_votes_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `logos_votes_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
+  CONSTRAINT `logos_votes_ibfk_2` FOREIGN KEY (`logo`) REFERENCES `logos` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='logos ratings given by users';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -562,8 +562,8 @@ CREATE TABLE `modification_requests` (
   KEY `approved` (`approved`),
   KEY `userID` (`userID`),
   KEY `gloperatorID` (`gloperatorID`),
-  CONSTRAINT `modification_requests_ibfk_2` FOREIGN KEY (`gloperatorID`) REFERENCES `users` (`id`),
-  CONSTRAINT `modification_requests_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
+  CONSTRAINT `modification_requests_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
+  CONSTRAINT `modification_requests_ibfk_2` FOREIGN KEY (`gloperatorID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -600,8 +600,8 @@ CREATE TABLE `nfos` (
   PRIMARY KEY (`id`),
   KEY `prod` (`prod`),
   KEY `user` (`user`),
-  CONSTRAINT `nfos_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
-  CONSTRAINT `nfos_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `nfos_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
+  CONSTRAINT `nfos_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -653,7 +653,7 @@ CREATE TABLE `oneliner` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `message` varchar(303) NOT NULL,
   `who` int(10) NOT NULL DEFAULT '0',
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `who` (`who`),
   CONSTRAINT `oneliner_ibfk_1` FOREIGN KEY (`who`) REFERENCES `users` (`id`)
@@ -688,10 +688,10 @@ CREATE TABLE `parties` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `web` varchar(255) NOT NULL,
-  `added` int(10) NOT NULL DEFAULT '0',
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedUser` int(10) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `added` (`added`)
+  KEY `added` (`addedUser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -767,8 +767,8 @@ CREATE TABLE `prodotherparty` (
   PRIMARY KEY (`id`),
   KEY `prod` (`prod`),
   KEY `partyyear` (`party`,`party_year`),
-  CONSTRAINT `prodotherparty_ibfk_2` FOREIGN KEY (`party`) REFERENCES `parties` (`id`),
-  CONSTRAINT `prodotherparty_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
+  CONSTRAINT `prodotherparty_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
+  CONSTRAINT `prodotherparty_ibfk_2` FOREIGN KEY (`party`) REFERENCES `parties` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -783,16 +783,16 @@ CREATE TABLE `prods` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `download` varchar(255) NOT NULL,
-  `date` date DEFAULT NULL COMMENT 'release date',
+  `releaseDate` date DEFAULT NULL COMMENT 'release date',
   `views` int(10) unsigned DEFAULT '0',
-  `added` int(10) unsigned NOT NULL DEFAULT '1',
+  `addedUser` int(10) unsigned NOT NULL DEFAULT '1',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'addition date',
   `rank` int(11) unsigned NOT NULL DEFAULT '0',
   `type` set('32b','64b','128b','256b','512b','1k','4k','8k','16k','32k','40k','64k','80k','96k','100k','128k','256k','artpack','bbstro','cracktro','demo','demopack','demotool','dentro','diskmag','fastdemo','game','intro','invitation','liveact','musicdisk','procedural graphics','report','slideshow','votedisk','wild') DEFAULT NULL,
   `party` int(10) DEFAULT NULL,
   `party_year` int(2) unsigned DEFAULT NULL,
-  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','beginner demo compo','black&white video compo','bootsector intro','browser demo','browser intro','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','hugescreen wild','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','javascript 1k','freestyle','media facade','shadertoy','gravedigger','interactive','remix') DEFAULT NULL,
+  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','beginner demo compo','black&white video compo','bootsector intro','browser demo','browser intro','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 1k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','hugescreen wild','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','javascript 1k','freestyle','media facade','shadertoy','gravedigger','interactive','remix','mini animation') DEFAULT NULL,
   `party_place` tinyint(3) unsigned DEFAULT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'addition date',
   `latestip` varchar(255) NOT NULL,
   `group1` int(10) DEFAULT NULL,
   `group2` int(10) DEFAULT NULL,
@@ -818,20 +818,20 @@ CREATE TABLE `prods` (
   KEY `group3` (`group3`),
   KEY `id` (`id`,`group1`,`group2`,`group3`),
   KEY `party` (`party`),
-  KEY `date` (`date`),
-  KEY `quand` (`quand`),
-  KEY `datequand` (`date`,`quand`),
+  KEY `date` (`releaseDate`),
+  KEY `quand` (`addedDate`),
+  KEY `datequand` (`releaseDate`,`addedDate`),
   KEY `partyyear` (`party`,`party_year`),
-  KEY `added` (`added`),
+  KEY `added` (`addedUser`),
   KEY `allgroups` (`group1`,`group2`,`group3`),
   KEY `boardID` (`boardID`),
   KEY `invitation` (`invitation`),
-  CONSTRAINT `prods_ibfk_6` FOREIGN KEY (`invitation`) REFERENCES `parties` (`id`),
   CONSTRAINT `prods_ibfk_1` FOREIGN KEY (`group1`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_2` FOREIGN KEY (`group2`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_3` FOREIGN KEY (`group3`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_4` FOREIGN KEY (`party`) REFERENCES `parties` (`id`),
-  CONSTRAINT `prods_ibfk_5` FOREIGN KEY (`boardID`) REFERENCES `boards` (`id`)
+  CONSTRAINT `prods_ibfk_5` FOREIGN KEY (`boardID`) REFERENCES `boards` (`id`),
+  CONSTRAINT `prods_ibfk_6` FOREIGN KEY (`invitation`) REFERENCES `parties` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -848,8 +848,8 @@ CREATE TABLE `prods_platforms` (
   KEY `plt` (`prod`,`platform`),
   KEY `pltpr` (`prod`),
   KEY `pltpl` (`platform`),
-  CONSTRAINT `prods_platforms_ibfk_2` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`),
-  CONSTRAINT `prods_platforms_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
+  CONSTRAINT `prods_platforms_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
+  CONSTRAINT `prods_platforms_ibfk_2` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -904,8 +904,8 @@ CREATE TABLE `screenshots` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `prod_2` (`prod`),
   KEY `user` (`user`),
-  CONSTRAINT `screenshots_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
-  CONSTRAINT `screenshots_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `screenshots_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
+  CONSTRAINT `screenshots_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='paternite des screenshots';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -940,8 +940,9 @@ CREATE TABLE `users` (
   `im_id` varchar(255) NOT NULL,
   `im_type` enum('AIM','ICQ','Jabber','MSN','Skype','Xfire','Yahoo') DEFAULT NULL,
   `level` enum('administrator','moderator','gloperator','user','pr0nstahr','fakeuser','banned') DEFAULT 'user',
+  `permissionSubmitItems` tinyint(4) NOT NULL DEFAULT '1',
   `avatar` varchar(255) NOT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `registerDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `udlogin` varchar(255) NOT NULL,
   `glops` int(10) unsigned NOT NULL DEFAULT '0',
   `ojuice` int(10) unsigned DEFAULT '0',
@@ -972,8 +973,8 @@ CREATE TABLE `users_cdcs` (
   UNIQUE KEY `pcdc` (`user`,`cdc`),
   KEY `pcdcu` (`user`),
   KEY `pcdcc` (`cdc`),
-  CONSTRAINT `users_cdcs_ibfk_2` FOREIGN KEY (`cdc`) REFERENCES `prods` (`id`),
-  CONSTRAINT `users_cdcs_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+  CONSTRAINT `users_cdcs_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
+  CONSTRAINT `users_cdcs_ibfk_2` FOREIGN KEY (`cdc`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1046,8 +1047,8 @@ CREATE TABLE `watchlist` (
   PRIMARY KEY (`id`),
   KEY `userID` (`userID`),
   KEY `prodID` (`prodID`),
-  CONSTRAINT `watchlist_ibfk_2` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`),
-  CONSTRAINT `watchlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
+  CONSTRAINT `watchlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
+  CONSTRAINT `watchlist_ibfk_2` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
