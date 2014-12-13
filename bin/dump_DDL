@@ -35,18 +35,18 @@ fi
 
 echo "Cleaning up the DDL..."
 # Remove any AUTO_INCREMENT option
-sed -e 's/ AUTO_INCREMENT=[0-9]*//' -i '' pouet.sql
+sed -e 's/ AUTO_INCREMENT=[0-9]*//' -i pouet.sql
 
 # Delete the last 2 lines (empty line + date of dump)
-sed -e 'N;$!P;$!D;$d' -i '' pouet.sql
+sed -e 'N;$!P;$!D;$d' -i pouet.sql
 
 # Remove the MySQL client version header
-sed -e '/-- MySQL dump .*  Distrib .*, for .*/d' -i '' pouet.sql
+sed -e '/-- MySQL dump .*  Distrib .*, for .*/d' -i pouet.sql
 
 # Remove the MySQL server version header
-sed -e '/-- Server version.*/d' -i '' pouet.sql
+sed -e '/-- Server version.*/d' -i pouet.sql
 
 # Remove the host/database information
-sed -e '/-- Host:.*Database:.*/d' -i '' pouet.sql
+sed -e '/-- Host:.*Database:.*/d' -i pouet.sql
 
 echo "Dump of the DDL completed in pouet.sql"
