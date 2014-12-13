@@ -302,7 +302,7 @@ class PouetBoxProdMain extends PouetBox {
     echo "popularity : ".$pop."%<br/>\n";
     echo "<div class='outerbar'><div class='innerbar' style='width: ".$pop."%'>&nbsp;<span>".$pop."%</span></div></div>\n";
 
-    $year = substr($this->prod->date,0,4);
+    $year = substr($this->prod->releaseDate,0,4);
     echo "<div class='awards'>";
     foreach($this->awards as $award)
     {

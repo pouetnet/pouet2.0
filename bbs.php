@@ -41,13 +41,13 @@ class PouetBoxBBSTopicList extends PouetBox
     switch($_GET["order"])
     {
       case "firstpost": $s->AddOrder("bbs_topics.firstpost ".$dir); break;
-      case "lastpost": $s->AddOrder("bbs_topics.lastpost ".$dir); break;
       case "userfirstpost": $s->AddOrder("bbs_topics_firstuser.nickname ".$dir); break;
       case "userlastpost": $s->AddOrder("bbs_topics_lastuser.nickname ".$dir); break;
       case "topic": $s->AddOrder("bbs_topics.topic ".$dir); break;
       case "category": $s->AddOrder("bbs_topics.category ".$dir); break;
       case "count": $s->AddOrder("bbs_topics.count ".$dir); break;
-      //default: $s->AddOrder("prods.date DESC"); $s->AddOrder("prods.quand DESC"); break;
+      case "lastpost":
+      default: $s->AddOrder("bbs_topics.lastpost ".$dir); break;
     }
     $s->AddOrder("bbs_topics.lastpost ".$dir);
     $s->SetLimit( $perPage, (int)(($this->page - 1) * $perPage) );

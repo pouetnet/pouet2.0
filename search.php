@@ -374,7 +374,7 @@ class PouetBoxSearchUser extends PouetBox
       echo "</td>\n";
 
       echo "<td class='date'>";
-      echo $u->quand;
+      echo $u->registerDate;
       echo "</td>\n";
 
       echo "</tr>\n";

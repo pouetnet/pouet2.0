@@ -18,8 +18,6 @@ class PouetBoxProdlist extends PouetBox
     $this->page = (int)max( 1, (int)$_GET["page"] );
 
     $s = new BM_Query("prods");
-    //$s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
-    //$s->AddOrder("prods.date DESC, prods.quand DESC");
 
     if (is_array($_GET["type"]))
     {
@@ -57,7 +55,6 @@ class PouetBoxProdlist extends PouetBox
       case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
       case "views": $s->AddOrder("prods.views ".$dir); break;
       case "added": $s->AddOrder("prods.addedDate ".$dir); break;
-      //default: $s->AddOrder("prods.date DESC"); $s->AddOrder("prods.quand DESC"); break;
     }
     $s->AddOrder("prods.releaseDate ".$dir);
     $s->AddOrder("prods.addedDate ".$dir);

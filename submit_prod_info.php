@@ -157,7 +157,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     unset($this->fields["group2"]);
     unset($this->fields["group3"]);
 
-    if ($prod->date)
+    if ($prod->releaseDate)
       unset($this->fields["releaseDate"]);
 
     unset($this->fields["platform"]);

@@ -113,7 +113,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     foreach($prod->groups as $g)
       $this->fields["group".$n++]["value"] = $g->id;
 
-    $this->fields["releaseDate"]["value"] = $prod->date;
+    $this->fields["releaseDate"]["value"] = $prod->releaseDate;
 
     $this->fields["platform"]["value"] = array_keys($prod->platforms);
     $this->fields["type"]["value"] = $prod->types;
