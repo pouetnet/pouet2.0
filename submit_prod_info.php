@@ -98,7 +98,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     }
 
     if ($this->fields["partyCompo"])
-      $sql["party_compo"] = $data["partyCompo"];
+      $sql["party_compo"] = nullify($data["partyCompo"]);
     if ($this->fields["partyRank"])
       $sql["party_place"] = $data["partyRank"];
 
