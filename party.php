@@ -163,7 +163,7 @@ class PouetBoxPartyView extends PouetBox
         $prods = $inv->perform();
         foreach($prods as &$v)
         {
-          $v->partycompo = 1; // invit
+          $v->party_compo = 1; // invit
           unset($v->placings);
         }
 
@@ -226,6 +226,8 @@ class PouetBoxPartyView extends PouetBox
       echo "<td>\n";
       if ($p->placings[0])
         echo $p->placings[0]->PrintRanking();
+      if (!$this->sortByCompo)
+        echo " ".$COMPOTYPES[$p->party_compo];
       echo "</td>\n";
       echo "<td class='prod'>\n";
       echo $p->RenderTypeIcons();
