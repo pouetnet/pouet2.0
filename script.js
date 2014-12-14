@@ -91,6 +91,11 @@ function adjustSubmitFormFields()
       }
     }
   });
+  if ($("invitationParty") && $("invitationParty").value)
+  {
+    $("row_invitationParty").show();
+    $("row_invitationYear").show();
+  }
 }
 
 function PrepareSubmitForm()
