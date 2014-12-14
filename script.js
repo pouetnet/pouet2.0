@@ -128,7 +128,7 @@ function PrepareSubmitForm()
     $("row_partyRank").show();
   }});
   if ($("invitationParty")) new Autocompleter($("invitationParty"), {"dataUrl":"./ajax_parties.php",onSelectItem:function(){
-    $("row_invitationYear").show();
+    //$("row_invitationYear").show();
   }});
   if ($("boardID")) new Autocompleter($("boardID"), {"dataUrl":"./ajax_boards.php"});
 }
