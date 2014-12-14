@@ -224,10 +224,10 @@ class PouetBoxPartyView extends PouetBox
       }
       echo "<tr>\n";
       echo "<td>\n";
+      if (!$this->sortByCompo)
+        echo $COMPOTYPES[$p->party_compo]." ";
       if ($p->placings[0])
         echo $p->placings[0]->PrintRanking();
-      if (!$this->sortByCompo)
-        echo " ".$COMPOTYPES[$p->party_compo];
       echo "</td>\n";
       echo "<td class='prod'>\n";
       echo $p->RenderTypeIcons();
