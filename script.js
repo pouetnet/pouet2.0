@@ -372,7 +372,7 @@ function Youtubify( e )
 (function ()
 {
   "use strict"; // See http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»]))/i;
+  var textarea, buttons, url = /^\s*((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?\xAB\xBB\u201C\u201D\u2018\u2019]))/i;
   var protocol = /^\s*[A-Z_a-z]+:\/\//;
 
   // Replaces the selected text in a textarea with the given text optionally highlighting a subset
