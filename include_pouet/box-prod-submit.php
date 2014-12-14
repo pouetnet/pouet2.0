@@ -147,7 +147,7 @@ class PouetBoxSubmitProd extends PouetBox
     $a["demozoo"] = $data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
-    $a["party_compo"] = $data["partyCompo"];
+    $a["party_compo"] = nullify($data["partyCompo"]);
     $a["party_place"] = $data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];

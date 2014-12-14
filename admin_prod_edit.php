@@ -57,7 +57,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $a["demozoo"] = $data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
-    $a["party_compo"] = $data["partyCompo"];
+    $a["party_compo"] = nullify($data["partyCompo"]);
     $a["party_place"] = $data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
@@ -523,7 +523,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     $a["party"] = $data["partyID"];
     $a["party_year"] = $data["partyYear"];
     $a["party_place"] = $data["partyPlace"];
-    $a["party_compo"] = $data["partyCompo"];
+    $a["party_compo"] = nullify($data["partyCompo"]);
     if ($data["editPartyID"])
     {
       SQLLib::UpdateRow("prodotherparty",$a,"id=".(int)$data["editPartyID"]);
