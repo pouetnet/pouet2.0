@@ -67,7 +67,7 @@ class PouetBoxProdMain extends PouetBox {
     list($this->screenshot) = $s->perform();
 
     $s = new BM_Query();
-    $s->AddField("prodotherparty.partycompo");
+    $s->AddField("prodotherparty.party_compo");
     $s->AddField("prodotherparty.party_place");
     $s->AddField("prodotherparty.party_year");
     $s->AddTable("prodotherparty");
@@ -76,7 +76,7 @@ class PouetBoxProdMain extends PouetBox {
     $rows = $s->perform();
     foreach($rows as $row)
     {
-      $this->prod->placings[] = new PouetPlacing( array("party"=>$row->party,"compo"=>$row->partycompo,"ranking"=>$row->party_place,"year"=>$row->party_year) );
+      $this->prod->placings[] = new PouetPlacing( array("party"=>$row->party,"compo"=>$row->party_compo,"ranking"=>$row->party_place,"year"=>$row->party_year) );
     }
 
     $s = new BM_Query();
@@ -209,7 +209,8 @@ class PouetBoxProdMain extends PouetBox {
         echo "  <td>";
         if ($p->compo)
         {
-          echo $p->compo;
+          global $COMPOTYPES;
+          echo $COMPOTYPES[ $p->compo ];
         }
         else {
           echo "<span class='na'>n/a</span>";
@@ -291,7 +292,8 @@ class PouetBoxProdMain extends PouetBox {
         //if ($p->ranking)
           echo "  <td>".$p->PrintRanking()."</td>\n";
         //if ($p->compo)
-          echo "  <td>".$p->compo."</td>\n";
+          global $COMPOTYPES;
+          echo "  <td>".$COMPOTYPES[ $p->compo ]."</td>\n";
         echo " </tr>\n";
       }
       echo "</table>\n";

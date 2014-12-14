@@ -13,10 +13,10 @@ class PouetBoxSubmitProd extends PouetBox
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->types = $m[1];
 
-    $row = SQLLib::selectRow("DESC prods partycompo");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->compos = array("");
-    $this->compos = array_merge($this->compos,$m[1]);
+    global $COMPOTYPES;
+    $this->compos = $COMPOTYPES;
+    $this->compos[0] = "";
+    asort($this->compos);
 
     $this->ranks = array(0=>"");
     $this->ranks[97] = "disqualified";
@@ -147,7 +147,7 @@ class PouetBoxSubmitProd extends PouetBox
     $a["demozoo"] = $data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
-    $a["partycompo"] = $data["partyCompo"];
+    $a["party_compo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
@@ -278,6 +278,7 @@ class PouetBoxSubmitProd extends PouetBox
         "name"=>"party compo",
         "type"=>"select",
         "fields"=>$this->compos,
+        "assoc"=>true,
       ),
       "partyRank"=>array(
         "name"=>"party rank",

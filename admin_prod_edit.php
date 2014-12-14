@@ -57,7 +57,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $a["demozoo"] = $data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
     $a["party_year"] = $data["partyYear"];
-    $a["partycompo"] = $data["partyCompo"];
+    $a["party_compo"] = $data["partyCompo"];
     $a["party_place"] = $data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
     $a["invitationyear"] = $data["invitationYear"];
@@ -487,7 +487,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
 
     $s = new BM_Query();
     $s->AddField("prodotherparty.id");
-    $s->AddField("prodotherparty.partycompo");
+    $s->AddField("prodotherparty.party_compo");
     $s->AddField("prodotherparty.party_place");
     $s->AddField("prodotherparty.party_year");
     $s->AddTable("prodotherparty");
@@ -495,11 +495,10 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     $s->AddWhere(sprintf_esc("prod=%d",$this->prod->id));
     $this->data = $s->perform();
 
-
-    $row = SQLLib::selectRow("DESC prods partycompo");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->compos = array("");
-    $this->compos = array_merge($this->compos,$m[1]);
+    global $COMPOTYPES;
+    $this->compos = $COMPOTYPES;
+    $this->compos[0] = "";
+    asort($this->compos);
 
     $this->ranks = array(0=>"");
     $this->ranks[97] = "disqualified";
@@ -524,7 +523,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     $a["party"] = $data["partyID"];
     $a["party_year"] = $data["partyYear"];
     $a["party_place"] = $data["partyPlace"];
-    $a["partycompo"] = $data["partyCompo"];
+    $a["party_compo"] = $data["partyCompo"];
     if ($data["editPartyID"])
     {
       SQLLib::UpdateRow("prodotherparty",$a,"id=".(int)$data["editPartyID"]);
@@ -557,8 +556,8 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     echo "</select></td>\n";
 
     echo "    <td><select name='partyCompo'>";
-    foreach($this->compos as $v)
-      printf("<option value='%s'%s>%s</option>",_html($v),($v == $row->partycompo) ? " selected='selected'" : "",_html($v));
+    foreach($this->compos as $k=>$v)
+      printf("<option value='%s'%s>%s</option>",_html($k),($k == $row->party_compo) ? " selected='selected'" : "",_html($v));
     echo "</select></td>\n";
 
     echo "    <td><select name='partyPlace'>";
@@ -569,9 +568,10 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
   }
   function RenderNormalRow($v)
   {
+    global $COMPOTYPES;
     echo "    <td>"._html($v->party->name)."</td>\n";
     echo "    <td>"._html($v->party_year)."</td>\n";
-    echo "    <td>"._html($v->partycompo)."</td>\n";
+    echo "    <td>"._html($COMPOTYPES[$v->party_compo])."</td>\n";
     echo "    <td>"._html($v->party_place)."</td>\n";
   }
   function RenderBody()

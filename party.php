@@ -125,9 +125,9 @@ class PouetBoxPartyView extends PouetBox
     $s->AddJoin("left","prodotherparty",sprintf_esc("prodotherparty.prod = prods.id and (prodotherparty.party = %d AND prodotherparty.party_year = %d)",$this->party->id,$this->year));
     foreach($s->fields as &$v)
     {
-      if ($v == "prods.partycompo as prods_partycompo")
+      if ($v == "prods.party_compo as prods_party_compo")
       {
-        $v = "COALESCE(prodotherparty.partycompo,prods.partycompo) as prods_partycompo";
+        $v = "COALESCE(prodotherparty.party_compo,prods.party_compo) as prods_party_compo";
       }
       if ($v == "prods.party_place as prods_party_place")
       {
@@ -152,7 +152,7 @@ class PouetBoxPartyView extends PouetBox
       case "views": $s->AddOrder("prods.views ".$dir); break;
       default:
       {
-        $s->AddOrder( "COALESCE(prodotherparty.partycompo ,prods.partycompo)" );
+        $s->AddOrder( "COALESCE(prodotherparty.party_compo,prods.party_compo)" );
         $s->AddOrder( "COALESCE(prodotherparty.party_place,prods.party_place)" );
         $this->sortByCompo = true;
 
@@ -163,7 +163,7 @@ class PouetBoxPartyView extends PouetBox
         $prods = $inv->perform();
         foreach($prods as &$v)
         {
-          $v->partycompo = "invit";
+          $v->partycompo = 1; // invit
           unset($v->placings);
         }
 
@@ -202,9 +202,10 @@ class PouetBoxPartyView extends PouetBox
 
     $lastCompo = "*";
     $headerDone = false;
+    global $COMPOTYPES;
     foreach($this->prods as $p)
     {
-      if ($p->partycompo != $lastCompo && !$headerDone)
+      if ($p->party_compo != $lastCompo && !$headerDone)
       {
         echo "<tr class='sortable'>\n";
         foreach($headers as $key=>$text)
@@ -213,13 +214,13 @@ class PouetBoxPartyView extends PouetBox
             adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
-          if ($key == "compo" && $this->sortByCompo) $out = "<th>".$p->partycompo."</th>";
+          if ($key == "compo" && $this->sortByCompo) $out = "<th>".$COMPOTYPES[$p->party_compo]."</th>";
           echo $out;
         }
         echo "</tr>\n";
         if (!$this->sortByCompo)
           $headerDone = true;
-        $lastCompo = $p->partycompo;
+        $lastCompo = $p->party_compo;
       }
       echo "<tr>\n";
       echo "<td>\n";

@@ -27,7 +27,7 @@ foreach($prod->types as $v)
   $xml->demo->addChild("category",ucfirst(_html($v)))->addAttribute("type",_html($v));
 
 $s = new BM_Query();
-$s->AddField("prodotherparty.partycompo");
+$s->AddField("prodotherparty.party_compo");
 $s->AddField("prodotherparty.party_place");
 $s->AddField("prodotherparty.party_year");
 $s->AddTable("prodotherparty");
@@ -36,16 +36,17 @@ $s->AddWhere(sprintf_esc("prod=%d",$prod->id));
 $rows = $s->perform();
 foreach($rows as $row)
 {
-  $prod->placings[] = new PouetPlacing( array("party"=>$row->party,"compo"=>$row->partycompo,"ranking"=>$row->party_place,"year"=>$row->party_year) );
+  $prod->placings[] = new PouetPlacing( array("party"=>$row->party,"compo"=>$row->party_compo,"ranking"=>$row->party_place,"year"=>$row->party_year) );
 }
 
+global $COMPOTYPES;
 foreach($prod->placings as $p)
 {
   $release = $xml->demo->addChild("release");
   $release->addChild("party",_html($p->party->name))->addAttribute("url",_html($p->party->web));
   $release->addChild("date",$p->year);
   $release->addChild("rank",$p->ranking);
-  $release->addChild("compo",$p->compo);
+  $release->addChild("compo",$COMPOTYPES[$p->compo]);
 }
 /*
 <release><party url="http://www.ambience.nl">Ambience</party><date>2000-03-15</date><rank>9</rank><compo>pc demo</compo></release>

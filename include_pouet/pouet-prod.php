@@ -28,7 +28,7 @@ class PouetProd extends BM_Class {
 
     $this->types = explode(",",$this->type);
     if ($this->party && $this->party->id != NO_PARTY_ID)
-      $this->placings[] = new PouetPlacing( array("party"=>$this->party,"compo"=>$this->partycompo,"ranking"=>$this->party_place,"year"=>$this->party_year) );
+      $this->placings[] = new PouetPlacing( array("party"=>$this->party,"compo"=>$this->party_compo,"ranking"=>$this->party_place,"year"=>$this->party_year) );
   }
   static function onAttach( &$node, &$query )
   {
