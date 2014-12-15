@@ -161,7 +161,7 @@ class PouetBoxUserMain extends PouetBox
   {
     $s = new BM_Query("prods");
     $s->AddOrder("prods.addedDate desc");
-    $s->AddWhere(sprintf("prods.added = %d",$this->id));
+    $s->AddWhere(sprintf("prods.addedUser = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
     else
@@ -178,7 +178,7 @@ class PouetBoxUserMain extends PouetBox
   {
     $s = new BM_Query("groups");
     $s->AddOrder("groups.addedDate desc");
-    $s->AddWhere(sprintf("groups.added = %d",$this->id));
+    $s->AddWhere(sprintf("groups.addedUser = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
     else
@@ -194,7 +194,7 @@ class PouetBoxUserMain extends PouetBox
   {
     $s = new BM_Query("parties");
     $s->AddOrder("parties.addedDate desc");
-    $s->AddWhere(sprintf("parties.added = %d",$this->id));
+    $s->AddWhere(sprintf("parties.addedUser = %d",$this->id));
     if ($limit)
       $s->SetLimit( $limit );
     else
