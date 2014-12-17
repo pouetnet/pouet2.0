@@ -9,7 +9,7 @@ $limit = max($limit,5);
 
 $s = new BM_Query("prods");
 $s->AddOrder("prods.releaseDate DESC,prods.addedDate DESC");
-$s->attach("added",array("users as user"=>"id"));
+$s->attach("addedUser",array("users as user"=>"id"));
 $s->SetLimit($limit);
 
 if ($_GET["type"])
