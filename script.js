@@ -52,7 +52,7 @@ function AddPreviewButton( button )
     document.body.insert(form);
     
     var textarea = new Element("textarea",{"name":"message"});
-    textarea.update( origTextarea.value );
+    //textarea.update( origTextarea.value );
     textarea.value = origTextarea.value;
     form.insert(textarea);
     
