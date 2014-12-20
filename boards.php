@@ -125,7 +125,7 @@ class PouetBoxBoardMain extends PouetBox
     echo "  </div>\n";
     echo "</div>\n";
 
-    echo " <div class='foot'>added on the ".$this->board->added." by ".$this->addedUser->PrintLinkedName()." ".$this->addedUser->PrintLinkedAvatar()."</div>\n";
+    echo " <div class='foot'>added on the ".$this->board->addedDate." by ".$this->addedUser->PrintLinkedName()." ".$this->addedUser->PrintLinkedAvatar()."</div>\n";
 
     echo "</div>\n";
     return $s;
