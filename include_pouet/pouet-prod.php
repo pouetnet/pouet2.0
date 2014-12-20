@@ -147,16 +147,10 @@ class PouetProd extends BM_Class {
   }
 
   function RenderReleaseDate() {
-    if (!$this->releaseDate || $this->releaseDate{0}=="0") return "";
-    if (substr($this->releaseDate,5,2)=="00")
-      return substr($this->releaseDate,0,4);
-    return strtolower(date("F Y",strtotime($this->releaseDate)));
+    return renderHalfDate( $this->releaseDate );
   }
   function RenderAddedDate() {
-    if (!$this->addedDate) return "";
-    if (substr($this->addedDate,5,2)=="00")
-      return substr($this->addedDate,0,4);
-    return strtolower(date("F Y",strtotime($this->addedDate)));
+    return renderHalfDate( $this->addedDate );
   }
   function RenderAsEntry() {
     echo "<span class='prodentry'>";
