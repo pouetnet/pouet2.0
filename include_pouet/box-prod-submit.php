@@ -225,7 +225,7 @@ class PouetBoxSubmitProd extends PouetBox
       ),
       "group3"=>array(
         "name"=>"group 3",
-        "infoAfter"=>"if the group is missing from the list, add it <a href='submit_group.php'>here</a> !",
+        "infoAfter"=>"if the group is missing from the list, add it <a href='submit_group.php' target='_blank'>here</a> !",
       ),
       "download"=>array(
         "type"=>"url",
@@ -269,7 +269,7 @@ class PouetBoxSubmitProd extends PouetBox
       ),
       "partyID"=>array(
         "name"=>"party",
-        "infoAfter"=>"if the party is missing from the list, add it <a href='submit_party.php'>here</a> !",
+        "infoAfter"=>"if the party is missing from the list, add it <a href='submit_party.php' target='_blank'>here</a> !",
       ),
       "partyYear"=>array(
         "name"=>"party year",
