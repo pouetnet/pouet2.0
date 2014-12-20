@@ -137,6 +137,13 @@ function move_uploaded_file_fake( $src, $dst )
   return true;
 }
 
+function renderHalfDate($date)
+{
+  if (!$date || $date{0}=="0") return "";
+  if (substr($date,5,2)=="00")
+    return substr($date,0,4);
+  return strtolower(date("F Y",strtotime($date)));
+}
 
 function array_select( $array, $keys )
 {

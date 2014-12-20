@@ -44,9 +44,7 @@ class PouetBoxBoardMain extends PouetBox
 
     if ($currentUser && $currentUser->CanEditItems())
     {
-      printf("<div id='adminlinks'>");
-      //printf("[<a href='admin_board_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
-      printf("</div>");
+      printf(" [<a href='admin_board_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
     }
     echo "</div>\n";
 
@@ -62,18 +60,42 @@ class PouetBoxBoardMain extends PouetBox
     echo "        <td>number :</td>\n";
     echo "        <td>"._html($this->board->phonenumber)."</td>\n";
     echo "      </tr>\n";
-    echo "      <tr>\n";
-    echo "        <td>platforms :</td>\n";
-    echo "        <td>";
-
-    echo "<ul>";
-    foreach($this->platforms as $t)
-      echo "<li><a href='prodlist.php?platform[]=".rawurlencode($PLATFORMS[$t]["name"])."'><span class='platform os_".$PLATFORMS[$t]["slug"]."'>".$PLATFORMS[$t]["name"]."</span> ".$PLATFORMS[$t]["name"]."</a></li>\n";
-    echo "</ul>";
-
-    echo "</td>\n";
-    echo "      </tr>\n";
-
+    if ($this->board->telnetip)
+    {
+      echo "      <tr>\n";
+      echo "        <td>telnet address :</td>\n";
+      echo "        <td>"._html($this->board->telnetip)."</td>\n";
+      echo "      </tr>\n";
+    }
+    if ($date = renderHalfDate($this->board->started))
+    {
+      echo "      <tr>\n";
+      echo "        <td>started :</td>\n";
+      echo "        <td>".$date."</td>\n";
+      echo "      </tr>\n";
+    }
+    if ($date = renderHalfDate($this->board->closed))
+    {
+      echo "      <tr>\n";
+      echo "        <td>closed :</td>\n";
+      echo "        <td>".$date."</td>\n";
+      echo "      </tr>\n";
+    }
+    if ($this->platforms)
+    {
+      echo "      <tr>\n";
+      echo "        <td>platforms :</td>\n";
+      echo "        <td>";
+  
+      echo "<ul>";
+      foreach($this->platforms as $t)
+        echo "<li><a href='prodlist.php?platform[]=".rawurlencode($PLATFORMS[$t]["name"])."'><span class='platform os_".$PLATFORMS[$t]["slug"]."'>".$PLATFORMS[$t]["name"]."</span> ".$PLATFORMS[$t]["name"]."</a></li>\n";
+      echo "</ul>";
+  
+      echo "</td>\n";
+      echo "      </tr>\n";
+    }
+    
     if ($this->nfos)
     {
       echo "      <tr>\n";
@@ -169,6 +191,7 @@ class PouetBoxBoardList extends PouetBox
   function Load() {
     $s = new BM_query("boards");
     $s->AddField("boards.id");
+    $s->AddField("boards.sysop");
     $s->AddField("boards.name");
     $s->AddField("boards.phonenumber");
     if ($this->letter=="#")
@@ -201,11 +224,13 @@ class PouetBoxBoardList extends PouetBox
     echo "<table class='boxtable'>\n";
     echo "<tr>\n";
     echo "  <th>name</th>\n";
-    echo "  <th>countrycode</th>\n";
+    echo "  <th>sysop</th>\n";
+    echo "  <th>phone number</th>\n";
     echo "</tr>\n";
     foreach ($this->boards as $b) {
       echo "<tr>\n";
       echo "  <td class='boardname'><a href='boards.php?which=".(int)$b->id."'>"._html($b->name)."</a></td>\n";
+      echo "  <td>"._html($b->sysop)."</td>\n";
       echo "  <td>"._html($b->phonenumber)."</td>\n";
       echo "</tr>\n";
     }

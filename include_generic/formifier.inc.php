@@ -24,6 +24,7 @@ class Formifier {
           echo "    <input type='hidden' name='".$k."' id='".$k."' value='".$v["value"]."'/>\n";
           break;
         case "date":
+          $year = $month = null;
           if ($v["value"])
           {
             list($year,$month,) = sscanf($v["value"],"%d-%d-%d");
