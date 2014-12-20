@@ -20,7 +20,7 @@ class PouetBoxBoardMain extends PouetBox
     $this->platforms = array();
     foreach($a as $v) $this->platforms[] = $v->platform;
 
-    $this->addedUser = PouetUser::Spawn($this->board->adder);
+    $this->addedUser = PouetUser::Spawn($this->board->addedUser);
 
     $this->nfos = SQLLib::SelectRows(sprintf_esc("select * from othernfos where refid = %d",$this->id));
 
