@@ -100,7 +100,9 @@ class PouetBoxAdminDeleteBoard extends PouetBox
   }
   function Commit($data)
   {
-    // TODO
+    SQLLib::Query(sprintf_esc("DELETE FROM othernfos WHERE refid=%d AND type='bbs'",$this->board->id)); // TODO: cleanup files
+    SQLLib::Query(sprintf_esc("DELETE FROM affiliatedboards WHERE board=%d",$this->board->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM boards_platforms WHERE board=%d",$this->board->id));
     SQLLib::Query(sprintf_esc("DELETE FROM boards WHERE id=%d",$this->board->id));
     
     gloperator_log( "board", (int)$this->board->id, "board_delete", get_object_vars($this->board) );
