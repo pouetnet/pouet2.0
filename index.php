@@ -23,31 +23,14 @@ require("include_pouet/menu.inc.php");
 
 // the reason this is done like this is so that later
 // we can allow the user to customize/reorder/etc it.
-$boxes = array(
-  "leftbar" => array(
-    array("box"=>"Login"),
-    array("box"=>"CDC"           ,"limit"=>get_setting("indexcdc")),
-    array("box"=>"LatestAdded"   ,"limit"=>get_setting("indexlatestadded")),
-    array("box"=>"LatestReleased","limit"=>get_setting("indexlatestreleased")),
-    array("box"=>"TopMonth"      ,"limit"=>get_setting("indextopprods")),
-    array("box"=>"TopAlltime"    ,"limit"=>get_setting("indextopkeops")),
-  ),
-  "middlebar" => array(
-    array("box"=>"LatestOneliner","limit"=>get_setting("indexoneliner")),
-    array("box"=>"LatestBBS"     ,"limit"=>get_setting("indexbbstopics")),
-    array("box"=>"NewsBoxes"     ,"limit"=>get_setting("indexojnews")),
-  ),
-  "rightbar" => array(
-    array("box"=>"SearchBox"      ,"limit"=>get_setting("indexsearch")),
-    array("box"=>"Stats"          ,"limit"=>get_setting("indexstats")),
-    array("box"=>"AffilButton"    ,"limit"=>get_setting("indexlinks")),
-    array("box"=>"LatestComments" ,"limit"=>get_setting("indexlatestcomments")),
-    array("box"=>"Watchlist"      ,"limit"=>get_setting("indexwatchlist")),
-    array("box"=>"LatestParties"  ,"limit"=>get_setting("indexlatestparties")),
-    array("box"=>"UpcomingParties"),
-    array("box"=>"TopGlops"       ,"limit"=>get_setting("indextopglops")),
-  ),
-);
+$customizerJSON = get_setting("customizerJSON");
+$customizer = json_decode($customizerJSON,true);
+if (!$customizer["frontpage"])
+{
+  require_once("include_pouet/default_usersettings.php");
+  $customizer = json_decode($DEFAULT_USERSETTINGS->customizerJSON, true);
+}
+$boxes = $customizer["frontpage"];
 
 echo "<div id='content' class='frontpage'>\n";
 
