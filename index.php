@@ -21,8 +21,6 @@ require_once("include_pouet/box-index-oneliner-latest.php");
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
-// the reason this is done like this is so that later
-// we can allow the user to customize/reorder/etc it.
 $customizerJSON = get_setting("customizerJSON");
 $customizer = json_decode($customizerJSON,true);
 if (!$customizer["frontpage"])
@@ -37,7 +35,7 @@ echo "<div id='content' class='frontpage'>\n";
 foreach($boxes as $bar=>$boxlist)
 {
   $timer["bar_".$bar]["start"] = microtime_float();
-  echo "  <div id='"._html($bar)."'>\n";
+  echo "  <div id='"._html($bar)."' class='column'>\n";
   foreach($boxlist as $box)
   {
     if (isset($box["limit"]) && (int)$box["limit"]==0)
