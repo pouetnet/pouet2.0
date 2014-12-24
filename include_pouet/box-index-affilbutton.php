@@ -8,7 +8,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
   function PouetBoxAffilButton() {
     parent::__construct();
     $this->uniqueID = "pouetbox_affilbutton";
-    $this->title = ""; // set later
+    $this->title = "affiliate buttons";
   }
 
   function Load( $cached = false ) {

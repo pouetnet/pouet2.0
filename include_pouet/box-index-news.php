@@ -31,6 +31,8 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
   {
     parent::__construct();
 
+    $this->title = "news!";
+    
     $this->cacheTime = 60*15;
 
     $this->uniqueID = "pouetbox_news";
