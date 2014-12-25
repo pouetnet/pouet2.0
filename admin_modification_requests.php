@@ -17,6 +17,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
     $this->uniqueID = "pouetbox_adminreq";
     $this->title = "process the following requests";
   }
+  use PouetForm;
   function Commit($data)
   {
     global $currentUser;

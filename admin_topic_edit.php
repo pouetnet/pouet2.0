@@ -31,6 +31,7 @@ class PouetBoxAdminEditTopic extends PouetBox
     $errormessage = array();
     return $errormessage;
   }
+  use PouetForm;
   function Validate( $data )
   {
     global $groupID,$currentUser;

@@ -21,6 +21,7 @@ class PouetBoxAdminEditParty extends PouetBoxSubmitParty
 
     $this->title = "edit this party: "._html( $this->party->name );
   }
+  use PouetForm;
   function Commit($data)
   {
     global $partyID;
@@ -60,6 +61,7 @@ class PouetBoxAdminDeleteParty extends PouetBox
 
     $this->title = "delete this party: ".$party->PrintLinked();
   }
+  use PouetForm;
   function Validate($data)
   {
     if ($data["check"] != $data["checkOrig"])

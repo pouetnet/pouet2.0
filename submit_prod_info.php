@@ -22,6 +22,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 
     $this->title = "submit things for this prod: "._html($this->prod->name);
   }
+  use PouetForm;
   function Validate( $data )
   {
     global $currentUser;

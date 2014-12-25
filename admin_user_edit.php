@@ -28,6 +28,7 @@ class PouetBoxAdminEditUser extends PouetBox
     $this->levels = $m[1];
 
   }
+  use PouetForm;
   function Commit($data)
   {
     global $currentUser;

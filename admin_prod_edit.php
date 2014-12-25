@@ -26,6 +26,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
     $this->title = "edit this prod: ".$this->prod->RenderLink();
   }
+  use PouetForm;
   function Commit($data)
   {
     //die("almost there");
@@ -155,6 +156,7 @@ class PouetBoxAdminDeleteProd extends PouetBox
 
     $this->title = "delete this prod: ".$this->prod->RenderLink();
   }
+  use PouetForm;
   function Validate($data)
   {
     if ($data["check"] != $data["checkOrig"])
@@ -324,6 +326,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
     preg_match_all("/'([^']+)'/",$row->Type,$m);
     $this->categories = $m[1];
   }
+  use PouetForm;
   function Commit($data)
   {
     if ($data["delSceneorg"])
@@ -414,6 +417,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
     $this->headers = array("type","link");
     $this->data = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$this->prod->id));
   }
+  use PouetForm;
   function Commit($data)
   {
     if ($data["delLink"])
@@ -511,6 +515,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
     for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $this->years[$x] = $x;
 
   }
+  use PouetForm;
   function Commit($data)
   {
     if ($data["delParty"])
@@ -617,6 +622,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
     $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
     $this->data = $s->perform();
   }
+  use PouetForm;
   function Commit($data)
   {
     if ($data["delCredit"])
@@ -711,6 +717,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
     $s->AddWhere(sprintf_esc("original=%d or derivative=%d",$this->prod->id,$this->prod->id));
     $this->data = $s->perform();
   }
+  use PouetForm;
   function Commit($data)
   {
     if ($data["delAffil"])

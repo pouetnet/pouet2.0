@@ -29,6 +29,8 @@ class PouetBoxSubmitProd extends PouetBox
     $this->yearsFuture = array("");
     for ($x=date("Y")+2; $x>=POUET_EARLIEST_YEAR; $x--) $this->yearsFuture[$x] = $x;
   }
+  
+  use PouetForm;
 
   function Validate( $data )
   {

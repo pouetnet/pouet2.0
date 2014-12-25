@@ -240,7 +240,7 @@ class PouetBoxListsAdd extends PouetBox
     );
     $this->title = "add item to list";
   }
-
+  use PouetForm;
   function Validate($post)
   {
     global $currentUser;

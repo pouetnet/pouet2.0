@@ -71,7 +71,7 @@ class PouetBox {
   }
 }
 
-class PouetFormBox
+trait PouetForm
 {
   function Validate( $data )
   {

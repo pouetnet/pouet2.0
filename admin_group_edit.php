@@ -21,6 +21,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 
     $this->title = "edit this group: "._html($this->group->name);
   }
+  use PouetForm;
   function Commit($data)
   {
     global $groupID;
@@ -70,6 +71,7 @@ class PouetBoxAdminDeleteGroup extends PouetBox
 
     $this->title = "delete this group: ".$group->RenderLong();
   }
+  use PouetForm;
   function Validate($data)
   {
     if ($data["check"] != $data["checkOrig"])

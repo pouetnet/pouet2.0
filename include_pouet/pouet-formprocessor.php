@@ -21,7 +21,7 @@ class PouetFormProcessor
   }
   function Add( $key, $object )
   {
-    if (!($object instanceof PouetBox))
+    if (array_search("PouetForm",class_uses($object))===false)
       throw new Exception("Wrong class in FormProcessor!");
     $this->objects[$key] = $object;
   }

@@ -13,7 +13,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
     $this->limit = 5;
   }
-
+  use PouetForm;
   function Validate($post)
   {
     global $currentUser;

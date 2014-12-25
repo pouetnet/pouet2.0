@@ -29,7 +29,7 @@ class PouetBoxSubmitList extends PouetBox
       ),
     );
   }
-
+  use PouetForm;
   function Validate( $data )
   {
     global $partyID,$currentUser;
