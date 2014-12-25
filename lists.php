@@ -259,6 +259,7 @@ class PouetBoxListsAdd extends PouetBox
   function Commit($post)
   {
     $items = array("prod","group","party","user");
+    $added = false;
     foreach($items as $v)
     {
       if ($post[$v."ID"])
@@ -268,9 +269,10 @@ class PouetBoxListsAdd extends PouetBox
         $a["type"] = $v;
         $a["itemid"] = $post[$v."ID"];
         SQLLib::InsertRow("listitems",$a);
+        $added = true;
       }
     }
-    return array();
+    return $added ? array() : array("you didn't add anything ! :(");
   }
   
   function RenderContent()
