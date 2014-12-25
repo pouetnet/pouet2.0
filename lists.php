@@ -310,11 +310,11 @@ document.observe("dom:loaded",function(){
   }
 }
 
-$boardID = (int)$_GET["which"];
+$listID = (int)$_GET["which"];
 
 $form = null;
 $p = null;
-if (!$boardID)
+if (!$listID)
 {
   $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
   $p = new PouetBoxListsList($pattern);
@@ -323,7 +323,7 @@ if (!$boardID)
 }
 else
 {
-  $p = new PouetBoxListsMain($boardID);
+  $p = new PouetBoxListsMain($listID);
   $p->Load();
   $TITLE = $p->list->name;
   
@@ -332,11 +332,10 @@ else
     || $currentUser->IsModerator()))
   {
     $form = new PouetFormProcessor();
-    $form->SetSuccessURL( "lists.php?which=".(int)$boardID, true );
+    $form->SetSuccessURL( "lists.php?which=".(int)$listID, true );
     $form->Add( "list_add", new PouetBoxListsAdd($p->list) );
-    
-    if ($currentUser && $currentUser->CanEditItems())
-      $form->Process();
+
+    $form->Process();
   }
 }
 
