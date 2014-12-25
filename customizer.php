@@ -28,7 +28,8 @@ class PouetBoxCustomizer extends PouetBox {
 
   function LoadFromDB() 
   {
-    $customizerJSON = get_setting("customizerJSON");
+    global $currentUser;
+    $customizerJSON = SQLLib::selectRow(sprintf_esc("select customizerJSON from usersettings where id = %d",$currentUser->id))->customizerJSON;
     $customizer = json_decode($customizerJSON,true);
     if (!$customizer["frontpage"])
     {
@@ -40,6 +41,8 @@ class PouetBoxCustomizer extends PouetBox {
 
   function Commit( $data )
   {
+    global $currentUser;
+
     $customizerJSON = get_setting("customizerJSON");
     $customizer = json_decode($customizerJSON,true);
     if ($data["up"])
@@ -54,7 +57,7 @@ class PouetBoxCustomizer extends PouetBox {
       
       $this->boxes[$col] = array_merge($pre, array($selBox), array($swap), $post);
     }
-    if ($data["down"])
+    else if ($data["down"])
     {
       $col = key($data["down"]);
       $boxIdx = key($data["down"][$col]);
@@ -66,6 +69,38 @@ class PouetBoxCustomizer extends PouetBox {
       
       $this->boxes[$col] = array_merge($pre, array($swap), array($selBox), $post);
     }
+    else if ($data["left"])
+    {
+      $col = key($data["left"]);
+      $boxIdx = key($data["left"][$col]);
+      
+      while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
+      prev($this->boxes);
+      
+      $target = key($this->boxes);
+      
+      $selBox = $this->boxes[$col][$boxIdx];
+      unset($this->boxes[$col][$boxIdx]);
+      $this->boxes[$target][] = $selBox;
+    }
+    else if ($data["right"])
+    {
+      $col = key($data["right"]);
+      $boxIdx = key($data["right"][$col]);
+      
+      while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
+      next($this->boxes);
+      
+      $target = key($this->boxes);
+      
+      $selBox = $this->boxes[$col][$boxIdx];
+      unset($this->boxes[$col][$boxIdx]);
+      $this->boxes[$target][] = $selBox;
+    }
+    
+    foreach($this->boxes as $bar=>&$boxlist)
+      $boxlist = array_values($boxlist);
+      
     $customizer["frontpage"] = $this->boxes;
     
     $json = json_encode($customizer);
@@ -77,14 +112,13 @@ class PouetBoxCustomizer extends PouetBox {
   
   function RenderContent() 
   {
+    $x = 0;
     foreach($this->boxes as $bar=>$boxlist)
     {
       echo "  <div id='"._html($bar)."' class='column'>\n";
       $y = 0;
       foreach($boxlist as $box)
       {
-        if (isset($box["limit"]) && (int)$box["limit"]==0)
-          continue;
         $class = "PouetBox".$box["box"];
         $p = new $class();
         
@@ -96,6 +130,10 @@ class PouetBoxCustomizer extends PouetBox {
           printf("  <input type='submit' name='up[%s][%d]' value='&#9650;'/>",_html($bar),$y);
         if ($y < count($boxlist) - 1)
           printf("  <input type='submit' name='down[%s][%d]' value='&#9660;'/>",_html($bar),$y);
+        if ($x > 0)
+          printf("  <input type='submit' name='left[%s][%d]' value='&#9664;'/>",_html($bar),$y);
+        if ($x < count($this->boxes) - 1)
+          printf("  <input type='submit' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
         echo "</span>";
         echo "</h2>\n";  
         echo "  </div>\n";
@@ -103,15 +141,17 @@ class PouetBoxCustomizer extends PouetBox {
         $y++;
       }
       echo "  </div>\n";
+      $x++;
     }
   }
+/*  
   function RenderFooter()
   {
     echo "<div class='foot'/>";
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
   }
-
+*/
 };
 
 $form = new PouetFormProcessor();
