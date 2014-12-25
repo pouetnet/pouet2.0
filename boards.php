@@ -260,7 +260,7 @@ include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-if($p) $p->Render();
+if($p && $p->board) $p->Render();
 echo "</div>\n";
 
 include("include_pouet/menu.inc.php");

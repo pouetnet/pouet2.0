@@ -61,7 +61,7 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
     foreach ($this->lists as $l) {
       echo "<tr>\n";
       echo "  <td class='listname'><a href='lists.php?which=".(int)$l->id."'>"._html($l->name)."</a></td>\n";
-      echo "  <td>"._html($l->desc)."</td>\n";
+      echo "  <td>"._html(shortify($l->desc))."</td>\n";
       echo "  <td>".$l->upkeeper->PrintLinkedAvatar()." ".$l->upkeeper->PrintLinkedName()."</td>\n";
       echo "</tr>\n";
     }
@@ -129,16 +129,9 @@ class PouetBoxListsMain extends PouetBox
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
     echo "<div id='listsname'>\n";
     echo $this->list->name;
-
-    if ($currentUser && $currentUser->CanEditItems())
-    {
-      printf("<div id='adminlinks'>");
-      //printf("[<a href='admin_board_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
-      printf("</div>");
-    }
     echo "</div>\n";
 
-    echo " <div class='content'>"._html($this->list->desc)."</div>\n";
+    echo " <div class='content' id='description'>".nl2br(_html($this->list->desc))."</div>\n";
 
     echo "<h2>maintainers</h2>";
     echo "<ul class='boxlist'>\n";
