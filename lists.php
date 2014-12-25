@@ -1,6 +1,76 @@
 <?
 require_once("bootstrap.inc.php");
 
+class PouetBoxListsList extends PouetBox  /* pf lol */
+{
+  var $letter;
+  function PouetBoxListsList($letter) {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_listslist";
+
+    $letter = substr($letter,0,1);
+    if (preg_match("/^[a-z]$/",$letter))
+      $this->letter = $letter;
+    else
+      $this->letter = "#";
+
+    $a = array();
+    $a[] = "<a href='lists.php?pattern=%23'>#</a>";
+    for($x=ord("a");$x<=ord("z");$x++)
+      $a[] = sprintf("<a href='lists.php?pattern=%s'>%s</a>",chr($x),chr($x));
+
+    $this->letterselect = "[ ".implode(" |\n",$a)." ]";
+  }
+
+  function RenderHeader()
+  {
+    echo "\n\n";
+    echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
+    echo " <div class='letterselect'>".$this->letterselect."</div>\n";
+  }
+
+  function RenderFooter()
+  {
+    echo " <div class='letterselect'>".$this->letterselect."</div>\n";
+    echo "</div>\n";
+  }
+
+  function Load()
+  {
+    $s = new BM_query("lists");
+    $s->AddField("lists.id");
+    $s->AddField("lists.name");
+    $s->AddField("lists.desc");
+    $s->Attach(array("lists"=>"upkeeper"),array("users as upkeeper"=>"id"));
+    if ($this->letter=="#")
+      $s->AddWhere(sprintf("name regexp '^[^a-z]'"));
+    else
+      $s->AddWhere(sprintf("name like '%s%%'",$this->letter));
+    $s->AddOrder("name");
+    $this->lists = $s->perform();
+  }
+
+  function RenderBody() {
+    global $thread_categories;
+    echo "<table class='boxtable'>\n";
+    echo "<tr>\n";
+    echo "  <th>name</th>\n";
+    echo "  <th>description</th>\n";
+    echo "  <th>upkeeper</th>\n";
+    echo "</tr>\n";
+    foreach ($this->lists as $l) {
+      echo "<tr>\n";
+      echo "  <td class='listname'><a href='lists.php?which=".(int)$l->id."'>"._html($l->name)."</a></td>\n";
+      echo "  <td>"._html($l->desc)."</td>\n";
+      echo "  <td>".$l->upkeeper->PrintLinkedAvatar()." ".$l->upkeeper->PrintLinkedName()."</td>\n";
+      echo "</tr>\n";
+    }
+    echo "</table>\n";
+  }
+};
+
+///////////////////////////////////////////////////////////
+
 class PouetBoxListsMain extends PouetBox
 {
   function PouetBoxListsMain($id) {
@@ -16,8 +86,8 @@ class PouetBoxListsMain extends PouetBox
     $s->AddField("lists.id");
     $s->AddField("lists.name");
     $s->AddField("lists.desc");
-    $s->AddField("lists.added");
-    $s->Attach(array("lists"=>"adder"),array("users as adder"=>"id"));
+    $s->AddField("lists.addedDate");
+    $s->Attach(array("lists"=>"addedUser"),array("users as addedUser"=>"id"));
     $s->Attach(array("lists"=>"upkeeper"),array("users as upkeeper"=>"id"));
     $s->AddWhere(sprintf_esc("lists.id=%d",$this->id));
     list($this->list) = $s->perform();
@@ -58,7 +128,7 @@ class PouetBoxListsMain extends PouetBox
     global $currentUser;
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
     echo "<div id='listsname'>\n";
-    echo sprintf("<a href='lists.php?which=%d'>%s</a>",$this->id,_html($this->list->name));
+    echo $this->list->name;
 
     if ($currentUser && $currentUser->CanEditItems())
     {
@@ -68,7 +138,12 @@ class PouetBoxListsMain extends PouetBox
     }
     echo "</div>\n";
 
-    echo " <div class='content'>upkept by ".$this->list->upkeeper->PrintLinkedName()." ".$this->list->upkeeper->PrintLinkedAvatar()."</div>\n";
+    echo " <div class='content'>"._html($this->list->desc)."</div>\n";
+
+    echo "<h2>maintainers</h2>";
+    echo "<ul class='boxlist'>\n";
+    echo " <li>".$this->list->upkeeper->PrintLinkedAvatar()." ".$this->list->upkeeper->PrintLinkedName()."</li>\n";
+    echo "</ul>\n";
 
     if ($this->groups)
     {
@@ -142,82 +217,107 @@ class PouetBoxListsMain extends PouetBox
       }
       echo "</ul>\n";
     }
-    echo " <div class='foot'>added on the ".$this->list->added." by ".$this->list->adder->PrintLinkedName()." ".$this->list->adder->PrintLinkedAvatar()."</div>\n";
+    echo " <div class='foot'>added on the ".$this->list->addedDate." by ".$this->list->addedUser->PrintLinkedName()." ".$this->list->addedUser->PrintLinkedAvatar()."</div>\n";
     echo "</div>\n";
-  }
-};
-
-class PouetBoxListsList extends PouetBox  /* pf lol */
-{
-  var $letter;
-  function PouetBoxListsList($letter) {
-    parent::__construct();
-    $this->uniqueID = "pouetbox_listslist";
-
-    $letter = substr($letter,0,1);
-    if (preg_match("/^[a-z]$/",$letter))
-      $this->letter = $letter;
-    else
-      $this->letter = "#";
-
-    $a = array();
-    $a[] = "<a href='lists.php?pattern=%23'>#</a>";
-    for($x=ord("a");$x<=ord("z");$x++)
-      $a[] = sprintf("<a href='lists.php?pattern=%s'>%s</a>",chr($x),chr($x));
-
-    $this->letterselect = "[ ".implode(" |\n",$a)." ]";
-  }
-
-  function RenderHeader()
-  {
-    echo "\n\n";
-    echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
-    echo " <div class='letterselect'>".$this->letterselect."</div>\n";
-  }
-
-  function RenderFooter()
-  {
-    echo " <div class='letterselect'>".$this->letterselect."</div>\n";
-    echo "</div>\n";
-  }
-
-  function Load()
-  {
-    $s = new BM_query("lists");
-    $s->AddField("lists.id");
-    $s->AddField("lists.name");
-    $s->AddField("lists.desc");
-    $s->Attach(array("lists"=>"upkeeper"),array("users as upkeeper"=>"id"));
-    if ($this->letter=="#")
-      $s->AddWhere(sprintf("name regexp '^[^a-z]'"));
-    else
-      $s->AddWhere(sprintf("name like '%s%%'",$this->letter));
-    $s->AddOrder("name");
-    $this->lists = $s->perform();
-  }
-
-  function RenderBody() {
-    global $thread_categories;
-    echo "<table class='boxtable'>\n";
-    echo "<tr>\n";
-    echo "  <th>name</th>\n";
-    echo "  <th>description</th>\n";
-    echo "  <th>upkeeper</th>\n";
-    echo "</tr>\n";
-    foreach ($this->lists as $l) {
-      echo "<tr>\n";
-      echo "  <td class='boardname'><a href='lists.php?which=".(int)$l->id."'>"._html($l->name)."</a></td>\n";
-      echo "  <td>"._html($l->desc)."</td>\n";
-      echo "  <td>".$l->upkeeper->PrintLinkedAvatar()." ".$l->upkeeper->PrintLinkedName()."</td>\n";
-      echo "</tr>\n";
-    }
-    echo "</table>\n";
   }
 };
 ///////////////////////////////////////////////////////////////////////////////
 
+class PouetBoxListsAdd extends PouetBox
+{
+  function PouetBoxListsAdd($list) 
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_listsadd";
+    $this->list = $list;
+    $this->formifier = new Formifier();
+    $this->fields = array(
+      "prodID"=>array(
+        "name"=>"add prod",
+      ),
+      "groupID"=>array(
+        "name"=>"add group",
+      ),
+      "partyID"=>array(
+        "name"=>"add party",
+      ),
+      "userID"=>array(
+        "name"=>"add user",
+      ),
+    );
+    $this->title = "add item to list";
+  }
+
+  function Validate($post)
+  {
+    global $currentUser;
+
+    if (!$currentUser)
+      return array("you have to be logged in!");
+      
+    if ($currentUser->id != $this->list->upkeeper->id 
+      && $currentUser->id != $this->list->addedUser->id
+      && !$currentUser->IsModerator())
+      return array("not allowed lol !");
+    
+    return array();
+  }
+
+  function Commit($post)
+  {
+    $items = array("prod","group","party","user");
+    foreach($items as $v)
+    {
+      if ($post[$v."ID"])
+      {
+        $a = array();
+        $a["list"] = $this->list->id;
+        $a["type"] = $v;
+        $a["itemid"] = $post[$v."ID"];
+        SQLLib::InsertRow("listitems",$a);
+      }
+    }
+    return array();
+  }
+  
+  function RenderContent()
+  {
+    $this->formifier->RenderForm( $this->fields );
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  new Autocompleter($("prodID"), {"dataUrl":"./ajax_prods.php",
+    "width":320,
+    "processRow": function(item) {
+      var s = item.name.escapeHTML();
+      if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+      return s;
+    }
+  });
+  new Autocompleter($("partyID"), {"dataUrl":"./ajax_parties.php"});
+  new Autocompleter($("groupID"), {"dataUrl":"./ajax_groups.php"});
+  new Autocompleter($("userID"),  {"dataUrl":"./ajax_users.php",
+    "processRow": function(item) {
+      return "<img class='avatar' src='<?=POUET_CONTENT_URL?>avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
+    }
+  });
+});
+//-->
+</script>
+<?
+  }
+  function RenderFooter()
+  {
+    echo "<div class='foot'>\n";
+    echo " <input type='submit' value='Submit' id='submit'>";
+    echo "</div>\n";
+  }
+}
+
 $boardID = (int)$_GET["which"];
 
+$form = null;
 $p = null;
 if (!$boardID)
 {
@@ -231,6 +331,18 @@ else
   $p = new PouetBoxListsMain($boardID);
   $p->Load();
   $TITLE = $p->list->name;
+  
+  if ($currentUser->id == $p->list->upkeeper->id 
+    || $currentUser->id == $p->list->addedUser->id
+    || $currentUser->IsModerator())
+  {
+    $form = new PouetFormProcessor();
+    $form->SetSuccessURL( "lists.php?which=".(int)$boardID, true );
+    $form->Add( "list_add", new PouetBoxListsAdd($p->list) );
+    
+    if ($currentUser && $currentUser->CanEditItems())
+      $form->Process();
+  }
 }
 
 require_once("include_pouet/header.php");
@@ -238,6 +350,7 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 if($p) $p->Render();
+if($form) $form->Display();
 echo "</div>\n";
 
 require("include_pouet/menu.inc.php");
