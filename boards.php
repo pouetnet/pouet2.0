@@ -13,8 +13,10 @@ class PouetBoxBoardMain extends PouetBox
 
   }
 
-  function LoadFromDB() {
+  function LoadFromDB() 
+  {
     $this->board = SQLLib::SelectRow(sprintf_esc("select * from boards where id = %d",$this->id));
+    if (!$this->board) return;
 
     $a = SQLLib::SelectRows(sprintf_esc("select * from boards_platforms where board = %d",$this->id));
     $this->platforms = array();
@@ -37,6 +39,7 @@ class PouetBoxBoardMain extends PouetBox
 
   function Render()
   {
+    if (!$this->board) return;
     global $currentUser,$PLATFORMS;
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
     echo "<div id='boardname'>\n";
@@ -260,7 +263,7 @@ include("include_pouet/header.php");
 include("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-if($p && $p->board) $p->Render();
+if($p) $p->Render();
 echo "</div>\n";
 
 include("include_pouet/menu.inc.php");
