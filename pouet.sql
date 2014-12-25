@@ -499,13 +499,12 @@ CREATE TABLE `lists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `desc` varchar(255) NOT NULL,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `adder` int(10) NOT NULL DEFAULT '0',
+  `addedUser` int(10) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `upkeeper` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `adder` (`adder`),
+  KEY `adder` (`addedUser`),
   KEY `upkeeper` (`upkeeper`),
-  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`adder`) REFERENCES `users` (`id`),
   CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`upkeeper`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -845,7 +844,6 @@ CREATE TABLE `prods` (
   KEY `boardID` (`boardID`),
   KEY `invitation` (`invitation`),
   KEY `party_compo` (`party_compo`),
-  CONSTRAINT `prods_ibfk_8` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`),
   CONSTRAINT `prods_ibfk_1` FOREIGN KEY (`group1`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_2` FOREIGN KEY (`group2`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_3` FOREIGN KEY (`group3`) REFERENCES `groups` (`id`),
