@@ -17,7 +17,7 @@ class PouetProd extends BM_Class {
   }
   static function getTable () { return "prods"; }
   static function getFields() { return array("id","name","type","views","addedUser","addedDate","releaseDate",
-    "voteup","votepig","votedown","voteavg","download","partycompo","party_compo","party_place","party_year"); }
+    "voteup","votepig","votedown","voteavg","download","party_compo","party_place","party_year"); }
   static function getExtendedFields() { return array("sceneorg","demozoo","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
 
   function onFinishedPopulate() {
