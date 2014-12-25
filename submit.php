@@ -21,6 +21,7 @@ class PouetBoxSubmit extends PouetBox {
       echo "  <li><a href='submit_board.php'>submit a bulletin board</a></li>\n";
       echo "  <li><a href='submit_avatar.php'>upload an avatar</a></li>\n";
       echo "  <li><a href='submit_logo.php'>upload a logo</a></li>\n";
+      echo "  <li><a href='submit_list.php'>create a list</a></li>\n";
       echo "  <li><a href='logo_vote.php'>vote on logos</a></li>\n";
       echo "</ul>\n";
     }

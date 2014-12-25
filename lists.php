@@ -56,7 +56,7 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
     echo "<tr>\n";
     echo "  <th>name</th>\n";
     echo "  <th>description</th>\n";
-    echo "  <th>upkeeper</th>\n";
+    echo "  <th>maintainer</th>\n";
     echo "</tr>\n";
     foreach ($this->lists as $l) {
       echo "<tr>\n";
@@ -332,9 +332,9 @@ else
   $p->Load();
   $TITLE = $p->list->name;
   
-  if ($currentUser->id == $p->list->upkeeper->id 
+  if ($currentUser && ($currentUser->id == $p->list->upkeeper->id 
     || $currentUser->id == $p->list->addedUser->id
-    || $currentUser->IsModerator())
+    || $currentUser->IsModerator()))
   {
     $form = new PouetFormProcessor();
     $form->SetSuccessURL( "lists.php?which=".(int)$boardID, true );
