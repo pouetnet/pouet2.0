@@ -1,4 +1,6 @@
 <?
+require_once("box-modalmessage.php");
+
 class PouetFormProcessor
 {
   private $objects;
@@ -19,6 +21,8 @@ class PouetFormProcessor
   }
   function Add( $key, $object )
   {
+    if (!($object instanceof PouetBox))
+      throw new Exception("Wrong class in FormProcessor!");
     $this->objects[$key] = $object;
   }
   function SetSuccessURL( $url, $redirect = false )
