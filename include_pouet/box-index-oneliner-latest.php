@@ -117,7 +117,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
 
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";
-      echo "   <form action='add.php' method='post'>\n";
+      echo "   <form id='frmIndexOneliner' action='add.php' method='post'>\n";
 
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
