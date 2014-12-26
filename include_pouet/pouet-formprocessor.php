@@ -22,7 +22,7 @@ class PouetFormProcessor
   function Add( $key, $object )
   {
     if (array_search("PouetForm",class_uses($object))===false)
-      throw new Exception("Wrong class in FormProcessor!");
+      throw new Exception("The box being added to FormProcessor must have the PouetForm trait!");
     $this->objects[$key] = $object;
   }
   function SetSuccessURL( $url, $redirect = false )
