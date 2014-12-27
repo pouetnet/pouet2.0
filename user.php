@@ -403,7 +403,8 @@ class PouetBoxUserMain extends PouetBox
     $this->paginator->SetLimitOnQuery( $s );
 
     $data = $s->perform();
-    PouetCollectPlatforms($data);
+    $prods = array(); foreach($data as $v) $prods[] = &$v->prod;
+    PouetCollectPlatforms( $prods );
 
     return $data;
   }
