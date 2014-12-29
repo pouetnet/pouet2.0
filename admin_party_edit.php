@@ -75,7 +75,7 @@ class PouetBoxAdminDeleteParty extends PouetBox
     SQLLib::Query(sprintf_esc("DELETE FROM partiesaka WHERE party1=%d OR party1=%d",$this->party->id,$this->party->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE party=%d",$this->party->id));
     SQLLib::Query(sprintf_esc("DELETE FROM partylinks WHERE party=%d",$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM lists WHERE itemid=%d AND type='party'",$this->party->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM listitems WHERE itemid=%d AND type='party'",$this->party->id));
     SQLLib::Query(sprintf_esc("DELETE FROM parties WHERE id=%d",$this->party->id));
     
     gloperator_log( "party", (int)$this->party->id, "party_delete", get_object_vars($this->party) );
