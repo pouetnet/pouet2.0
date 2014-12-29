@@ -66,7 +66,23 @@ class PouetBoxCustomizer extends PouetBox {
             $_box[$parameterName] = $value;
           }
     }
-    if ($data["up"])
+    if ($data["addBox"])
+    {
+      $col = key($this->boxes);
+      if (class_exists( "PouetBox".$_POST["newBox"] ))
+        $this->boxes[$col][] = array("box"=>$_POST["newBox"]);
+    }
+    if ($data["delete"])
+    {
+      $col = key($data["delete"]);
+      $boxIdx = key($data["delete"][$col]);
+      
+      $pre    = array_slice( $this->boxes[$col], 0, $boxIdx );
+      $post   = array_slice( $this->boxes[$col], $boxIdx + 1 );
+      
+      $this->boxes[$col] = array_merge($pre, $post);
+    }
+    else if ($data["up"])
     {
       $col = key($data["up"]);
       $boxIdx = key($data["up"][$col]);
@@ -130,8 +146,41 @@ class PouetBoxCustomizer extends PouetBox {
     return array();
   }
   
-  function RenderContent()
+  function RenderBody()
   {
+    echo " <div class='content addnew'>\n";
+    echo "add new box: ";
+    echo "<select name='newBox'>";
+    printf("<option value=''>---</option>\n",$v,_html($p->title));
+    $availableBoxes = array(
+      "Login",
+      "CDC",
+      "LatestAdded",
+      "LatestReleased",
+      "TopMonth",
+      "TopAlltime",
+      "LatestOneliner",
+      "LatestBBS",
+      "NewsBoxes",
+      "SearchBox",
+      "Stats",
+      "AffilButton",
+      "LatestComments",
+      "Watchlist",
+      "LatestParties",
+      "UpcomingParties",
+      "TopGlops",
+    );
+    foreach($availableBoxes as $v)
+    {
+      $class = "PouetBox".$v;
+      $p = new $class();
+      printf("<option value='%s'>%s</option>\n",$v,_html($p->title));
+    }
+    echo "</select>";
+    echo "  <input type='submit' name='addBox' value='Submit' />";
+    echo " </div>\n";
+    echo " <div class='content'>\n";
     $x = 0;
     foreach($this->boxes as $bar=>$boxlist)
     {
@@ -142,7 +191,7 @@ class PouetBoxCustomizer extends PouetBox {
         $class = "PouetBox".$box["box"];
         $p = new $class();
         
-        echo "  <div class='customizerBox'>\n";  
+        echo "  <div class='customizerBox' data-class='"._html($box["box"])."'>\n";  
         echo "    <h2>";
         echo _html($p->title);
         echo "<span class='controls'>";
@@ -154,6 +203,7 @@ class PouetBoxCustomizer extends PouetBox {
           printf("  <input type='submit' name='left[%s][%d]' value='&#9664;'/>",_html($bar),$y);
         if ($x < count($this->boxes) - 1)
           printf("  <input type='submit' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
+        printf("  <input type='submit' name='delete[%s][%d]' value='x'/>",_html($bar),$y);
         echo "</span>";
         echo "    </h2>\n";  
         if (has_trait($p,"PouetFrontPage"))
@@ -181,6 +231,7 @@ class PouetBoxCustomizer extends PouetBox {
       echo "  </div>\n";
       $x++;
     }
+    echo " </div>\n";
   }
   function RenderFooter()
   {
