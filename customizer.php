@@ -196,14 +196,14 @@ class PouetBoxCustomizer extends PouetBox {
         echo _html($p->title);
         echo "<span class='controls'>";
         if ($y > 0)
-          printf("  <input type='submit' name='up[%s][%d]' value='&#9650;'/>",_html($bar),$y);
+          printf("  <input type='submit' class='move' name='up[%s][%d]' value='&#9650;'/>",_html($bar),$y);
         if ($y < count($boxlist) - 1)
-          printf("  <input type='submit' name='down[%s][%d]' value='&#9660;'/>",_html($bar),$y);
+          printf("  <input type='submit' class='move' name='down[%s][%d]' value='&#9660;'/>",_html($bar),$y);
         if ($x > 0)
-          printf("  <input type='submit' name='left[%s][%d]' value='&#9664;'/>",_html($bar),$y);
+          printf("  <input type='submit' class='move' name='left[%s][%d]' value='&#9664;'/>",_html($bar),$y);
         if ($x < count($this->boxes) - 1)
-          printf("  <input type='submit' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
-        printf("  <input type='submit' name='delete[%s][%d]' value='x'/>",_html($bar),$y);
+          printf("  <input type='submit' class='move' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
+        printf("  <input type='submit' name='delete[%s][%d]' value='X' title='remove box'/>",_html($bar),$y);
         echo "</span>";
         echo "    </h2>\n";  
         if (has_trait($p,"PouetFrontPage"))
