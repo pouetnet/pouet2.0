@@ -39,6 +39,7 @@ class PouetUser extends BM_Class {
     $this->stats["requestGlops"] = SQLLib::SelectRow(sprintf_esc("SELECT COUNT(*) AS c FROM modification_requests WHERE userID=%d AND approved = 1 AND requestType in ('prod_add_credit')",$this->id) )->c;
     $this->stats["topics"]      = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM bbs_topics WHERE userfirstpost=%d",$this->id))->c;
     $this->stats["posts"]       = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM bbs_posts WHERE author=%d",$this->id))->c;
+    $this->stats["oneliners"]   = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM oneliner WHERE who=%d",$this->id))->c;
     if($this->udlogin)
       $this->stats["ud"] = (int)round(SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))->points / 1000);
     else

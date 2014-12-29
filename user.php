@@ -674,9 +674,37 @@ class PouetBoxUserMain extends PouetBox
 
     if ($this->user->stats["requestGlops"])
     {
-      if (!$this->show || $this->nfos)
+      if (!$this->show)
       {
         echo "<div class='contribheader'>requests made <span>".(int)$this->totalRequests." requests, ".$this->user->stats["requestGlops"]." glöps</span> ";
+        //if ($this->show!="requests")
+        //  echo "[<a href='user.php?who=".$this->id."&amp;show=requests'>show</a>]";
+        echo "</div>\n";
+      }
+      /*
+      if ($this->requests)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->nfos as $p)
+        {
+          echo "<li>";
+          echo $p->RenderTypeIcons();
+          echo $p->RenderPlatformIcons();
+          echo $p->RenderSingleRow();
+          echo $p->RenderAwards();
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+      */
+    }
+
+    if ($this->user->stats["oneliners"])
+    {
+      if (!$this->show)
+      {
+        echo "<div class='contribheader'>oneliners posted <span>".(int)$this->user->stats["oneliners"]." oneliners</span> ";
         //if ($this->show!="requests")
         //  echo "[<a href='user.php?who=".$this->id."&amp;show=requests'>show</a>]";
         echo "</div>\n";
