@@ -12,34 +12,12 @@ class PouetBoxLogin extends PouetBox {
     $this->uniqueID = "pouetbox_login";
     $this->title = "login";
   }
-  function SetParameters($data)
-  {
-  }
   function RenderBody() {
     if (!get_login_id())
     {
-      /*
-      echo "<form action='".POUET_ROOT_URL_SECURE."login.php' method='post'>\n";
-
-      $csrf = new CSRFProtect();
-      $csrf->PrintToken();
-
-      echo "<div class='content r1 center'>\n";
-      //echo "<input id='loginusername' type='text' name='login' value='SceneID' size='15' maxlength='16'/><br />\n";
-      //echo "<input id='loginpassword' type='password' name='password' value='password' size='15'/><br />\n";
-      echo "<input id='loginusername' type='text'     name='login'    size='15' placeholder='SceneID'/><br />\n";
-      echo "<input id='loginpassword' type='password' name='password' size='15' placeholder='password'/><br />\n";
-//      echo "<input type='checkbox' name='permanent'/>login for 1 year<br />\n";
-      echo "<input type='hidden' name='return' value='"._html(rootRelativePath())."'/>\n";
-      echo "<a href='account.php'>register here</a>\n";
-      echo "</div>\n";
-      echo "<div class='foot'><input type='submit' value='Submit'/></div>";
-      echo "</form>\n";
-      */
       echo "<div class='content loggedout'>\n";
       echo "<a href='login.php'>login via SceneID</a>";
       echo "</div>\n";
-      
     } else {
       global $currentUser;
       echo "<div class='content loggedin'>\n";
@@ -65,6 +43,7 @@ class PouetBoxLogin extends PouetBox {
       }
       echo "<div class='foot'>\n";
       echo "<a href='account.php'>account</a> ::\n";
+      echo "<a href='customizer.php'>cust&ouml;omizer</a> ::\n";
       echo "<a href='logout.php'>logout</a>\n";
       echo "</div>";
     }
