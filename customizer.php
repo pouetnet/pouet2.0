@@ -39,12 +39,33 @@ class PouetBoxCustomizer extends PouetBox {
     $this->boxes = $customizer["frontpage"];
   }
 
+  use PouetForm;
   function Commit( $data )
   {
     global $currentUser;
 
     $customizerJSON = get_setting("customizerJSON");
     $customizer = json_decode($customizerJSON,true);
+    if ($data["parameter"])
+    {
+      foreach($data["parameter"] as $col=>$boxen)
+        foreach($boxen as $boxIdx=>$box)
+          foreach($box as $parameterName=>$value)
+          {
+            $_box = &$this->boxes[$col][$boxIdx];
+            $class = "PouetBox".$_box["box"];
+            $p = new $class();
+            if (has_trait($p,"PouetFrontPage"))
+            {
+              $params = $p->GetParameterSettings();
+              if (isset($params[$parameterName]["max"]))
+                $value = min($value,$params[$parameterName]["max"]);
+              if (isset($params[$parameterName]["min"]))
+                $value = max($value,$params[$parameterName]["min"]);
+            }
+            $_box[$parameterName] = $value;
+          }
+    }
     if ($data["up"])
     {
       $col = key($data["up"]);
@@ -97,7 +118,6 @@ class PouetBoxCustomizer extends PouetBox {
       unset($this->boxes[$col][$boxIdx]);
       $this->boxes[$target][] = $selBox;
     }
-    
     foreach($this->boxes as $bar=>&$boxlist)
       $boxlist = array_values($boxlist);
       
@@ -110,7 +130,7 @@ class PouetBoxCustomizer extends PouetBox {
     return array();
   }
   
-  function RenderContent() 
+  function RenderContent()
   {
     $x = 0;
     foreach($this->boxes as $bar=>$boxlist)
@@ -135,7 +155,25 @@ class PouetBoxCustomizer extends PouetBox {
         if ($x < count($this->boxes) - 1)
           printf("  <input type='submit' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
         echo "</span>";
-        echo "</h2>\n";  
+        echo "    </h2>\n";  
+        if (has_trait($p,"PouetFrontPage"))
+        {
+          $params = $p->GetParameterSettings();
+          if ($params)
+          {
+            echo "    <div class='content r2'>\n";
+            echo "      <div class='formifier'>\n";
+            foreach($params as $name=>$values)
+            {
+              echo "        <div class='row'>\n";
+              printf("        <label>%s:</label>\n",_html($values["name"]));
+              printf("        <input type='number' name='parameter[%s][%d][%s]' value='%d'>\n",_html($bar),$y,_html($name),_html($box[$name]));
+              echo "        </div>\n";
+            }
+            echo "      </div>\n";
+            echo "    </div>\n";
+          }
+        }
         echo "  </div>\n";
         
         $y++;
@@ -144,14 +182,12 @@ class PouetBoxCustomizer extends PouetBox {
       $x++;
     }
   }
-/*  
   function RenderFooter()
   {
     echo "<div class='foot'/>";
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
   }
-*/
 };
 
 $form = new PouetFormProcessor();
