@@ -9,6 +9,7 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     $this->cacheTime = 60;
 
     $this->limit = 10;
+    $this->hideResidue = true;
   }
   function LoadFromCachedData($data) {
     $this->data = unserialize($data);
@@ -17,9 +18,19 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     return serialize($this->data);
   }
 
+  use PouetFrontPage;
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
+    if (isset($data["hideResidue"])) $this->hideResidue = $data["hideResidue"];
+    
+  }
+  function GetParameterSettings()
+  {
+    return array(
+      "limit"      => array("name"=>"number of topics visible"),
+      "hideResidue"=> array("name"=>"hide residue topics"),
+    );
   }
 
   function LoadFromDB() {
@@ -44,7 +55,8 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
     echo "<table class='boxtable'>\n";
     $n = 0;
     foreach ($this->data as $r) {
-      if (get_setting("indexbbsnoresidue"))
+      //if (get_setting("indexbbsnoresidue"))
+      if ($this->hideResidue)
       {
         if ($r->category == "residue") continue;
       }

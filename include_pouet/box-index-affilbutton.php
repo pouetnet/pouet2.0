@@ -10,6 +10,7 @@ class PouetBoxAffilButton extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_affilbutton";
     $this->title = "affiliate buttons";
   }
+  //use PouetFrontPage;
 
   function Load( $cached = false ) {
     $s = new SQLSelect();

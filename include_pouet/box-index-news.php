@@ -58,9 +58,16 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
     return serialize($this->rssBitfellasNews);
   }
 
+  use PouetFrontPage;
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
+  }
+  function GetParameterSettings()
+  {
+    return array(
+      "limit" => array("name"=>"number of news items visible"),
+    );
   }
 
   function Render()

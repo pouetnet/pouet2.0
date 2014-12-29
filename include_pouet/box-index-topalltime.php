@@ -21,9 +21,17 @@ class PouetBoxTopAlltime extends PouetBoxCachable {
   function GetCacheableData() {
     return serialize($this->data);
   }
+  
+  use PouetFrontPage;
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
+  }
+  function GetParameterSettings()
+  {
+    return array(
+      "limit" => array("name"=>"number of prods visible"),
+    );
   }
 
   function LoadFromDB() {
