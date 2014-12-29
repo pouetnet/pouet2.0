@@ -144,6 +144,11 @@ function move_uploaded_file_fake( $src, $dst )
   return true;
 }
 
+function has_trait($object,$trait)
+{
+  return (array_search($trait,class_uses($object))!==false);
+}
+
 function renderHalfDate($date)
 {
   if (!$date || $date{0}=="0") return "";
