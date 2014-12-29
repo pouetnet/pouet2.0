@@ -99,6 +99,17 @@ trait PouetForm
   }
 }
 
+trait PouetFrontPage
+{
+  function SetParameters($data)
+  {
+  }
+  function GetParameterSettings()
+  {
+    return array();
+  }
+}
+
 class PouetBoxCachable extends PouetBox {
   var $cacheTime;
   function PouetBoxCachable() {
@@ -135,9 +146,6 @@ class PouetBoxCachable extends PouetBox {
   {
     $this->LoadFromDB();
     $this->SaveToCache();
-  }
-  function SetParameters($data)
-  {
   }
   function Load($cached=false) {
     global $timer;

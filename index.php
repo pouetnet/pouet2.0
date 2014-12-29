@@ -45,7 +45,8 @@ foreach($boxes as $bar=>$boxlist)
     
     if (!$currentUser && !$p->IsVisibleLoggedOut())
       continue;
-    $p->SetParameters($box);
+    if (has_trait($p,"PouetFrontPage"))
+      $p->SetParameters($box);
     $p->Load(true);
     $p->Render();
   }
