@@ -21,6 +21,7 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
 
     $this->title = "edit this board: <a href='boards.php?which=".$this->id."'>"._html( $this->board->name )."</a>";
   }
+  use PouetForm;
   function Commit($data)
   {
     global $boardID;
@@ -92,6 +93,7 @@ class PouetBoxAdminDeleteBoard extends PouetBox
 
     $this->title = "delete this board: "._html($board->name);
   }
+  use PouetForm;
   function Validate($data)
   {
     if ($data["check"] != $data["checkOrig"])

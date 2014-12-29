@@ -499,13 +499,12 @@ CREATE TABLE `lists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `desc` varchar(255) NOT NULL,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `adder` int(10) NOT NULL DEFAULT '0',
+  `addedUser` int(10) NOT NULL DEFAULT '0',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `upkeeper` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `adder` (`adder`),
+  KEY `adder` (`addedUser`),
   KEY `upkeeper` (`upkeeper`),
-  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`adder`) REFERENCES `users` (`id`),
   CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`upkeeper`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -778,14 +777,13 @@ CREATE TABLE `prodotherparty` (
   `party_year` int(10) unsigned NOT NULL DEFAULT '0',
   `party_place` int(10) unsigned NOT NULL DEFAULT '0',
   `party_compo` int(11) DEFAULT NULL,
-  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','black&white video compo','bootsector intro','browser demo','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','gravedigger') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `prod` (`prod`),
   KEY `partyyear` (`party`,`party_year`),
   KEY `party_compo` (`party_compo`),
-  CONSTRAINT `prodotherparty_ibfk_3` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`),
   CONSTRAINT `prodotherparty_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
-  CONSTRAINT `prodotherparty_ibfk_2` FOREIGN KEY (`party`) REFERENCES `parties` (`id`)
+  CONSTRAINT `prodotherparty_ibfk_2` FOREIGN KEY (`party`) REFERENCES `parties` (`id`),
+  CONSTRAINT `prodotherparty_ibfk_3` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -809,7 +807,6 @@ CREATE TABLE `prods` (
   `party` int(10) DEFAULT NULL,
   `party_year` int(2) unsigned DEFAULT NULL,
   `party_compo` int(11) DEFAULT NULL,
-  `partycompo` enum('invit','none','4k procedural gfx','8bit demo','8bit 1k','16 seconds demo','32bit low demo','32bit hi demo','32k game','96k game','acorn demo','acorn intro','acorn 4k','acorn 1k','alternative demo','amiga demo','amiga intro','amiga fastintro','amiga aga demo','amiga ecs demo','amiga 128k','amiga 64k','amiga 40k','amiga 10k','amiga 4k','amiga 2k','amiga 256b','animation','atari demo','atari intro','atari 8bit demo','atari xl demo','atari 8bit intro','atari 192k','atari 96k','atari 4k','atari 128b','BASIC demo','BK demo','BK 4k','beginner demo compo','black&white video compo','bootsector intro','browser demo','browser intro','C16 16k','C16 1k','C16 128b','C16 64b','c64 demo','c64 intro','c64 256b','c64 1k','c64 4k','coding','crazy demo','combined demo','combined dentro','combined demo/intro','combined intro','combined 80k','combined 64k/4k','combined 64k','combined 1k','combined 4k','combined 256b','combined 128b','console demo','cpc demo','disqualified demos compo','dreamcast demo','dynamic demo','fake demo','falcon intro','falcon demo','fast demo','flash demo','gamedev','gameboy demo','handheld demo','hugescreen wild','java demo','java intro','lamer demo','lowend demo','lowend intro','mac demo','megademo','mobile demo','musicdisk','music video','oldskool demo','oldskool intro','OHP demo','pc demo','pc intro','pc fast intro','pc 256k','pc 128k','pc 100k','pc 80k','pc 64k','pc 16k','pc 8k','pc 5k','pc 4k','pc 1k','pc 512b','pc 256b','pc 128b','pc 64b','pc 32b','pc 3d acc demo','pc non 3d acc demo','pirated demo','playstation demo','php demo','processing demo','recycle.bin','scrooler demo','silent movie','shortfilm','short wild','textmode demo','useless utility','website','wild demo','windows demo','windows95 demo','windows98 demo','zx demo','zx intro','zx 4k','zx 1k','zx 512b','zx 256b','zx 128b','javascript 1k','freestyle','media facade','shadertoy','gravedigger','interactive','remix','mini animation') DEFAULT NULL,
   `party_place` tinyint(3) unsigned DEFAULT NULL,
   `latestip` varchar(255) NOT NULL,
   `group1` int(10) DEFAULT NULL,
@@ -845,7 +842,6 @@ CREATE TABLE `prods` (
   KEY `boardID` (`boardID`),
   KEY `invitation` (`invitation`),
   KEY `party_compo` (`party_compo`),
-  CONSTRAINT `prods_ibfk_8` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`),
   CONSTRAINT `prods_ibfk_1` FOREIGN KEY (`group1`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_2` FOREIGN KEY (`group2`) REFERENCES `groups` (`id`),
   CONSTRAINT `prods_ibfk_3` FOREIGN KEY (`group3`) REFERENCES `groups` (`id`),

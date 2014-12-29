@@ -16,7 +16,7 @@ class PouetBoxProdPost extends PouetBox {
 
     $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prod));
   }
-
+  use PouetForm;
   function Validate($post)
   {
     global $currentUser;

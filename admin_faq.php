@@ -49,6 +49,7 @@ class PouetBoxAdminEditFAQ extends PouetBox
           $this->fields[$k]["value"] = $v;
     }
   }
+  use PouetForm;
   function Commit($data)
   {
     global $currentUser;

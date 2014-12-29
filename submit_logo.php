@@ -10,7 +10,7 @@ class PouetBoxSubmitLogo extends PouetBox
     $this->uniqueID = "pouetbox_submitlogo";
     $this->title = "submit a logo!";
   }
-
+  use PouetForm;
   function Validate( $data )
   {
     global $currentUser;

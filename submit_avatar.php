@@ -48,7 +48,7 @@ class PouetBoxSubmitAvatar extends PouetBox
     $this->uniqueID = "pouetbox_submitavatar";
     $this->title = "submit an avatar!";
   }
-
+  use PouetForm;
   function Validate( $data )
   {
     global $groupID,$currentUser;

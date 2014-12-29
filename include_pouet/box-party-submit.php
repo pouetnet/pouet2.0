@@ -10,7 +10,7 @@ class PouetBoxSubmitParty extends PouetBox
     $this->formifier = new Formifier();
     $this->fields = array();
   }
-
+  use PouetForm;
   function Validate( $data )
   {
     global $partyID,$currentUser;

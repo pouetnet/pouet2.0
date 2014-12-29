@@ -10,6 +10,8 @@ if (get_setting($menusetting))
    <li><a href="groups.php">Groups</a></li>
    <li><a href="parties.php">Parties</a></li>
    <li><a href="userlist.php">Users</a></li>
+   <li><a href="boards.php">Boards</a></li>
+   <li><a href="lists.php">Lists</a></li>
    <li><a href="search.php">Search</a></li>
    <li><a href="bbs.php">BBS</a></li>
    <li><a href="faq.php">FAQ</a></li>

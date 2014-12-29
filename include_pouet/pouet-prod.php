@@ -17,7 +17,7 @@ class PouetProd extends BM_Class {
   }
   static function getTable () { return "prods"; }
   static function getFields() { return array("id","name","type","views","addedUser","addedDate","releaseDate",
-    "voteup","votepig","votedown","voteavg","download","partycompo","party_compo","party_place","party_year"); }
+    "voteup","votepig","votedown","voteavg","download","party_compo","party_place","party_year"); }
   static function getExtendedFields() { return array("sceneorg","demozoo","csdb","zxdemo","latestip","invitation","invitationyear","boardID","rank"); }
 
   function onFinishedPopulate() {
@@ -49,7 +49,7 @@ class PouetProd extends BM_Class {
   function RenderPlatformIcons() {
     $s = "<span class='platformiconlist'>";
     foreach($this->platforms as $t)
-      $s .= "<span class='platformi os_".$t["slug"]."' title='"._html($$t["name"])."'>".$$t["name"]."</span>\n";
+      $s .= "<span class='platformi os_".$t["slug"]."' title='"._html($t["name"])."'>"._html($t["name"])."</span>\n";
     $s .= "</span>";
     return $s;
   }
@@ -163,6 +163,8 @@ class PouetProd extends BM_Class {
     echo "</span>";
   }
 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 function PouetCollectPlatforms( &$prodArray )
 {

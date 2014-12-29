@@ -10,31 +10,6 @@ class PouetBox {
     $this->classes = array();
   }
 
-  function Validate( $data )
-  {
-    return array();
-  }
-
-  function Commit( $data )
-  {
-    return array();
-  }
-
-  function ParsePostMessage( $data )
-  {
-    $errors = $this->Validate( $data );
-
-    if (count($errors))
-      return $errors;
-
-    return $this->Commit( $data );
-  }
-
-  function GetInsertionID()
-  {
-    return 0;
-  }
-
   function GetData() // override
   {
     return NULL;
@@ -93,6 +68,34 @@ class PouetBox {
     $timer[$this->uniqueID." load"]["start"] = microtime_float();
     $this->LoadFromDB();
     $timer[$this->uniqueID." load"]["end"] = microtime_float();
+  }
+}
+
+trait PouetForm
+{
+  function Validate( $data )
+  {
+    return array();
+  }
+
+  function Commit( $data )
+  {
+    return array();
+  }
+
+  function ParsePostMessage( $data )
+  {
+    $errors = $this->Validate( $data );
+
+    if (count($errors))
+      return $errors;
+
+    return $this->Commit( $data );
+  }
+
+  function GetInsertionID()
+  {
+    return 0;
   }
 }
 

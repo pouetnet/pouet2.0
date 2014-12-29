@@ -321,7 +321,7 @@ class PouetBoxAccount extends PouetBox
 
     return $errors;
   }
-
+  use PouetForm;
   function ParsePostMessage( $data )
   {
     if (!get_login_id())
@@ -386,6 +386,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
     $this->uniqueID = "pouetbox_accountreq";
     $this->title = "your most recent modification requests";
   }
+  use PouetForm;
   function LoadFromDB()
   {
     global $currentUser;
@@ -445,6 +446,9 @@ class PouetBoxAccountModificationRequests extends PouetBox
 
 if (!get_login_id())
 {
+  require_once("include_pouet/header.php");
+  require("include_pouet/menu.inc.php");
+
   $message = new PouetBoxModalMessage(false,true);
   $message->classes[] = "errorbox";
   $message->title = "An error has occured:";

@@ -8,7 +8,7 @@ class PouetBoxBBSPost extends PouetBox {
     $this->uniqueID = "pouetbox_bbspost";
     $this->title = "post a new reply";
   }
-
+  use PouetForm;
   function Validate($post)
   {
     global $currentUser;

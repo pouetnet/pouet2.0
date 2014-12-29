@@ -21,6 +21,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 
     $this->title = "edit this group: "._html($this->group->name);
   }
+  use PouetForm;
   function Commit($data)
   {
     global $groupID;
@@ -70,6 +71,7 @@ class PouetBoxAdminDeleteGroup extends PouetBox
 
     $this->title = "delete this group: ".$group->RenderLong();
   }
+  use PouetForm;
   function Validate($data)
   {
     if ($data["check"] != $data["checkOrig"])
@@ -83,6 +85,7 @@ class PouetBoxAdminDeleteGroup extends PouetBox
     SQLLib::Query(sprintf_esc("UPDATE prods SET group3=NULL WHERE group3=%d",$this->group->id));
     SQLLib::Query(sprintf_esc("DELETE FROM groupsaka WHERE group1=%d OR group2=%d",$this->group->id,$this->group->id));
     SQLLib::Query(sprintf_esc("DELETE FROM affiliatedboards WHERE `group`=%d",$this->group->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM listitems WHERE itemid=%d AND type='group'",$this->group->id));
     SQLLib::Query(sprintf_esc("DELETE FROM groups WHERE id=%d",$this->group->id));
     
     gloperator_log( "group", (int)$this->group->id, "group_delete", get_object_vars($this->group) );

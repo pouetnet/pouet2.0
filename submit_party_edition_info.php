@@ -25,6 +25,7 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
 
     $this->title = sprintf("submit links for this party: %s %04d",_html($this->party->name),$this->year);
   }
+  use PouetForm;
   function Commit($data)
   {
     global $partyID;

@@ -1,4 +1,6 @@
 <?
+require_once(POUET_ROOT_LOCAL . "/include_pouet/box-modalmessage.php");
+
 class PouetFormProcessor
 {
   private $objects;
@@ -19,6 +21,8 @@ class PouetFormProcessor
   }
   function Add( $key, $object )
   {
+    if (array_search("PouetForm",class_uses($object))===false)
+      throw new Exception("The box being added to FormProcessor must have the PouetForm trait!");
     $this->objects[$key] = $object;
   }
   function SetSuccessURL( $url, $redirect = false )

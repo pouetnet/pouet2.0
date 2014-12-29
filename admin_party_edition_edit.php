@@ -22,6 +22,7 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
     $this->title = sprintf("edit this party: %s %04d",_html($this->party->name),$this->year);
   }
+  use PouetForm;
   function Commit($data)
   {
     global $partyID;
