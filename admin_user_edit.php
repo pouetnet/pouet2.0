@@ -110,6 +110,7 @@ class PouetBoxAdminUserNicks extends PouetBox
     $this->id = (int)$id;
     $this->title = "previous nicks";
   }
+  use PouetForm;
   function LoadFromDB()
   {
     $this->nicks = SQLLib::SelectRows(sprintf_esc("select * from oldnicks where user = %d",$this->id));
@@ -137,6 +138,7 @@ class PouetBoxAdminUserIPs extends PouetBox
     $this->ip = $ip;
     $this->title = "users using "._html($ip);
   }
+  use PouetForm;
   function LoadFromDB()
   {
     $s = new BM_Query("users");
