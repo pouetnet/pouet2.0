@@ -311,7 +311,7 @@ document.observe("dom:loaded",function(){
       item.addClassName("floaty");
       item.setStyle({
         "left":(ev.pointerX() - 120) + "px",
-        "top" :(ev.pointerY() -  20) + "px"
+        "top" :(ev.pointerY() -  12) + "px"
       });
       originalColumn = item.up(".column");
       originalPosition = originalColumn.childElements().indexOf(item);
@@ -340,7 +340,7 @@ document.observe("dom:loaded",function(){
     {
       el.setStyle({
         "left":(ev.pointerX() - 120) + "px",
-        "top" :(ev.pointerY() -  20) + "px"
+        "top" :(ev.pointerY() -  12) + "px"
       });
       $$(".placeholder").invoke("remove");
       var item = new Element("div",{"class":"placeholder"});
