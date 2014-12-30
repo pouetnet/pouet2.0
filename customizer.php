@@ -44,8 +44,7 @@ class PouetBoxCustomizer extends PouetBox {
   {
     global $currentUser;
 
-    $customizerJSON = get_setting("customizerJSON");
-    $customizer = json_decode($customizerJSON,true);
+    $this->LoadFromDB();
     if ($data["parameter"])
     {
       foreach($data["parameter"] as $col=>$boxen)
@@ -138,9 +137,13 @@ class PouetBoxCustomizer extends PouetBox {
       $boxlist = array_values($boxlist);
       
     $customizer["frontpage"] = $this->boxes;
-    
+
     $json = json_encode($customizer);
-    SQLLib::UpdateRow("usersettings",array("customizerJSON"=>$json),"id=".(int)$currentUser->id);
+
+    if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id=%d",(int)$currentUser->id)))
+      SQLLib::UpdateRow("usersettings",array("customizerJSON"=>$json),"id=".(int)$currentUser->id);
+    else
+      SQLLib::InsertRow("usersettings",array("customizerJSON"=>$json,"id"=>(int)$currentUser->id));
     $_SESSION["settings"]->customizerJSON = $json;
     
     return array();
@@ -246,7 +249,6 @@ $form->SetSuccessURL("customizer.php",true);
 
 $box = new PouetBoxCustomizer();
 $form->Add( "customizer", $box );
-$box->Load();
 
 if ($currentUser)
   $form->Process();
