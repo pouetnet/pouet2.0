@@ -3,10 +3,10 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxTopAlltime extends PouetBoxCachable {
+class PouetBoxIndexTopAlltime extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxTopAlltime() {
+  function PouetBoxIndexTopAlltime() {
     parent::__construct();
     $this->uniqueID = "pouetbox_topalltime";
     $this->title = "all-time top";

@@ -1,8 +1,8 @@
 <?
-class PouetBoxLatestAdded extends PouetBoxCachable {
+class PouetBoxIndexLatestAdded extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxLatestAdded() {
+  function PouetBoxIndexLatestAdded() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestadded";
     $this->title = "latest added prods";

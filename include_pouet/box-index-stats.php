@@ -3,11 +3,11 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxStats extends PouetBoxCachable {
+class PouetBoxIndexStats extends PouetBoxCachable {
   var $data;
   var $fields;
   var $links;
-  function PouetBoxStats() {
+  function PouetBoxIndexStats() {
     parent::__construct();
     $this->uniqueID = "pouetbox_stats";
     $this->title = "some stats";

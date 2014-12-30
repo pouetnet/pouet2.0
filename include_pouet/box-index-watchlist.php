@@ -1,8 +1,8 @@
 <?
-class PouetBoxWatchlist extends PouetBox {
+class PouetBoxIndexWatchlist extends PouetBox {
   var $data;
   var $prods;
-  function PouetBoxWatchlist() {
+  function PouetBoxIndexWatchlist() {
     parent::__construct();
     $this->uniqueID = "pouetbox_watchlist";
     $this->title = "your watchlist";

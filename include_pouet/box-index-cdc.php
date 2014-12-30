@@ -3,10 +3,10 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxCDC extends PouetBoxCachable {
+class PouetBoxIndexCDC extends PouetBoxCachable {
   var $data;
   var $prod;
-  function PouetBoxCDC() {
+  function PouetBoxIndexCDC() {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdc";
     $this->title = "coup de coeur";

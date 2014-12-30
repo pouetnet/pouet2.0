@@ -1,8 +1,8 @@
 <?
 
-class PouetBoxLatestBBS extends PouetBoxCachable {
+class PouetBoxIndexLatestBBS extends PouetBoxCachable {
   var $data;
-  function PouetBoxLatestBBS() {
+  function PouetBoxIndexLatestBBS() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestbbs";
     $this->title = "the oldskool pouët.net bbs";

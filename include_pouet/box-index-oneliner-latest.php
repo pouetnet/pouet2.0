@@ -4,9 +4,9 @@ require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 require_once("include_pouet/pouet-user.php");
 
-class PouetBoxLatestOneliner extends PouetBoxCachable {
+class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   var $data;
-  function PouetBoxLatestOneliner() {
+  function PouetBoxIndexLatestOneliner() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestoneliner";
     $this->title = "the so famous pouët.net oneliner";

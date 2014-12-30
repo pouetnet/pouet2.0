@@ -3,9 +3,9 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxAffilButton extends PouetBoxCachable {
+class PouetBoxIndexAffilButton extends PouetBoxCachable {
   var $data;
-  function PouetBoxAffilButton() {
+  function PouetBoxIndexAffilButton() {
     parent::__construct();
     $this->uniqueID = "pouetbox_affilbutton";
     $this->title = "affiliate buttons";

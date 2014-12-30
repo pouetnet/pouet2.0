@@ -3,10 +3,10 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxTopMonth extends PouetBoxCachable {
+class PouetBoxIndexTopMonth extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxTopMonth() {
+  function PouetBoxIndexTopMonth() {
     parent::__construct();
     $this->uniqueID = "pouetbox_topmonth";
     $this->title = "top of the month";

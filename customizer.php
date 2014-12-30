@@ -61,7 +61,7 @@ class PouetBoxCustomizer extends PouetBox {
           foreach($boxen as $boxIdx=>$box)
           {
             $_box = &$this->boxes[$col][$boxIdx];
-            $class = "PouetBox".$_box["box"];
+            $class = "PouetBoxIndex".$_box["box"];
             $p = new $class();
             if (has_trait($p,"PouetFrontPage"))
             {
@@ -89,7 +89,7 @@ class PouetBoxCustomizer extends PouetBox {
       if ($data["addBox"])
       {
         $col = key($this->boxes);
-        if (class_exists( "PouetBox".$_POST["newBox"] ))
+        if (class_exists( "PouetBoxIndex".$_POST["newBox"] ))
           $this->boxes[$col][] = array("box"=>$_POST["newBox"]);
       }
       if ($data["delete"])
@@ -198,7 +198,7 @@ class PouetBoxCustomizer extends PouetBox {
     );
     foreach($availableBoxes as $v)
     {
-      $class = "PouetBox".$v;
+      $class = "PouetBoxIndex".$v;
       $p = new $class();
       printf("<option value='%s'>%s</option>\n",$v,_html($p->title));
     }
@@ -213,7 +213,7 @@ class PouetBoxCustomizer extends PouetBox {
       $y = 0;
       foreach($boxlist as $box)
       {
-        $class = "PouetBox".$box["box"];
+        $class = "PouetBoxIndex".$box["box"];
         $p = new $class();
         
         echo "  <div class='customizerBox' data-class='"._html($box["box"])."'>\n";  

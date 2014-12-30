@@ -3,14 +3,14 @@ require_once("include_generic/sqllib.inc.php");
 require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
-class PouetBoxNews extends PouetBox {
+class PouetBoxIndexNews extends PouetBox {
   var $data;
   var $prod;
   var $link;
   var $title;
   var $content;
   var $timestamp;
-  function PouetBoxNews() {
+  function PouetBoxIndexNews() {
     parent::__construct();
     $this->uniqueID = "pouetbox_newsbox";
     $this->title = "news box";
@@ -25,9 +25,9 @@ class PouetBoxNews extends PouetBox {
   }
 };
 
-class PouetBoxNewsBoxes extends PouetBoxCachable
+class PouetBoxIndexNewsBoxes extends PouetBoxCachable
 {
-  function PouetBoxNewsBoxes()
+  function PouetBoxIndexNewsBoxes()
   {
     parent::__construct();
 
@@ -75,7 +75,7 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
     if (!$this->rssBitfellasNews['items']) {
     	printf('Error: Unable to open BitFeed !');
     } else {
-      $p = new PouetBoxNews();
+      $p = new PouetBoxIndexNews();
       for($i=0; $i < min(count($this->rssBitfellasNews['items']),$this->limit); $i++)
       {
         if (!$this->rssBitfellasNews['items'][$i]['title'])

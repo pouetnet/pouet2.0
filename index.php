@@ -40,7 +40,7 @@ foreach($boxes as $bar=>$boxlist)
   {
     if (isset($box["limit"]) && (int)$box["limit"]==0)
       continue;
-    $class = "PouetBox".$box["box"];
+    $class = "PouetBoxIndex".$box["box"];
     $p = new $class();
     
     if (!$currentUser && !$p->IsVisibleLoggedOut())
