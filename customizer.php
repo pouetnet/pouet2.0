@@ -48,22 +48,33 @@ class PouetBoxCustomizer extends PouetBox {
     if ($data["parameter"])
     {
       foreach($data["parameter"] as $col=>$boxen)
+      {
         foreach($boxen as $boxIdx=>$box)
-          foreach($box as $parameterName=>$value)
+        {
+          $_box = &$this->boxes[$col][$boxIdx];
+          $class = "PouetBox".$_box["box"];
+          $p = new $class();
+          if (has_trait($p,"PouetFrontPage"))
           {
-            $_box = &$this->boxes[$col][$boxIdx];
-            $class = "PouetBox".$_box["box"];
-            $p = new $class();
-            if (has_trait($p,"PouetFrontPage"))
+            $params = $p->GetParameterSettings();
+            foreach($params as $parameterName=>$paramValues)
             {
-              $params = $p->GetParameterSettings();
-              if (isset($params[$parameterName]["max"]))
-                $value = min($value,$params[$parameterName]["max"]);
-              if (isset($params[$parameterName]["min"]))
-                $value = max($value,$params[$parameterName]["min"]);
+              $value = $data["parameter"][$col][$boxIdx][$parameterName];
+              switch($paramValues["type"])
+              {
+                case "checkbox":
+                  $value = ($value == "on");
+                  break;
+                default:
+                  if (isset($data["max"])) $value = min($value,$paramValues["max"]);
+                  if (isset($data["min"])) $value = max($value,$paramValues["min"]);
+                  break;
+              }
+              $_box[$parameterName] = $value;
             }
-            $_box[$parameterName] = $value;
           }
+        }
+      }
     }
     if ($data["addBox"])
     {
@@ -220,7 +231,15 @@ class PouetBoxCustomizer extends PouetBox {
             {
               echo "        <div class='row'>\n";
               printf("        <label>%s:</label>\n",_html($values["name"]));
-              printf("        <input type='number' name='parameter[%s][%d][%s]' value='%d'>\n",_html($bar),$y,_html($name),_html($box[$name]));
+              switch($values["type"])
+              {
+                case "checkbox":
+                  printf("        <input type='checkbox' name='parameter[%s][%d][%s]'%s>\n",_html($bar),$y,_html($name),$box[$name] ? " checked='checked'" : "");
+                  break;
+                default:
+                  printf("        <input type='number' name='parameter[%s][%d][%s]' value='%d'>\n",_html($bar),$y,_html($name),_html($box[$name]));
+                  break;
+              }
               echo "        </div>\n";
             }
             echo "      </div>\n";
@@ -238,17 +257,64 @@ class PouetBoxCustomizer extends PouetBox {
   }
   function RenderFooter()
   {
-    echo "<div class='foot'/>";
-    echo "  <input type='submit' value='Submit' />";
+    echo "  <div class='foot'/>";
+    echo "    <input type='submit' value='Submit' />";
+    echo "  </div>";
     echo "</div>";
   }
 };
 
+class PouetBoxCustomizerPanic extends PouetBox
+{
+  function PouetBoxCustomizerPanic( )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_customizerpanic";
+
+    $this->classes[] = "errorbox";
+
+    $this->title = "panic button !";
+  }
+  use PouetForm;
+  function Commit($data)
+  {
+    global $currentUser;
+    
+    require_once("include_pouet/default_usersettings.php");
+    $json = $DEFAULT_USERSETTINGS->customizerJSON;
+
+    if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id=%d",(int)$currentUser->id)))
+      SQLLib::UpdateRow("usersettings",array("customizerJSON"=>$json),"id=".(int)$currentUser->id);
+    else
+      SQLLib::InsertRow("usersettings",array("customizerJSON"=>$json,"id"=>(int)$currentUser->id));
+    $_SESSION["settings"]->customizerJSON = $json;
+
+    return array();
+  }
+  function RenderContent()
+  {
+    echo "  <p>Click this button to reset your front page to 'factory default', in case something breaks !</p>";
+    echo "  <input type='submit' value='reset front page settings !'/>";
+    ?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  $("pouetbox_customizerpanic").up("form").observe("submit",function(e){
+    if (!confirm("are you sure you want to reset ?"))
+      e.stop();
+  });
+});
+</script>
+    <?
+  }
+}
+
+
 $form = new PouetFormProcessor();
 $form->SetSuccessURL("customizer.php",true);
 
-$box = new PouetBoxCustomizer();
-$form->Add( "customizer", $box );
+$form->Add( "customizer", new PouetBoxCustomizer() );
+$form->Add( "customizerpanic", new PouetBoxCustomizerPanic() );
 
 if ($currentUser)
   $form->Process();

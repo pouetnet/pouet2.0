@@ -23,13 +23,12 @@ class PouetBoxLatestBBS extends PouetBoxCachable {
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
     if (isset($data["hideResidue"])) $this->hideResidue = $data["hideResidue"];
-    
   }
   function GetParameterSettings()
   {
     return array(
       "limit"      => array("name"=>"number of topics visible"),
-      "hideResidue"=> array("name"=>"hide residue topics"),
+      "hideResidue"=> array("name"=>"hide residue topics", "type"=>"checkbox"),
     );
   }
 

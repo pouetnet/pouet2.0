@@ -46,7 +46,7 @@ $TEST = array(
    'indexbbsnoresidue' => 1,
    'prodcomments' => -1,
    'indexwatchlist' => 5,
-   'customizerJSON' => '{"frontpage":{"leftbar":[{"box":"Login"},{"box":"CDC","limit":"1"},{"box":"LatestAdded","limit":"5"},{"box":"LatestReleased","limit":"5"},{"box":"TopMonth","limit":"10"},{"box":"TopAlltime","limit":"10"}],"middlebar":[{"box":"LatestOneliner","limit":"5"},{"box":"LatestBBS","limit":"10"},{"box":"NewsBoxes","limit":"5"}],"rightbar":[{"box":"SearchBox","limit":"1"},{"box":"Stats","limit":"1"},{"box":"AffilButton","limit":"1"},{"box":"LatestComments","limit":"5"},{"box":"Watchlist","limit":"5"},{"box":"LatestParties","limit":"5"},{"box":"UpcomingParties"},{"box":"TopGlops","limit":"10"}]}}',
+   'customizerJSON' => '{"frontpage":{"leftbar":[{"box":"Login"},{"box":"CDC","limit":"1"},{"box":"LatestAdded","limit":"5"},{"box":"LatestReleased","limit":"5"},{"box":"TopMonth","limit":"10"},{"box":"TopAlltime","limit":"10"}],"middlebar":[{"box":"LatestOneliner","limit":"5"},{"box":"LatestBBS","limit":"10","hideResidue":true},{"box":"NewsBoxes","limit":"5"}],"rightbar":[{"box":"SearchBox","limit":"1"},{"box":"Stats","limit":"1"},{"box":"AffilButton","limit":"1"},{"box":"LatestComments","limit":"5"},{"box":"Watchlist","limit":"5"},{"box":"LatestParties","limit":"5"},{"box":"UpcomingParties"},{"box":"TopGlops","limit":"10"}]}}',
 );
 $DEFAULT_USERSETTINGS = new stdClass();
 foreach($TEST as $k=>$v) $DEFAULT_USERSETTINGS->$k = $v;
