@@ -264,6 +264,151 @@ class PouetBoxCustomizer extends PouetBox {
   }
 };
 
+class PouetBoxCustomizerSitewide extends PouetBox
+{
+  function PouetBoxCustomizerSitewide( )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_customizersitewide";
+
+    $this->title = "sitewide settings";
+    
+    $this->namesNumeric = array(
+      // numbers
+/*      
+      "indextopglops" => "front page - top glops",
+      "indextopprods" => "front page - top prods (recent)",
+      "indextopkeops" => "front page - top prods (all-time)",
+      "indexoneliner" => "front page - oneliner",
+      "indexlatestadded" => "front page - latest added",
+      "indexlatestreleased" => "front page - latest released",
+      "indexojnews" => "front page - bitfellas news",
+      "indexlatestcomments" => "front page - latest comments",
+      "indexlatestparties" => "front page - latest parties",
+      "indexbbstopics" => "front page - bbs topics",
+      "indexwatchlist" => "front page - watchlist",
+*/      
+      "bbsbbstopics" => "bbs page - bbs topics",
+      "prodlistprods" => "prodlist page - prods",
+      "userlistusers" => "userlist page - users",
+      "searchprods" => "search page - prods",
+      "userlogos" => "user page - logos",
+      "userprods" => "user page - prods",
+      "usergroups" => "user page - groups",
+      "userparties" => "user page - parties",
+      "userscreenshots" => "user page - screenshots",
+      "usernfos" => "user page - nfos",
+      "usercomments" => "user page - comments",
+      "userrulez" => "user page - rulez",
+      "usersucks" => "user page - sucks",
+      "commentshours" => "comments page - hours",
+      "topicposts" => "topic page - posts",
+    );
+    $this->namesSwitch = array(
+      //select
+      "logos" => "logos",
+      "topbar" => "top bar",
+      "bottombar" => "bottom bar",
+/*      
+      "indexcdc" => "front page - cdc",
+      "indexsearch" => "front page - search",
+      "indexstats" => "front page - stats",
+      "indexlinks" => "front page - links",
+*/      
+      "indexplatform" => "front page - show platform icons",
+      "indextype" => "front page - show type icons",
+      "indexwhoaddedprods" => "front page - who added prods",
+      "indexwhocommentedprods" => "front page - who commented prods",
+      "topichidefakeuser" => "bbs page - hide fakeuser",
+      "prodhidefakeuser" => "prod page - hide fakeuser",
+      "displayimages" => "[img][/img] tags should be displayed as...",
+//      "indexbbsnoresidue" => "residue threads on the front page are...",
+    );    
+    
+    $this->formifier = new Formifier();
+    
+    $this->fieldsSettings = array();
+    $a = array_merge($this->namesNumeric,$this->namesSwitch);
+    foreach($a as $k=>$v)
+    {
+      $this->fieldsSettings[$k] = array();
+      $this->fieldsSettings[$k]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->$k : $v;
+      if ($this->namesNumeric[$k])
+      {
+        $this->fieldsSettings[$k]["name"] = $this->namesNumeric[$k];
+        $this->fieldsSettings[$k]["type"] = "number";
+        $this->fieldsSettings[$k]["min"] = strpos($k,"index") === 0 ? 0 : 1;
+        $this->fieldsSettings[$k]["max"] = POUET_CACHE_MAX;
+      }
+      if ($this->namesSwitch[$k])
+      {
+        $this->fieldsSettings[$k]["name"] = $this->namesSwitch[$k];
+        $this->fieldsSettings[$k]["type"] = "select";
+        $this->fieldsSettings[$k]["assoc"] = true;
+        $this->fieldsSettings[$k]["fields"] = array(0=>"hidden",1=>"displayed");
+      }
+    }
+    // exceptions!
+    $this->fieldsSettings["topicposts"]["min"] = 1;
+    //$this->fieldsSettings["indexojnews"]["max"] = 10;
+    $this->fieldsSettings["displayimages"]["fields"] = array(0=>"links",1=>"images");
+    //$this->fieldsSettings["indexbbsnoresidue"]["fields"] = array(0=>"shown",1=>"hidden");
+    $this->fieldsSettings["prodcomments"]["name"] = "prod page - number of comments";
+    $this->fieldsSettings["prodcomments"]["type"] = "select";
+    $this->fieldsSettings["prodcomments"]["assoc"] = true;
+    $this->fieldsSettings["prodcomments"]["fields"] = array(-1=>"all",0=>"hide",5=>"5",10=>"10",25=>"25",50=>"50",100=>"100");
+    $this->fieldsSettings["prodcomments"]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->prodcomments : $DEFAULT_USERSETTINGS->prodcomments;
+
+
+    if ($_POST)
+    {
+      foreach($_POST as $k=>$v)
+      {
+        if ($this->fieldsSettings[$k]) $this->fieldsSettings[$k]["value"] = $v;
+      }
+    }    
+  }
+  function RenderFooter()
+  {
+    echo "  <div class='foot'/>";
+    echo "    <input type='submit' value='Submit' />";
+    echo "  </div>";
+    echo "</div>";
+  }
+  use PouetForm;
+  function Commit($data)
+  {
+    $sql = array();
+    foreach ($this->fieldsSettings as $k=>$v)
+    {
+      if ($v["type"] == "number")
+      {
+        $sql[$k] = min($v["max"], max($v["min"], (int)($data[$k]) ));
+      }
+      else
+      {
+        $sql[$k] = (int)$data[$k];
+      }
+      $_SESSION["settings"]->$k = (int)$sql[$k];
+    }
+    if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id = %d",(int)get_login_id())))
+    {
+      SQLLib::UpdateRow("usersettings",$sql,"id=".(int)get_login_id());
+    }
+    else
+    {
+      $sql["id"] = (int)get_login_id();
+      SQLLib::InsertRow("usersettings",$sql);
+    }
+  }
+  function RenderContent()
+  {
+    $this->formifier->RenderForm( $this->fieldsSettings );
+  }
+}
+
+
 class PouetBoxCustomizerPanic extends PouetBox
 {
   function PouetBoxCustomizerPanic( )
@@ -282,13 +427,13 @@ class PouetBoxCustomizerPanic extends PouetBox
     global $currentUser;
     
     require_once("include_pouet/default_usersettings.php");
-    $json = $DEFAULT_USERSETTINGS->customizerJSON;
+    $a = get_object_vars( $DEFAULT_USERSETTINGS );
 
     if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id=%d",(int)$currentUser->id)))
-      SQLLib::UpdateRow("usersettings",array("customizerJSON"=>$json),"id=".(int)$currentUser->id);
+      SQLLib::UpdateRow("usersettings",$a,"id=".(int)$currentUser->id);
     else
-      SQLLib::InsertRow("usersettings",array("customizerJSON"=>$json,"id"=>(int)$currentUser->id));
-    $_SESSION["settings"]->customizerJSON = $json;
+      SQLLib::InsertRow("usersettings",array_merge(array("id"=>(int)$currentUser->id),$a) );
+    $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
 
     return array();
   }
@@ -314,6 +459,7 @@ $form = new PouetFormProcessor();
 $form->SetSuccessURL("customizer.php",true);
 
 $form->Add( "customizer", new PouetBoxCustomizer() );
+$form->Add( "customizersite", new PouetBoxCustomizerSitewide() );
 $form->Add( "customizerpanic", new PouetBoxCustomizerPanic() );
 
 if ($currentUser)
