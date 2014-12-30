@@ -45,104 +45,114 @@ class PouetBoxCustomizer extends PouetBox {
     global $currentUser;
 
     $this->LoadFromDB();
-    if ($data["parameter"])
+    if ($data["jsonBoxData"])
     {
-      foreach($data["parameter"] as $col=>$boxen)
+      // potential TODO: validate if data isn't bogus
+      // (is it necesssary? if the user breaks their own front page,
+      // it's their own damn fault)
+      $this->boxes = json_decode( $data["jsonBoxData"], true );
+    }
+    else
+    {
+      if ($data["parameter"])
       {
-        foreach($boxen as $boxIdx=>$box)
+        foreach($data["parameter"] as $col=>$boxen)
         {
-          $_box = &$this->boxes[$col][$boxIdx];
-          $class = "PouetBox".$_box["box"];
-          $p = new $class();
-          if (has_trait($p,"PouetFrontPage"))
+          foreach($boxen as $boxIdx=>$box)
           {
-            $params = $p->GetParameterSettings();
-            foreach($params as $parameterName=>$paramValues)
+            $_box = &$this->boxes[$col][$boxIdx];
+            $class = "PouetBox".$_box["box"];
+            $p = new $class();
+            if (has_trait($p,"PouetFrontPage"))
             {
-              $value = $data["parameter"][$col][$boxIdx][$parameterName];
-              switch($paramValues["type"])
+              $params = $p->GetParameterSettings();
+              foreach($params as $parameterName=>$paramValues)
               {
-                case "checkbox":
-                  $value = ($value == "on");
-                  break;
-                default:
-                  if (isset($data["max"])) $value = min($value,$paramValues["max"]);
-                  if (isset($data["min"])) $value = max($value,$paramValues["min"]);
-                  break;
+                $value = $data["parameter"][$col][$boxIdx][$parameterName];
+                switch($paramValues["type"])
+                {
+                  case "checkbox":
+                    $value = ($value == "on");
+                    break;
+                  default:
+                    if (isset($data["max"])) $value = min($value,$paramValues["max"]);
+                    if (isset($data["min"])) $value = max($value,$paramValues["min"]);
+                    break;
+                }
+                $_box[$parameterName] = $value;
               }
-              $_box[$parameterName] = $value;
             }
           }
         }
       }
-    }
-    if ($data["addBox"])
-    {
-      $col = key($this->boxes);
-      if (class_exists( "PouetBox".$_POST["newBox"] ))
-        $this->boxes[$col][] = array("box"=>$_POST["newBox"]);
-    }
-    if ($data["delete"])
-    {
-      $col = key($data["delete"]);
-      $boxIdx = key($data["delete"][$col]);
-      
-      $pre    = array_slice( $this->boxes[$col], 0, $boxIdx );
-      $post   = array_slice( $this->boxes[$col], $boxIdx + 1 );
-      
-      $this->boxes[$col] = array_merge($pre, $post);
-    }
-    else if ($data["up"])
-    {
-      $col = key($data["up"]);
-      $boxIdx = key($data["up"][$col]);
-      
-      $pre    = array_slice( $this->boxes[$col], 0, $boxIdx - 1 );
-      $swap   = $this->boxes[$col][$boxIdx-1];
-      $selBox = $this->boxes[$col][$boxIdx];
-      $post   = array_slice( $this->boxes[$col], $boxIdx + 1 );
-      
-      $this->boxes[$col] = array_merge($pre, array($selBox), array($swap), $post);
-    }
-    else if ($data["down"])
-    {
-      $col = key($data["down"]);
-      $boxIdx = key($data["down"][$col]);
-      
-      $pre    = array_slice( $this->boxes[$col], 0, $boxIdx );
-      $selBox = $this->boxes[$col][$boxIdx];
-      $swap   = $this->boxes[$col][$boxIdx + 1];
-      $post   = array_slice( $this->boxes[$col], $boxIdx + 2 );
-      
-      $this->boxes[$col] = array_merge($pre, array($swap), array($selBox), $post);
-    }
-    else if ($data["left"])
-    {
-      $col = key($data["left"]);
-      $boxIdx = key($data["left"][$col]);
-      
-      while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
-      prev($this->boxes);
-      
-      $target = key($this->boxes);
-      
-      $selBox = $this->boxes[$col][$boxIdx];
-      unset($this->boxes[$col][$boxIdx]);
-      $this->boxes[$target][] = $selBox;
-    }
-    else if ($data["right"])
-    {
-      $col = key($data["right"]);
-      $boxIdx = key($data["right"][$col]);
-      
-      while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
-      next($this->boxes);
-      
-      $target = key($this->boxes);
-      
-      $selBox = $this->boxes[$col][$boxIdx];
-      unset($this->boxes[$col][$boxIdx]);
-      $this->boxes[$target][] = $selBox;
+      if ($data["addBox"])
+      {
+        $col = key($this->boxes);
+        if (class_exists( "PouetBox".$_POST["newBox"] ))
+          $this->boxes[$col][] = array("box"=>$_POST["newBox"]);
+      }
+      if ($data["delete"])
+      {
+        $col = key($data["delete"]);
+        $boxIdx = key($data["delete"][$col]);
+        
+        $pre    = array_slice( $this->boxes[$col], 0, $boxIdx );
+        $post   = array_slice( $this->boxes[$col], $boxIdx + 1 );
+        
+        $this->boxes[$col] = array_merge($pre, $post);
+      }
+      else if ($data["up"])
+      {
+        $col = key($data["up"]);
+        $boxIdx = key($data["up"][$col]);
+        
+        $pre    = array_slice( $this->boxes[$col], 0, $boxIdx - 1 );
+        $swap   = $this->boxes[$col][$boxIdx-1];
+        $selBox = $this->boxes[$col][$boxIdx];
+        $post   = array_slice( $this->boxes[$col], $boxIdx + 1 );
+        
+        $this->boxes[$col] = array_merge($pre, array($selBox), array($swap), $post);
+      }
+      else if ($data["down"])
+      {
+        $col = key($data["down"]);
+        $boxIdx = key($data["down"][$col]);
+        
+        $pre    = array_slice( $this->boxes[$col], 0, $boxIdx );
+        $selBox = $this->boxes[$col][$boxIdx];
+        $swap   = $this->boxes[$col][$boxIdx + 1];
+        $post   = array_slice( $this->boxes[$col], $boxIdx + 2 );
+        
+        $this->boxes[$col] = array_merge($pre, array($swap), array($selBox), $post);
+      }
+      else if ($data["left"])
+      {
+        $col = key($data["left"]);
+        $boxIdx = key($data["left"][$col]);
+        
+        while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
+        prev($this->boxes);
+        
+        $target = key($this->boxes);
+        
+        $selBox = $this->boxes[$col][$boxIdx];
+        unset($this->boxes[$col][$boxIdx]);
+        $this->boxes[$target][] = $selBox;
+      }
+      else if ($data["right"])
+      {
+        $col = key($data["right"]);
+        $boxIdx = key($data["right"][$col]);
+        
+        while (key($this->boxes) !== $col && key($this->boxes)) next($this->boxes);
+        next($this->boxes);
+        
+        $target = key($this->boxes);
+        
+        $selBox = $this->boxes[$col][$boxIdx];
+        unset($this->boxes[$col][$boxIdx]);
+        $this->boxes[$target][] = $selBox;
+      }
     }
     foreach($this->boxes as $bar=>&$boxlist)
       $boxlist = array_values($boxlist);
@@ -217,7 +227,7 @@ class PouetBoxCustomizer extends PouetBox {
           printf("  <input type='submit' class='move' name='left[%s][%d]' value='&#9664;'/>",_html($bar),$y);
         if ($x < count($this->boxes) - 1)
           printf("  <input type='submit' class='move' name='right[%s][%d]' value='&#9654;'/>",_html($bar),$y);
-        printf("  <input type='submit' name='delete[%s][%d]' value='X' title='remove box'/>",_html($bar),$y);
+        printf("  <input type='submit' class='close' name='delete[%s][%d]' value='X' title='remove box'/>",_html($bar),$y);
         echo "</span>";
         echo "    </h2>\n";  
         if (has_trait($p,"PouetFrontPage"))
@@ -234,10 +244,10 @@ class PouetBoxCustomizer extends PouetBox {
               switch($values["type"])
               {
                 case "checkbox":
-                  printf("        <input type='checkbox' name='parameter[%s][%d][%s]'%s>\n",_html($bar),$y,_html($name),$box[$name] ? " checked='checked'" : "");
+                  printf("        <input type='checkbox' name='parameter[%s][%d][%s]' data-paramname='%s' %s>\n",_html($bar),$y,_html($name),_html($name),$box[$name] ? " checked='checked'" : "");
                   break;
                 default:
-                  printf("        <input type='number' name='parameter[%s][%d][%s]' value='%d'>\n",_html($bar),$y,_html($name),_html($box[$name]));
+                  printf("        <input type='number' name='parameter[%s][%d][%s]' data-paramname='%s' value='%d'>\n",_html($bar),$y,_html($name),_html($name),_html($box[$name]));
                   break;
               }
               echo "        </div>\n";
@@ -254,6 +264,128 @@ class PouetBoxCustomizer extends PouetBox {
       $x++;
     }
     echo " </div>\n";
+?>
+<script type="text/javascript">
+<!--
+function isMouseOverElement( el, x, y )
+{
+  el = $(el);
+  return (el.cumulativeOffset().left < x && x < el.cumulativeOffset().left + el.getDimensions().width
+       && el.cumulativeOffset().top  < y && y < el.cumulativeOffset().top + el.getLayout().get("margin-box-height"));
+}
+function getTargetLocation(x,y)
+{
+  var targetColumn = null;
+  var targetPosition = null;
+  $$(".column").each(function(col){
+    if ( isMouseOverElement(col,x,y) )
+    {
+      targetColumn = col;
+      targetPosition = col.select(".customizerBox").length;
+      var n = 0;
+      col.select(".customizerBox").each(function(box){
+        if ( isMouseOverElement(box,x,y) )
+          targetPosition = n;
+        n++;
+      })
+    }
+  });
+  return { column: targetColumn, position: targetPosition };
+}
+
+var originalColumn = null;
+var originalPosition = 0;
+document.observe("dom:loaded",function(){
+  $("pouetbox_customizer").addClassName("js");
+  $$("#pouetbox_customizer .customizerBox").each(function(item){
+    item.select(".move").each(function(i) { i.hide(); } );
+    item.down(".close").observe("click",function(ev){
+      ev.stop();
+      item.remove();
+    });
+    item.down("h2").setStyle({"cursor":"move"});
+    item.down("h2").observe("mousedown",function(ev){
+      if (ev.isRightClick()) return;
+      if (ev.findElement(".close")) return;
+      ev.stop();
+      item.addClassName("floaty");
+      item.setStyle({
+        "left":(ev.pointerX() - 120) + "px",
+        "top" :(ev.pointerY() -  20) + "px"
+      });
+      originalColumn = item.up(".column");
+      originalPosition = originalColumn.childElements().indexOf(item);
+      document.body.insert(item);
+    });
+    item.down("h2").observe("mouseup",function(ev){
+      if (ev.isRightClick()) return;
+      ev.stop();
+      item.removeClassName("floaty");
+      $$(".placeholder").invoke("remove");
+      var targetColumn = originalColumn;
+      var targetPosition = originalPosition;
+      var t = getTargetLocation( ev.pointerX(), ev.pointerY() );
+      if (t.column !== null) targetColumn = t.column;
+      if (t.position !== null) targetPosition = t.position;
+      var c = targetColumn.childElements();
+      if (targetPosition >= c.length)
+        targetColumn.insert({"bottom":item});
+      else
+        c[targetPosition].insert({"before":item});
+    });    
+  });
+  document.observe("mousemove",function(ev){
+    var el = document.body.down(".floaty");
+    if (el)
+    {
+      el.setStyle({
+        "left":(ev.pointerX() - 120) + "px",
+        "top" :(ev.pointerY() -  20) + "px"
+      });
+      $$(".placeholder").invoke("remove");
+      var item = new Element("div",{"class":"placeholder"});
+      var t = getTargetLocation( ev.pointerX(), ev.pointerY() );
+      var targetColumn = originalColumn;
+      var targetPosition = originalPosition;
+      if (t.column !== null) targetColumn = t.column;
+      if (t.position !== null) targetPosition = t.position;
+      if (targetColumn !== null && targetPosition !== null)
+      {
+        var c = targetColumn.childElements();
+        if (targetPosition >= c.length)
+          targetColumn.insert({"bottom":item});
+        else
+          c[targetPosition].insert({"before":item});
+          
+        Event.observe(window, 'beforeunload', function(e) {
+          e.returnValue = 'are you sure you want to leave without saving the order ?';
+        });          
+      }
+    }
+  });
+  $$("#pouetbox_customizer .foot input[type='submit']").first().observe("click",function(ev){
+    var result = {};
+    $$(".column").each(function(col){
+      result[col.id] = [];
+      col.select(".customizerBox").each(function(box){
+        var o = {}
+        o.box = box.getAttribute("data-class");
+        box.select(".content input").each(function(inp){
+          var v = Form.Element.getValue(inp);
+          if (inp.type == 'checkbox') v = (v == "on");
+          o[ inp.getAttribute("data-paramname") ] = v;
+        });
+        result[col.id].push(o);
+      });
+    });
+    Event.stopObserving(window,'beforeunload');
+    $$("#pouetbox_customizer .foot").first().insert( new Element("input",{type:"hidden",name:"jsonBoxData",value:JSON.stringify(result)}) );
+//    ev.stop();
+  });
+});
+//-->
+</script>
+<?
   }
   function RenderFooter()
   {
