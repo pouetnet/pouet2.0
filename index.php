@@ -38,9 +38,9 @@ foreach($boxes as $bar=>$boxlist)
   echo "  <div id='"._html($bar)."' class='column'>\n";
   foreach($boxlist as $box)
   {
-    if (isset($box["limit"]) && (int)$box["limit"]==0)
-      continue;
     $class = "PouetBoxIndex".$box["box"];
+    if (!class_exists($class))
+      continue;
     $p = new $class();
     
     if (!$currentUser && !$p->IsVisibleLoggedOut())
