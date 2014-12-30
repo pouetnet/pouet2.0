@@ -31,7 +31,7 @@ class PouetBoxLatestAdded extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of prods visible"),
+      "limit" => array("name"=>"number of prods visible","default"=>5,"max"=>POUET_CACHE_MAX),
     );
   }
 

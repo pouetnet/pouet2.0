@@ -59,7 +59,7 @@ class PouetBoxLatestOneliner extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of oneliners visible"),
+      "limit" => array("name"=>"number of oneliners visible","default"=>5,"max"=>POUET_CACHE_MAX),
     );
   }
 

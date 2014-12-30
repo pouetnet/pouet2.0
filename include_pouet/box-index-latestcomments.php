@@ -30,7 +30,7 @@ class PouetBoxLatestComments extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of comments visible"),
+      "limit" => array("name"=>"number of comments visible","default"=>5,"max"=>POUET_CACHE_MAX),
     );
   }
 

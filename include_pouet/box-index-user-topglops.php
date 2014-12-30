@@ -30,7 +30,7 @@ class PouetBoxTopGlops extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of users visible"),
+      "limit" => array("name"=>"number of users visible","default"=>10,"max"=>POUET_CACHE_MAX),
     );
   }
 

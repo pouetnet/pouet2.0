@@ -66,7 +66,7 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of news items visible"),
+      "limit" => array("name"=>"number of news items visible","default"=>5,"max"=>10),
     );
   }
 
@@ -76,7 +76,7 @@ class PouetBoxNewsBoxes extends PouetBoxCachable
     	printf('Error: Unable to open BitFeed !');
     } else {
       $p = new PouetBoxNews();
-      for($i=0; $i < $this->limit; $i++)
+      for($i=0; $i < min(count($this->rssBitfellasNews['items']),$this->limit); $i++)
       {
         if (!$this->rssBitfellasNews['items'][$i]['title'])
           continue;

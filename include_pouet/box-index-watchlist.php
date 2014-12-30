@@ -7,7 +7,7 @@ class PouetBoxWatchlist extends PouetBox {
     $this->uniqueID = "pouetbox_watchlist";
     $this->title = "your watchlist";
 
-    $this->limit = 10;
+    $this->limit = 5;
   }
 
   function GetData()
@@ -23,7 +23,7 @@ class PouetBoxWatchlist extends PouetBox {
   function GetParameterSettings()
   {
     return array(
-      "limit"      => array("name"=>"number of prods visible"),
+      "limit"      => array("name"=>"number of prods visible","default"=>5,"max"=>POUET_CACHE_MAX),
     );
   }
   

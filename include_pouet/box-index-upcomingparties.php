@@ -20,6 +20,20 @@ class PouetBoxUpcomingParties extends PouetBoxCachable {
       "demopartynet:startDate",
       "demopartynet:endDate",
     ));
+    
+    $this->limit = 5;
+  }
+
+  use PouetFrontPage;
+  function SetParameters($data)
+  {
+    if (isset($data["limit"])) $this->limit = $data["limit"];
+  }
+  function GetParameterSettings()
+  {
+    return array(
+      "limit" => array("name"=>"number of prods visible","default"=>5,"max"=>10),
+    );
   }
 
   function LoadFromCachedData($data) {
@@ -36,7 +50,7 @@ class PouetBoxUpcomingParties extends PouetBoxCachable {
 
   function RenderBody() {
     echo "<ul class='boxlist'>\n";
-    for($i=0; $i < 5; $i++)
+    for($i=0; $i < min( count($this->rssData['items']),$this->limit); $i++)
     {
     	$st = strtotime($this->rssData['items'][$i]['demopartynet:startDate']);
     	$et = strtotime($this->rssData['items'][$i]['demopartynet:endDate']);

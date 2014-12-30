@@ -48,7 +48,7 @@ class PouetBoxCustomizer extends PouetBox {
     if ($data["jsonBoxData"])
     {
       // potential TODO: validate if data isn't bogus
-      // (is it necesssary? if the user breaks their own front page,
+      // (is it necessary? if the user breaks their own front page,
       // it's their own damn fault)
       $this->boxes = json_decode( $data["jsonBoxData"], true );
     }
@@ -75,8 +75,9 @@ class PouetBoxCustomizer extends PouetBox {
                     $value = ($value == "on");
                     break;
                   default:
-                    if (isset($data["max"])) $value = min($value,$paramValues["max"]);
-                    if (isset($data["min"])) $value = max($value,$paramValues["min"]);
+                    if (isset($paramValues["max"])) $value = min($value,$paramValues["max"]);
+                    //if (isset($data["min"])) 
+                    $value = max($value,0);
                     break;
                 }
                 $_box[$parameterName] = $value;
@@ -247,7 +248,11 @@ class PouetBoxCustomizer extends PouetBox {
                   printf("        <input type='checkbox' name='parameter[%s][%d][%s]' data-paramname='%s' %s>\n",_html($bar),$y,_html($name),_html($name),$box[$name] ? " checked='checked'" : "");
                   break;
                 default:
-                  printf("        <input type='number' name='parameter[%s][%d][%s]' data-paramname='%s' value='%d'>\n",_html($bar),$y,_html($name),_html($name),_html($box[$name]));
+                  printf("        <input type='number' name='parameter[%s][%d][%s]' data-paramname='%s'",_html($bar),$y,_html($name),_html($name));
+                  //if ($values["min"]) 
+                  printf(" min='%d'\n",$values["min"]);
+                  if ($values["max"]) printf(" max='%d'\n",$values["max"]);
+                  printf(" value='%d'>\n",_html( isset($box[$name]) ? $box[$name] : $values["default"]) );
                   break;
               }
               echo "        </div>\n";
