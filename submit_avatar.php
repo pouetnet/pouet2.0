@@ -10,6 +10,7 @@ class PouetBoxAvatarGallery extends PouetBox
     $this->uniqueID = "pouetbox_avatargallery";
     $this->title = "some of the currently available avatars";
   }
+  use PouetForm;
   function Render()
   {
     global $currentUser;
