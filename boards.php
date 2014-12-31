@@ -68,7 +68,7 @@ class PouetBoxBoardMain extends PouetBox
       echo "      <tr>\n";
       echo "        <td>telnet address :</td>\n";
       $url = $this->board->telnetip;
-      if (strstr($url,"://"))
+      if (strstr($url,"://")===false)
         $url = "telnet://" . $url;
       echo "        <td><a href='"._html($url)."'>"._html($this->board->telnetip)."</a></td>\n";
       echo "      </tr>\n";
