@@ -26,7 +26,7 @@ if (!$currentUser) {
   switch ($_POST["type"]) {
     case "oneliner":
       {
-        $box = new PouetBoxLatestOneliner();
+        $box = new PouetBoxIndexLatestOneliner();
         $thing = "oneline";
         $data = $_POST["message"];
         $message->returnPage = "index.php";
