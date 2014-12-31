@@ -42,11 +42,6 @@ class PouetBoxAdminEditUser extends PouetBox
   {
     global $currentUser;
     $this->fields = array(
-      "name"=>array(
-        "name"=>"sceneID login",
-        "type" => "static",
-        "value" => $this->sceneID["login"],
-      ),
       "lastLogin"=>array(
         "name"=>"last logged in",
         "type" => "static",
