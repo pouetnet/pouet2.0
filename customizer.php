@@ -50,7 +50,9 @@ class PouetBoxCustomizer extends PouetBox {
       // potential TODO: validate if data isn't bogus
       // (is it necessary? if the user breaks their own front page,
       // it's their own damn fault)
-      $this->boxes = json_decode( $data["jsonBoxData"], true );
+      $d = json_decode( $data["jsonBoxData"], true );
+      if ($d !== null)
+        $this->boxes = $d;
     }
     else
     {
