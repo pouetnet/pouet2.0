@@ -67,7 +67,10 @@ class PouetBoxBoardMain extends PouetBox
     {
       echo "      <tr>\n";
       echo "        <td>telnet address :</td>\n";
-      echo "        <td>"._html($this->board->telnetip)."</td>\n";
+      $url = $this->board->telnetip;
+      if (strstr($url,"://"))
+        $url = "telnet://" . $url;
+      echo "        <td><a href='"._html($url)."'>"._html($this->board->telnetip)."</a></td>\n";
       echo "      </tr>\n";
     }
     if ($date = renderHalfDate($this->board->started))
