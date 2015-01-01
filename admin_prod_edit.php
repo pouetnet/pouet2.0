@@ -97,6 +97,8 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     }
 
     gloperator_log( "prod", (int)$this->id, "prod_edit" );
+    
+    SQLLib::Query(sprintf_esc("delete from prods_linkcheck where prodID = %d",$this->id));
 
     return array();
   }
