@@ -36,6 +36,9 @@ function cron_CheckLinks()
     
     $a = array();
     $a["prodID"] = $prod->id;
+    $a["protocol"] = "http";
+    if (strpos($prod->download,"ftp://")===0)
+      $a["protocol"] = "ftp";
     $a["testDate"] = date("Y-m-d H:i:s");
     $a["returnCode"] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     $a["returnContentType"] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
