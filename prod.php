@@ -51,6 +51,8 @@ class PouetBoxProdMain extends PouetBox {
     }
 
     $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
+    
+    $this->linkCheck = SQLLib::SelectRow(sprintf_esc("SELECT * FROM prods_linkcheck where prodID = %d",$this->id));
 
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
@@ -392,7 +394,25 @@ document.observe("dom:loaded",function(){
   }
   function RenderLinks() {
     echo "<ul>\n";
-    echo "<li id='mainDownload'>[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]</li>\n";
+    echo "<li id='mainDownload'>";
+    if ($this->linkCheck)
+    {
+      if ($this->linkCheck->returnCode === 0 
+      || $this->linkCheck->returnCode >= 400 && $this->linkCheck->returnCode <= 599)
+      {
+        echo "<span class='brokenLink error'>Link broken!</span> ";
+      }
+      /*
+      TODO: not sure about this
+      else if (strstr($this->linkCheck->returnContentType,"octet-stream") === false)
+      {
+        echo " <span class='brokenLink error'>Link broken!</span>";
+      }
+      */
+    }
+    echo "[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]";
+    echo "</li>\n";
+    
     foreach ($this->downloadLinks as $link)
     {
       echo "<li".($link->id?" id='".$link->id."'":"").">[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
