@@ -598,6 +598,9 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     $a = array();
     $a["download"] = $reqData["downloadLink"];
     SQLLib::UpdateRow("prods",$a,"id=".(int)$itemID);
+    
+    SQLLib::Query(sprintf_esc("delete from prods_linkcheck where prodID = %d",$itemID));
+    
     return array();
   }
 };
