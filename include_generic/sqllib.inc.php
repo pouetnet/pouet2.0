@@ -167,6 +167,14 @@ class SQLLib {
     SQLLib::Query($sql);
   }
 
+  static function UpdateOrInsertRow($table,$o,$where) 
+  {
+    if (SQLLib::SelectRow(sprintf("SELECT * FROM %s WHERE %s",$table,$where)))
+      return SQLLib::UpdateRow($table,$o,$where);
+    else
+      return SQLLib::InsertRow($table,$o);
+  }
+  
   static function StartTransaction() 
   {
     mysqli_autocommit(SQLLib::$link, FALSE);
