@@ -22,6 +22,9 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     if (!$message)
       return array("not too meaningful, is it...");
 
+    if (strstr($message,"tinybrain") !== false)
+      return array("</spam>");
+
     $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY addedDate DESC LIMIT 1");
 
     if ($r->who == $currentUser->id)
