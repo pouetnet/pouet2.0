@@ -19,9 +19,9 @@ function cron_CheckLinks()
   $s->AddJoin("left","prods_linkcheck","prods_linkcheck.prodID = prods.id");
   $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 30");
   $s->AddOrder("RAND()");
-  $s->SetLimit(5);
+  $s->SetLimit( 20 );
   $prods = SQLLib::SelectRows( $s->GetQuery() );
-  $out = "";
+  $out = array();
   foreach($prods as $prod)
   {
     $ch = curl_init();
@@ -43,10 +43,11 @@ function cron_CheckLinks()
     
     curl_close($ch);
     
-    $out .= "\n[".$prod->id."] " . $prod->download . " >> ". $a["returnCode"];
+    $out[] = $a["returnCode"];
+    //$out .= "\n[".$prod->id."] " . $prod->download . " >> ". $a["returnCode"];
     sleep(5);
   }
-  return $out;
+  return implode(", ",$out);
 }
 
 switch($argv[1])
