@@ -74,7 +74,8 @@ class RedisStorage implements IEphemeralStorage
   }
   function __construct()
   {
-    $this->redis = new Redis("localhost");
+    $this->redis = new Redis();
+    $this->redis->connect('localhost');
   }
   function get($key)
   {
