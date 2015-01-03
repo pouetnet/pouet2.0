@@ -3,7 +3,7 @@
 //$r = SQLLib::SelectRow("select * from usersettings where id = 11057");
 //echo serialize($r);
 
-$TEST = array(
+$DEFAULT_USERSETTINGS = (object)array(
    'topicposts' => 25,
    'bbsbbstopics' => 25,
    'prodlistprods' => 25,
@@ -37,7 +37,4 @@ $TEST = array(
       '"rightbar":[{"box":"SearchBox","limit":"1"},{"box":"Stats","limit":"1"},{"box":"AffilButton","limit":"1"},{"box":"LatestComments","limit":"5"},{"box":"Watchlist","limit":"5"},{"box":"LatestParties","limit":"5"},{"box":"UpcomingParties"},{"box":"TopGlops","limit":"10"}]'.
     '}}',
 );
-$DEFAULT_USERSETTINGS = new stdClass();
-foreach($TEST as $k=>$v) $DEFAULT_USERSETTINGS->$k = $v;
-
 ?>
