@@ -3,7 +3,6 @@ require_once("bootstrap.inc.php");
 require_once("include_generic/recaptchalib.php");
 require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
-require_once("include_pouet/default_usersettings.php");
 
 $COUNTRIES = array_merge(array(""),$COUNTRIES);
 
@@ -179,41 +178,8 @@ class PouetBoxAccount extends PouetBox
       $glop *= 2;
     }
 
-    global $DEFAULT_USERSETTINGS;
     global $namesNumeric;
     global $namesSwitch;
-
-    $this->fieldsSettings = array();
-    foreach(get_object_vars($DEFAULT_USERSETTINGS) as $k=>$v)
-    {
-      $this->fieldsSettings[$k] = array();
-      $this->fieldsSettings[$k]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->$k : $v;
-      if ($namesNumeric[$k])
-      {
-        $this->fieldsSettings[$k]["name"] = $namesNumeric[$k];
-        $this->fieldsSettings[$k]["type"] = "number";
-        $this->fieldsSettings[$k]["min"] = strpos($k,"index") === 0 ? 0 : 1;
-        $this->fieldsSettings[$k]["max"] = POUET_CACHE_MAX;
-      }
-      if ($namesSwitch[$k])
-      {
-        $this->fieldsSettings[$k]["name"] = $namesSwitch[$k];
-        $this->fieldsSettings[$k]["type"] = "select";
-        $this->fieldsSettings[$k]["assoc"] = true;
-        $this->fieldsSettings[$k]["fields"] = array(0=>"hidden",1=>"displayed");
-      }
-    }
-    // exceptions!
-    $this->fieldsSettings["topicposts"]["min"] = 1;
-    $this->fieldsSettings["indexojnews"]["max"] = 10;
-    $this->fieldsSettings["displayimages"]["fields"] = array(0=>"links",1=>"images");
-    $this->fieldsSettings["indexbbsnoresidue"]["fields"] = array(0=>"shown",1=>"hidden");
-
-    $this->fieldsSettings["prodcomments"]["name"] = "prod page - number of comments";
-    $this->fieldsSettings["prodcomments"]["type"] = "select";
-    $this->fieldsSettings["prodcomments"]["assoc"] = true;
-    $this->fieldsSettings["prodcomments"]["fields"] = array(-1=>"all",0=>"hide",5=>"5",10=>"10",25=>"25",50=>"50",100=>"100");
-    $this->fieldsSettings["prodcomments"]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->prodcomments : $DEFAULT_USERSETTINGS->prodcomments;
 
     if ($_POST)
     {
@@ -221,8 +187,6 @@ class PouetBoxAccount extends PouetBox
       {
         if ($this->fieldsPouet[$k]) $this->fieldsPouet[$k]["value"] = $v;
         if ($this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
-        //if ($this->fieldsSceneID[$k]) $this->fieldsSceneID[$k]["value"] = $v;
-        if ($this->fieldsSettings[$k]) $this->fieldsSettings[$k]["value"] = $v;
       }
     }
 
@@ -292,30 +256,6 @@ class PouetBoxAccount extends PouetBox
 
     global $avatars;
 
-    $sql = array();
-    foreach ($this->fieldsSettings as $k=>$v)
-    {
-      if ($v["type"] == "number")
-      {
-        $sql[$k] = min($v["max"], max($v["min"], (int)($data[$k]) ));
-      }
-      else
-      {
-        $sql[$k] = (int)$data[$k];
-      }
-      $_SESSION["settings"]->$k = (int)$sql[$k];
-    }
-    if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id = %d",(int)get_login_id())))
-    {
-      SQLLib::UpdateRow("usersettings",$sql,"id=".(int)get_login_id());
-    }
-    else
-    {
-      $sql["id"] = (int)get_login_id();
-      SQLLib::InsertRow("usersettings",$sql);
-    }
-
-
     global $success;
     if (!$errors) $success = "modifications complete!";
 
@@ -369,10 +309,6 @@ class PouetBoxAccount extends PouetBox
       $this->formifier->RenderForm( $this->fieldsCDC );
       echo "  </div>\n";
     }
-    echo "  <h2>sitewide settings</h2>\n";
-    echo "  <div class='accountsection content' id='customizer'>\n";
-    $this->formifier->RenderForm( $this->fieldsSettings );
-    echo "  </div>\n";
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
   }
@@ -497,11 +433,6 @@ document.observe("dom:loaded",function(){
   updateAvatar();
   $("avatarlist").observe("change",updateAvatar);
   $("avatarlist").observe("keyup",updateAvatar);
-
-  var s = new Element("div",{"class":"content","style":"padding:10px;text-align:center;cursor:pointer;cursor:hand;color:#9FCFFF;"}).update("advanced poueteers only - click here to show");
-  s.observe("click",function(){ $("customizer").show(); s.hide(); });
-  $("customizer").parentNode.insertBefore(s,$("customizer"));
-  $("customizer").hide();
 
   for (var i=1; i<10; i++)
   {
