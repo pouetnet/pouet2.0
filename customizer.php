@@ -528,6 +528,9 @@ class PouetBoxCustomizerSitewide extends PouetBox
   use PouetForm;
   function Commit($data)
   {
+    global $currentUser;
+    global $currentUserSettings;
+    global $ephemeralStorage;
     $sql = array();
     foreach ($this->fieldsSettings as $k=>$v)
     {
@@ -550,6 +553,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
       $sql["id"] = (int)get_login_id();
       SQLLib::InsertRow("usersettings",$sql);
     }
+    $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );
   }
   function RenderContent()
   {
