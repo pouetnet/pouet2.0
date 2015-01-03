@@ -339,7 +339,7 @@ CREATE TABLE `compotypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `componame` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -853,6 +853,24 @@ CREATE TABLE `prods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `prods_linkcheck`
+--
+
+DROP TABLE IF EXISTS `prods_linkcheck`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prods_linkcheck` (
+  `prodID` int(10) NOT NULL,
+  `protocol` varchar(5) NOT NULL,
+  `returnCode` smallint(6) NOT NULL,
+  `returnContentType` varchar(255) NOT NULL,
+  `testDate` datetime NOT NULL,
+  KEY `prodID` (`prodID`),
+  CONSTRAINT `prods_linkcheck_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `prods_platforms`
 --
 
@@ -1046,6 +1064,7 @@ CREATE TABLE `usersettings` (
   `displayimages` int(1) NOT NULL DEFAULT '1',
   `indexbbsnoresidue` tinyint(4) NOT NULL DEFAULT '1',
   `prodcomments` int(11) NOT NULL DEFAULT '-1',
+  `customizerJSON` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
