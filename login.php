@@ -8,6 +8,7 @@ if ($_GET["error"])
 
 if (!$_GET["code"])
 {
+  $_SESSION["__return"] = $_GET["return"];
   $sceneID->PerformAuthRedirect();
   exit();
 }
@@ -16,6 +17,9 @@ $rv = null;
 $err = "";
 try
 {
+  $returnURL = $_SESSION["__return"];
+  unset($_SESSION["__return"]);
+  
   $sceneID->ProcessAuthResponse();
 
   unset($_SESSION["user"]);
@@ -56,7 +60,7 @@ try
   $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$user->id));
   $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
 
-  redirect( basename( $_POST["return"] ? $_POST["return"] : "index.php" ) );
+  redirect( basename( $returnURL ? $returnURL : "index.php" ) );
   
 }
 catch(SceneID3Exception $e) 
