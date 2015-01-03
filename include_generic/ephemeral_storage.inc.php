@@ -101,6 +101,9 @@ foreach(array(
   ) as $cls)
 {
   if ($cls::available())
+  {
     $ephemeralStorage = new $cls();
+    break;
+  }
 }
 ?>
