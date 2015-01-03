@@ -19,7 +19,6 @@ try
   $sceneID->ProcessAuthResponse();
 
   unset($_SESSION["user"]);
-  unset($_SESSION["settings"]);
 
   session_regenerate_id(true);
 
@@ -53,9 +52,11 @@ try
   }
 
   $_SESSION["user"] = $user;
-  $_SESSION["settings"] = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$_SESSION["user"]->id));
+  
+  $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$user->id));
+  $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
 
-  redirect( basename($_POST["return"]?$_POST["return"]:"index.php") );
+  redirect( basename( $_POST["return"] ? $_POST["return"] : "index.php" ) );
   
 }
 catch(SceneID3Exception $e) 

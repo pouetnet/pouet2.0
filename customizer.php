@@ -163,12 +163,18 @@ class PouetBoxCustomizer extends PouetBox {
     $customizer["frontpage"] = $this->boxes;
 
     $json = json_encode($customizer);
-
+    
+    global $currentUser;
+    global $currentUserSettings;
+    global $ephemeralStorage;
+    
     if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id=%d",(int)$currentUser->id)))
       SQLLib::UpdateRow("usersettings",array("customizerJSON"=>$json),"id=".(int)$currentUser->id);
     else
       SQLLib::InsertRow("usersettings",array("customizerJSON"=>$json,"id"=>(int)$currentUser->id));
-    $_SESSION["settings"]->customizerJSON = $json;
+    $currentUserSettings->customizerJSON = $json;
+    
+    $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );
     
     return array();
   }
@@ -470,12 +476,13 @@ class PouetBoxCustomizerSitewide extends PouetBox
     
     $this->formifier = new Formifier();
     
+    global $currentUserSettings;
     $this->fieldsSettings = array();
     $a = array_merge($this->namesNumeric,$this->namesSwitch);
     foreach($a as $k=>$v)
     {
       $this->fieldsSettings[$k] = array();
-      $this->fieldsSettings[$k]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->$k : $v;
+      $this->fieldsSettings[$k]["value"] = $currentUserSettings ? $currentUserSettings->$k : $v;
       if ($this->namesNumeric[$k])
       {
         $this->fieldsSettings[$k]["name"] = $this->namesNumeric[$k];
@@ -500,7 +507,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
     $this->fieldsSettings["prodcomments"]["type"] = "select";
     $this->fieldsSettings["prodcomments"]["assoc"] = true;
     $this->fieldsSettings["prodcomments"]["fields"] = array(-1=>"all",0=>"hide",5=>"5",10=>"10",25=>"25",50=>"50",100=>"100");
-    $this->fieldsSettings["prodcomments"]["value"] = $_SESSION["settings"] ? $_SESSION["settings"]->prodcomments : $DEFAULT_USERSETTINGS->prodcomments;
+    $this->fieldsSettings["prodcomments"]["value"] = $currentUserSettings ? $currentUserSettings->prodcomments : $DEFAULT_USERSETTINGS->prodcomments;
 
 
     if ($_POST)
@@ -532,7 +539,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
       {
         $sql[$k] = (int)$data[$k];
       }
-      $_SESSION["settings"]->$k = (int)$sql[$k];
+      $currentUserSettings->$k = (int)$sql[$k];
     }
     if (SQLLib::SelectRow(sprintf_esc("select id from usersettings where id = %d",(int)get_login_id())))
     {
@@ -567,6 +574,8 @@ class PouetBoxCustomizerPanic extends PouetBox
   function Commit($data)
   {
     global $currentUser;
+    global $currentUserSettings;
+    global $ephemeralStorage;
     
     require_once("include_pouet/default_usersettings.php");
     $a = get_object_vars( $DEFAULT_USERSETTINGS );
@@ -575,7 +584,8 @@ class PouetBoxCustomizerPanic extends PouetBox
       SQLLib::UpdateRow("usersettings",$a,"id=".(int)$currentUser->id);
     else
       SQLLib::InsertRow("usersettings",array_merge(array("id"=>(int)$currentUser->id),$a) );
-    $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
+    $currentUserSettings = $DEFAULT_USERSETTINGS;
+    $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );
 
     return array();
   }

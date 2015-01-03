@@ -393,11 +393,8 @@ function get_login_level()
 
 function get_setting( $s )
 {
-  global $DEFAULT_USERSETTINGS;
-  if ($_SESSION["settings"])
-    return $_SESSION["settings"]->$s;
-  else
-    return $DEFAULT_USERSETTINGS->$s;
+  global $currentUserSettings;
+  return $currentUserSettings->$s;
 }
 
 function find_screenshot( $id )

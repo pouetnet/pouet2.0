@@ -15,6 +15,7 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/formifier.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/LastRss.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/rewriter.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/ephemeral_storage.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes.inc.php");
@@ -77,9 +78,22 @@ $_SESSION["keepalive"] = str_pad("",rand(1,10),"x") . rand(1,10000);
 
 $timer["page"]["start"] = microtime_float();
 
-if (!$_SESSION["settings"])
+if ($currentUser)
+{
+  if ($ephemeralStorage->has( "settings:".$currentUser->id ))
+  {
+    $currentUserSettings = $ephemeralStorage->get( "settings:".$currentUser->id );
+  }
+  else
+  {
+    require_once("include_pouet/default_usersettings.php");
+    $currentUserSettings = $DEFAULT_USERSETTINGS;
+    $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );
+  }
+}
+else
 {
   require_once("include_pouet/default_usersettings.php");
-  $_SESSION["settings"] = $DEFAULT_USERSETTINGS;
+  $currentUserSettings = $DEFAULT_USERSETTINGS;
 }
 ?>
