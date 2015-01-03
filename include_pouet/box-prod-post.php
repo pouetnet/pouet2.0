@@ -117,7 +117,7 @@ class PouetBoxProdPost extends PouetBox {
     } else {
       if (!$currentUser->CanPostInProdComments())
         return;
-      echo "<form action='add.php' method='post'>\n";
+      echo "<form action='add.php' method='post' id='frmProdComment'>\n";
 
       $csrf = new CSRFProtect();
       $csrf->PrintToken();

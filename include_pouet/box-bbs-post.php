@@ -69,7 +69,7 @@ class PouetBoxBBSPost extends PouetBox {
     if (!$currentUser || !$currentUser->CanPostInBBS())
       return;
 
-    echo "<form action='add.php' method='post'>\n";
+    echo "<form action='add.php' method='post' id='frmBBSPost'>\n";
 
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
