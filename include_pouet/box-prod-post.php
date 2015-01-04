@@ -61,26 +61,26 @@ class PouetBoxProdPost extends PouetBox {
       default: $vote = 0; break;
     }
 
-  	$a = array();
-  	$a["addedDate"] = date("Y-m-d H:i:s");
-  	$a["who"] = get_login_id();
-  	$a["which"] = $this->prod;
-  	$a["comment"] = $message;
-  	$a["rating"] = $vote;
+    $a = array();
+    $a["addedDate"] = date("Y-m-d H:i:s");
+    $a["who"] = get_login_id();
+    $a["which"] = $this->prod;
+    $a["comment"] = $message;
+    $a["rating"] = $vote;
     SQLLib::InsertRow("comments",$a);
 
-		$rulez=0;
-		$piggie=0;
-		$sucks=0;
-		$total=0;
-		$checktable = array();
+    $rulez=0;
+    $piggie=0;
+    $sucks=0;
+    $total=0;
+    $checktable = array();
 
     $r = SQLLib::SelectRows("SELECT rating,who FROM comments WHERE which=".$this->prod);
     foreach ($r as $t)
-			if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
-			  $checktable[$t->who] = $t->rating;
+      if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
+        $checktable[$t->who] = $t->rating;
 
-		foreach($checktable as $k=>$v)
+    foreach($checktable as $k=>$v)
     {
       if($v==1) $rulez++;
       else if($v==-1) $sucks++;
@@ -88,16 +88,16 @@ class PouetBoxProdPost extends PouetBox {
       $total++;
     }
 
-		if ($total!=0)
-		  $avg = sprintf("%.2f",(float)($rulez*1+$sucks*-1)/(float)$total);
-	  else
-	    $avg = "0.00";
+    if ($total!=0)
+      $avg = sprintf("%.2f",(float)($rulez*1+$sucks*-1)/(float)$total);
+    else
+      $avg = "0.00";
 
-  	$a = array();
-  	$a["voteup"] = $rulez;
-  	$a["votepig"] = $piggie;
-  	$a["votedown"] = $sucks;
-  	$a["voteavg"] = $avg;
+    $a = array();
+    $a["voteup"] = $rulez;
+    $a["votepig"] = $piggie;
+    $a["votedown"] = $sucks;
+    $a["voteavg"] = $avg;
     SQLLib::UpdateRow("prods",$a,"id=".$this->prod);
 
     @unlink("cache/pouetbox_latestcomments.cache");
