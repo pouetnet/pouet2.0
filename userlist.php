@@ -19,18 +19,16 @@ class PouetBoxUserlist extends PouetBox
 
     $s = new BM_Query("users");
 
-    $dir = "DESC";
-    if ($_GET["reverse"])
-      $dir = "ASC";
+    $dir = !$_GET["reverse"];
     switch($_GET["order"])
     {
-      case "nickname": $s->AddOrder("users.nickname ".$dir); break;
-      case "age": $s->AddOrder("users.registerDate ".$dir); break;
-      case "level": $s->AddOrder("users.level ".$dir); break;
+      case "nickname": $s->AddOrder("users.nickname ".($dir?"ASC":"DESC")); break;
+      case "age": $s->AddOrder("users.registerDate ".($dir?"ASC":"DESC")); break;
+      case "level": $s->AddOrder("users.level ".($dir?"ASC":"DESC")); break;
       case "glops":
-      default: $s->AddOrder("users.glops ".$dir); break;
+      default: $s->AddOrder("users.glops ".($dir?"DESC":"ASC")); break;
     }
-    $s->AddOrder("users.id ".$dir);
+    $s->AddOrder("users.id ".($dir?"ASC":"DESC"));
 
     $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
 
