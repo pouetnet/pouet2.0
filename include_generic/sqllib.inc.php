@@ -278,9 +278,9 @@ class SQLSelect
   }
   function SetLimit( $limit, $offset = NULL ) 
   {
-    $this->limit = $limit;
+    $this->limit = (int)$limit;
     if ($offset !== NULL)
-      $this->offset = $offset;
+      $this->offset = (int)$offset;
   }
   function GetQuery()
 	{
