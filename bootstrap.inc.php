@@ -95,7 +95,7 @@ if ($currentUser)
   {
     $currentUserSettings = $ephemeralStorage->get( "settings:".$currentUser->id );
   }
-  else
+  if (!$currentUserSettings)
   {
     require_once("include_pouet/default_usersettings.php");
     $currentUserSettings = $DEFAULT_USERSETTINGS;
