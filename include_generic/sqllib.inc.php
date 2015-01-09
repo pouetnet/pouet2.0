@@ -5,6 +5,23 @@ $SQLLIB_QUERIES = array();
 
 $SQLLIB_ARRAYS_CLEANED = false;
 
+class SQLLibException extends Exception 
+{ 
+  public function __construct($message = null, $code = 0, $query = "")
+  {
+    parent::__construct($message, $code);
+    $this->query = $query;
+  }
+  public function __toString()
+  {
+    $e .= date("Y-m-d H:i:s");
+    $e .= "\nError: ".$this->getMessage()."\n";
+    $e .= "\nQuery: ".$this->query."\n";
+    $e .= "\nTrace: ".$this->getTraceAsString();
+    return $e;
+  }
+}
+
 class SQLLib {
   public static $link;
   public static $debugMode = false;
@@ -45,14 +62,14 @@ class SQLLib {
     {
       $start = microtime(true);
       $r = @mysqli_query(SQLLib::$link,$cmd);
-      if(!$r) throw new Exception("<pre>\nMySQL ERROR:\nError: ".mysqli_error(SQLLib::$link)."\nQuery: ".$cmd);
+      if(!$r) throw new SQLLibException(mysqli_error(SQLLib::$link),0,$cmd);
       $end = microtime(true);
       $SQLLIB_QUERIES[$cmd] = $end - $start;
     }
     else
     {
       $r = @mysqli_query(SQLLib::$link,$cmd);
-      if(!$r) throw new Exception("<pre>\nMySQL ERROR:\nError: ".mysqli_error(SQLLib::$link)."\nQuery: ".$cmd);
+      if(!$r) throw new SQLLibException(mysqli_error(SQLLib::$link),0,$cmd);
       $SQLLIB_QUERIES[] = "*";
     }
 

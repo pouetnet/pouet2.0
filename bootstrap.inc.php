@@ -69,6 +69,17 @@ if (get_login_id())
   }
 }
 
+if (defined("POUET_EXCEPTION_LOG"))
+{
+  set_exception_handler( function($ex){
+    if ($f = fopen( POUET_EXCEPTION_LOG, "a" ))
+    {
+      fwrite( $f, str_pad("\n",60,"=") . "\n" . $ex );
+      fclose($f);
+    }
+  } );
+}
+
 if ($currentUser && $currentUser->IsBanned())
 {
   $_SESSION = $currentUser = NULL;
