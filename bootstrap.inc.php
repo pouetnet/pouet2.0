@@ -97,6 +97,12 @@ if ($currentUser)
   }
   if (!$currentUserSettings)
   {
+    $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$user->id));
+    if ($currentUserSettings)
+      $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
+  }
+  if (!$currentUserSettings)
+  {
     require_once("include_pouet/default_usersettings.php");
     $currentUserSettings = $DEFAULT_USERSETTINGS;
     $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );

@@ -58,7 +58,8 @@ try
   $_SESSION["user"] = $user;
   
   $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$user->id));
-  $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
+  if ($currentUserSettings)
+    $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
 
   redirect( basename( $returnURL ? $returnURL : "index.php" ) );
   
