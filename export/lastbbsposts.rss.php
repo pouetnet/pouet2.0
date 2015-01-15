@@ -7,7 +7,7 @@ $limit = $_GET["howmany"] ? $_GET["howmany"] : 10;
 $limit = min($limit,25);
 $limit = max($limit,5);
 
-$p = new PouetBoxLatestBBS();
+$p = new PouetBoxIndexLatestBBS();
 $p->Load(true);
 
 $rss = new PouetRSS();
