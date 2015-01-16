@@ -97,9 +97,9 @@ if ($currentUser)
   }
   if (!$currentUserSettings)
   {
-    $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$user->id));
+    $currentUserSettings = SQLLib::SelectRow(sprintf_esc("select * from usersettings where id=%d",$currentUser->id));
     if ($currentUserSettings)
-      $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
+      $ephemeralStorage->set( "settings:".$currentUser->id, $currentUserSettings );
   }
   if (!$currentUserSettings)
   {
