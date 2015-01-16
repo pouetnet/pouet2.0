@@ -69,4 +69,5 @@ class PouetBoxIndexLatestAdded extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "LatestAdded";
 ?>

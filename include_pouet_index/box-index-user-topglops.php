@@ -60,4 +60,5 @@ class PouetBoxIndexTopGlops extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "TopGlops";
 ?>

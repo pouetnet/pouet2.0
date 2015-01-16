@@ -60,4 +60,5 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "TopMonth";
 ?>

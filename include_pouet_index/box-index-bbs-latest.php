@@ -77,4 +77,5 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "LatestBBS";
 ?>

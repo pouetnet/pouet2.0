@@ -44,4 +44,5 @@ class PouetBoxIndexCDC extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "CDC";
 ?>

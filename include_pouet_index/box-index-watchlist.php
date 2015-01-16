@@ -88,4 +88,5 @@ class PouetBoxIndexWatchlist extends PouetBox {
   }
 };
 
+$indexAvailableBoxes[] = "Watchlist";
 ?>

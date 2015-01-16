@@ -155,4 +155,5 @@ $("onelinermsg").observe("focus",function(){
   }
 };
 
+$indexAvailableBoxes[] = "LatestOneliner";
 ?>

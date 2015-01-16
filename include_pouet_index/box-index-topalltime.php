@@ -59,4 +59,5 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "TopAlltime";
 ?>

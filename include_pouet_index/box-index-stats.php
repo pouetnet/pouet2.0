@@ -50,4 +50,5 @@ class PouetBoxIndexStats extends PouetBoxCachable {
 
 };
 
+$indexAvailableBoxes[] = "Stats";
 ?>

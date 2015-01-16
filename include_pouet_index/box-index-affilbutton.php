@@ -33,4 +33,5 @@ class PouetBoxIndexAffilButton extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "AffilButton";
 ?>

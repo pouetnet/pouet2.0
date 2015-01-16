@@ -75,4 +75,5 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "LatestComments";
 ?>

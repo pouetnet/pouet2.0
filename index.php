@@ -1,22 +1,8 @@
 <?
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-login.php");
-require_once("include_pouet_index/box-index-bbs-latest.php");
-require_once("include_pouet_index/box-index-cdc.php");
-require_once("include_pouet_index/box-index-watchlist.php");
-require_once("include_pouet_index/box-index-latestadded.php");
-require_once("include_pouet_index/box-index-latestreleased.php");
-require_once("include_pouet_index/box-index-latestcomments.php");
-require_once("include_pouet_index/box-index-latestparties.php");
-require_once("include_pouet_index/box-index-upcomingparties.php");
-require_once("include_pouet_index/box-index-topmonth.php");
-require_once("include_pouet_index/box-index-topalltime.php");
-require_once("include_pouet_index/box-index-news.php");
-require_once("include_pouet_index/box-index-searchbox.php");
-require_once("include_pouet_index/box-index-affilbutton.php");
-require_once("include_pouet_index/box-index-stats.php");
-require_once("include_pouet_index/box-index-user-topglops.php");
-require_once("include_pouet_index/box-index-oneliner-latest.php");
+
+require_once("include_pouet_index/index_bootstrap.inc.php");
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");

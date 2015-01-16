@@ -83,4 +83,5 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "UpcomingParties";
 ?>

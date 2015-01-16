@@ -42,4 +42,5 @@ class PouetBoxIndexSearchBox extends PouetBoxCachable {
 
 };
 
+$indexAvailableBoxes[] = "SearchBox";
 ?>

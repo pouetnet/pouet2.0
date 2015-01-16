@@ -70,4 +70,5 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
   }
 };
 
+$indexAvailableBoxes[] = "LatestParties";
 ?>
