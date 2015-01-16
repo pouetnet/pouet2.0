@@ -21,8 +21,10 @@ class PouetBoxIndexRandom extends PouetBox {
   }
 
   function LoadFromDB() {
+    $id = SQLLib::SelectRow("SELECT prods.id as id FROM prods ORDER BY RAND() LIMIT 10")->id;
+    
     $s = new BM_Query("prods");
-    $s->AddOrder("rand()");
+    $s->AddWhere(sprintf_esc("prods.id = %d",$id));
     $s->SetLimit(1);
     $data = $s->perform();
     $this->data = reset($data);
