@@ -9,7 +9,7 @@ class PouetBoxCustomizer extends PouetBox {
   function PouetBoxCustomizer() {
     parent::__construct();
     $this->uniqueID = "pouetbox_customizer";
-    $this->title = "custom&ouml;olobstormaziabletic 7004+ super MK2!";
+    $this->title = "custom\xC3\xB6olobstormaziabletic 7004+ super MK2!";
   }
 
   function LoadFromDB() 
@@ -582,9 +582,11 @@ document.observe("dom:loaded",function(){
 $form = new PouetFormProcessor();
 $form->SetSuccessURL("customizer.php",true);
 
-$form->Add( "customizer", new PouetBoxCustomizer() );
+$form->Add( "customizer", $box = new PouetBoxCustomizer() );
 $form->Add( "customizersite", new PouetBoxCustomizerSitewide() );
 $form->Add( "customizerpanic", new PouetBoxCustomizerPanic() );
+
+$TITLE = $box->title;
 
 if ($currentUser)
   $form->Process();
