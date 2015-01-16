@@ -24,15 +24,16 @@ class PouetBoxIndexRandom extends PouetBox {
     $s = new BM_Query("prods");
     $s->AddOrder("rand()");
     $s->SetLimit(1);
-    list($this->data) = $s->perform();
+    $data = $s->perform();
+    $this->data = reset($data);
 
-    $a = array(&$this->data->prod);
+    $a = array(&$this->data);
     PouetCollectPlatforms($a);
   }
 
   function RenderContent() {
     if ($this->data)
-      $this->data->prod->RenderAsEntry();
+      $this->data->RenderAsEntry();
   }
   function RenderFooter() {
     echo "</div>\n";
@@ -40,5 +41,5 @@ class PouetBoxIndexRandom extends PouetBox {
   }
 };
 
-//$indexAvailableBoxes[] = "Random";
+$indexAvailableBoxes[] = "Random";
 ?>
