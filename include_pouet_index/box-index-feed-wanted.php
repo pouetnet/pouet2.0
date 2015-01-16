@@ -18,6 +18,8 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
     $this->rss->setItemTags(array(
       "link",
       "title",
+      "wanted:demand",
+      "wanted:area",
     ));
     
     $this->limit = 5;
