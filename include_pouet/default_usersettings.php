@@ -30,7 +30,7 @@ $DEFAULT_USERSETTINGS = (object)array(
   '{"frontpage":{'.
     '"leftbar":[{"box":"Login"},{"box":"CDC","limit":"1"},{"box":"LatestAdded","limit":"5"},{"box":"LatestReleased","limit":"5"},{"box":"TopMonth","limit":"10"},{"box":"TopAlltime","limit":"10"}],'.
     '"middlebar":[{"box":"LatestOneliner","limit":"5"},{"box":"LatestBBS","limit":"10","hideResidue":true},{"box":"NewsBoxes","limit":"5"}],'.
-    '"rightbar":[{"box":"SearchBox","limit":"1"},{"box":"Stats","limit":"1"},{"box":"AffilButton","limit":"1"},{"box":"LatestComments","limit":"5"},{"box":"Watchlist","limit":"5"},{"box":"LatestParties","limit":"5"},{"box":"UpcomingParties"},{"box":"TopGlops","limit":"10"}]'.
+    '"rightbar":[{"box":"SearchBox","limit":"1"},{"box":"Stats","limit":"1"},{"box":"AffilButton","limit":"1"},{"box":"LatestComments","limit":"5"},{"box":"Watchlist","limit":"5"},{"box":"LatestParties","limit":"5"},{"box":"UpcomingParties"},{"box":"FeedWanted"},{"box":"TopGlops","limit":"10"}]'.
   '}}',
 );
 ?>
