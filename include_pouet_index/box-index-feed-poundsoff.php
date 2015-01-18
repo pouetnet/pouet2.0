@@ -10,6 +10,8 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_feedpoundsoff";
     $this->title = "pounds-off !";
 
+    $this->cacheTime = 60*60;
+
     $this->limit = 5;
   }
 
