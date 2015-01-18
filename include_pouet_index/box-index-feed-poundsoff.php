@@ -46,6 +46,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
       if($this->jsonData[$i]['status'] == "lost"   && $this->jsonData[$i]['intent'] == "lose weight") $p = "rulez";
       if($this->jsonData[$i]['status'] == "gained" && $this->jsonData[$i]['intent'] == "gain weight") $p = "rulez";
       if($this->jsonData[$i]['status'] == "hold"   && $this->jsonData[$i]['intent'] == "hold weight") $p = "rulez";
+      if($this->jsonData[$i]['status'] == "hold"   && $this->jsonData[$i]['intent'] != "hold weight") $p = "isok";
       echo "<img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />\n";
       echo "<a href='"._html($this->jsonData[$i]['url'])."'>"._html($this->jsonData[$i]['name'])."</a> "._html(strip_tags($this->jsonData[$i]['message']));
       echo "</li>\n";
