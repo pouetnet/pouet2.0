@@ -7,6 +7,7 @@ Installation notes
 -----------------
 
 1. Make sure you create a credentials file: https://github.com/pouetnet/pouet2.0/blob/master/include_generic/credentials.inc.php.dist
+2. Load the pouet.sql file into a local SQL db
 
 Credits (of sort)
 -----------------
