@@ -8,7 +8,7 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_feedpouettwitter";
-    $this->title = "twitter !";
+    $this->title = "twitter @pouetdotnet";
 
     //$this->cacheTime = 60*60;
 
