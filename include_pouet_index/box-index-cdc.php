@@ -34,7 +34,7 @@ class PouetBoxIndexCDC extends PouetBoxCachable {
 
   function RenderContent() {
     //return $this->prod->RenderLink() . " $ " . $this->prod->RenderGroupsShort();
-    if ($this->data)
+    if ($this->data && $this->data->prod)
       $this->data->prod->RenderAsEntry();
   }
   function RenderFooter() {
