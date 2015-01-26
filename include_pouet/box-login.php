@@ -51,5 +51,4 @@ class PouetBoxLogin extends PouetBox {
 
 };
 
-class PouetBoxIndexLogin extends PouetBoxLogin {};
 ?>
