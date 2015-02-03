@@ -10,7 +10,7 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
     $this->uniqueID = "pouetbox_feedpouettwitter";
     $this->title = "twitter @pouetdotnet";
 
-    //$this->cacheTime = 60*60;
+    $this->cacheTime = 60*60;
 
     $this->rss = new lastRSS(array(
       "cacheTime" => 5 * 60, // in seconds
