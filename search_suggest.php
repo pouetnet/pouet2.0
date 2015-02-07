@@ -8,6 +8,6 @@ foreach($r as $o)
   $res[1][] = $o->name;
   $res[2][] = $o->type.($o->party_year?", ".$o->party_year:"");
 }
-header("Content-type: application/json; charset=utf-8")
+header("Content-type: application/json; charset=utf-8");
 echo json_encode($res);
 ?>
