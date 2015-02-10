@@ -83,11 +83,16 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   }
 
   function RenderBody() {
-    echo "<ul class='boxlist'>\n";
+    echo "<ul class='boxlist boxlisttable'>\n";
     for($i=0; $i < min( count($this->jsonData),$this->limit); $i++)
     {
       echo "<li>\n";
-      echo "<a href='https://twitter.com/pouetdotnet/status/"._html($this->jsonData[$i]->id_str)."'>"._html(strip_tags($this->jsonData[$i]->text))."</a> ";
+      $tweet = $this->jsonData[$i];
+      if ($tweet->retweeted_status)
+        $tweet = $tweet->retweeted_status;
+        
+      echo "<span><img src='"._html($tweet->user->profile_image_url_https)."' width='16'></span>";
+      echo "<span><a href='https://twitter.com/pouetdotnet/status/"._html($tweet->id_str)."'>"._html(strip_tags($tweet->text))."</a></span>";
       echo "</li>\n";
     }
     echo "</ul>\n";
