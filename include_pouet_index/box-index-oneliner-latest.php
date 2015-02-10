@@ -136,7 +136,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
       echo "    <input type='hidden' name='type' value='oneliner'>\n";
 
       // we dont use placeholder="" because we want people to be able to post the default nonsense
-      echo "    <input type='text' name='message' value='"._html($funnytext)."' id='onelinermsg'/>\n";
+      echo "    <input type='text' name='message' value='"._html($funnytext)."' id='onelinermsg' maxlength='300'/>\n";
       echo "    <input type='submit' value='Submit'/>\n";
       echo "   </form>\n";
       echo "  </div>\n";
