@@ -92,7 +92,7 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
         $tweet = $tweet->retweeted_status;
         
       echo "<span><img src='"._html($tweet->user->profile_image_url_https)."' width='16'></span>";
-      echo "<span><a href='https://twitter.com/pouetdotnet/status/"._html($tweet->id_str)."'>"._html(strip_tags($tweet->text))."</a></span>";
+      echo "<span><a href='https://twitter.com/"._html($tweet->user->screen_name)."/status/"._html($tweet->id_str)."'>"._html(strip_tags($tweet->text))."</a></span>";
       echo "</li>\n";
     }
     echo "</ul>\n";
