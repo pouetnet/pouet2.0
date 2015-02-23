@@ -12,6 +12,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     $this->title = "the so famous pouët.net oneliner";
 
     $this->limit = 5;
+    $this->showTimestamps = false;  
   }
   use PouetForm;
   function Validate($post)
@@ -58,17 +59,20 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
+    if (isset($data["showTimestamps"])) $this->showTimestamps = $data["showTimestamps"];
   }
   function GetParameterSettings()
   {
     return array(
       "limit" => array("name"=>"number of oneliners visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "showTimestamps" => array("name"=>"show timestamps","type"=>"checkbox"),
     );
   }
 
   function LoadFromDB() {
     $s = new BM_query();
     $s->AddField("message");
+    $s->AddField("addedDate");
     $s->AddTable("oneliner");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
     //$s->AddOrder("oneliner.addedDate desc, oneliner.id desc");
@@ -84,6 +88,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     foreach ($data as $r) {
       if (!$r->user) continue;
       echo "<li>\n";
+      if ($this->showTimestamps)
+        echo "<time datetime='".$r->addedDate."' title='".$r->addedDate."'>".date("H:i",strtotime($r->addedDate))."</time> ";
       echo $r->user->PrintLinkedAvatar()."\n";
 
       $p = $r->message;

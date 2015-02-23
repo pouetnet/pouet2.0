@@ -22,6 +22,7 @@ class PouetBoxOnelinerView extends PouetBox {
     $s = new BM_Query();
     $s->AddTable("oneliner");
     $s->AddField("oneliner.message");
+    $s->AddField("oneliner.addedDate");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
 
@@ -43,7 +44,10 @@ class PouetBoxOnelinerView extends PouetBox {
       $p = preg_replace("/([a-z]+:\/\/\S+)/","<a href='$1'>$1</a>",$p);
       $p = nl2br($p);
       $p = better_wordwrap($p,80," ");
-      echo "<li>".$c->user->PrintLinkedAvatar()." ".$p."</li>\n";
+      echo "<li>";
+      echo "<time datetime='".$c->addedDate."' title='".$c->addedDate."'>".date("H:i",strtotime($c->addedDate))."</time> ";
+      echo $c->user->PrintLinkedAvatar()." ".$p;
+      echo "</li>\n";
     }
     echo "</ul>";
 
