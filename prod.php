@@ -143,14 +143,14 @@ class PouetBoxProdMain extends PouetBox {
       $this->downloadLinks[] = $o;
     }
     $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$this->id)));
+    $this->screenshotPath = find_screenshot($this->prod->id);
   }
 
   function RenderScreenshot() {
-    $shotpath = find_screenshot($this->prod->id);
-    if ($shotpath)
+    if ($this->screenshotPath)
     {
       $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
-      return "<img src='".POUET_CONTENT_URL.$shotpath."' alt='".$title."' title='".$title."'/>\n";
+      return "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
     }
     else
     {
@@ -708,7 +708,11 @@ if (!$prodid)
 $main = new PouetBoxProdMain($prodid);
 $main->Load();
 if ($main->prod)
-  $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+{
+  $ogValues["title"] = $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+  if ($main->screenshotPath)
+    $ogValues["image"] = POUET_CONTENT_URL . $main->screenshotPath;
+}
 
 $csrf = new CSRFProtect();
 if ($_POST["wlAction"] && $currentUser)

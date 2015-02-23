@@ -18,6 +18,13 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="stylesheet" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
   <?}?>
+  
+<?
+  if ($ogValues) foreach ($ogValues as $k=>$v)
+  {
+    printf("  <meta property=\"og:%s\" content=\"%s\"/>\n",$k,_html($v));
+  }
+?>  
 
   <script type="text/javascript">
   <!--

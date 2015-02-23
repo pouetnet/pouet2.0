@@ -113,4 +113,7 @@ else
   require_once("include_pouet/default_usersettings.php");
   $currentUserSettings = $DEFAULT_USERSETTINGS;
 }
+$TITLE = "";
+$ogValues = array();
+$ogValues["type"] = "website";
 ?>
