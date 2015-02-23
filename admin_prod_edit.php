@@ -24,6 +24,8 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
 
+    $this->formifier->canDeleteFiles = true;
+    
     $this->title = "edit this prod: ".$this->prod->RenderLink();
   }
   use PouetForm;
@@ -76,24 +78,42 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       SQLLib::InsertRow("prods_platforms",$a);
     }
 
-    if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
+    if ($data["screenshot_delete"])
     {
+      SQLLib::Query(sprintf_esc("delete from screenshots where prod = %d",$this->id));
       foreach( array( "jpg","gif","png" ) as $v )
         @unlink( get_local_screenshot_path( (int)$this->id, $v ) );
-
-      list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
-      $extension = "_";
-      switch($type) {
-        case 1:$extension="gif";break;
-        case 2:$extension="jpg";break;
-        case 3:$extension="png";break;
-      }
-      if ($extension != "_")
-        move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( (int)$this->id, $extension ) );
     }
-    if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
+    else
     {
-      move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( (int)$this->id ) );
+      if(is_uploaded_file($_FILES["screenshot"]["tmp_name"]))
+      {
+        foreach( array( "jpg","gif","png" ) as $v )
+          @unlink( get_local_screenshot_path( (int)$this->id, $v ) );
+  
+        list($width,$height,$type) = GetImageSize($_FILES["screenshot"]["tmp_name"]);
+        $extension = "_";
+        switch($type) {
+          case 1:$extension="gif";break;
+          case 2:$extension="jpg";break;
+          case 3:$extension="png";break;
+        }
+        if ($extension != "_")
+          move_uploaded_file_fake( $_FILES["screenshot"]["tmp_name"], get_local_screenshot_path( (int)$this->id, $extension ) );
+      }
+    }    
+    
+    if ($data["nfofile_delete"])
+    {
+      SQLLib::Query(sprintf_esc("delete from nfos where prod = %d",$this->id));
+      unlink( get_local_nfo_path( (int)$this->id ) );
+    }
+    else
+    {
+      if(is_uploaded_file($_FILES["nfofile"]["tmp_name"]))
+      {
+        move_uploaded_file_fake( $_FILES["nfofile"]["tmp_name"], get_local_nfo_path( (int)$this->id ) );
+      }
     }
 
     gloperator_log( "prod", (int)$this->id, "prod_edit" );

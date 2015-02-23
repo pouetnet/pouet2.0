@@ -1,7 +1,12 @@
 <?
 class Formifier {
+  function Formifier()
+  {
+    $this->canDeleteFiles = false;
+  }
   function RenderForm( $fields )
   {
+    $confirmFields = array();
     echo "  <div class='formifier'>\n";
     foreach($fields as $k=>$v)
     {
@@ -101,7 +106,14 @@ document.observe("dom:loaded",function(){
           echo "    <input type='checkbox' name='".$k."' id='".$k."' ".($v["value"]?" checked='checked'":"")."/>\n";
           break;
         case "file":
-          echo "    <input type='file' name='".$k."' id='".$k."'".($v["accept"]?" accept='"._html($v["accept"])."'":"")."/>\n";
+          echo "    <div>\n";
+          echo "      <input type='file' name='".$k."' id='".$k."'".($v["accept"]?" accept='"._html($v["accept"])."'":"")."/>\n";
+          if ($this->canDeleteFiles)
+          {
+            echo "      <input type='checkbox' name='".$k."_delete' id='".$k."_delete' /> <label for='".$k."_delete'>Delete file</label>\n";
+            $confirmFields[] = $k."_delete";
+          }
+          echo "    </div>\n";
           break;
         case "captcha":
           echo "    <div>\n";
@@ -142,6 +154,29 @@ document.observe("dom:loaded",function(){
         echo "    <p class='infoAfter'>".$v["infoAfter"]."</p>\n";
     }
     echo "  </div>\n";
+    if ($confirmFields)
+    {
+?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  var frm = $("<?=$confirmFields[0]?>").up("form");
+  frm.observe("submit",function(ev){
+    var b = false;
+<?
+  foreach($confirmFields as $v)
+  {
+    printf("    if ($('%s').checked) b = true;\n",$v);
+  }
+?>
+    if (!b)
+      return;
+    if (!confirm("are you sure you want to delete files ?"))
+      ev.stop();
+  });
+});
+</script>
+<?          
+    }
   }
 };
 ?>
