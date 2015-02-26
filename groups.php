@@ -20,19 +20,18 @@ class PouetBoxGroupMain extends PouetBox
     // not to boast or anything, but this is fucking beautiful.
 
     $sub = new SQLSelect();
-    $sub->AddField("comments.addedDate");
-    $sub->AddField("comments.who");
+    $sub->AddField("max(comments.addedDate) as maxDate");
     $sub->AddField("comments.which");
-    $sub->AddField("comments.rating");
     $sub->AddTable("comments");
     $sub->AddJoin("left","prods","prods.id = comments.which");
-    $sub->AddOrder("comments.addedDate desc");
+    //$sub->AddOrder("comments.addedDate desc");
+    $sub->AddGroup("comments.which");
     $sub->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
     $s = new BM_Query("prods");
     $s->AddField("cmts.addedDate as lastcomment");
     $s->AddField("cmts.rating as lastcommentrating");
-    $s->AddJoin("left","(select addedDate,who,which,rating from (".$sub->GetQuery().") as dummy group by which) as cmts","cmts.which=prods.id");
+    $s->AddJoin("left","(select comments.addedDate,comments.who,comments.which,comments.rating from (".$sub->GetQuery().") as dummy left join comments on dummy.maxDate = comments.addedDate and dummy.which = comments.which) as cmts","cmts.which=prods.id");
     $s->attach(array("cmts"=>"who"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("(prods.group1 = %d) or (prods.group2 = %d) or (prods.group3 = %d)",$this->id,$this->id,$this->id));
 
