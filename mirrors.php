@@ -33,7 +33,7 @@ class PouetBoxMirrors extends PouetBox {
 
     $links = array();
 
-    $links["http://www.scene.org/search.php?search=".$extensionless.""] = $this->prod->name." on scene.org"; //(works now! [in theory])
+    $links["http://files.scene.org/search/?q=".$extensionless.""] = $this->prod->name." on scene.org"; //(works now! [in theory])
     $links["http://www.google.com/search?q=\"".$extensionless."\""] = $this->prod->name . " on google";
     $links["http://www.filesearching.com/cgi-bin/s?q=".$extensionless.""] = $this->prod->name . " on filesearching.com";
     $links["http://www.filemirrors.com/search.src?file=".$extensionless.""] = $this->prod->name . " on filemirrors";
