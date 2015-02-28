@@ -55,7 +55,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = null;
 
     $a["csdb"] = $data["csdbID"];
-    $a["sceneorg"] = $data["sceneOrgID"];
+    //$a["sceneorg"] = $data["sceneOrgID"];
     //$a["zxdemo"] = $data["zxdemoID"];
     $a["demozoo"] = $data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
@@ -149,7 +149,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       $this->fields["partyRank"]["value"] = $prod->placings[0]->ranking;
     }
 
-    $this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
+    //$this->fields["sceneOrgID"]["value"] = $prod->sceneorg;
     $this->fields["demozooID"]["value"] = $prod->demozoo;
     $this->fields["csdbID"]["value"] = $prod->csdb;
     $this->fields["boardID"]["value"] = $prod->boardID;

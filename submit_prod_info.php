@@ -174,7 +174,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->ranking)
       unset($this->fields["partyRank"]);
 
-    unset($this->fields["sceneOrgID"]);
+    //unset($this->fields["sceneOrgID"]);
     unset($this->fields["zxdemoID"]);
     unset($this->fields["csdbID"]);
     unset($this->fields["demozooID"]);

@@ -110,6 +110,7 @@ class PouetBoxProdMain extends PouetBox {
     $this->credits = $s->perform();
 
     $this->downloadLinks = array();
+    /*
     if ($this->prod->sceneorg)
     {
       $o = new stdClass();
@@ -118,6 +119,7 @@ class PouetBoxProdMain extends PouetBox {
       $o->link = "http://scene.org/file.php?id=".(int)$this->prod->sceneorg;
       $this->downloadLinks[] = $o;
     }
+    */
     if ($this->prod->csdb)
     {
       $o = new stdClass();
