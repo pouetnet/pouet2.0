@@ -124,6 +124,7 @@ class PouetBoxAdminEditFAQList extends PouetBox
     $s->AddOrder("category, id");
     $this->items = $s->perform();
   }
+  use PouetForm;
   function Render()
   {
     global $REQUESTTYPES;
