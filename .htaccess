@@ -5,10 +5,17 @@ RewriteEngine On
 
 # redirect all subdomains to http://www.pouet.net
 
+RewriteCond %{HTTPS} ^off$ [NC]
 RewriteCond %{HTTP_HOST} =pouet.net [OR]
 RewriteCond %{HTTP_HOST} =pouet.scene.org [OR]
 RewriteCond %{HTTP_HOST} =www.pouet.scene.org
 RewriteRule ^(.*)$ http://www.pouet.net/$1 [R=301,QSA,NE,L]
+
+RewriteCond %{HTTPS} ^on$ [NC]
+RewriteCond %{HTTP_HOST} =pouet.net [OR]
+RewriteCond %{HTTP_HOST} =pouet.scene.org [OR]
+RewriteCond %{HTTP_HOST} =www.pouet.scene.org
+RewriteRule ^(.*)$ https://www.pouet.net/$1 [R=301,QSA,NE,L]
 
 
 # redirect all old directories to content domain
