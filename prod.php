@@ -312,7 +312,7 @@ class PouetBoxProdMain extends PouetBox {
     echo "<div class='awards'>";
     foreach($this->awards as $award)
     {
-    	printf("<a href='./sceneorg.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
+    	printf("<a href='./awards.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
         $award->type == "viewingtip" ? $year : $year . str_replace(" ","",$award->category),
         $award->type,
         $award->category,
