@@ -144,7 +144,7 @@ class PouetBoxSceneOrgTips extends PouetBox {
   }
 };
 
-$TITLE = "scene.org awards and viewing tips";
+$TITLE = "awards and viewing tips";
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
