@@ -103,7 +103,7 @@ class PouetProd extends BM_Class {
       echo "<div class='awards'>";
       foreach($this->awards as $a)
       {
-    		printf("<a href='sceneorg.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
+    		printf("<a href='awards.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
     		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . str_replace(" ","",$a->category),
     		  $a->type,
     		  $a->category,
