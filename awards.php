@@ -17,11 +17,11 @@ class PouetBoxSceneOrgAwards extends PouetBox {
     $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
     $s->AddOrder("sceneorgrecommended.category");
     $s->AddOrder("sceneorgrecommended.type");
-    $s->AddWhere("sceneorgrecommended.type != 'viewingtip'");
-    $this->sceneorg = $s->perform();
+    $s->AddWhere("sceneorgrecommended.type in ('awardwinner','awardnominee')");
+    $this->prods = $s->perform();
 
     $a = array();
-    foreach($this->sceneorg as $v) $a[] = &$v->prod;
+    foreach($this->prods as $v) $a[] = &$v->prod;
     PouetCollectPlatforms($a);
   }
 
@@ -31,7 +31,7 @@ class PouetBoxSceneOrgAwards extends PouetBox {
     echo "<table class='boxtable'>\n";
     $lastYear = 0;
     $lastCategory = "";
-    foreach ($this->sceneorg as $row)
+    foreach ($this->prods as $row)
     {
       if ($lastYear != substr($row->prod->releaseDate,0,4))
       {
@@ -65,6 +65,30 @@ class PouetBoxSceneOrgAwards extends PouetBox {
   }
 };
 
+class PouetBoxMeteorikAwards extends PouetBoxSceneOrgAwards {
+  function PouetBoxMeteorikAwards() {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_meteorikawards";
+    $this->title = "meteorik awards";
+  }
+
+  function LoadFromDB()
+  {
+    $s = new BM_Query("sceneorgrecommended");
+    $s->AddField("sceneorgrecommended.type");
+    $s->AddField("sceneorgrecommended.category");
+    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
+    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
+    $s->AddOrder("sceneorgrecommended.category");
+    $s->AddOrder("sceneorgrecommended.type");
+    $s->AddWhere("sceneorgrecommended.type in ('meteorikwinner','meteoriknominee')");
+    $this->prods = $s->perform();
+
+    $a = array();
+    foreach($this->prods as $v) $a[] = &$v->prod;
+    PouetCollectPlatforms($a);
+  }
+};
 
 class PouetBoxSceneOrgTips extends PouetBox {
   function PouetBoxSceneOrgTips() {
@@ -126,6 +150,10 @@ require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
+
+$box = new PouetBoxMeteorikAwards();
+$box->Load();
+$box->Render();
 
 $box = new PouetBoxSceneOrgAwards();
 $box->Load();

@@ -38,7 +38,7 @@ class PouetBoxIndexCDC extends PouetBoxCachable {
       $this->data->prod->RenderAsEntry();
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='sceneorg.php'>scene.org awards</a> :: <a href='cdc.php'>more</a>...</div>\n";
+    echo "  <div class='foot'><a href='awards.php'>awards</a> :: <a href='cdc.php'>more</a>...</div>\n";
     echo "</div>\n";
     return $s;
   }
