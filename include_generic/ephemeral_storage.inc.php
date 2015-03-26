@@ -58,7 +58,7 @@ class FileStorage implements IEphemeralStorage
   }
   function set($key,$value)
   {
-    file_put_contents( $this->keyToFilename($key), serialize($value) );
+    @file_put_contents( $this->keyToFilename($key), serialize($value) );
   }
   function has($key)
   {
