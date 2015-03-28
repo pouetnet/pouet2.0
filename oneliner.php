@@ -13,12 +13,12 @@ class PouetBoxOnelinerView extends PouetBox {
 
   function LoadFromDB() {
     global $POSTS_PER_PAGE;
-
+/*
     $s = new SQLSelect();
     $s->AddField("count(*) as c");
     $s->AddTable("oneliner");
     $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
-
+*/
     $s = new BM_Query();
     $s->AddTable("oneliner");
     $s->AddField("oneliner.message");
@@ -32,7 +32,7 @@ class PouetBoxOnelinerView extends PouetBox {
     $this->paginator->SetData( "oneliner.php", $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
 
-    $this->oneliner = $s->perform();
+    $this->oneliner = $s->performWithCalcRows( $this->postcount );
   }
 
   function RenderBody() {
