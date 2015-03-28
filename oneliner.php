@@ -24,6 +24,8 @@ class PouetBoxOnelinerView extends PouetBox {
     $s->AddField("oneliner.message");
     $s->AddField("oneliner.addedDate");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
+    if ($_GET["who"])
+      $s->AddWhere(sprintf_esc("oneliner.who = %d",$_GET["id"]));
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
 
     $this->paginator = new PouetPaginator();
