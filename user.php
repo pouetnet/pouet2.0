@@ -705,8 +705,7 @@ class PouetBoxUserMain extends PouetBox
       if (!$this->show)
       {
         echo "<div class='contribheader'>oneliners posted <span>".(int)$this->user->stats["oneliners"]." oneliners</span> ";
-        //if ($this->show!="requests")
-        //  echo "[<a href='user.php?who=".$this->id."&amp;show=requests'>show</a>]";
+        echo "[<a href='oneliner.php?who=".$this->id."'>show</a>]";
         echo "</div>\n";
       }
       /*
