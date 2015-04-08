@@ -6,6 +6,13 @@ function pouetAdmin_recacheFrontPage()
   $content .= "</ul>";
   return $content;
 }
+function pouetAdmin_recacheFrontPagePartial()
+{
+  $content = "<ul>";
+  foreach(glob("cache/*") as $v) if ($_POST["deleteCache"][basename($v)] == "on") { $content .= "<li>deleting '".$v."'</li>\n"; @unlink($v); }
+  $content .= "</ul>";
+  return $content;
+}
 
 function pouetAdmin_recacheTopDemos()
 {

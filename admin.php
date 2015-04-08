@@ -9,6 +9,14 @@ if (!$currentUser || !$currentUser->IsGloperator())
   exit();
 }
 
+function PouetAdmin_recacheFrontPagePartial_Form()
+{
+  echo "<ul>";
+  foreach(glob("cache/*") as $v) { echo "<li><input type='checkbox' name='deleteCache["._html(basename($v))."]'/> "._html($v)."</li>\n"; }
+  echo "</ul>";
+  return $content;
+}
+
 class PouetBoxAdmin extends PouetBox {
   function PouetBoxAdmin() {
     parent::__construct();
@@ -24,7 +32,8 @@ class PouetBoxAdmin extends PouetBox {
     echo "<h2>i'm gonna wreck it !</h2>\n";
     echo "<ul class='boxlist'>\n";
     $actions = array(
-      "recacheFrontPage" => "flush front page cache",
+      "recacheFrontPagePartial" => "flush front page cache",
+      "recacheFrontPage" => "flush entire front page cache",
       "recacheTopDemos" => "recalculate top demo list",
     );
     foreach($actions as $k=>$v)
@@ -36,6 +45,9 @@ class PouetBoxAdmin extends PouetBox {
       $csrf->PrintToken();
 
       echo _html($v).": ";
+      $func = "PouetAdmin_".$k."_Form";
+      if (function_exists($func)) $func();
+      
       echo "<input name='".$k."' type='submit' value='submit'/>";
       echo "</form>";
       echo "</li>\n";
