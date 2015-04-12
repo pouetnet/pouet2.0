@@ -41,7 +41,15 @@ class PouetBoxOnelinerView extends PouetBox {
     global $POSTS_PER_PAGE;
 
     echo "<ul class='boxlist'>";
-    foreach ($this->oneliner as $c) {
+    $lastDate = "";
+    foreach ($this->oneliner as $c) 
+    {
+      $day = substr($c->addedDate,0,10);
+      if ($day != $lastDate)
+      {
+        echo "<li class='day'>".$day."</li>\n";
+        $lastDate = $day;
+      }
       $p = $c->message;
       $p = _html($p);
       //$p = bbencode($p,true);
