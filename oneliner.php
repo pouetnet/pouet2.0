@@ -31,7 +31,7 @@ class PouetBoxOnelinerView extends PouetBox {
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
 
     $this->paginator = new PouetPaginator();
-    $this->paginator->SetData( "oneliner.php", $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
+    $this->paginator->SetData( ($_GET["who"] ? "oneliner.php?who=".(int)$_GET["who"] : "oneliner.php"), $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
 
     $this->oneliner = $s->perform();
