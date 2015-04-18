@@ -16,6 +16,16 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
   <?if ( POUET_MOBILE ) {?>
   <link rel="stylesheet" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
+  <style>
+
+  .content
+  .content * {
+    word-break: break-all;
+    word-wrap: break-word;
+    overlow-wrap: break-word;
+  }
+
+  </style>
   <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
   <?}?>
   
