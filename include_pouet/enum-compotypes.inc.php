@@ -145,5 +145,6 @@ $COMPOTYPES = array (
   143 => 'interactive',
   144 => 'remix',
   145 => 'mini animation',
+  146 => '120hz demo',
 );
 ?>
