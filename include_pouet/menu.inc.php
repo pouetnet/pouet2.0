@@ -4,7 +4,7 @@ define("MENU_DONE_ONCE",true);
 if (get_setting($menusetting))
 {
 ?>
-<nav>
+<nav id="<?=$menusetting?>">
   <ul>
    <li><a href="prodlist.php">Prods</a></li>
    <li><a href="groups.php">Groups</a></li>
@@ -22,5 +22,16 @@ if (get_setting($menusetting))
   </ul>
 </nav>
 <?
+if (POUET_MOBILE)
+{
+  if ($menusetting == "topbar")
+  {
+    printf("<a href='#bottombar' class='mobileNavLink'>Go to bottom</a>");
+  } 
+  else
+  {
+    printf("<a href='#topbar' class='mobileNavLink'>Go to top</a>");
+  } 
+}
 }
 ?>
