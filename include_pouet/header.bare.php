@@ -20,9 +20,9 @@ header("Content-type: text/html; charset=utf-8");
   <?}?>
   
 <?
-  if ($ogValues) foreach ($ogValues as $k=>$v)
+  if ($metaValues) foreach ($metaValues as $k=>$v)
   {
-    printf("  <meta property=\"og:%s\" content=\"%s\"/>\n",$k,_html($v));
+    printf("  <meta property=\"%s\" content=\"%s\"/>\n",$k,_html($v));
   }
 ?>  
 

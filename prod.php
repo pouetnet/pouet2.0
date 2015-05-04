@@ -711,9 +711,17 @@ $main = new PouetBoxProdMain($prodid);
 $main->Load();
 if ($main->prod)
 {
-  $ogValues["title"] = $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+  $metaValues["og:title"] = 
+  $metaValues["twitter:title"] = 
+  $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+  $metaValues["twitter:card"] = "photo";
+  $metaValues["twitter:site"] = "@pouetdotnet";
+  
   if ($main->screenshotPath)
-    $ogValues["image"] = POUET_CONTENT_URL . $main->screenshotPath;
+  {
+    $metaValues["og:image"] = 
+    $metaValues["twitter:image"] = "@pouetdotnet";
+  }
 }
 
 $csrf = new CSRFProtect();
