@@ -720,7 +720,7 @@ if ($main->prod)
   if ($main->screenshotPath)
   {
     $metaValues["og:image"] = 
-    $metaValues["twitter:image"] = "@pouetdotnet";
+    $metaValues["twitter:image"] = POUET_CONTENT_URL . $main->screenshotPath;
   }
 }
 
