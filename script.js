@@ -329,12 +329,12 @@ function Youtubify( e )
     if (videoID)
     {
       var callback = "ytcb";
-      new Ajax.JSONRequest("https://gdata.youtube.com/feeds/api/videos/"+videoID[2]+"?v=2&alt=json",{
+      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s&part=snippet",{
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON.entry.title)
           {
-            var s = transport.responseJSON.entry.title.$t;
+            var s = transport.responseJSON.items[0].snippet.title;
             item.update( s.escapeHTML() );
             item.addClassName("youtube");
           }
