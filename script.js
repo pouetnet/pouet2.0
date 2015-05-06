@@ -332,7 +332,7 @@ function Youtubify( e )
       new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s&part=snippet",{
         method: "get",
         onSuccess: function(transport) {
-          if (transport.responseJSON.items && transport.responseJSON.items.length > 1)
+          if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
           {
             var s = transport.responseJSON.items[0].snippet.title;
             item.update( s.escapeHTML() );
