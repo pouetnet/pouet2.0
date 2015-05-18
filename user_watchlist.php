@@ -21,9 +21,7 @@ class PouetBoxUserWatchlist extends PouetBox {
     $s->AddWhere( sprintf_esc("prods.id in (%s)",implode(",",$i) ) );
     $this->prods = $s->perform();
 
-    $a = array();
-    foreach($this->prods as $v) $a[] = &$v;
-    PouetCollectPlatforms($a);
+    PouetCollectPlatforms($this->prods);
   }
 
   function RenderBody()
