@@ -361,6 +361,25 @@ function Youtubify( e )
       return;
     }
     
+    var demozooProdID = item.href.match(/demozoo\.org\/productions\/([0-9]+)/);
+    if (demozooProdID)
+    {
+      var callback = "demozoocb";
+      new Ajax.JSONRequest("http://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=json",{
+        method: "get",
+        onSuccess: function(transport) {
+          if (transport.responseJSON)
+          {
+            var s = transport.responseJSON.title;
+            item.update( s.escapeHTML() );
+            item.addClassName("demozoo");
+          }
+        },
+      });
+      return;
+    }
+  
+    
     var host = item.href.match(/:\/\/(.*?)\//);
     if (host)
     {
