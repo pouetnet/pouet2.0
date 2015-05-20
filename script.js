@@ -365,7 +365,7 @@ function Youtubify( e )
     if (demozooProdID)
     {
       var callback = "demozoocb";
-      new Ajax.JSONRequest("http://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=json",{
+      new Ajax.JSONRequest("http://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=jsonp",{
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON)
