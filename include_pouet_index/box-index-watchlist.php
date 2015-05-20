@@ -77,6 +77,7 @@ class PouetBoxIndexWatchlist extends PouetBox {
         if (++$n == $this->limit) break;
       }
       echo "</ul>\n";
+      echo "  <div class='foot'><a href='user_watchlist.php'>more</a>...</div>\n";
     }
     else
     {
