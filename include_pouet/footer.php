@@ -5,7 +5,7 @@
   <li>
     <a href="index.php">pouët.net</a> 2.0 &copy; 2000-<?=date("Y")?> <a href="groups.php?which=5">mandarine</a>
     - hosted on <a href="http://www.scene.org/">scene.org</a>
-    - follow us on <a href="https://twitter.com/pouetdotnet">twitter</a>
+    - follow us on <a href="https://twitter.com/pouetdotnet">twitter</a> and <a href="https://www.facebook.com/pouet.dot.net">facebook</a>
   </li>
   <li>
     send comments and bug reports to <a href="mailto:webmaster@pouet.net">webmaster@pouet.net</a>
