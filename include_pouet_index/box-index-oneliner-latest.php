@@ -154,6 +154,12 @@ $("onelinermsg").observe("focus",function(){
     $("onelinermsg").value = "";
   onelinerClicked = true;
 });
+$("frmIndexOneliner").observe("submit",function(ev){
+  if ($("onelinermsg").value.indexOf("[url")!=-1) {
+    alert("BBCode doesn't work in the oneliner!");
+    ev.stop();
+  }
+});
 </script>
 <?
     }
