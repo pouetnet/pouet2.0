@@ -12,6 +12,8 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     $this->title = "latest comments added";
 
     $this->limit = 5;
+    $this->showUser = true;
+    $this->showVote = false;
   }
 
   function LoadFromCachedData($data) {
@@ -26,11 +28,15 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
   function SetParameters($data)
   {
     if (isset($data["limit"])) $this->limit = $data["limit"];
+    if (isset($data["showUser"])) $this->showUser = $data["showUser"];
+    if (isset($data["showVote"])) $this->showVote = $data["showVote"];
   }
   function GetParameterSettings()
   {
     return array(
       "limit" => array("name"=>"number of comments visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "showUser" => array("name"=>"show user avatar","default"=>true,"type"=>"checkbox"),
+      "showVote" => array("name"=>"show vote with comment","default"=>false,"type"=>"checkbox"),
     );
   }
 
@@ -41,6 +47,7 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     $s->attach(array("c"=>"who"),array("users as user"=>"id"));
     $s->AddOrder("c.addedDate desc");
     $s->AddField("c.id as commentID");
+    $s->AddField("c.rating as rating");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
 
@@ -58,10 +65,19 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
       echo "<span class='rowprod'>\n";
       echo $d->prod->RenderAsEntry();
       echo "</span>\n";
-      if (get_setting("indexwhocommentedprods"))
+      if ($this->showUser)
       {
         echo "<span class='rowuser'>\n";
         echo $d->user->PrintLinkedAvatar();
+        echo "</span>\n";
+      }
+      if ($this->showVote)
+      {
+        $p = "isok";
+        if ($d->rating < 0) $p = "sucks";
+        if ($d->rating > 0) $p = "rulez";
+        echo "<span class='rowvote'>\n";
+        echo "<img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />\n";
         echo "</span>\n";
       }
       echo "</li>\n";
