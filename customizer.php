@@ -436,7 +436,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
       "indexplatform" => "front page - show platform icons",
       "indextype" => "front page - show type icons",
       "indexwhoaddedprods" => "front page - who added prods",
-      "indexwhocommentedprods" => "front page - who commented prods",
+//      "indexwhocommentedprods" => "front page - who commented prods",
       "topichidefakeuser" => "bbs page - hide fakeuser",
       "prodhidefakeuser" => "prod page - hide fakeuser",
       "displayimages" => "[img][/img] tags should be displayed as...",
