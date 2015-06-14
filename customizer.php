@@ -221,7 +221,8 @@ class PouetBoxCustomizer extends PouetBox {
               switch($values["type"])
               {
                 case "checkbox":
-                  printf("        <input type='checkbox' name='parameter[%s][%d][%s]' data-paramname='%s' %s>\n",_html($bar),$y,_html($name),_html($name),$box[$name] ? " checked='checked'" : "");
+                  $value = isset($box[$name]) ? $box[$name] : $values["default"];
+                  printf("        <input type='checkbox' name='parameter[%s][%d][%s]' data-paramname='%s' %s>\n",_html($bar),$y,_html($name),_html($name),$value ? " checked='checked'" : "");
                   break;
                 default:
                   printf("        <input type='number' name='parameter[%s][%d][%s]' data-paramname='%s'",_html($bar),$y,_html($name),_html($name));
