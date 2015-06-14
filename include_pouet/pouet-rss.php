@@ -5,6 +5,13 @@ class PouetRSS
   function __construct()
   {
     $this->xml = new SimpleXMLElement("<"."?xml version='1.0' encoding='UTF-8'?"."><rss/>");
+    $this->dtd = POUET_ROOT_URL . "faq.php#faq12";
+    
+    $this->dom = dom_import_simplexml($this->xml);
+
+    $this->dom->setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:pouet",$this->dtd);
+    $this->dom->setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:atom","http://www.w3.org/2005/Atom");
+    
     $this->xml->addAttribute("version","2.0");
     $this->xml->addChild("channel");
     $this->xml->channel->addChild("title","pouët.net");
@@ -39,7 +46,15 @@ class PouetRSS
           $node->addChild($k,_html($v))->addAttribute("isPermaLink",strstr($v,"://")===false?"false":"true");
           break;
         default:
-          $node->addChild($k,_html($v));
+          if (is_array($v))
+          {
+            foreach($v as $i)
+              $node->addChild($k,_html($i),strstr($k,":")!==false ? $this->dtd : null);
+          }
+          else
+          {
+            $node->addChild($k,_html($v),strstr($k,":")!==false ? $this->dtd : null);
+          }
           break;
       }
     }

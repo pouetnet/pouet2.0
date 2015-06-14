@@ -37,7 +37,12 @@ $rss = new PouetRSS();
 foreach($data as $item)
 {
   $rss->AddItem(array(
-    "title"     => $item->name,
+    "title"       => $item->name . ($item->groups ? " by ".$item->RenderGroupsPlain() : ""),
+    "pouet:title" => $item->name,
+    "pouet:group" => array_map(function($i){ return $i->name; },$item->groups),
+    "pouet:party" => array_map(function($i){ return trim($i->party->name." ".$i->year); },$item->placings),
+    "pouet:type" => explode(",",$item->type),
+    "pouet:platform" => array_map(function($i){ return $i["name"]; },$item->platforms),
     "link"      => POUET_ROOT_URL . "prod.php?which=" . $item->id,
     "pubDate"   => date("r",strtotime($item->addedDate)),
     "enclosure" => find_screenshot($item->id),
