@@ -134,7 +134,7 @@ class PouetBoxProdPost extends PouetBox {
         echo " <input type='radio' name='rating' id='ratingsucks' value='sucks'/> <label for='ratingsucks'>sucks</label>\n";
         echo " </div>\n";
       }
-      echo " <textarea name='comment'></textarea>\n";
+      echo " <textarea name='comment' id='comment'></textarea>\n";
       echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
       echo "</div>\n";
       echo "<div class='foot'>\n";
@@ -145,6 +145,21 @@ class PouetBoxProdPost extends PouetBox {
 <script language="JavaScript" type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
+  $$(".tools").each(function(item){
+    var cid = item.readAttribute("data-cid");
+    item.update("<a href='#'>quote</a> |");
+    item.down("a").observe("click",function(e){
+      e.stop();
+      new Ajax.Request("ajax_prodcomment.php",{
+        "method":"post",
+        "parameters":$H({"id":cid}).toQueryString(),
+        "onSuccess":function(transport){
+          $("comment").value += "[quote]" + transport.responseJSON.comment.strip() + "[/quote]";
+        }
+      });
+      try { $("comment").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
+    });
+  });
   AddPreviewButton($('submit'));
   PreparePostForm( $$("#pouetbox_prodpost form").first() );
 });

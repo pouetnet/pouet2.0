@@ -642,7 +642,7 @@ class PouetBoxProdComments extends PouetBox {
         unset($main->userCDCs[$c->user->id]);
       }
 
-      echo "added on the <a href='prod.php?post=".$c->id."'>".$c->addedDate."</a> by ";
+      echo "<span class='tools' data-cid='".$c->id."'></span> added on the <a href='prod.php?post=".$c->id."'>".$c->addedDate."</a> by ";
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
 
       echo "</div>\n";
