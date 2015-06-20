@@ -155,9 +155,9 @@ document.observe("dom:loaded",function(){
         "parameters":$H({"id":cid}).toQueryString(),
         "onSuccess":function(transport){
           $("comment").value += "[quote]" + transport.responseJSON.comment.strip() + "[/quote]";
+          try { $("comment").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
         }
       });
-      try { $("comment").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
     });
   });
   AddPreviewButton($('submit'));

@@ -203,9 +203,9 @@ document.observe("dom:loaded",function(){
         "parameters":$H({"id":cid}).toQueryString(),
         "onSuccess":function(transport){
           $("message").value += "[quote]" + transport.responseJSON.post.strip() + "[/quote]";
+          try { $("message").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
         }
       });
-      try { $("message").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
     });
   });
   PreparePostForm( $$("#pouetbox_bbspost form").first() );
