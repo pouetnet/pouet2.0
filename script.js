@@ -145,8 +145,8 @@ function PreparePostForm( form )
     var bbTags = $A(["url", "code", "b", "i", "u", "img", "quote", "list"]);
     var broken = false;
     bbTags.each(function(item){
-      var re1 = new RegExp("\\["+item,"g");
-      var re2 = new RegExp("\\[/"+item,"g");
+      var re1 = new RegExp("\\["+item+"[^a-z]","g");
+      var re2 = new RegExp("\\[/"+item+"[^a-z]","g");
       if ((ta.value.match(re1) || []).length != (ta.value.match(re2) || []).length)
         broken = item;
     });    
