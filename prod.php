@@ -399,7 +399,7 @@ document.observe("dom:loaded",function(){
     echo "<li id='mainDownload'>";
     if ($this->linkCheck)
     {
-      if ($this->linkCheck->returnCode === 0 
+      if ($this->linkCheck->returnCode == 0 
       || $this->linkCheck->returnCode >= 400 && $this->linkCheck->returnCode <= 599)
       {
         echo "<span class='brokenLink error'>Link broken!</span> ";
