@@ -90,6 +90,14 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
           "type"=>"hidden",
           "value"=>(int)$data["linkID"],
         ),
+        "oldLinkKey" => array(
+          "type"=>"hidden",
+          "value"=>$l->type,
+        ),
+        "oldLink" => array(
+          "type"=>"hidden",
+          "value"=>$l->link,
+        ),
         "newLinkKey" => array(
           "name"=>"link description (youtube, source, linux port, etc)",
           "type"=>"text",
@@ -147,6 +155,8 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
       return array("you didn't change anything :|");
 
     $output["linkID"] = $input["linkID"];
+    $output["oldLink"] = $input["oldLink"];
+    $output["oldLinkKey"] = $input["oldLinkKey"];
     $output["newLink"] = $input["newLink"];
     $output["newLinkKey"] = $input["newLinkKey"];
     $output["reason"] = $input["reason"];
@@ -156,13 +166,22 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
   static function Display($itemID, $data)
   {
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
-    $s = "<b>old</b>: ";
+    $s = "<b>current</b>: ";
     $s .= _html($row->type)." - ";
     $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
-    $s .= "<br/><b>new</b>: ";
+
+    $s .= "<br/>";
+    $s .= "<b>old</b>: ";
+    $s .= _html($data["oldLinkKey"])." - ";
+    $s .= "<a href='"._html($data["oldLink"])."'>"._html(shortify_cut($data["oldLink"],50))."</a>";
+    
+    $s .= "<br/>";
+    $s .= "<b>new</b>: ";
     $s .= _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."'>"._html(shortify_cut($data["newLink"],50))."</a>";
-    $s .= "<br/><b>reason</b>: ";
+    
+    $s .= "<br/>";
+    $s .= "<b>reason</b>: ";
     $s .= _html($data["reason"]);
     return $s;
   }
@@ -290,6 +309,8 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
 
     $output["userID"] = $input["userID"];
     $output["userRole"] = $input["userRole"];
+    $output["oldUserID"] = $input["oldUserID"];
+    $output["oldUserRole"] = $input["oldUserRole"];
     return array();
   }
 
@@ -334,6 +355,14 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
         "creditID" => array(
           "type"=>"hidden",
           "value"=>(int)$data["creditID"],
+        ),
+        "oldUserID" => array(
+          "type"=>"hidden",
+          "value"=>(int)$l->userID,
+        ),
+        "oldUserRole" => array(
+          "type"=>"hidden",
+          "value"=>$l->role,
         ),
         "userID" => array(
           "name"=>"user",
@@ -416,7 +445,24 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     $row = reset($l);
 
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
-    $s = "<b>old</b>: ";
+    $s = "<b>current</b>: ";
+    if ($row->user)
+    {
+      $s .= $row->user->PrintLinkedAvatar()." ";
+      $s .= $row->user->PrintLinkedName();
+    }
+    $s .= " - "._html($row->role);
+
+    $s = new BM_Query("credits");
+    $s->AddField("credits.id");
+    $s->AddField("credits.role");
+    $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $s->AddWhere(sprintf_esc("credits.id = %d",$data["oldUserID"]));
+    $s->SetLimit(1);
+    $l = $s->perform();
+    $row = reset($l);
+
+    $s = "<br/><b>old</b>: ";
     if ($row->user)
     {
       $s .= $row->user->PrintLinkedAvatar()." ";
@@ -541,6 +587,10 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
   {
     $prod = PouetProd::Spawn( $data["prod"] );
     $fields = array(
+      "oldDownloadLink" => array(
+        "type"=>"hidden",
+        "value"=>$prod->download,
+      ),
       "downloadLink" => array(
         "name"=>"enter new download link",
         "type"=>"url",
@@ -575,6 +625,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     if (strcmp($prod->download,$input["downloadLink"])===0)
       return array("you didn't change anything :|");
 
+    $output["oldDownloadLink"] = $input["oldDownloadLink"];
     $output["downloadLink"] = $input["downloadLink"];
     $output["reason"] = $input["reason"];
     return array();
@@ -583,8 +634,10 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
   static function Display($itemID, $data)
   {
     $prod = PouetProd::Spawn( $itemID );
-    $s = "<b>old</b>: ";
+    $s = "<b>current</b>: ";
     $s .= "<a href='"._html($prod->download)."'>"._html(shortify_cut($prod->download,50))."</a>";
+    $s .= "<br/><b>old</b>: ";
+    $s .= "<a href='"._html($data["oldDownloadLink"])."'>"._html(shortify_cut($data["oldDownloadLink"],50))."</a>";
     $s .= "<br/><b>new</b>: ";
     $s .= "<a href='"._html($data["downloadLink"])."'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
     $s .= "<br/><b>reason</b>: ";
