@@ -1,4 +1,5 @@
 <?
+global $PLATFORMS;
 $PLATFORMS = array (
   65 => 
   array (

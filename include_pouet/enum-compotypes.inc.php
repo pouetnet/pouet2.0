@@ -1,4 +1,5 @@
 <?
+global $COMPOTYPES;
 $COMPOTYPES = array (
   1 => 'invit',
   2 => 'none',
