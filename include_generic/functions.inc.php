@@ -353,6 +353,19 @@ function adjust_query_header( $param )
   return _html( $url["path"] . "?" . http_build_query($query));
 }
 
+function softurlencode($string) 
+{
+  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",   ":",   "@",   "&",   "=",   "+",   "$",   ",",   "/",   "?", /*  "%", */  "#",   "[",   "]");
+  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', /*'%25', */'%23', '%5B', '%5D');
+  return str_replace($replacements, $entities, $string);
+}
+function verysofturlencode($string) 
+{
+  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",    "@",   "&",   "=",   "+",  " ",   "$",   ",",    "#",   "[",   "]");
+  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%26', '%3D', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
+  return str_replace($replacements, $entities, $string);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

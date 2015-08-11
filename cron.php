@@ -10,22 +10,25 @@ require_once("admin.functions.php");
 
 echo "[".date("Y-m-d H:i:s")."] Cron running: ".$argv[1]."\n";
 
-function cron_CheckLinks()
+function cron_CheckLinks( $id = null )
 {
   $s = new SQLSelect();
   $s->AddField("prods.id");
   $s->AddField("prods.download");
   $s->AddTable("prods");
   $s->AddJoin("left","prods_linkcheck","prods_linkcheck.prodID = prods.id");
-  $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 30");
   $s->AddOrder("RAND()");
+  if ($id)
+    $s->AddWhere(sprintf_esc("prods.id = %d",$id));
+  else
+    $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 30");
   $s->SetLimit( 20 );
   $prods = SQLLib::SelectRows( $s->GetQuery() );
   $out = array();
   foreach($prods as $prod)
   {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $prod->download);
+    curl_setopt($ch, CURLOPT_URL, verysofturlencode($prod->download));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -48,7 +51,8 @@ function cron_CheckLinks()
     curl_close($ch);
     
     $out[] = $a["returnCode"];
-    //$out .= "\n[".$prod->id."] " . $prod->download . " >> ". $a["returnCode"];
+    //$out[] = json_encode($a);
+    //$out[] = "\n[".$prod->id."] " . $prod->download . " >> ". $a["returnCode"];
     sleep(5);
   }
   return implode(", ",$out);
@@ -63,7 +67,7 @@ switch($argv[1])
       echo " > Recache: ".$v."\n";
     break;
   case "linkCheck":
-    $content = cron_CheckLinks();
+    $content = cron_CheckLinks( $argv[2] );
     echo " > linkCheck: ".$content."\n";
     break;
 }
