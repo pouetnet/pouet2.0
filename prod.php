@@ -714,6 +714,8 @@ if ($main->prod)
   $metaValues["og:title"] = 
   $metaValues["twitter:title"] = 
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
+
+  $metaValues["og:type"] = "website";
   $metaValues["twitter:card"] = "photo";
   $metaValues["twitter:site"] = "@pouetdotnet";
   
