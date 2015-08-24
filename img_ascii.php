@@ -90,8 +90,15 @@ $max=0;
 
 for($i=0;$i<$nbr;$i++)
 {
-  $len=strlen(rtrim($txt[$i]));
-  if($len>$max) $max=$len;
+  $p=0;
+  $len=strlen($txt[$i]);
+  for($j=0;$j<$len+1;$j++)
+  {
+    $chr=ord($txt[$i]{$j});
+    if($chr==9) { $chr=32; $p+=7-($p&7); }
+    $p++;
+  }  
+  if($p>$max) $max=$p;
 }
 $i_w=$max*$c_w+$s;
 $i_h=$nbr*$c_h+$s+10;
@@ -106,16 +113,18 @@ imagefilledrectangle($im,0,$i_h-9,$i_w,$i_h,$c2);
 for($i=0;$i<$nbr;$i++)
 {
   $len=strlen($txt[$i]);
+  $p = 0;
   for($j=0;$j<$len+1;$j++)
   {
     $chr=ord($txt[$i]{$j});
-    if($chr==9) $chr=32;
+    if($chr==9) { $chr=32; $p+=7-($p&7); }
     $x=$chr%16*$c_w;
     $y=($chr-$chr%16)/16*$c_h;
     imagecolorset($fnt,$fc2,$r3,$g3,$b3);
-    imagecopymerge($im,$fnt,$j*$c_w+$s,$i*$c_h+$s,$x,$y,$c_w,$c_h,100);
+    imagecopymerge($im,$fnt,$p*$c_w+$s,$i*$c_h+$s,$x,$y,$c_w,$c_h,100);
     imagecolorset($fnt,$fc2,$r1,$g1,$b1);
-    imagecopymerge($im,$fnt,$j*$c_w,$i*$c_h,$x,$y,$c_w,$c_h,100);
+    imagecopymerge($im,$fnt,$p*$c_w,$i*$c_h,$x,$y,$c_w,$c_h,100);
+    $p++;
   }
 }
 
