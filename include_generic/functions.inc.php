@@ -365,6 +365,16 @@ function verysofturlencode($string)
   $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%26', '%3D', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
   return str_replace($replacements, $entities, $string);
 }
+function handle_db_cache( $filename, $funcGenerateIfNotFound )
+{
+  if (!file_exists( $filename ))
+  {
+    $data = $funcGenerateIfNotFound();
+    file_put_contents($filename,serialize($data));
+    return $data;
+  }
+  return unserialize( file_get_contents( $filename ) );  
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -1,6 +1,27 @@
 <?
-require_once("enum-platforms.inc.php");
-require_once("enum-compotypes.inc.php");
+global $PLATFORMS;
+$PLATFORMS = handle_db_cache( POUET_ROOT_LOCAL . "/cache/enum-platforms.cache", function() {
+  $rows = SQLLIB::selectRows("select * from platforms");
+  $platforms = array();
+  foreach($rows as $r)
+  {
+    $platforms[ $r->id ] = get_object_vars($r);
+    unset($platforms[ $r->id ]["id"]);
+    $platforms[ $r->id ]["slug"] = strtolower(preg_replace("/[^a-zA-Z0-9]+/","",$platforms[ $r->id ]["name"]));
+  }
+  ksort($platforms);
+  return $platforms;
+});
+
+global $COMPOTYPES;
+$COMPOTYPES = handle_db_cache( POUET_ROOT_LOCAL . "/cache/enum-compotypes.cache", function() {
+  $rows = SQLLib::selectRows("select * from compotypes");
+  
+  $compos = array();
+  foreach($rows as $v) $compos[$v->id] = $v->componame;
+  ksort($compos);
+  return $compos;
+});
 
 $AFFILIATIONS_ORIGINAL = array(
   "remix" => "remixed in",
