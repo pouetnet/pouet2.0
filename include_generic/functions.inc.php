@@ -217,7 +217,8 @@ function split_search_terms( $str )
 
 function process_ascii( $text )
 {
-  $enc = mb_detect_encoding( $text, "iso-8859-1,utf-8" );
+  $enc = mb_detect_encoding( $text, "utf-8, iso-8859-1" );
+  var_dump($enc);
   $utf8 = mb_convert_encoding( $text, "utf-8", $enc );
   return $utf8;
 }
