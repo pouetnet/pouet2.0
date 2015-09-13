@@ -1,7 +1,7 @@
 <?
 header("Content-type: text/html; charset=utf-8");
 $RSS["export/lastprodsreleased.rss.php"] = "last prods released";
-$RSS["export/lastprodsadded.rss.php"] = "last prods released";
+$RSS["export/lastprodsadded.rss.php"] = "last prods added";
 $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
 ?>
 <!DOCTYPE html>
