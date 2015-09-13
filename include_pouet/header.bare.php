@@ -1,5 +1,8 @@
 <?
 header("Content-type: text/html; charset=utf-8");
+$RSS["export/lastprodsreleased.rss.php"] = "last prods released";
+$RSS["export/lastprodsadded.rss.php"] = "last prods released";
+$RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,9 +12,9 @@ header("Content-type: text/html; charset=utf-8");
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
   <link rel="search" type="application/opensearchdescription+xml" href="opensearch_prod.xml" title="pouët.net: prod search" />
   <link rel="canonical" href="http://www.pouet.net<?=_html($_SERVER["REQUEST_URI"])?>"/>
-  <link rel="alternate" href="export/lastprodsreleased.rss.php" type="application/rss+xml" title="pouët.net: last prods released">
-  <link rel="alternate" href="export/lastprodsadded.rss.php" type="application/rss+xml" title="pouët.net: last prods added">
-  <link rel="alternate" href="export/lastbbsposts.rss.php" type="application/rss+xml" title="pouët.net: last bbs posts">
+<?foreach($RSS as $url=>$title){?>
+  <link rel="alternate" href="<?=_html($url)?>" type="application/rss+xml" title="pouët.net: <?=_html($title)?>">
+<?}?>
 
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
   <?if ( POUET_MOBILE ) {?>

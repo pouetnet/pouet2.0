@@ -758,6 +758,8 @@ if ($_POST["wlAction"] && $currentUser)
   }
 }
 
+$RSS["export/lastprodcomments.rss.php?prod=".(int)$main->prod->id] = "latest comments on ".$main->prod->name;
+
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 

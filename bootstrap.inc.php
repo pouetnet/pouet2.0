@@ -116,4 +116,6 @@ else
 $TITLE = "";
 $ogValues = array();
 $ogValues["type"] = "website";
+
+$RSS = array();
 ?>
