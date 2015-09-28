@@ -113,6 +113,9 @@ class PouetProd extends BM_Class {
 		}
 
   }
+  function GetLink( $root = POUET_ROOT_URL) {
+    return sprintf( $root . "prod.php?which=%d",$this->id);
+  }
   function RenderLink() {
     return sprintf("<a href='prod.php?which=%d'>%s</a>",$this->id,_html($this->name));
   }

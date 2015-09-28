@@ -2,7 +2,7 @@
 class PouetRSS
 {
   private $xml;
-  function __construct()
+  function __construct( $opt = array() )
   {
     $this->xml = new SimpleXMLElement("<"."?xml version='1.0' encoding='UTF-8'?"."><rss/>");
     $this->dtd = POUET_ROOT_URL . "faq.php#faq12";
@@ -14,9 +14,9 @@ class PouetRSS
     
     $this->xml->addAttribute("version","2.0");
     $this->xml->addChild("channel");
-    $this->xml->channel->addChild("title","pouët.net");
-    $this->xml->channel->addChild("link",POUET_ROOT_URL);
-    $this->xml->channel->addChild("description","your online demoscene resource");
+    $this->xml->channel->addChild("title",$opt["title"] ?: "pouët.net");
+    $this->xml->channel->addChild("link",$opt["link"] ?: POUET_ROOT_URL);
+    $this->xml->channel->addChild("description",$opt["description"] ?: "your online demoscene resource");
 
     $link = $this->xml->channel->addChild("atom:link","","http://www.w3.org/2005/Atom");
     $link->addAttribute("href",($_SERVER["HTTPS"]=="on"?"https":"http")."://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"] );
