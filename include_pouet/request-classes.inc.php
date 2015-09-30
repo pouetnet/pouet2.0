@@ -170,7 +170,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $s .= _html($row->type)." - ";
     $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
 
-    if ($row->type != $data["oldLink"])
+    if ($row->link != $data["oldLink"])
     {
       $s .= "<br/>";
       $s .= "<b>old</b>: ";
