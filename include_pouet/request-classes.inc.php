@@ -170,10 +170,13 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
     $s .= _html($row->type)." - ";
     $s .= "<a href='"._html($row->link)."'>"._html(shortify_cut($row->link,50))."</a>";
 
-    $s .= "<br/>";
-    $s .= "<b>old</b>: ";
-    $s .= _html($data["oldLinkKey"])." - ";
-    $s .= "<a href='"._html($data["oldLink"])."'>"._html(shortify_cut($data["oldLink"],50))."</a>";
+    if ($row->type != $data["oldLink"])
+    {
+      $s .= "<br/>";
+      $s .= "<b>old</b>: ";
+      $s .= _html($data["oldLinkKey"])." - ";
+      $s .= "<a href='"._html($data["oldLink"])."'>"._html(shortify_cut($data["oldLink"],50))."</a>";
+    }
     
     $s .= "<br/>";
     $s .= "<b>new</b>: ";
@@ -636,8 +639,11 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     $prod = PouetProd::Spawn( $itemID );
     $s = "<b>current</b>: ";
     $s .= "<a href='"._html($prod->download)."'>"._html(shortify_cut($prod->download,50))."</a>";
-    $s .= "<br/><b>old</b>: ";
-    $s .= "<a href='"._html($data["oldDownloadLink"])."'>"._html(shortify_cut($data["oldDownloadLink"],50))."</a>";
+    if ($prod->download != $data["oldDownloadLink"])
+    {
+      $s .= "<br/><b>old</b>: ";
+      $s .= "<a href='"._html($data["oldDownloadLink"])."'>"._html(shortify_cut($data["oldDownloadLink"],50))."</a>";
+    }
     $s .= "<br/><b>new</b>: ";
     $s .= "<a href='"._html($data["downloadLink"])."'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
     $s .= "<br/><b>reason</b>: ";
