@@ -40,7 +40,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <script type="text/javascript" src="./jsonp.js"></script>
   <script type="text/javascript" src="./cookie.js"></script>
   <script type="text/javascript" src="./autocompleter.js"></script>
-  <script type="text/javascript" src="./script.js"></script>
+  <script type="text/javascript" src="./script.js?<?=filemtime("script.js")?>"></script>
 
   <!--[if lt IE 9]><script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
