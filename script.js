@@ -121,6 +121,58 @@ function PrepareSubmitForm()
     if ($(item)) $(item).hide();
   });
   
+  var resetCompos = function()
+  {
+    var options = $("partyCompo").select("option");
+    var v = $("partyCompo").options[$("partyCompo").selectedIndex].value;
+    $("partyCompo").update("");
+    options.each(function(i){ $("partyCompo").insert(i); });
+    $("partyCompo").value = v;
+  }
+  var reorganizeCompos = function(){
+    if (!$("partyID").value) { resetCompos(); return; }
+    if (!$("partyYear").options[$("partyYear").selectedIndex].value) { resetCompos(); return; }
+    new Ajax.Request("ajax_partycompos.php",{
+      "method":"GET",
+      "parameters":$H({
+        "party":$("partyID").value,
+        "year":$("partyYear").options[$("partyYear").selectedIndex].value
+      }),
+      "onException": function(r, e) { throw e; },
+      "onSuccess":function(transport)
+        {
+          if (transport.responseJSON && transport.responseJSON.compos.length)
+          {
+            var options = $("partyCompo").select("option");
+            var v = $("partyCompo").options[$("partyCompo").selectedIndex].value;
+            $("partyCompo").update("");
+            var idx = 0;
+            var og1 = new Element("optgroup",{"label":"known compos at this party"});
+            $("partyCompo").insert(og1);
+            options.each(function(i){
+              if (transport.responseJSON.compos.indexOf(parseInt(i.value,10)) != -1)
+                og1.insert( i );
+            });
+
+            var og2 = new Element("optgroup",{"label":"other compos"});
+            $("partyCompo").insert(og2);
+            options.each(function(i){
+              if (transport.responseJSON.compos.indexOf(parseInt(i.value,10)) == -1)
+                og2.insert( i );
+            });
+            
+            $("partyCompo").insert( {top:options.find(function(i){ return i.value == 0; })} );
+            $("partyCompo").value = v;
+            
+          }
+          else
+          {
+            resetCompos();
+          }
+        },
+    });
+  };
+  
   if ($("platform")) $("platform").observe("change",adjustSubmitFormFields);
   if ($("type")) $("type").observe("change",adjustSubmitFormFields);
   adjustSubmitFormFields();
@@ -131,7 +183,10 @@ function PrepareSubmitForm()
     $("row_partyYear").show();
     $("row_partyCompo").show();
     $("row_partyRank").show();
+    reorganizeCompos();
   }});
+  $("partyYear").observe("change",reorganizeCompos);
+  $("partyYear").observe("keyup",reorganizeCompos);
   if ($("invitationParty")) new Autocompleter($("invitationParty"), {"dataUrl":"./ajax_parties.php",onSelectItem:function(){
     //$("row_invitationYear").show();
   }});
