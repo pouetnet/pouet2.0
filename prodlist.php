@@ -66,8 +66,6 @@ class PouetBoxProdlist extends PouetBox
     $this->prods = $s->performWithCalcRows( $this->count );
     PouetCollectPlatforms($this->prods);
     PouetCollectAwards($this->prods);
-
-    $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
   function Render() {
@@ -128,7 +126,7 @@ class PouetBoxProdlist extends PouetBox
       if ($p->voteavg > 0) $i = "rulez";
       echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
 
-      $pop = (int)($p->views * 100 / $this->maxviews);
+      $pop = (int)calculate_popularity( $p->views );
       echo "<td>".progress_bar_solo( $pop, $pop."%" )."</td>\n";
 
       echo "</tr>\n";

@@ -58,8 +58,6 @@ class PouetBoxSearchProd extends PouetBox
 
     PouetCollectPlatforms($this->data);
     PouetCollectAwards($this->data);
-
-    $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
   function Render() {
@@ -111,7 +109,7 @@ class PouetBoxSearchProd extends PouetBox
 
       echo "<td>".(int)$p->commentCount."</td>\n";
 
-      $pop = (int)($p->views * 100 / $this->maxviews);
+      $pop = (int)calculate_popularity( $p->views );
       echo "<td>".progress_bar_solo( $pop, $pop."%" )."</td>\n";
 
       echo "</tr>\n";

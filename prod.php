@@ -31,8 +31,6 @@ class PouetBoxProdMain extends PouetBox {
   var $prod;
   var $votes;
 
-  var $maxviews;
-
   function PouetBoxProdMain($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodmain";
@@ -50,8 +48,6 @@ class PouetBoxProdMain extends PouetBox {
       SQLLib::Query(sprintf_esc("UPDATE prods SET views=views+1, latestip='%s' WHERE id=%d",$_SERVER["REMOTE_ADDR"],$this->id));
     }
 
-    $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
-    
     $this->linkCheck = SQLLib::SelectRow(sprintf_esc("SELECT * FROM prods_linkcheck where prodID = %d",$this->id));
 
     $a = array(&$this->prod);
@@ -304,7 +300,7 @@ class PouetBoxProdMain extends PouetBox {
     }
   }
   function RenderPopularity() {
-    $pop = (int)($this->prod->views * 100 / $this->maxviews);
+    $pop = (int)calculate_popularity( $this->prod->views );
     echo "popularity : ".$pop."%<br/>\n";
     echo progress_bar( $pop, $pop."%" );
 

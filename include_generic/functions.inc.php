@@ -376,6 +376,16 @@ function handle_db_cache( $filename, $funcGenerateIfNotFound )
   return unserialize( file_get_contents( $filename ) );  
 }
 
+$MAX_PROD_VIEWS = null;
+function calculate_popularity( $views )
+{
+  global $MAX_PROD_VIEWS;
+  if (!$MAX_PROD_VIEWS)
+    $MAX_PROD_VIEWS = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
+  
+  return $views * 100.0 / $MAX_PROD_VIEWS;
+}
+
 function progress_bar( $val, $title = "" )
 {
   $s .= "<div class='outerbar' title='"._html($title)."'><div class='innerbar' style='width: ".$val."%'>&nbsp;<span>"._html($title)."</span></div></div>\n";

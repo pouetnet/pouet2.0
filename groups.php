@@ -57,8 +57,6 @@ class PouetBoxGroupMain extends PouetBox
     $s->attach(array("affiliatedboards"=>"board"),array("boards as board"=>"id"));
     $s->AddWhere(sprintf_esc("affiliatedboards.group=%d",$this->id));
     $this->affil = $s->perform();
-
-    $this->maxviews = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
   function Render()
@@ -162,7 +160,7 @@ class PouetBoxGroupMain extends PouetBox
       if ($p->voteavg > 0) $i = "rulez";
       echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
 
-      $pop = (int)($p->views * 100 / $this->maxviews);
+      $pop = (int)calculate_popularity( $p->views );
       echo "<td>".progress_bar_solo( $pop, $pop."%" )."</td>\n";
 
       if ($p->user)
