@@ -306,7 +306,7 @@ class PouetBoxProdMain extends PouetBox {
   function RenderPopularity() {
     $pop = (int)($this->prod->views * 100 / $this->maxviews);
     echo "popularity : ".$pop."%<br/>\n";
-    echo "<div class='outerbar'><div class='innerbar' style='width: ".$pop."%'>&nbsp;<span>".$pop."%</span></div></div>\n";
+    echo progress_bar( $pop, $pop."%" );
 
     $year = substr($this->prod->releaseDate,0,4);
     echo "<div class='awards'>";

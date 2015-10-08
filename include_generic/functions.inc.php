@@ -376,6 +376,18 @@ function handle_db_cache( $filename, $funcGenerateIfNotFound )
   return unserialize( file_get_contents( $filename ) );  
 }
 
+function progress_bar( $val, $title = "" )
+{
+  $s .= "<div class='outerbar' title='"._html($title)."'><div class='innerbar' style='width: ".$val."%'>&nbsp;<span>"._html($title)."</span></div></div>\n";
+  return $s;
+}
+
+function progress_bar_solo( $val, $title = "" )
+{
+  $s .= "<div class='innerbar_solo' style='width: ".$val."px' title='"._html($title)."'>&nbsp;<span>"._html($title)."</span></div>";
+  return $s;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

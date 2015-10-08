@@ -112,7 +112,7 @@ class PouetBoxSearchProd extends PouetBox
       echo "<td>".(int)$p->commentCount."</td>\n";
 
       $pop = (int)($p->views * 100 / $this->maxviews);
-      echo "<td><div class='innerbar_solo' style='width: ".$pop."px'>&nbsp;<span>".$pop."%</span></div></td>\n";
+      echo "<td>".progress_bar_solo( $pop, $pop."%" )."</td>\n";
 
       echo "</tr>\n";
     }

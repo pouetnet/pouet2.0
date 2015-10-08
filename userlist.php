@@ -75,7 +75,7 @@ class PouetBoxUserlist extends PouetBox
       echo "</td>\n";
 
       $pop = (int)($p->glops * 100 / $this->maxglops);
-      echo "<td><div class='innerbar_solo' style='width: ".$pop."px' title='".$p->glops." glöps'>&nbsp;<span>".$pop."%</span></div></td>\n";
+      echo "<td>".progress_bar_solo( $pop, $p->glops." glöps")."</td>\n";
 
       echo "</tr>\n";
     }
