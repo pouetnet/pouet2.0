@@ -126,6 +126,7 @@ class PouetBoxAccount extends PouetBox
         "required"=>true,
         "value"=>$this->user->avatar,
         "type"=>"avatar",
+        "infoAfter"=>"(<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span>",
       ),
       "slengpung"=>array(
         "info"=>"your slengpung id, if you have one",
@@ -420,19 +421,27 @@ else
 ?>
 <script type="text/javascript">
 <!--
-function updateAvatar()
-{
-  $("avatarimg").src = "<?=POUET_CONTENT_URL?>avatars/" + $("avatar").options[ $("avatar").selectedIndex ].value;
-}
 document.observe("dom:loaded",function(){
   if (!$("avatarlist"))
     return;
+
+  var updateAvatar = function()
+  {
+    $("avatarimg").src = "<?=POUET_CONTENT_URL?>avatars/" + $("avatar").options[ $("avatar").selectedIndex ].value;
+  }
 
   var img = new Element("img",{"id":"avatarimg","width":16,"height":16});
   $("avatarlist").insertBefore(img,$("avatar"));
   updateAvatar();
   $("avatarlist").observe("change",updateAvatar);
   $("avatarlist").observe("keyup",updateAvatar);
+
+  $("randomAvatar").update("(<a href='#'>pick random</a>)")
+  $("randomAvatar").down("a").observe("click",function(ev){
+    ev.stop();
+    $("avatar").selectedIndex = Math.floor( Math.random() * $("avatar").options.length );
+    updateAvatar();
+  });
 
   for (var i=1; i<10; i++)
   {
