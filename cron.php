@@ -28,12 +28,14 @@ function cron_CheckLinks( $id = null )
   foreach($prods as $prod)
   {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, verysofturlencode($prod->download));
+    $url = verysofturlencode($prod->download);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_USERAGENT, "Pouet-BrokenLinkCheck/2.0");
-    curl_setopt($ch, CURLOPT_NOBODY, true);    
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_HTTPGET, true);    
     
     curl_exec($ch);
     
@@ -50,9 +52,15 @@ function cron_CheckLinks( $id = null )
     
     curl_close($ch);
     
-    $out[] = $a["returnCode"];
-    //$out[] = json_encode($a);
-    //$out[] = "\n[".$prod->id."] " . $prod->download . " >> ". $a["returnCode"];
+    if ($id)
+    {
+      $out[] = json_encode($a);
+      $out[] = "\n[".$prod->id."] " . $url . " >> ". $a["returnCode"];
+    }
+    else
+    {
+      $out[] = $prod->id . " -> " . $a["returnCode"];
+    }
     sleep(5);
   }
   return implode(", ",$out);
