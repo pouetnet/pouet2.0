@@ -361,8 +361,8 @@ function softurlencode($string)
 }
 function verysofturlencode($string) 
 {
-  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",    "@",   "&",   "=",   "+",  " ",   "$",   ",",    "#",   "[",   "]");
-  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%26', '%3D', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
+  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",    "@",   "&",   "+",  " ",   "$",   ",",    "#",   "[",   "]");
+  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%26', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
   return str_replace($replacements, $entities, $string);
 }
 function handle_db_cache( $filename, $funcGenerateIfNotFound )
@@ -383,7 +383,7 @@ function calculate_popularity( $views )
   if (!$MAX_PROD_VIEWS)
     $MAX_PROD_VIEWS = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   
-  return $views * 100.0 / $MAX_PROD_VIEWS;
+  return $views / $MAX_PROD_VIEWS * 100.0;
 }
 
 function progress_bar( $val, $title = "" )
