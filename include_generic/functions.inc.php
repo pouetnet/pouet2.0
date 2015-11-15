@@ -505,6 +505,6 @@ if (POUET_TEST)
   define("POUET_CDC_MINGLOP",4);
 else
   define("POUET_CDC_MINGLOP",64);
-define("POUET_EARLIEST_YEAR",1980);
+define("POUET_EARLIEST_YEAR",1970);
 
 ?>
