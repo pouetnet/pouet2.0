@@ -94,14 +94,16 @@ class PouetUser extends BM_Class {
         $sceneID->GetClientCredentialsToken();
       }
       $data = $sceneID->User( $this->id );
+      if ($data["user"])
       {
         SQLLib::UpdateRow("users",array(
           "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),
           "sceneIDData"=>serialize($data["user"])
         ),sprintf_esc("id=%d",$this->id));
+        return $data["user"];
       }
 
-      return $data;
+      return array();
     }
     catch(SceneID3Exception $e)
     {
