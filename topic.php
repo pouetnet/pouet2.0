@@ -137,7 +137,7 @@ if ($view->topic)
       $msg->uniqueID = "pouetbox_fixmewarning";
       $msg->classes[] = "errorbox";
       $msg->title = "want to add or update a link ?";
-      $msg->message = "we've made a new automated edit request system to modify prods - if you just want to add credits or links to prods, <b>go to the prod page and click the edit link at the bottom</b>!";
+      $msg->message = "we've made a new automated edit request system to modify prods - if you just want to add credits or links (including youtube or soundcloud links!) to prods, <b>go to the prod page and click the edit link at the bottom</b>!";
       $msg->Render();
 ?>
 <style type="text/css">
