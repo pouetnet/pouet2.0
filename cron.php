@@ -27,14 +27,24 @@ function cron_CheckLinks( $id = null )
   $out = array();
   foreach($prods as $prod)
   {
+    $f = fopen("/dev/null","wb");
     $ch = curl_init();
     $url = verysofturlencode($prod->download);
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FILE, $f);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_USERAGENT, "Pouet-BrokenLinkCheck/2.0");
-    curl_setopt($ch, CURLOPT_NOBODY, true);
+    //curl_setopt($ch, CURLOPT_NOBODY, true);
+    $dataLength = 0;
+    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch,$data)use($dataLength){
+      $length = strlen($data);
+      $dataLength += $length;
+      if ($dataLength > 1024) // abort download after 1k
+        return 0;
+      return $length;
+    });
     curl_setopt($ch, CURLOPT_HTTPGET, true);    
     
     curl_exec($ch);
@@ -51,6 +61,8 @@ function cron_CheckLinks( $id = null )
     SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
     
     curl_close($ch);
+    
+    fclose($f);
     
     if ($id)
     {

@@ -50,7 +50,7 @@ class PouetBoxAdminEditUser extends PouetBox
       "lastIP"=>array(
         "name"=>"last IP",
         "type" => "static",
-        "value" => "<a href='admin_user_edit.php?ip=".rawurlencode($this->user->lastip)."'>"._html($this->user->lastip)."</a> ("._html($this->user->lasthost).") [<a href='http://www.geobytes.com/IpLocator.htm?GetLocation&amp;IpAddress="._html($this->user->lastip)."'>geoip</a>]",
+        "value" => "<a href='admin_user_edit.php?ip=".rawurlencode($this->user->lastip)."'>"._html($this->user->lastip)."</a> ("._html($this->user->lasthost).") [<a href='https://geoiptool.com/en/?IP="._html($this->user->lastip)."'>geoip</a>]",
       ),
       "level"=>array(
         "name"=>"level",
