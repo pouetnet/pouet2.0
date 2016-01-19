@@ -42,14 +42,14 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   }
 
   function GetCacheableData() {
-    return serialize($this->jsonData);
+    return $this->jsonData ? serialize($this->jsonData) : false;
   }
 
   function Sideload( $url, $data = array(), $headers = array(), $method = "GET" )
   {
     if ($method == "GET")
       $url .= (strstr($url,"?") === false ? "?" : "&") . http_build_query($data);
-    return file_get_contents( $url, false, stream_context_create( array(
+    return @file_get_contents( $url, false, stream_context_create( array(
       'http'=>array(
         'method'=>$method,
         'header'=>implode("\r\n",$headers),

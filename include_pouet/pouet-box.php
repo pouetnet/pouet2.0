@@ -130,7 +130,8 @@ class PouetBoxCachable extends PouetBox {
 
   function SaveToCache() {
     $s = $this->GetCacheableData();
-    file_put_contents($this->GetCacheFilename(),$s);
+    if ($s !== false)
+      file_put_contents($this->GetCacheFilename(),$s);
   }
 
   function GetCachedData() {
