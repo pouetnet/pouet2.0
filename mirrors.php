@@ -23,7 +23,7 @@ class PouetBoxMirrors extends PouetBox {
 
 
     $somepos = strrpos(basename($this->prod->download), ".");
-    if ($pos === false) { // not found means it is extensionless, cool for amiga stuff
+    if ($somepos === false) { // not found means it is extensionless, cool for amiga stuff
       $extensionless = basename($this->prod->download);
     } else { //lets strip the extension to help searches for prods using .rar instead of .zip
       $extensionless = substr(basename($this->prod->download), 0, $somepos);
