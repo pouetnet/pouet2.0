@@ -30,6 +30,7 @@ class PouetBoxIndexStats extends PouetBoxCachable {
       $this->data[$v."_all"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v)->c;
       $this->data[$v."_24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$field."))<=3600*24")->c;
     }
+    $this->data["usersSeen24h"] = SQLLib::SelectRow("SELECT count(0) as c FROM users WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(lastLogin))<=3600*24")->c;
   }
 
   function Render() {
@@ -45,6 +46,10 @@ class PouetBoxIndexStats extends PouetBoxCachable {
       echo "  <td class='r".(($n++&1)+1)." stat'>+ ".$this->data[$v."_24h"]."</td>\n";
       echo "</tr>\n";
     }
+    echo "<tr>\n";
+    echo "  <td class='r".(($n++&1)+1)."'>".$this->data["usersSeen24h"]." users seen in the last 24h</td>\n";
+    echo "  <td class='r".(($n++&1)+1)." stat'>&nbsp;</td>\n";
+    echo "</tr>\n";
     echo "</table>\n";
   }
 
