@@ -325,17 +325,24 @@ else
 {
   $p = new PouetBoxListsMain($listID);
   $p->Load();
-  $TITLE = $p->list->name;
-  
-  if ($currentUser && ($currentUser->id == $p->list->upkeeper->id 
-    || $currentUser->id == $p->list->addedUser->id
-    || $currentUser->IsModerator()))
+  if ($p->list)
   {
-    $form = new PouetFormProcessor();
-    $form->SetSuccessURL( "lists.php?which=".(int)$listID, true );
-    $form->Add( "list_add", new PouetBoxListsAdd($p->list) );
-
-    $form->Process();
+    $TITLE = $p->list->name;
+    
+    if ($currentUser && ($currentUser->id == $p->list->upkeeper->id 
+      || $currentUser->id == $p->list->addedUser->id
+      || $currentUser->IsModerator()))
+    {
+      $form = new PouetFormProcessor();
+      $form->SetSuccessURL( "lists.php?which=".(int)$listID, true );
+      $form->Add( "list_add", new PouetBoxListsAdd($p->list) );
+  
+      $form->Process();
+    }
+  }
+  else
+  {
+    $p = null;
   }
 }
 
