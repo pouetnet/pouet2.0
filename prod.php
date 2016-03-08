@@ -309,10 +309,10 @@ class PouetBoxProdMain extends PouetBox {
     foreach($this->awards as $award)
     {
     	printf("<a href='./awards.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
-        $award->type == "viewingtip" ? $year : $year . str_replace(" ","",$award->category),
-        $award->type,
-        $award->category,
-        $award->category);
+        $award->type == "viewingtip" ? $year : $year . hashify($award->category),
+        _html($award->type),
+        _html($award->category),
+        _html($award->category));
     }
     echo "</div>";
   }

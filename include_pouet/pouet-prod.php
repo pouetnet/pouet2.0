@@ -104,10 +104,10 @@ class PouetProd extends BM_Class {
       foreach($this->awards as $a)
       {
     		printf("<a href='awards.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
-    		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . str_replace(" ","",$a->category),
-    		  $a->type,
-    		  $a->category,
-    		  $a->category);
+    		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . hashify($a->category),
+    		  _html($a->type),
+    		  _html($a->category),
+    		  _html($a->category));
   		}
       echo "</div>";
 		}

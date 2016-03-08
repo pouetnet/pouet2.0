@@ -398,6 +398,15 @@ function progress_bar_solo( $val, $title = "" )
   return $s;
 }
 
+function hashify($s) {
+  $hash = strtolower($s);
+  $hash = preg_replace("/[^\w]+/","-",$hash);
+  $hash = preg_replace("/^[_]+/","",$hash);
+  $hash = preg_replace("/[_]+$/","",$hash);
+  $hash = trim($hash,"-");
+  return $hash;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

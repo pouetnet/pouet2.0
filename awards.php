@@ -41,7 +41,7 @@ class PouetBoxSceneOrgAwards extends PouetBox {
       if ($lastCategory != $row->category)
       {
         $lastCategory = $row->category;
-        echo "<tr id='".str_replace(" ","",$lastYear.$lastCategory)."'><th colspan='3' class='category'>".$lastCategory."</th></tr>\n";
+        echo "<tr id='".hashify($lastYear.$lastCategory)."'><th colspan='3' class='category'>".$lastCategory."</th></tr>\n";
       }
       $p = $row->prod;
       if (!$p) continue;
