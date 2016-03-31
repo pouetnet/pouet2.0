@@ -10,8 +10,7 @@ class PouetBoxSubmitProd extends PouetBox
     $this->fields = array();
 
     $row = SQLLib::selectRow("DESC prods type");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->types = $m[1];
+    $this->types = enum2array($row->Type);
 
     global $COMPOTYPES;
     $this->compos = $COMPOTYPES;

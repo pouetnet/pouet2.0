@@ -24,8 +24,7 @@ class PouetBoxAdminEditUser extends PouetBox
     $this->fields = array();
 
     $row = SQLLib::selectRow("DESC users level");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->levels = $m[1];
+    $this->levels = enum2array($row->Type);
 
   }
   use PouetForm;

@@ -9,11 +9,11 @@ class PouetBoxTopList extends PouetBox {
     $this->formifier = new Formifier();
 
     $row = SQLLib::selectRow("DESC prods type");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
+    $m = enum2array($row->Type);
 
     $this->types = array();
     $this->types[""] = "- none - ";
-    foreach($m[1] as $v) $this->types[$v] = $v;
+    foreach($m as $v) $this->types[$v] = $v;
   }
 
   function LoadFromDB()

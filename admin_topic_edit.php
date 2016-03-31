@@ -22,8 +22,7 @@ class PouetBoxAdminEditTopic extends PouetBox
     $this->fields = array();
 
     $row = SQLLib::selectRow("DESC bbs_topics category");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->categories = $m[1];
+    $this->categories = enum2array($row->Type);
   }
 
   function ValidateInput( $data )

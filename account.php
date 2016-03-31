@@ -194,9 +194,9 @@ class PouetBoxAccount extends PouetBox
 
 
     $row = SQLLib::SelectRow("DESC users im_type");
-    preg_match_all("/'(.*?)'/",$row->Type,$m);
-    array_unshift($m[1],"");
-    $this->fieldsPouet["im_type"]["fields"] = $m[1];
+    $m = enum2array($row->Type);
+    array_unshift($m,"");
+    $this->fieldsPouet["im_type"]["fields"] = $m;
   }
 
   function ParsePostLoggedIn( $data )

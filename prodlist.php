@@ -158,8 +158,7 @@ class PouetBoxProdlistSelectors extends PouetBox
 {
   function Load() {
     $row = SQLLib::selectRow("DESC prods type");
-    preg_match_all("/'([a-zA-Z0-9\s_\-]+)'/",$row->Type,$m);
-    $this->types = $m[1];
+    $this->types = enum2array($row->Type);
   }
   function Render() {
     global $PLATFORMS;

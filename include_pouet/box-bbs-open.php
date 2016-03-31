@@ -7,8 +7,7 @@ class PouetBoxBBSOpen extends PouetBox {
     $this->title = "open a new bbs thread";
 
     $row = SQLLib::selectRow("DESC bbs_topics category");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->categories = $m[1];
+    $this->categories = enum2array($row->Type);
   }
 
   function ParsePostMessage($post)

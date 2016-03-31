@@ -407,6 +407,10 @@ function hashify($s) {
   return $hash;
 }
 
+function enum2array($s)
+{
+  return str_getcsv(substr($s,substr($s,0,3)=="set"?4:5,-1), ',', "'");
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )

@@ -342,12 +342,10 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
     $this->headers = array("type","category");
 
     $row = SQLLib::selectRow("DESC sceneorgrecommended type");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->types = $m[1];
+    $this->types = enum2array($row->Type);
 
     $row = SQLLib::selectRow("DESC sceneorgrecommended category");
-    preg_match_all("/'([^']+)'/",$row->Type,$m);
-    $this->categories = $m[1];
+    $this->categories = enum2array($row->Type);
   }
   use PouetForm;
   function Commit($data)
