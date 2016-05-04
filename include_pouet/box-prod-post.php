@@ -27,12 +27,7 @@ class PouetBoxProdPost extends PouetBox {
     if (!$currentUser->CanPostInProdComments())
       return array("not allowed lol.");
 
-    $message = $post["comment"];
-    $message = str_replace(html_entity_decode('&shy;', 0, 'UTF-8'),"",$message);
-    $message = strip_tags(bbencode($message),"img");
-    $message = trim($message);
-
-    if (!$message)
+    if (!is_string_meaningful($post["comment"]))
       return array("not too meaningful, is it...");
 
     $r = SQLLib::SelectRow(sprintf_esc("SELECT id FROM prods where id=%d",$this->prod));

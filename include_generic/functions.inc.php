@@ -411,6 +411,17 @@ function enum2array($s)
 {
   return str_getcsv(substr($s,substr($s,0,3)=="set"?4:5,-1), ',', "'");
 }
+
+function is_string_meaningful($s)
+{
+  $message = $s;
+  $message = str_replace(html_entity_decode('&shy;', 0, 'UTF-8'),"",$message);
+  $message = strip_tags(bbencode($message),"img");
+  $message = trim($message);
+
+  return !!$message;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )
