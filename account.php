@@ -341,7 +341,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
     $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
     $s->AddOrder("requestDate desc");
-    $s->SetLimit(10);
+    $s->SetLimit( $_GET["limit"] ?: 10 );
     $this->requests = $s->perform();
   }
   function Render()
