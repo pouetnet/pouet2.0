@@ -29,6 +29,7 @@ class PouetBoxProdPost extends PouetBox {
 
     $message = $post["comment"];
     $message = str_replace(html_entity_decode('&shy;', 0, 'UTF-8'),"",$message);
+    $message = strip_tags(bbencode($message),"img");
     $message = trim($message);
 
     if (!$message)
@@ -40,7 +41,7 @@ class PouetBoxProdPost extends PouetBox {
 
     $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY addedDate DESC LIMIT 1",$this->prod));
 
-    if ($r && $r->who == get_login_id() && $r->comment == $message)
+    if ($r && $r->who == get_login_id() && $r->comment == $post["comment"])
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
 
     return array();
