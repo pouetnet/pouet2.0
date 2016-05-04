@@ -20,7 +20,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     global $currentUser;
     $message = trim($post["message"]);
 
-    if (!$message)
+    if (!is_string_meaningful($message))
       return array("not too meaningful, is it...");
 
     if (strstr($message,"tinybrain") !== false)
