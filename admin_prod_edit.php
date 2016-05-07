@@ -2,6 +2,7 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-prod-submit.php");
+require_once("include_pouet/pouet-box-editbase.php");
 
 if ($currentUser && !$currentUser->CanEditItems())
 {
@@ -243,91 +244,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdBase extends PouetBox
-{
-  public static $slug = "None";
-  function GetRow($id)
-  {
-    foreach($this->data as $v)
-      if ($v->id == $id)
-        return $v;
-    return new stdClass();
-  }
-  function RenderEditRow($row)
-  {
-  }
-  function RenderNormalRow($row)
-  {
-  }
-  function RenderNormalRowEnd($row)
-  {
-    echo "<td>";
-    $csrf = new CSRFProtect();
-    $csrf->PrintToken();
-    printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
-    printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug,$row->id);
-    echo "</td>\n";
-  }
-  function RenderDeleteRowEnd($row)
-  {
-    echo "<td>";
-    $csrf = new CSRFProtect();
-    $csrf->PrintToken();
-    echo "<input type='hidden' name='del".static::$slug."' value='".$row->id."'/>";
-    echo "<input type='submit' value='Delete!'/>";
-    echo "</td>\n";
-  }
-  function RenderEditRowEnd($row)
-  {
-    echo "<td>";
-    $csrf = new CSRFProtect();
-    $csrf->PrintToken();
-    if ($row->id)
-      echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
-    echo "<input type='submit' value='Submit'/>";
-    echo "</td>\n";
-  }
-  function RenderBody()
-  {
-    echo "<table class='boxtable'>\n";
-    echo "  <tr>\n";
-    foreach($this->headers as $v)
-      echo "    <th>"._html($v)."</th>\n";
-    echo "    <th>&nbsp;</th>\n";
-    echo "  </tr>\n";
-    foreach($this->data as $row)
-    {
-      echo "  <tr>\n";
-      if ($_GET["edit" . static::$slug] == $row->id)
-      {
-        $this->RenderEditRow($row);
-        $this->RenderEditRowEnd($row);
-      }
-      else if ($_GET["del" . static::$slug] == $row->id)
-      {
-        $this->RenderNormalRow($row);
-        $this->RenderDeleteRowEnd($row);
-      }
-      else
-      {
-        $this->RenderNormalRow($row);
-        $this->RenderNormalRowEnd($row);
-      }
-      echo "  </tr>\n";
-    }
-    if ($_GET["new" . static::$slug])
-    {
-      $this->RenderEditRow( new stdClass() );
-      $this->RenderEditRowEnd( new stdClass() );
-    }
-    echo "</table>\n";
-    echo "<div class='foot'>";
-    printf("<a href='%s?which=%d&amp;new%s=true' class='new'>new</a>",$_SERVER["SCRIPT_NAME"],$this->prod->id,static::$slug);
-    echo "</div>\n";
-  }
-}
-
-class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
+class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Sceneorg";
   function PouetBoxAdminEditProdSceneorg( $prod )
@@ -336,6 +253,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxAdminEditProdBase
 
     $this->uniqueID = "pouetbox_prodeditprodsceneorg";
     $this->prod = $prod;
+    $this->id = $prod->id;
     $this->title = "scene.org recommendations";
 
     $this->data = SQLLib::SelectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d",$this->prod->id));
@@ -424,7 +342,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
+class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Link";
   function PouetBoxAdminEditProdLinks( $prod )
@@ -433,6 +351,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxAdminEditProdBase
 
     $this->uniqueID = "pouetbox_prodeditprodlinks";
     $this->prod = $prod;
+    $this->id = $prod->id;
     $this->title = "additional links";
 
     $this->headers = array("type","link");
@@ -498,7 +417,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
+class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Party";
   function PouetBoxAdminEditProdParties( $prod )
@@ -507,6 +426,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxAdminEditProdBase
 
     $this->uniqueID = "pouetbox_prodeditprodparties";
     $this->prod = $prod;
+    $this->id = $prod->id;
     $this->title = "additional parties";
 
     $this->headers = array("party","year","compo","place");
@@ -623,7 +543,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
+class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Credit";
   function PouetBoxAdminEditProdCredits( $prod )
@@ -632,6 +552,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxAdminEditProdBase
 
     $this->uniqueID = "pouetbox_prodeditprodcredits";
     $this->prod = $prod;
+    $this->id = $prod->id;
     $this->title = "credits";
 
     $this->headers = array("user","role");
@@ -716,7 +637,7 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
+class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Affil";
   function PouetBoxAdminEditProdAffil( $prod )
@@ -725,6 +646,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxAdminEditProdBase
 
     $this->uniqueID = "pouetbox_prodeditprodaffil";
     $this->prod = $prod;
+    $this->id = $prod->id;
     $this->title = "related prods";
 
     $this->headers = array("relation","prod");

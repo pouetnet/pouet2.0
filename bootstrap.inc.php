@@ -24,6 +24,7 @@ require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-user.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-party.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-group.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-board.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-formprocessor.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 
