@@ -96,7 +96,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
       $p = _html($p);
       //$p = bbencode($p,true);
       //$p = nl2br($p);
-      $p = preg_replace("/([a-z]+:\/\/\S+)/","<a href='$1'>link me beautiful</a>",$p);
+      $p = preg_replace("/([a-z]+:\/\/\S+)/","<a href='$1' rel='external'>link me beautiful</a>",$p);
       $p = better_wordwrap($p,40," ");
 
       echo $p;

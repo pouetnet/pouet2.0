@@ -379,7 +379,7 @@ document.observe("dom:loaded",function(){
 
 function Youtubify( e )
 {
-  e.select("li a:not(.usera)").each(function(item){
+  e.select("a[rel='external']").each(function(item){
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
     {
