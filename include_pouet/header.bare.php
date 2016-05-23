@@ -19,7 +19,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
   <?if ( POUET_MOBILE ) {?>
   <link rel="stylesheet" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
-  <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0;" />
   <?}?>
   
 <?
