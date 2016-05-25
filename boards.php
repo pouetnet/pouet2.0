@@ -129,7 +129,7 @@ class PouetBoxBoardMain extends PouetBox
 
       echo "<ul>";
       foreach($this->bbstros as $p)
-        echo "<li>".$p->RenderLink()." by ".$p->RenderGroupsLong()."</li>\n";
+        echo "<li>".$p->RenderSingleRowShort()."</li>\n";
       echo "</ul>";
 
       echo "</td>\n";
