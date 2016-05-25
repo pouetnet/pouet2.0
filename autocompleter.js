@@ -7,6 +7,7 @@ Autocompleter = Class.create({
       dropdown: false,
       lockSelect: true,
       width: null,
+      placeholder: "",
     },options || {}); 
     var instance = this;
     
@@ -24,7 +25,7 @@ Autocompleter = Class.create({
       parent.insert(this.finalSelection);
     }
 
-    this.searchBox = new Element("input",{"class":"autocompleteSearch","style":"position:relative"});
+    this.searchBox = new Element("input",{"class":"autocompleteSearch","style":"position:relative","placeholder":this.options.placeholder});
     parent.insert( this.searchBox );
 
     if (this.options.dropdown)
@@ -41,9 +42,7 @@ Autocompleter = Class.create({
     if (this.finalSelection)
     {
       this.finalSelection.observe("click",function(){
-        instance.originalElement.value = "";
-        instance.finalSelection.hide();
-        instance.searchBox.show();  
+        instance.reset(false);
       });
     }
     this.keyboardSelection = -1;
@@ -147,6 +146,15 @@ Autocompleter = Class.create({
         this.searchBox.value = this.originalElement.value;
       }      
     }
+  },
+  reset:function(complete)
+  {
+    if (complete)
+      this.searchBox.value = "";
+    this.originalElement.value = "";
+    if (this.finalSelection)
+      this.finalSelection.hide();
+    this.searchBox.show();  
   },
   selectListItem: function(li)
   {
