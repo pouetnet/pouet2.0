@@ -46,6 +46,7 @@ class PouetBoxSearchProd extends PouetBox
     $s = new BM_Query("prods");
     $s->AddField("cmts.c as commentCount");
     $s->AddJoin("left","(select which, count(*) as c from comments group by which) as cmts","cmts.which = prods.id");
+    $s->AddOrder(sprintf_esc("if(prods.name='%s',1,2)",$_GET["what"]));
     $s->AddOrder("prods.name ASC");
     $s->AddOrder("prods.id");
     foreach($this->terms as $term)
@@ -162,6 +163,7 @@ class PouetBoxSearchGroup extends PouetBox
     $s->AddJoin("left","(select group1, count(*) as c from prods group by group1) as p1","p1.group1 = groups.id");
     $s->AddJoin("left","(select group2, count(*) as c from prods group by group2) as p2","p2.group2 = groups.id");
     $s->AddJoin("left","(select group3, count(*) as c from prods group by group3) as p3","p3.group3 = groups.id");
+    $s->AddOrder(sprintf_esc("if(groups.name='%s',1,2)",$_GET["what"]));
     $s->AddOrder("groups.name ASC");
     foreach($this->terms as $term)
       $s->AddWhere(sprintf_esc("(groups.name LIKE '%%%s%%' or groups.acronym LIKE '%%%s%%')",_like($term),_like($term)));
@@ -248,6 +250,7 @@ class PouetBoxSearchParty extends PouetBox
     $s = new BM_Query("parties");
     $s->AddField("p.c as prods");
     $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id");
+    $s->AddOrder(sprintf_esc("if(parties.name='%s',1,2)",$_GET["what"]));
     $s->AddOrder("parties.name ASC");
     foreach($this->terms as $term)
       $s->AddWhere(sprintf_esc("parties.name LIKE '%%%s%%'",_like($term)));
@@ -334,6 +337,7 @@ class PouetBoxSearchUser extends PouetBox
     $s = new BM_Query("users");
 //    $s->AddField("p.c as prods");
 //    $s->AddJoin("left","(select party, count(*) as c from prods group by party) as p","p.party = parties.id");
+    $s->AddOrder(sprintf_esc("if(users.nickname='%s',1,2)",$_GET["what"]));
     $s->AddOrder("users.nickname ASC");
     foreach($this->terms as $term)
       $s->AddWhere(sprintf_esc("users.nickname LIKE '%%%s%%'",_like($term)));
