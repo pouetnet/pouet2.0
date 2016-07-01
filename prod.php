@@ -536,16 +536,30 @@ class PouetBoxProdPopularityHelper extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function PouetBoxProdPopularityHelper($id) {
+  function PouetBoxProdPopularityHelper($prod) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodpopularityhelper";
     $this->title = "popularity helper";
-    $this->id = $id;
+    $this->prod = $prod;
   }
 
   function RenderContent() {
-    echo "increase the popularity of this prod by spreading this URL:<br/>";
-    echo "<input type='text' value='http://www.pouet.net/prod.php?which=".$this->id."' size='50' readonly='readonly' />";
+    $url = POUET_ROOT_URL . "prod.php?which=".$this->prod->id;
+    echo "<p>increase the popularity of this prod by spreading this URL:</p>\n";
+    echo "<input type='text' value='"._html($url)."' size='50' readonly='readonly' />\n";
+    echo "<p>or via:\n";
+
+    echo "  <a href='https://www.facebook.com/sharer/sharer.php?u="._html(rawurlencode($url))."'>facebook</a>\n";
+    
+    $text = "You should watch \"".$this->prod->name."\" on @pouetdotnet: ".$url;
+    echo "  <a href='https://twitter.com/intent/tweet?text="._html(rawurlencode($text))."'>twitter</a>\n";
+    
+    echo "  <a href='https://plus.google.com/share?url="._html(rawurlencode($url))."'>google+</a>\n";
+
+    echo "  <a href='http://pinterest.com/pin/create/button/?url="._html(rawurlencode($url))."'>pinterest</a>\n";
+
+    echo "  <a href='http://tumblr.com/widgets/share/tool?canonicalUrl="._html(rawurlencode($url))."'>tumblr</a>\n";
+    echo "</p>\n";
   }
 };
 
@@ -766,7 +780,7 @@ if ($main->prod)
 {
   $main->Render();
 
-  $p = new PouetBoxProdPopularityHelper($prodid);
+  $p = new PouetBoxProdPopularityHelper($main->prod);
   $p->Render();
 
   if (get_setting("prodcomments")!=0)
