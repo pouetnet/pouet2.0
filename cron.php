@@ -28,34 +28,44 @@ function cron_CheckLinks( $id = null )
   foreach($prods as $prod)
   {
     $ch = curl_init();
+    $urls = array();
     $url = verysofturlencode($prod->download);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, "Pouet-BrokenLinkCheck/2.0");
-    //curl_setopt($ch, CURLOPT_NOBODY, true);
-    $dataLength = 0;
-    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch,$data)use($dataLength){
-      $length = strlen($data);
-      $dataLength += $length;
-      if ($dataLength > 1024) // abort download after 1k
-        return 0;
-      return $length;
-    });
-    curl_setopt($ch, CURLOPT_HTTPGET, true);    
-    
-    curl_exec($ch);
-    
+    for ($x=0; $x<10; $x++)
+    {
+      curl_setopt($ch, CURLOPT_URL, $url);
+      //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+      curl_setopt($ch, CURLOPT_USERAGENT, "Pouet-BrokenLinkCheck/2.0");
+      //curl_setopt($ch, CURLOPT_NOBODY, true);
+      $dataLength = 0;
+      curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch,$data)use($dataLength){
+        $length = strlen($data);
+        $dataLength += $length;
+        if ($dataLength > 1024) // abort download after 1k
+          return 0;
+        return $length;
+      });
+      curl_setopt($ch, CURLOPT_HTTPGET, true);    
+      
+      $urls[] = $url;
+      curl_exec($ch);
+      
+      $lastUrl = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+      if ($lastUrl == $url)
+        break;
+      $url = $lastUrl;
+    }
+
     $a = array();
     $a["prodID"] = $prod->id;
     $a["protocol"] = "http";
-    $lastUrl = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
     if (strpos($lastUrl,"ftp://")===0)
       $a["protocol"] = "ftp";
     $a["testDate"] = date("Y-m-d H:i:s");
     $a["returnCode"] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     $a["returnContentType"] = curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
+
     SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
     
     curl_close($ch);
@@ -63,7 +73,7 @@ function cron_CheckLinks( $id = null )
     if ($id)
     {
       $out[] = json_encode($a);
-      $out[] = "\n[".$prod->id."] " . $url . " >> ". $a["returnCode"];
+      $out[] = "\n[".$prod->id."] " . json_encode($urls) . " >> ". $a["returnCode"];
     }
     else
     {
