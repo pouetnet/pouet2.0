@@ -10,12 +10,16 @@ class PouetRequestClassBase
   // return error string on error, empty string / null / false / etc. on success
   static function GetFields($data,&$fields,&$js) { return ""; }
 
+  // transform form $input into sql-ish $output
   // return error array on error, empty array on success
   static function ValidateRequest($input,&$output) { $output = $input; return array(); }
 
-  // return HTML string
+  // return HTML string describing the changes
+  // - $data is the changeset
   static function Display($itemID, $data) { return ""; }
 
+  // commit changeset
+  // - $reqData is the changeset
   // return error array on error, empty array on success
   static function Process($itemID,$reqData) { return array(); }
 };
@@ -592,7 +596,6 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
   }
 };
 
-
 ///////////////////////////////////////////////////////////////////////////////
 
 class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
@@ -678,6 +681,199 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
   }
 };
 
+///////////////////////////////////////////////////////////////////////////////
+
+class PouetRequestClassChangeInfo extends PouetRequestClassBase
+{
+  static function GetItemType() { return "prod"; }
+  static function Describe() { return "change prod info"; }
+
+  // return error string on error, empty string / null / false / etc. on success
+  static function ProdToArray( $prod )
+  {
+    $fields["name"] = $prod->name;
+
+    $n = 1;
+    foreach($prod->groups as $g)
+      $fields["group".$n++] = $g->id;
+
+    $fields["releaseDate"] = $prod->releaseDate;
+
+    $fields["platform"] = array_keys($prod->platforms);
+    $fields["type"] = $prod->types;
+
+    if (count($prod->placings) > 0)
+    {
+      $fields["partyID"] = $prod->placings[0]->party->id;
+      $fields["partyYear"] = $prod->placings[0]->year;
+      $fields["partyCompo"] = $prod->placings[0]->compo;
+      $fields["partyRank"] = $prod->placings[0]->ranking;
+    }
+
+    //$fields["sceneOrgID"] = $prod->sceneorg;
+    $fields["demozooID"] = $prod->demozoo;
+    $fields["csdbID"] = $prod->csdb;
+    $fields["boardID"] = $prod->boardID;
+    $fields["invitationParty"] = $prod->invitation;
+    $fields["invitationYear"] = $prod->invitationyear;
+    
+    return $fields;
+  }
+  static function GetFields($data,&$fields,&$js)
+  {
+    $row = SQLLib::selectRow("DESC prods type");
+    $types = enum2array($row->Type);
+
+    global $COMPOTYPES;
+    $compos = $COMPOTYPES;
+    $compos[0] = "";
+    asort($compos);
+
+    $ranks = array(0=>"");
+    $ranks[97] = "disqualified";
+    $ranks[98] = "not applicable";
+    $ranks[99] = "not shown";
+    for ($x=1; $x<=96; $x++) $ranks[$x] = $x;
+
+    $years = array("");
+    for ($x=date("Y"); $x>=POUET_EARLIEST_YEAR; $x--) $years[$x] = $x;
+    $yearsFuture = array("");
+    for ($x=date("Y")+2; $x>=POUET_EARLIEST_YEAR; $x--) $yearsFuture[$x] = $x;
+
+    global $PLATFORMS;
+    $plat = array();
+	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
+	  uasort($plat,"strcasecmp");
+
+    $fields = array(
+      "name"=>array(
+        "name"=>"prod name / title",
+        "info"=>" ",
+        "required"=>true,
+      ),
+      "group1"=>array(
+        "name"=>"group 1",
+      ),
+      "group2"=>array(
+        "name"=>"group 2",
+      ),
+      "group3"=>array(
+        "name"=>"group 3",
+        "infoAfter"=>"if the group is missing from the list, add it <a href='submit_group.php' target='_blank'>here</a> !",
+      ),
+      "releaseDate"=>array(
+        "name"=>"release date",
+        "type"=>"date",
+      ),
+      "type"=>array(
+        "name"=>"type",
+        "type"=>"select",
+        "multiple"=>true,
+        "fields"=>$types,
+        "info"=>"ctrl + click or cmd + click to select more than one !",
+        "required"=>true,
+      ),
+      "platform"=>array(
+        "name"=>"platform",
+        "type"=>"select",
+        "multiple"=>true,
+        "assoc"=>true,
+        "fields"=>$plat,
+        "info"=>"ctrl + click or cmd + click to select more than one !",
+        "required"=>true,
+      ),
+      "csdbID"=>array(
+        "name"=>"csdb ID",
+      ),
+      /*
+      "sceneOrgID"=>array(
+        "name"=>"scene.org ID",
+      ),
+      */
+      "demozooID"=>array(
+        "name"=>"demozoo ID",
+      ),
+      "partyID"=>array(
+        "name"=>"party",
+        "infoAfter"=>"if the party is missing from the list, add it <a href='submit_party.php' target='_blank'>here</a> !",
+      ),
+      "partyYear"=>array(
+        "name"=>"party year",
+        "type"=>"select",
+        "fields"=>$years,
+      ),
+      "partyCompo"=>array(
+        "name"=>"party compo",
+        "type"=>"select",
+        "fields"=>$compos,
+        "assoc"=>true,
+      ),
+      "partyRank"=>array(
+        "name"=>"party rank",
+        "type"=>"select",
+        "assoc"=>true,
+        "fields"=>$ranks,
+      ),
+      "invitationParty"=>array(
+        "name"=>"invitation for party",
+      ),
+      "invitationYear"=>array(
+        "name"=>"invitation year",
+        "type"=>"select",
+        "fields"=>$yearsFuture,
+      ),
+      "boardID"=>array(
+        "name"=>"bbs affiliation",
+      ),
+      "finalStep" => array(
+        "type"=>"hidden",
+        "value"=>1,
+      ),
+    );
+    if ($data["prod"] && $prod = PouetProd::Spawn( $data["prod"] ))
+    {
+      $a = array(&$prod);
+      PouetCollectPlatforms( $a );
+
+      $pa = static::ProdToArray( $prod );
+      foreach($pa as $k=>$v)
+        $fields[$k]["value"] = $v;
+    }
+    $js .= "document.observe(\"dom:loaded\",function(){\n";
+    $js .= "  if (!$(\"row_csdbID\")) return;\n";
+    $js .= "  PrepareSubmitForm();\n";
+    $js .= "});\n";
+  }
+
+  // transform form $input into sql-ish $output
+  // return error array on error, empty array on success
+  static function ValidateRequest($input,&$output) 
+  {
+    $fields = array();
+    static::GetFields(array(),$fields,$js);
+    $prod = PouetProd::Spawn( $_REQUEST["prod"] );
+    $pa = static::ProdToArray( $prod );
+
+    $_in = array();
+    foreach($fields as $k=>$v) $_in[$k] = $input[$k];
+    $output = array_diff( $_in, $pa );
+    unset($output["finalStep"]);
+    
+    return array();    
+  }
+
+  // return HTML string describing the changes
+  // - $data is the changeset
+  static function Display($itemID, $data) {
+    return json_encode($data);
+  }
+
+  // commit changeset
+  // - $reqData is the changeset
+  // return error array on error, empty array on success
+  static function Process($itemID,$reqData) { return array(); }
+};
+
 $REQUESTTYPES = array(
   "prod_add_link" => "PouetRequestClassAddLink",
   "prod_change_link" => "PouetRequestClassChangeLink",
@@ -688,5 +884,6 @@ $REQUESTTYPES = array(
   "prod_remove_credit" => "PouetRequestClassRemoveCredit",
 
   "prod_change_downloadlink" => "PouetRequestClassChangeDownloadLink",
+  "prod_change_info" => "PouetRequestClassChangeInfo",
 );
 ?>
