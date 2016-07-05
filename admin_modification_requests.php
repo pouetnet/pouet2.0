@@ -128,6 +128,12 @@ class PouetBoxAdminModificationRequests extends PouetBox
 <script type="text/javascript">
 <!--
 document.observe("dom:loaded",function(){
+  $$("#pouetbox_adminreq th[colspan]").first().insert( " [" );
+  $$("#pouetbox_adminreq th[colspan]").first().insert( new Element("a",{"href":"#"}).update("resolve youtube links").observe("click",function(){
+    Youtubify( $("pouetbox_adminreq").down('tbody') );
+  }) );
+  $$("#pouetbox_adminreq th[colspan]").first().insert( "]" );
+  
   $$("#pouetbox_adminreq input[type='submit']").invoke("observe","click",function(e){ e.element().setAttribute("clicked","true"); });
   $$("#pouetbox_adminreq form").invoke("observe","submit",function(e){
     e.stop();
