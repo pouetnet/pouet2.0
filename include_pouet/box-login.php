@@ -41,6 +41,18 @@ class PouetBoxLogin extends PouetBox {
           echo "</div>\n";
         }
       }
+      $broken = SQLLib::SelectRow(sprintf_esc(
+        " select count(*) as c from prods_linkcheck".
+        " left join prods on prods.id = prods_linkcheck.prodID".
+        " left join users on prods.addedUser = users.id".
+        " where users.id = %d and (returnCode = 0 or (returnCode >= 400 && returnCode <= 599))",$currentUser->id));
+      if ($broken->c)
+      {
+        echo "<div class='content notifications'>\n";
+        printf("[ <a href='http://cardboard.pouet.net/broken_links.php?userID=me'>you have %d broken links !</a> ]",$broken->c);
+        echo "</div>\n";
+      }
+      
       echo "<div class='foot'>\n";
       echo "<a href='account.php'>account</a> ::\n";
       echo "<a href='customizer.php'>cust&ouml;omizer</a> ::\n";
