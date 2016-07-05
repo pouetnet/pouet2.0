@@ -558,7 +558,7 @@ class PouetBoxProdPopularityHelper extends PouetBox {
 
     echo "  <a href='http://pinterest.com/pin/create/button/?url="._html(rawurlencode($url))."'>pinterest</a>\n";
 
-    echo "  <a href='http://tumblr.com/widgets/share/tool?canonicalUrl="._html(rawurlencode($url))."'>tumblr</a>\n";
+    echo "  <a href='http://tumblr.com/widgets/share/tool?canonicalUrl="._html(rawurlencode($url))."&amp;posttype=link'>tumblr</a>\n";
     echo "</p>\n";
   }
 };
