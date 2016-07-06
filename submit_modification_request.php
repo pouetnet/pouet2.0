@@ -34,9 +34,9 @@ class PouetBoxModificationRequest extends PouetBox
     $post = array();
 
     global $REQUESTTYPES;
-    if ($REQUESTTYPES[ $_POST["requestType"] ])
+    if ($REQUESTTYPES[ $_REQUEST["requestType"] ])
     {
-      $error = $REQUESTTYPES[ $_POST["requestType"] ]::ValidateRequest($data,$post);
+      $error = $REQUESTTYPES[ $_REQUEST["requestType"] ]::ValidateRequest($data,$post);
       if ($error) return $error;
     }
     else
@@ -77,12 +77,9 @@ class PouetBoxModificationRequest extends PouetBox
       if ($_REQUEST["prod"] && $v::GetItemType()=="prod") $this->fields["requestType"]["fields"][$k] = $v::Describe();
     }
     
-    $this->fields["requestType"]["fields"]["other"] = "other request...";
-    
-    foreach($_POST as $k=>$v)
+    foreach($_REQUEST as $k=>$v)
       if ($this->fields[$k])
         $this->fields[$k]["value"] = $v;
-
   }
 
   function Render()
@@ -102,16 +99,20 @@ class PouetBoxModificationRequest extends PouetBox
     echo "</h2>\n";
 
     $error = "";
-    if(!$_POST["requestType"])
+    if(!$_REQUEST["requestType"])
     {
       echo "  <div class='content'>\n";
-      if(count($this->fields["requestType"]["fields"]))
-        $this->formifier->RenderForm( $this->fields );
-      else
+      global $REQUESTTYPES;
+      echo "<label>whatchu want ?</label>\n";
+      echo "<ul>\n";
+      foreach($REQUESTTYPES as $k=>$v)
       {
-        echo "you need to select something to request about first !";
-        $error = " ";
+        if ($_REQUEST["prod"] && $v::GetItemType()=="prod")
+          printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html($k),_html($v::Describe()));
       }
+      printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html("other"),_html("other request..."));
+      echo "</ul>\n";
+      $error = " ";
       echo "  </div>\n";
     }
     else
@@ -126,9 +127,9 @@ class PouetBoxModificationRequest extends PouetBox
       
       $js = "";
       global $REQUESTTYPES;
-      if ($REQUESTTYPES[ $_POST["requestType"] ])
+      if ($REQUESTTYPES[ $_REQUEST["requestType"] ])
       {
-        $error = $REQUESTTYPES[ $_POST["requestType"] ]::GetFields($_REQUEST,$fields,$js);
+        $error = $REQUESTTYPES[ $_REQUEST["requestType"] ]::GetFields($_REQUEST,$fields,$js);
       }
       else
       {
@@ -165,13 +166,11 @@ class PouetBoxModificationRequest extends PouetBox
 
 $TITLE = "submit a modification request";
 
-if ($_POST["requestType"] == "other")
+if ($_REQUEST["requestType"] == "other")
 {
   redirect("topic.php?which=".(int)FIXMETHREAD_ID."&from=".(int)$_REQUEST["prod"]."#pouetbox_bbspost");
   exit();
 }
-if (!$_POST["requestType"] && $_GET["requestType"])
-  $_POST["requestType"] = $_GET["requestType"];
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
