@@ -17,6 +17,7 @@ function cron_CheckLinks( $id = null )
   $s->AddField("prods.download");
   $s->AddTable("prods");
   $s->AddJoin("left","prods_linkcheck","prods_linkcheck.prodID = prods.id");
+  $s->AddOrder("prods_linkcheck.testDate");
   $s->AddOrder("RAND()");
   if ($id)
     $s->AddWhere(sprintf_esc("prods.id = %d",$id));
