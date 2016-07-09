@@ -688,7 +688,6 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change prod info"; }
 
-  // return error string on error, empty string / null / false / etc. on success
   static function ProdToArray( $prod )
   {
     $fields["name"] = $prod->name;
@@ -845,8 +844,6 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $js .= "});\n";
   }
 
-  // transform form $input into sql-ish $output
-  // return error array on error, empty array on success
   static function ValidateRequest($input,&$output) 
   {
     $fields = array();
@@ -857,21 +854,144 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $_in = array();
     foreach($fields as $k=>$v) $_in[$k] = $input[$k];
     $output = array_diff( $_in, $pa );
+    if (array_diff( $_in["type"], $pa["type"] ))
+      $output["type"] = array_diff( $_in["type"], $pa["type"] );
+    if (array_diff( $_in["platform"], $pa["platform"] ))
+      $output["platform"] = array_diff( $_in["platform"], $pa["platform"] );
+     
     unset($output["finalStep"]);
     
     return array();    
   }
 
-  // return HTML string describing the changes
-  // - $data is the changeset
-  static function Display($itemID, $data) {
-    return json_encode($data);
+  static function Display($itemID, $data) 
+  {
+    global $PLATFORMS;
+    global $COMPOTYPES;
+    $prod = PouetProd::Spawn( $itemID );
+    $a = array(&$prod);
+    PouetCollectPlatforms( $a );
+
+    $fields = array();
+    static::GetFields(array(),$fields,$js);
+    
+    $s = "";
+    foreach($data as $k=>$v)
+    {
+      switch($k)
+      {
+        case "type":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $prod->RenderTypeIcons();
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $prod->types = $v;
+          $s .= $prod->RenderTypeIcons();
+          $s .= "<br/>";
+          break;
+        case "platform":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $prod->RenderPlatformIcons();
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $prod->platforms = array();
+          foreach($v as $a) $prod->platforms[] = $PLATFORMS[$a];
+          $s .= $prod->RenderPlatformIcons();
+          $s .= "<br/>";
+          break;
+        case "group1":
+        case "group2":
+        case "group3":
+          $group = PouetGroup::Spawn( $prod->{$k} );
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $group ? $group->RenderLong() : "<i>none</i>";
+          $s .= "<br/>";
+          $group = PouetGroup::Spawn( $v );
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $group->RenderLong();
+          $s .= "<br/>";
+          break;
+        case "partyID":
+          $party = PouetParty::Spawn( $prod->{$k} );
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $party ? $party->PrintLinked() : "<i>none</i>";
+          $s .= "<br/>";
+          $party = PouetParty::Spawn( $v );
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $party->PrintLinked();
+          $s .= "<br/>";
+          break;
+        case "partyYear":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $prod->placings[0]->year;
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($v);
+          $s .= "<br/>";
+          break;
+        case "partyCompo":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $COMPOTYPES[$prod->placings[0]->compo];
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $COMPOTYPES[$v];
+          $s .= "<br/>";
+          break;
+        case "partyRank":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($prod->placings[0]->ranking);
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($v);
+          $s .= "<br/>";
+          break;
+        default:
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($prod->{$k});
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($v);
+          $s .= "<br/>";
+      }
+    }  
+    return $s;
   }
 
-  // commit changeset
-  // - $reqData is the changeset
-  // return error array on error, empty array on success
-  static function Process($itemID,$reqData) { return array(); }
+  static function Process($itemID,$reqData) 
+  {
+    $sql = array();
+    foreach($reqData as $k=>$v)
+    {
+      switch($k)
+      {
+        case "partyID":    $sql["party"] = $v; break;
+        case "partyYear":  $sql["party_year"] = $v; break;
+        case "partyCompo": $sql["party_compo"] = $v; break;
+        case "partyRank":  $sql["party_place"] = $v; break;
+        case "type":       $sql["type"] = implode(",",$v); break;
+        case "platform":   break; // deal with this underneath
+        case "demozooID":  $sql["demozoo"] = $v; break;
+        case "csdbID":     $sql["csdb"] = $v; break;
+        default:
+          $sql[$k] = $v;
+      }
+    }
+    SQLLib::UpdateRow("prods",$sql,"id=".(int)$itemID);
+    
+    if (isset($data["platform"]))
+    {
+      $data["platform"] = array_unique($data["platform"]);
+      SQLLib::Query(sprintf_esc("delete from prods_platforms where prod = %d",(int)$itemID));
+      foreach($data["platform"] as $v)
+      {
+        $a = array();
+        $a["prod"] = (int)$itemID;
+        $a["platform"] = $v;
+        SQLLib::InsertRow("prods_platforms",$a);
+      }
+    }
+    
+  }
 };
 
 $REQUESTTYPES = array(
