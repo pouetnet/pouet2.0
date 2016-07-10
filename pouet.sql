@@ -20,9 +20,11 @@ DROP TABLE IF EXISTS `affiliatedboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `affiliatedboards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `board` int(10) NOT NULL DEFAULT '0',
   `group` int(10) NOT NULL DEFAULT '0',
   `type` enum('WHQ','member','EHQ','USHQ','HQ','dist') DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `board` (`board`),
   KEY `group` (`group`),
   CONSTRAINT `affiliatedboards_ibfk_1` FOREIGN KEY (`board`) REFERENCES `boards` (`id`),
@@ -865,7 +867,7 @@ CREATE TABLE `prods_linkcheck` (
   `returnCode` smallint(6) NOT NULL,
   `returnContentType` varchar(255) NOT NULL,
   `testDate` datetime NOT NULL,
-  KEY `prodID` (`prodID`),
+  PRIMARY KEY (`prodID`),
   CONSTRAINT `prods_linkcheck_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -914,8 +916,8 @@ DROP TABLE IF EXISTS `sceneorgrecommended`;
 CREATE TABLE `sceneorgrecommended` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `prodid` int(10) NOT NULL DEFAULT '0',
-  `type` enum('awardwinner','awardnominee','viewingtip') DEFAULT NULL,
-  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement') DEFAULT NULL,
+  `type` enum('awardwinner','awardnominee','viewingtip','meteorikwinner','meteoriknominee') DEFAULT NULL,
+  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement','High End Demo','High End Intro','High End Graphics','High End Soundtrack','Low End Demo','Low End Intro','Low End Graphics','Low End Soundtrack','New Talent','Interactive','Standalone Graphics','Tiny Intro','Alternative Platforms','Best Art Direction','Best Pixel Graphics in a Low-End Demo or Intro','Best Storytelling / Storyline / Plot','Best High-End Intro','Best High-End Demo','Best Soundtrack','Best Low-End Demo','Best Low-End intro','That''s not Possible on this Platform!') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `prodid` (`prodid`),
   KEY `type` (`type`),
