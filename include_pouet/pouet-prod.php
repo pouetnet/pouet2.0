@@ -166,6 +166,10 @@ class PouetProd extends BM_Class {
     echo "</span>";
   }
   function Delete() {
+    global $currentUser;
+    if (!($currentUser && $currentUser->CanDeleteItems()))
+      return;
+    
     SQLLib::Query(sprintf_esc("DELETE FROM downloadlinks WHERE prod=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM comments WHERE which=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM nfos WHERE prod=%d",$this->id));
