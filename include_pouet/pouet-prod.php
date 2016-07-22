@@ -165,6 +165,30 @@ class PouetProd extends BM_Class {
     echo "<span class='group'>".$this->RenderGroupsShort()."</span>\n";
     echo "</span>";
   }
+  function Delete() {
+    SQLLib::Query(sprintf_esc("DELETE FROM downloadlinks WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM comments WHERE which=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM nfos WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM screenshots WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prods_platforms WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM sceneorgrecommended WHERE prodid=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM users_cdcs WHERE cdc=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM affiliatedprods WHERE original=%d or derivative=%d",$this->id,$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prods_refs WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE prod=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM cdc WHERE which=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM credits WHERE prodID=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM watchlist WHERE prodID=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM listitems WHERE itemid=%d AND type='prod'",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prods_linkcheck WHERE prodID=%d LIMIT 1",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->id));
+
+    @unlink( get_local_nfo_path( (int)$this->id ) );
+    foreach( array( "jpg","gif","png" ) as $v )
+      @unlink( get_local_screenshot_path( (int)$this->id, $v ) );
+
+    gloperator_log( "prod", (int)$this->id, "prod_delete", get_object_vars($this) );
+  }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
