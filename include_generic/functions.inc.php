@@ -417,10 +417,10 @@ function is_string_meaningful($s)
   $message = $s;
   //$message = str_replace(html_entity_decode('&shy;', 0, 'UTF-8'),"",$message);
   $message = preg_replace('/\p{C}+/u', "", $message);
+  $message = htmlspecialchars($message,ENT_QUOTES);
   $message = bbencode($message);
   $message = strip_tags($message,"<img>");
   $message = trim($message);
-
   return !!$message;
 }
 
