@@ -17,8 +17,22 @@ class PouetBoxUserWatchlist extends PouetBox {
     $i = array();
     foreach($ids as $v) $i[] = $v->prodID;
   
+    $sub = new SQLSelect();
+    $sub->AddField("max(comments.addedDate) as maxDate");
+    $sub->AddField("comments.which");
+    $sub->AddTable("comments");
+    $sub->AddJoin("left","prods","prods.id = comments.which");
+    //$sub->AddOrder("comments.addedDate desc");
+    $sub->AddGroup("comments.which");
+    $sub->AddWhere( sprintf_esc("prods.id in (%s)",implode(",",$i) ) );
+  
     $s = new BM_Query("prods");
+    $s->AddField("cmts.addedDate as lastcomment");
+    $s->AddField("cmts.rating as lastcommentrating");
     $s->AddWhere( sprintf_esc("prods.id in (%s)",implode(",",$i) ) );
+    $s->AddJoin("left","(select comments.addedDate,comments.who,comments.which,comments.rating from (".$sub->GetQuery().") as dummy left join comments on dummy.maxDate = comments.addedDate and dummy.which = comments.which) as cmts","cmts.which=prods.id");
+    $s->attach(array("cmts"=>"who"),array("users as user"=>"id"));
+    $s->AddOrder("cmts.addedDate DESC");
     $this->prods = $s->perform();
 
     PouetCollectPlatforms($this->prods);
@@ -34,7 +48,7 @@ class PouetBoxUserWatchlist extends PouetBox {
     echo "  <th>group</th>\n";
     echo "  <th>platform</th>\n";
     //echo "  <th>time</th>\n";
-    //echo "  <th>user</th>\n";
+    echo "  <th>last comment</th>\n";
     echo "</tr>\n";
 
     foreach ($this->prods as $p)
@@ -54,6 +68,18 @@ class PouetBoxUserWatchlist extends PouetBox {
       echo "<td>\n";
       echo $p->RenderPlatformIcons();
       echo "</td>\n";
+
+      if ($p->user)
+      {
+        $rating = "isok";
+        if ($p->lastcommentrating < 0) $rating = "sucks";
+        if ($p->lastcommentrating > 0) $rating = "rulez";
+        echo "<td>";
+        echo "<span class='vote ".$rating."'>".$rating."</span> ";
+        echo $p->lastcomment." ".$p->user->PrintLinkedAvatar()."</td>\n";
+      }
+      else
+        echo "<td>&nbsp;</td>";
 
       echo "</tr>\n";
     }
