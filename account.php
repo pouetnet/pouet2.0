@@ -126,7 +126,7 @@ class PouetBoxAccount extends PouetBox
         "required"=>true,
         "value"=>$this->user->avatar,
         "type"=>"avatar",
-        "infoAfter"=>"(<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span>",
+        "infoAfter"=>"(<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span> <span id='avatarPicker'></span>",
       ),
       "slengpung"=>array(
         "info"=>"your slengpung id, if you have one",
@@ -444,6 +444,39 @@ document.observe("dom:loaded",function(){
     ev.stop();
     $("avatar").selectedIndex = Math.floor( Math.random() * $("avatar").options.length );
     updateAvatar();
+  });
+  
+  var div = new Element("div",{"id":"avatarPickerPalette"})
+  $("avatarPicker").parentNode.insert(div);
+  
+  div.insert( new Element("a",{"href":"#"}).observe("click",function(e){
+    regeneratePalette();
+  }).update("show more") );
+  div.insert( new Element("a",{"href":"#","id":"avatarPickerClose"}).observe("click",function(e){
+    $("avatarPickerPalette").hide();
+  }).update("close") );
+  div.insert( new Element("div",{"id":"paletteAvatars"}) );
+  var regeneratePalette = function()
+  {
+    $("paletteAvatars").update();
+    for (var i=0; i<100; i++)
+    {
+      var src = $("avatar").options[ Math.floor( Math.random() * $("avatar").options.length ) ].value;
+      var img = new Element("img",{"src":"<?=POUET_CONTENT_URL?>avatars/" + src,"data-src":src,"title":src});
+      $("paletteAvatars").insert( img );
+      img.observe("click",function(ev){
+        $("avatar").value = ev.element().getAttribute("data-src");
+        updateAvatar();
+        $("avatarPickerPalette").hide();
+      });
+    }
+  }
+  regeneratePalette();
+  $("avatarPicker").update("(<a href='#'>show picker</a>)")
+  $("avatarPickerPalette").hide();
+  $("avatarPicker").down("a").observe("click",function(ev){
+    ev.stop();
+    $("avatarPickerPalette").show();
   });
 
   for (var i=1; i<10; i++)
