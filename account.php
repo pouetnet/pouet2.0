@@ -367,7 +367,10 @@ class PouetBoxAccountModificationRequests extends PouetBox
         case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
       }
       echo "</td>\n";
-      echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
+      if ($REQUESTTYPES[$r->requestType])
+        echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";
+      else
+        echo "    <td>unknown request type</td>";
       echo "    <td>";
       if ( $r->approved === NULL ) echo "<b>pending</b>";
       else if ( $r->approved == 0 ) echo "<b>no</b> :: "._html($r->comment);
