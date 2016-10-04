@@ -10,6 +10,7 @@ class PouetBoxPartyResults extends PouetBox {
   function LoadFromDB()
   {
     $this->party = PouetParty::spawn( $_GET["which"] );
+    if (!$this->party) return;
     $this->title = $this->party->name." ".(int)$_GET["when"]." results";
   }
   function RenderHeader()
@@ -68,7 +69,8 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-$box->Render();
+if ($box->party)
+  $box->Render();
 
 echo "</div>\n";
 
