@@ -6,6 +6,11 @@ if (get_setting($menusetting))
 ?>
 <nav id="<?=$menusetting?>">
   <ul>
+<? if ($currentUser) { ?>
+   <li><a href="account.php">Account</a></li>
+<? } else { ?>
+   <li><a href="login.php?return=<?=_html(rootRelativePath())?>">Log in</a></li>
+<? } ?>
    <li><a href="prodlist.php">Prods</a></li>
    <li><a href="groups.php">Groups</a></li>
    <li><a href="parties.php">Parties</a></li>
