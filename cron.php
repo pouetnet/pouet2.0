@@ -22,7 +22,7 @@ function cron_CheckLinks( $id = null )
   if ($id)
     $s->AddWhere(sprintf_esc("prods.id = %d",$id));
   else
-    $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 30");
+    $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 20");
   $s->SetLimit( 20 );
   $prods = SQLLib::SelectRows( $s->GetQuery() );
   $out = array();
