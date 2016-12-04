@@ -97,6 +97,8 @@ class PouetBoxTopList extends PouetBox {
     $limit = max($limit,10);
     $s->SetLimit($limit);
     $this->prods = $s->perform();
+    PouetCollectPlatforms($this->prods);
+    PouetCollectAwards($this->prods);
   }
   function RenderTitle()
   {
@@ -109,11 +111,19 @@ class PouetBoxTopList extends PouetBox {
   }
   function RenderBody()
   {
-    echo "<ul class='boxlist'>\n";
+    echo "<ul class='boxlist boxlisttable'>\n";
     $n = 1;
     foreach($this->prods as $p)
     {
-      printf("  <li>%d. %s</li>\n",$n++,$p->RenderSingleRowShort());
+      printf("  <li>\n");
+      printf("    <span>%d.</span>\n",$n++);
+      printf("    <span>");
+      echo $p->RenderTypeIcons();
+      echo $p->RenderPlatformIcons();
+      echo $p->RenderSingleRowShort();
+      echo " ".$p->RenderAwards();
+      printf("    </span>");
+      printf("  </li>\n");
     }
     echo "</ul>\n";
   }
