@@ -14,7 +14,8 @@ class PouetBoxProdlist extends PouetBox
   function LoadFromDB() {
     $s = new SQLSelect();
 
-    $perPage = get_setting("prodlistprods");
+    $this->perPage = get_setting("prodlistprods");
+    
     $this->page = (int)max( 1, (int)$_GET["page"] );
 
     $s = new BM_Query("prods");
@@ -59,7 +60,7 @@ class PouetBoxProdlist extends PouetBox
     $s->AddOrder("prods.releaseDate ".$dir);
     $s->AddOrder("prods.addedDate ".$dir);
 
-    $s->SetLimit( $perPage, (int)(($this->page-1) * $perPage) );
+    $s->SetLimit( $this->perPage, (int)(($this->page-1) * $this->perPage) );
 
     //echo $s->GetQuery();
 
@@ -132,18 +133,17 @@ class PouetBoxProdlist extends PouetBox
       echo "</tr>\n";
     }
 
-    $perPage = get_setting("prodlistprods");
-
     echo "<tr>\n";
     echo "<td class='nav' colspan=".(count($headers)-2).">\n";
 
+    $numPages = ceil($this->count / $this->perPage);
     if ($this->page > 1)
       echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
-    if ($this->page < ($this->count / $perPage))
+    if ($this->page < $numPages)
       echo "  <div class='nextpage'><a href='".adjust_query(array("page"=>($this->page + 1)))."'>next page</a></div>\n";
 
     echo "  <select name='page'>\n";
-    for ($x=1; $x<=($this->count / $perPage) + 1; $x++)
+    for ($x = 1; $x <= $numPages; $x++)
       printf("    <option value='%d'%s>%d</option>\n",$x,$x==$this->page?" selected='selected'":"",$x);
     echo "  </select>\n";
     echo "  <input type='submit' value='Submit'/>\n";
