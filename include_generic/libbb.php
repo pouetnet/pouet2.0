@@ -102,8 +102,10 @@ function bbencode_url_cb( $matches )
 {
   if (strtolower(substr($matches[1],0,11)) == "javascript:")
     return "<b>I'm a 1337 h4xx0r !!!11</b>";
-  else
+  else if (count($matches) == 3)
     return "<a href='$matches[1]'>$matches[2]</a>";
+  else
+    return "<a href='$matches[1]'>$matches[1]</a>";
 }
 
 function bbencode( $text )
