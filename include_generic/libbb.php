@@ -98,6 +98,14 @@ function bbencode_parse_tag($message,$tag,$openCode,$closeCode)
 
 }
 
+function bbencode_url_cb( $matches )
+{
+  if (strtolower(substr($matches[1],0,11)) == "javascript:")
+    return "<b>I'm a 1337 h4xx0r !!!11</b>";
+  else
+    return "<a href='$matches[1]'>$matches[2]</a>";
+}
+
 function bbencode( $text )
 {
   $text = preg_replace("/\[b\](.*?)\[\/b\]/si","<b>$1</b>",$text);
@@ -109,9 +117,11 @@ function bbencode( $text )
   $text = preg_replace("/\[list\](.*?)\[\/list\]/si","<ul>$1</ul>",$text);
   $text = preg_replace("/\[list=(.*?)\](.*?)\[\/list\]/si","<ol type='$1'>$2</ol>",$text);
   $text = preg_replace("/\[\*\](.*)[\r\n]/","<li>$1</li>",$text);
-  $text = preg_replace("/\[url=&quot;(.*?)&quot;\](.*?)\[\/url\]/si","<a href='$1'>$2</a>",$text);
-  $text = preg_replace("/\[url\](.*?)\[\/url\]/si","<a href='$1'>$1</a>",$text);
-  $text = preg_replace("/\[url=(.*?)\](.*?)\[\/url\]/si","<a href='$1'>$2</a>",$text);
+
+  $text = preg_replace_callback("/\[url=&quot;(.*?)&quot;\](.*?)\[\/url\]/si",bbencode_url_cb,$text);
+  $text = preg_replace_callback("/\[url\](.*?)\[\/url\]/si",bbencode_url_cb,$text);
+  $text = preg_replace_callback("/\[url=(.*?)\](.*?)\[\/url\]/si",bbencode_url_cb,$text);
+
   if (get_setting("displayimages") || $_GET["forceimages"])
     $text = preg_replace("/\[img\](.*?)\[\/img\]/i","<img src='$1' class='bbimage' alt='BB Image'/>",$text);
   else
