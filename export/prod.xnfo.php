@@ -52,7 +52,7 @@ foreach($prod->placings as $p)
 <release><party url="http://www.ambience.nl">Ambience</party><date>2000-03-15</date><rank>9</rank><compo>pc demo</compo></release>
 */
 
-$xml->demo->addChild("releaseDate",substr($prod->releaseDate,0,10));
+$xml->demo->addChild("releaseDate",substr($prod->releaseDate,0,7));
 
 if (count($prod->groups))
 {
