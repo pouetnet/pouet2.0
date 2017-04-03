@@ -1,6 +1,9 @@
 <?
 error_reporting(E_ALL & ~E_NOTICE);
 
+// Enforce HTTPS for this domain (this header is ignored when served over HTTP) 
+header('Strict-Transport-Security: max-age=15768000');
+
 define("POUET_ROOT_LOCAL",dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
