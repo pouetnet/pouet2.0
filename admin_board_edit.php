@@ -45,14 +45,17 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
     
     SQLLib::UpdateRow("boards",$a,"id=".$this->id);
 
-    $data["platform"] = array_unique($data["platform"]);
     SQLLib::Query(sprintf_esc("delete from boards_platforms where board = %d",(int)$this->id));
-    foreach($data["platform"] as $v)
+    if ($data["platform"])
     {
-      $a = array();
-      $a["board"] = (int)$this->id;
-      $a["platform"] = $v;
-      SQLLib::InsertRow("boards_platforms",$a);
+      $data["platform"] = array_unique($data["platform"]);
+      foreach($data["platform"] as $v)
+      {
+        $a = array();
+        $a["board"] = (int)$this->id;
+        $a["platform"] = $v;
+        SQLLib::InsertRow("boards_platforms",$a);
+      }
     }
 
     gloperator_log( "board", $this->id, "board_edit" );
