@@ -53,6 +53,7 @@ class PouetBoxProdlist extends PouetBox
       case "thumbup": $s->AddOrder("prods.voteup ".$dir); break;
       case "thumbpig": $s->AddOrder("prods.votepig ".$dir); break;
       case "thumbdown": $s->AddOrder("prods.votedown ".$dir); break;
+      case "thumbdiff": $s->AddOrder("(prods.voteup - prods.votedown) ".$dir); break;
       case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
       case "views": $s->AddOrder("prods.views ".$dir); break;
       case "added": $s->AddOrder("prods.addedDate ".$dir); break;
