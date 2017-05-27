@@ -39,6 +39,7 @@ class PouetBoxGroupMain extends PouetBox
     switch($_GET["order"])
     {
       case "type": $s->AddOrder("prods.type ".($r?"DESC":"ASC")); break;
+      case "platform": { $s->AddJoin("left","prods_platforms as pp","pp.prod=prods.id"); $s->AddOrder("pp.platform ".($r?"DESC":"ASC")); break; }
       case "party": $s->AddOrder("prods_party.name ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_year ".($r?"DESC":"ASC")); $s->AddOrder("prods.party_place ".($r?"DESC":"ASC")); break;
       case "release": $s->AddOrder("prods.releaseDate ".($r?"ASC":"DESC")); break;
       case "thumbup": $s->AddOrder("prods.voteup ".($r?"ASC":"DESC")); break;
@@ -95,6 +96,7 @@ class PouetBoxGroupMain extends PouetBox
     $headers = array(
       "type"=>"type",
       "name"=>"prodname",
+      "platform"=>"platform",
       "party"=>"release party",
       "release"=>"release date",
       "thumbup"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />",
@@ -111,7 +113,8 @@ class PouetBoxGroupMain extends PouetBox
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
         adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
-      if ($key == "name") $out = str_replace("<th>"," ",$out);
+      if ($key == "name") { $out = str_replace("<th>"," ",$out); $out = str_replace("</th>"," ",$out); }
+      if ($key == "platform") $out = str_replace("<th>"," ",$out);
       echo $out;
     }
     echo "</tr>\n";
