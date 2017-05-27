@@ -475,19 +475,36 @@ CREATE TABLE `links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `listitems`
+-- Table structure for table `list_items`
 --
 
-DROP TABLE IF EXISTS `listitems`;
+DROP TABLE IF EXISTS `list_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `listitems` (
+CREATE TABLE `list_items` (
   `list` int(10) unsigned NOT NULL DEFAULT '0',
   `itemid` int(10) unsigned NOT NULL DEFAULT '0',
   `type` enum('user','prod','group','party') NOT NULL DEFAULT 'prod',
   KEY `list` (`list`),
-  CONSTRAINT `listitems_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`)
+  CONSTRAINT `list_items_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `list_maintainers`
+--
+
+DROP TABLE IF EXISTS `list_maintainers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `list_maintainers` (
+  `listID` int(10) unsigned NOT NULL,
+  `userID` int(10) NOT NULL,
+  KEY `listID` (`listID`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `list_maintainers_ibfk_1` FOREIGN KEY (`listID`) REFERENCES `lists` (`id`),
+  CONSTRAINT `list_maintainers_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -503,11 +520,12 @@ CREATE TABLE `lists` (
   `desc` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT '0',
   `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `upkeeper` int(10) NOT NULL DEFAULT '0',
+  `owner` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `adder` (`addedUser`),
-  KEY `upkeeper` (`upkeeper`),
-  CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`upkeeper`) REFERENCES `users` (`id`)
+  KEY `owner` (`owner`),
+  KEY `addedUser` (`addedUser`),
+  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`),
+  CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -917,8 +935,9 @@ CREATE TABLE `sceneorgrecommended` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `prodid` int(10) NOT NULL DEFAULT '0',
   `type` enum('awardwinner','awardnominee','viewingtip','meteorikwinner','meteoriknominee') DEFAULT NULL,
-  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement','High End Demo','High End Intro','High End Graphics','High End Soundtrack','Low End Demo','Low End Intro','Low End Graphics','Low End Soundtrack','New Talent','Interactive','Standalone Graphics','Tiny Intro','Alternative Platforms','Best Art Direction','Best Pixel Graphics in a Low-End Demo or Intro','Best Storytelling / Storyline / Plot','Best High-End Intro','Best High-End Demo','Best Soundtrack','Best Low-End Demo','Best Low-End intro','That''s not Possible on this Platform!') DEFAULT NULL,
+  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement','High End Demo','High End Intro','High End Graphics','High End Soundtrack','Low End Demo','Low End Intro','Low End Graphics','Low End Soundtrack','New Talent','Interactive','Standalone Graphics','Tiny Intro','Alternative Platforms','Best Art Direction','Best Pixel Graphics in a Low-End Demo or Intro','Best Storytelling / Storyline / Plot','Best High-End Intro','Best High-End Demo','Best Soundtrack','Best Low-End Demo','Best Low-End intro','That''s not Possible on this Platform!','Best High-End 4k Intro','Best Storytelling / Storyline / Plot','Best Freestyle Graphics') DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `prodid_category` (`prodid`,`category`),
   KEY `prodid` (`prodid`),
   KEY `type` (`type`),
   KEY `category` (`category`),
