@@ -248,7 +248,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddField("credits.role");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
-    $s->AddOrder("credits_prod.addedDate desc");
+    $s->AddOrder("credits_prod.releaseDate desc");
     if ($limit)
       $s->SetLimit( $limit );
 
