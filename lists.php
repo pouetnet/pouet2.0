@@ -56,7 +56,7 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
     echo "<tr>\n";
     echo "  <th>name</th>\n";
     echo "  <th>description</th>\n";
-    echo "  <th>maintainer</th>\n";
+    echo "  <th>owner</th>\n";
     echo "</tr>\n";
     foreach ($this->lists as $l) {
       echo "<tr>\n";
