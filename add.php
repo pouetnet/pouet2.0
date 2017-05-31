@@ -63,7 +63,7 @@ if ($box) {
   if (!$csrf->ValidateToken())
   {
     $message->classes[] = "errorbox";
-    $message->message = "who are you and where did you come from ?";
+    $message->message = "Who are you and where did you come from?";
   }
   else
   {
