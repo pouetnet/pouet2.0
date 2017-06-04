@@ -10,7 +10,7 @@ class PouetBoxPreview extends PouetBox {
 
   function RenderContent()
   {
-    echo parse_message( $_POST["message"] );
+    echo parse_message( substr( $_POST["message"], 0, 65535 ) );
   }
 };
 
