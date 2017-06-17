@@ -854,9 +854,9 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $_in = array();
     foreach($fields as $k=>$v) $_in[$k] = $input[$k];
     $output = array_diff( $_in, $pa );
-    if (array_diff( $_in["type"], $pa["type"] ))
+    if (array_diff( $_in["type"] ?: array(), $pa["type"] ))
       $output["type"] = array_diff( $_in["type"], $pa["type"] );
-    if (array_diff( $_in["platform"], $pa["platform"] ))
+    if (array_diff( $_in["platform"] ?: array(), $pa["platform"] ))
       $output["platform"] = array_diff( $_in["platform"], $pa["platform"] );
      
     unset($output["finalStep"]);
