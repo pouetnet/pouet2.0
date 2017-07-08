@@ -115,8 +115,8 @@ else
   $currentUserSettings = $DEFAULT_USERSETTINGS;
 }
 $TITLE = "";
-$ogValues = array();
-$ogValues["type"] = "website";
+$metaValues = array();
+$metaValues["og:type"] = "website";
 
 $RSS = array();
 ?>
