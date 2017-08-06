@@ -51,7 +51,7 @@ class PouetBoxSubmitList extends PouetBox
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["desc"] = $data["desc"];
-    $a["upkeeper"] = get_login_id();
+    $a["owner"] = get_login_id();
     $a["addedUser"] = get_login_id();
     $a["addedDate"] = date("Y-m-d H:i:s");
     $this->listID = SQLLib::InsertRow("lists",$a);
