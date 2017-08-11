@@ -187,6 +187,13 @@ document.observe("dom:loaded",function(){
       $msg->message = "this thread now officially wants YOU to go make a demo about it instead. please comply.";
       $msg->Render();
     }
+    else if ($currentUser && !$currentUser->CanPostToBBS())
+    {
+      $msg = new PouetBoxModalMessage( true );
+      $msg->title = "no you can't";
+      $msg->message = "i think it's become painfully obvious that the pou&euml;t BBS is not for you.";
+      $msg->Render();
+    }
     else
     {
       echo $post->Render();

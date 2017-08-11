@@ -35,6 +35,7 @@ class PouetBoxAdminEditUser extends PouetBox
     if ($currentUser->IsAdministrator() && array_search($data["level"],$this->levels)!==false)
       $a["level"] = $data["level"];
     $a["permissionSubmitItems"] = $data["permissionSubmitItems"] == "on";
+    $a["permissionPostBBS"] = $data["permissionPostBBS"] == "on";
     SQLLib::UpdateRow("users",$a,"id=".(int)$this->user->id);
   }
   function LoadFromDB()
@@ -57,10 +58,15 @@ class PouetBoxAdminEditUser extends PouetBox
         "value" => $this->user->level,
         "fields" => $this->levels,
       ),
-      "permissionSubmitItems"=>array(
+      "permissionSubmitItems" => array(
         "name"=>"allow user to add items",
         "type" => "checkbox",
         "value" => $this->user->permissionSubmitItems,
+      ),
+      "permissionPostBBS" => array(
+        "name"=>"allow user to post to the BBS",
+        "type" => "checkbox",
+        "value" => $this->user->permissionPostBBS,
       ),
     );
     if ($currentUser && !$currentUser->IsAdministrator())
