@@ -183,7 +183,7 @@ class PouetProd extends BM_Class {
     SQLLib::Query(sprintf_esc("DELETE FROM cdc WHERE which=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM credits WHERE prodID=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM watchlist WHERE prodID=%d",$this->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM listitems WHERE itemid=%d AND type='prod'",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE itemid=%d AND type='prod'",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prods_linkcheck WHERE prodID=%d LIMIT 1",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM modification_requests WHERE itemID=%d AND itemType='prod'",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prods WHERE id=%d LIMIT 1",$this->id));
