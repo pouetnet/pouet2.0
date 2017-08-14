@@ -29,13 +29,14 @@ $AFFILIATIONS_ORIGINAL = array(
   "final" => "final version",
   "pack" => "packed in",
   "related" => "related to",
+  "sequel" => "continued in",
 );
 $AFFILIATIONS_INVERSE = array(
   "remix" => "remix of",
   "port" => "ported from",
   "final" => "party version",
   "pack" => "includes",
-  "related" => "related from",
+  "sequel" => "sequel to",
 );
 
 $verificationStrings = array(
