@@ -380,11 +380,27 @@ document.observe("dom:loaded",function(){
 function Youtubify( e )
 {
   e.select("a[rel='external']").each(function(item){
+    var ytAPIKey = "AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s";
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
     {
-      var callback = "ytcb";
-      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s&part=snippet",{
+      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=" + ytAPIKey + "&part=snippet",{
+        method: "get",
+        onSuccess: function(transport) {
+          if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
+          {
+            var s = transport.responseJSON.items[0].snippet.title;
+            item.update( s.escapeHTML() );
+            item.addClassName("youtube");
+          }
+        },
+      });
+      return;
+    }
+    var playlistID = item.href.match(/youtube\.com\/playlist\?.*list=([a-zA-Z0-9_\-]{34})/);
+    if (playlistID)
+    {
+      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/playlists?id=" + playlistID[1] + "&key=" + ytAPIKey + "&part=snippet",{
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
@@ -401,7 +417,6 @@ function Youtubify( e )
     var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
     if (pouetID)
     {
-      var callback = "pouetcb";
       new Ajax.JSONRequest("http://api.pouet.net/v1/prod/?id="+pouetID[1],{
         method: "get",
         onSuccess: function(transport) {
@@ -419,7 +434,6 @@ function Youtubify( e )
     var demozooProdID = item.href.match(/demozoo\.org\/productions\/([0-9]+)/);
     if (demozooProdID)
     {
-      var callback = "demozoocb";
       new Ajax.JSONRequest("http://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=jsonp",{
         method: "get",
         onSuccess: function(transport) {
