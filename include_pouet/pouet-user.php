@@ -146,7 +146,7 @@ class PouetUser extends BM_Class {
   }
   function CanPostInBBS()
   {
-    return true;
+    return $this->permissionPostBBS != 0;
   }
   function CanPostInProdComments()
   {
@@ -168,10 +168,6 @@ class PouetUser extends BM_Class {
   {
     return $this->IsModerator();
   }
-  function CanPostToBBS()
-  {
-    return $this->permissionPostBBS != 0;
-  }  
 };
 
 BM_AddClass("PouetUser");

@@ -1,6 +1,7 @@
 <?
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-open.php");
+require_once("include_pouet/box-login.php");
 
 class PouetBoxBBSTopicList extends PouetBox
 {
@@ -172,13 +173,22 @@ document.observe("dom:loaded",function(){
 $p = new PouetBoxBBSTopicList();
 $p->Load();
 
-$q = new PouetBoxBBSOpen();
-$q->Load();
+if ($currentUser)
+{
+  if ($currentUser->CanPostInBBS())
+  {
+    $q = new PouetBoxBBSOpen();
+    $q->Load();
+  }
+}
+else
+{
+  $q = new PouetBoxLogin();
+}
 
 $TITLE = "BBS";
 if ($p->page > 1)
   $TITLE .= " :: page ".(int)$p->page;
-
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");

@@ -56,49 +56,43 @@ class PouetBoxBBSOpen extends PouetBox {
   function RenderBody()
   {
     global $currentUser;
-    if (!get_login_id())
-    {
-      require_once("box-login.php");
-      $box = new PouetBoxLogin();
-      $box->RenderBody();
-    }
-    else
-    {
-      if (!$currentUser->CanPostInBBS())
-        return;
+    if (!$currentUser)
+      return;
 
-      echo "<form action='add.php' method='post'>\n";
+    if (!$currentUser->CanPostInBBS())
+      return;
 
-      $csrf = new CSRFProtect();
-      $csrf->PrintToken();
+    echo "<form action='add.php' method='post'>\n";
 
-      echo "<div class='content'>\n";
-      echo " <input type='hidden' name='type' value='bbs'>\n";
+    $csrf = new CSRFProtect();
+    $csrf->PrintToken();
 
-      echo " <label for='topic'>topic:</label>\n";
-      echo " <input name='topic' id='topic'/>\n";
+    echo "<div class='content'>\n";
+    echo " <input type='hidden' name='type' value='bbs'>\n";
 
-      echo " <label for='category'>category:</label>\n";
-      echo " <select name='category' id='category'>\n";
-      foreach($this->categories as $v)
-        printf("<option value='%s'>%s</option>",_html($v),_html($v));
-      echo " </select>\n";
+    echo " <label for='topic'>topic:</label>\n";
+    echo " <input name='topic' id='topic'/>\n";
 
-      echo " <label for='message'>message:</label>\n";
-      echo " <textarea name='message' id='message'></textarea>\n";
+    echo " <label for='category'>category:</label>\n";
+    echo " <select name='category' id='category'>\n";
+    foreach($this->categories as $v)
+      printf("<option value='%s'>%s</option>",_html($v),_html($v));
+    echo " </select>\n";
 
-      echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
-      echo "</div>\n";
-      echo "<div class='foot'>\n";
-      echo " <script language='JavaScript' type='text/javascript'>\n";
-      echo " <!--\n";
-      echo "   document.observe('dom:loaded',function(){ AddPreviewButton($('submit')); });\n";
-      echo " //-->\n";
-      echo " </script>\n";
-      echo " <input type='submit' value='Submit' id='submit'>";
-      echo "</div>\n";
-      echo "</form>\n";
-    }
+    echo " <label for='message'>message:</label>\n";
+    echo " <textarea name='message' id='message'></textarea>\n";
+
+    echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
+    echo "</div>\n";
+    echo "<div class='foot'>\n";
+    echo " <script language='JavaScript' type='text/javascript'>\n";
+    echo " <!--\n";
+    echo "   document.observe('dom:loaded',function(){ AddPreviewButton($('submit')); });\n";
+    echo " //-->\n";
+    echo " </script>\n";
+    echo " <input type='submit' value='Submit' id='submit'>";
+    echo "</div>\n";
+    echo "</form>\n";
   }
 
 };

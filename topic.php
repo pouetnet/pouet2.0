@@ -187,7 +187,7 @@ document.observe("dom:loaded",function(){
       $msg->message = "this thread now officially wants YOU to go make a demo about it instead. please comply.";
       $msg->Render();
     }
-    else if ($currentUser && !$currentUser->CanPostToBBS())
+    else if ($currentUser && !$currentUser->CanPostInBBS())
     {
       $msg = new PouetBoxModalMessage( true );
       $msg->title = "no you can't";
