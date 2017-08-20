@@ -398,7 +398,7 @@ document.observe("dom:loaded",function(){
       if ($this->linkCheck->returnCode == 0 
       || $this->linkCheck->returnCode >= 400 && $this->linkCheck->returnCode <= 599)
       {
-        echo "<span class='brokenLink error'>Link broken!</span> ";
+        printf("<span class='brokenLink error' title='%s'>Link broken!</span> ",$this->linkCheck->returnCode == 0 ? "server not found" : "server returned ".$this->linkCheck->returnCode );
       }
       /*
       TODO: not sure about this
