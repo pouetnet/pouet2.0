@@ -415,13 +415,26 @@ class PouetBoxSearchBBS extends PouetBox
     parent::__construct();
     $this->uniqueID = "pouetbox_searchbbs";
     $this->terms = $terms;
+    foreach($this->terms as $k=>$v)
+    {
+      if (strlen($v) < 2)
+      {
+        unset($this->terms[$k]);
+      }
+    }
+    $this->terms = array_values($this->terms);
   }
 
-  function LoadFromDB() {
-    $s = new SQLSelect();
-
+  function LoadFromDB() 
+  {
     $perPage = get_setting("searchprods");
     $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->data = array();
+    
+    if (!$this->terms)
+      return;
+      
+    $s = new SQLSelect();
 
     $s = new BM_Query("bbs_posts");
     $s->AddField("bbs_topics.topic as topic");
@@ -455,16 +468,19 @@ class PouetBoxSearchBBS extends PouetBox
     }
     echo "</tr>\n";
 
+    $terms = array();
+    foreach ($this->terms as $v2) {
+      $terms[] = preg_quote($v2,"/");
+    }
+
     foreach ($this->data as $p) {
       echo "<tr class='r2'>\n";
 
       echo "<td class='name'>";
 
       $s = _html($p->topic);
-      foreach ($this->terms as $v2) {
-        $v2 = preg_quote($v2,"/");
-        $s = preg_replace("/(".$v2.")/i","<span class='searchhighlight'>$1</span>",$s);
-      }
+      $s = preg_replace("/(".implode("|",$terms).")/i","<span class='searchhighlight'>$1</span>",$s);
+
       echo "<a href='topic.php?post=".$p->postID."'>".$s."</a>";
       echo "</td>\n";
       echo "<td class='date'>";
@@ -479,11 +495,8 @@ class PouetBoxSearchBBS extends PouetBox
 
       $s = strip_tags($p->post);
       $s = preg_replace("/(\s+)/"," ",$s);
-      $s = _html(mb_strcut($s,max(0,stripos($s,$this->terms[0])-50),100,"utf-8"));
-      foreach ($this->terms as $v2) {
-        $v2 = preg_quote($v2,"/");
-        $s = preg_replace("/(".$v2.")/i","<span class='searchhighlight'>$1</span>",$s);
-      }
+      $s = _html(mb_strcut($s,max(0,mb_stripos($s,$this->terms[0])-50),100,"utf-8"));
+      $s = preg_replace("/(".implode("|",$terms).")/i","<span class='searchhighlight'>$1</span>",$s);
 
       echo "<tr class='r1'>\n";
       echo "  <td colspan='3'>...".$s."...</td>\n";
