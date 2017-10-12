@@ -849,19 +849,29 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $fields = array();
     static::GetFields(array(),$fields,$js);
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
+    $a = array(&$prod);
+    PouetCollectPlatforms( $a );
     $pa = static::ProdToArray( $prod );
 
     $_in = array();
     foreach($fields as $k=>$v) $_in[$k] = $input[$k];
+
+    if( $input["releaseDate_year"] && $input["releaseDate_month"] && checkdate( (int)$input["releaseDate_month"], 15, (int)$input["releaseDate_year"]) )
+      $_in["releaseDate"] = sprintf("%04d-%02d-15",$input["releaseDate_year"],$input["releaseDate_month"]);
+    else if ($input["releaseDate_year"])
+      $_in["releaseDate"] = sprintf("%04d-00-15",$input["releaseDate_year"]);
+    
     $output = array_diff( $_in, $pa );
+
     if (array_diff( $_in["type"] ?: array(), $pa["type"] ))
-      $output["type"] = array_diff( $_in["type"], $pa["type"] );
+      $output["type"] = $_in["type"];
+      
     if (array_diff( $_in["platform"] ?: array(), $pa["platform"] ))
-      $output["platform"] = array_diff( $_in["platform"], $pa["platform"] );
-     
+      $output["platform"] = $_in["platform"];
+
     unset($output["finalStep"]);
     
-    return array();    
+    return $output ? array() : array("you didn't change anything !");
   }
 
   static function Display($itemID, $data) 
@@ -976,11 +986,14 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $sql[$k] = $v;
       }
     }
-    SQLLib::UpdateRow("prods",$sql,"id=".(int)$itemID);
-    
-    if (isset($data["platform"]))
+    if ($sql)
     {
-      $data["platform"] = array_unique($data["platform"]);
+      SQLLib::UpdateRow("prods",$sql,"id=".(int)$itemID);
+    }
+    
+    if (isset($reqData["platform"]))
+    {
+      $data["platform"] = array_unique($reqData["platform"]);
       SQLLib::Query(sprintf_esc("delete from prods_platforms where prod = %d",(int)$itemID));
       foreach($data["platform"] as $v)
       {
