@@ -69,7 +69,7 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
       echo "<a href='".$this->rssData['items'][$i]['link']."'>".$this->rssData['items'][$i]['demopartynet:title']."</a> ";
       echo " <span class='timeleft'>";
       echo $form;
-      if ($dist == 0) echo " (today!)";
+      if ($dist <= 0) echo " (now!)";
       else if ($dist == 1) echo " (tomorrow)";
       else echo " (".$dist." days)";
       echo "</span>";
