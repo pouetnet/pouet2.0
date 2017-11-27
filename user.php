@@ -89,6 +89,12 @@ class PouetBoxUserMain extends PouetBox
       $this->posts = $this->GetBBSPosts( $this->show=="posts" ? null : get_setting("usercomments") );
     }
 
+    $this->lists = array();
+    if ($this->show=="lists")
+    {
+      $this->lists = $this->GetLists( $this->show=="lists" ? null : 10 );
+    }
+
     $this->requests = array();
     //if ($this->show=="requests")
     {
@@ -266,7 +272,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
     $s->AddOrder("credits_prod.addedDate desc");
     $data2 = $s->perform();
-    
+
     $this->totalCreditsThumbUp = $data2[0]->up;
     $this->totalCreditsThumbDown = $data2[0]->down;
 
@@ -360,6 +366,29 @@ class PouetBoxUserMain extends PouetBox
 
     return $data;
   }
+  function GetLists( $limit = null )
+  {
+    $s = new BM_Query("lists");
+    $s->AddField("lists.id as listID");
+    $s->AddField("lists.name");
+    $s->AddWhere(sprintf("lists.owner = %d",$this->id));
+    $s->AddOrder("lists.addedDate desc");
+    if ($limit)
+    {
+      $s->SetLimit( $limit );
+    }
+    else
+    {
+      $this->listCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from lists where owner = %d",$this->id) )->c;
+
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=lists", $this->listCount, 50, $_GET["page"], false );
+      $this->paginator->SetLimitOnQuery( $s );
+    }
+
+    $data = $s->perform();
+
+    return $data;
+  }
   function GetModRequests( $limit = null )
   {
     $s = new BM_Query("modification_requests");
@@ -369,10 +398,10 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
 
     $data = $s->performWithCalcRows( $this->totalRequests );
-  
+
     return $data;
   }
-  
+
   function GetDemoblog( $page )
   {
     $s = new BM_Query("comments");
@@ -544,7 +573,7 @@ class PouetBoxUserMain extends PouetBox
         $this->paginator->RenderNavbar();
       }
     }
-    
+
     if ($this->user->stats["groups"])
     {
       if (!$this->show || $this->groups)
@@ -726,7 +755,7 @@ class PouetBoxUserMain extends PouetBox
       }
       */
     }
-    
+
     if ($this->user->stats["topics"])
     {
       if (!$this->show || $this->topics)
@@ -759,7 +788,7 @@ class PouetBoxUserMain extends PouetBox
         echo "<div class='contribheader'>bbs posts";
         if ($this->user->stats["posts"])
           echo " <span>".$this->user->stats["posts"]." posts</span>";
-        if ($this->show!="posts")        
+        if ($this->show!="posts")
           echo " [<a href='user.php?who=".$this->id."&amp;show=posts'>show</a>]";
         echo "</div>\n";
       }
@@ -777,7 +806,32 @@ class PouetBoxUserMain extends PouetBox
         $this->paginator->RenderNavbar();
       }
     }
-    
+
+    if ($this->user->stats["lists"])
+    {
+      if (!$this->show || $this->lists)
+      {
+        echo "<div class='contribheader'>lists";
+        if ($this->user->stats["lists"])
+          echo " <span>".$this->user->stats["lists"]." lists</span>";
+        if ($this->show!="lists")
+          echo " [<a href='user.php?who=".$this->id."&amp;show=lists'>show</a>]";
+        echo "</div>\n";
+      }
+      if ($this->lists)
+      {
+        echo "<ul class='boxlist'>";
+        foreach($this->lists as $l)
+        {
+          echo "<li>";
+          echo "<a href='lists.php?which=".$l->listID."'>"._html($l->name)."</a>";
+          echo "</li>";
+        }
+        echo "</ul>";
+        $this->paginator->RenderNavbar();
+      }
+    }
+
     if ($this->show=="otherstats")
     {
       echo "<div class='contribheader'>top thumb up agreers";
@@ -795,7 +849,7 @@ class PouetBoxUserMain extends PouetBox
         }
         echo "</ul>";
       }
-  
+
       echo "<div class='contribheader'>top thumb down agreers";
       echo "</div>\n";
       if ($this->agreeSucks)
@@ -812,7 +866,7 @@ class PouetBoxUserMain extends PouetBox
         echo "</ul>";
       }
     }
-    
+
     if ($this->comments)
     {
       echo "<ul class='boxlist' id='demoblog'>";
