@@ -32,7 +32,7 @@ foreach($data as $item)
     "description" => $item->comment,
     "link"      => POUET_ROOT_URL . "prod.php?post=" . $item->id,
     "pubDate"   => date("r",strtotime($item->addedDate)),
-    "guid"      => $item->id,
+    "guid"      => "pouetcomment".$item->id,
     "pouet:vote" => $votes[ $item->rating ],
   ));
 }
