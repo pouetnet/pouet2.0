@@ -169,7 +169,7 @@ class PouetProd extends BM_Class {
     global $currentUser;
     if (!($currentUser && $currentUser->CanDeleteItems()))
       return;
-    
+
     SQLLib::Query(sprintf_esc("DELETE FROM downloadlinks WHERE prod=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM comments WHERE which=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM nfos WHERE prod=%d",$this->id));
@@ -194,6 +194,29 @@ class PouetProd extends BM_Class {
 
     gloperator_log( "prod", (int)$this->id, "prod_delete", get_object_vars($this) );
   }
+
+  use PouetAPI { ToAPI as protected ToAPISuper; }
+
+  function ToAPI()
+  {
+    $array = $this->ToAPISuper();
+    
+    $screenshot = find_screenshot( $this->id );
+    if ($screenshot)
+    {
+      $array["screenshot"] = POUET_CONTENT_URL . $screenshot;
+    }
+  
+    global $COMPOTYPES;
+    $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
+    foreach($this->placings as &$p)
+      $p->compo_name = $COMPOTYPES[ $p->compo ];
+    
+    unset($array["views"]);
+    unset($array["latestip"]);
+    return $array;
+  }
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////

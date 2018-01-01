@@ -42,6 +42,8 @@ class PouetParty extends BM_Class {
   {
     return "[<a href='party_results.php?which=".$this->id."&amp;when=".$year."'>results</a>] ";
   }
+  
+  use PouetAPI;
 };
 
 BM_AddClass("PouetParty");
@@ -51,13 +53,15 @@ class PouetPlacing {
   var $compo;
   var $ranking;
   var $year;
-  function PouetPlacing($initarray) {
+  function PouetPlacing($initarray)
+  {
     $this->party = $initarray["party"];
     $this->compo = $initarray["compo"];
     $this->ranking = $initarray["ranking"];
     $this->year = $initarray["year"];
   }
-  function PrintRanking() {
+  function PrintRanking()
+  {
     $n = (int)$this->ranking;
     if (!$n) return "";
     if ($n==97) return "disqualified";
@@ -73,13 +77,23 @@ class PouetPlacing {
     if ($n==13) $suf = "th";
     return $this->ranking."<span class='ordinal'>".$suf."</span>";
   }
-  function PrintResult() {
+  function PrintResult()
+  {
     $s = $this->PrintRanking();
     if ($s) $s.= " at ";
     $s .= $this->party->PrintLinked($this->year);
     return $s;
-
   }
+
+  use PouetAPI { ToAPI as protected ToAPISuper; }
+
+  function ToAPI()
+  {
+    global $COMPOTYPES;
+    $array = $this->ToAPISuper();
+    $array["compo_name"] = $COMPOTYPES[ $this->compo ];
+    return $array;
+  }  
 }
 
 ?>
