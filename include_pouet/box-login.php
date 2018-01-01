@@ -16,7 +16,7 @@ class PouetBoxLogin extends PouetBox {
     if (!get_login_id())
     {
       echo "<div class='content loggedout'>\n";
-      printf( "<a href='login.php?return=%s'>login via SceneID</a>",_html(rootRelativePath()) );
+      printf( "<a href='login.php?return=%s'>login via SceneID</a>",_html(rawurlencode(rootRelativePath())) );
       echo "</div>\n";
     } else {
       global $currentUser;
