@@ -3,7 +3,7 @@ class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","avatar","glops","registerDate","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
-  
+
   function PrintAvatar()
   {
     return sprintf("<img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/>",rawurlencode($this->avatar),_html($this->nickname));
@@ -60,7 +60,7 @@ class PouetUser extends BM_Class {
     $glops += 20 * $this->stats["logosVote"];
     $glops +=  1 * $this->stats["ud"];
     $glops +=  1 * $this->stats["requestGlops"];
-    
+
     return $glops;
   }
   function UpdateGlops()
@@ -173,6 +173,17 @@ class PouetUser extends BM_Class {
   function CanEditBBS()
   {
     return $this->IsModerator();
+  }
+
+  use PouetAPI { ToAPI as protected ToAPISuper; }
+
+  function ToAPI()
+  {
+    $array = $this->ToAPISuper();
+    unset($array["lastLogin"]);
+    unset($array["permissionSubmitItems"]);
+    unset($array["permissionPostBBS"]);
+    return $array;
   }
 };
 
