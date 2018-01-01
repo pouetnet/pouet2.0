@@ -32,7 +32,7 @@ class PouetBox {
   }
 
   function RenderContent() { // override
-    return "content comes here";
+    echo "content comes here";
   }
 
   function RenderFooter() {

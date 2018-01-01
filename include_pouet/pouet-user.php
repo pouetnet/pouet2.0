@@ -3,12 +3,17 @@ class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","avatar","glops","registerDate","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
-  function PrintLinkedAvatar() {
-//    return "<a href='user.php?who=".$this->id."' class='usera' title=\""._html($this->nickname)."\"><img src='".POUET_CONTENT_URL."avatars/".rawurlencode($this->avatar)."' alt=\""._html($this->nickname)."\" class='avatar'/></a>";
-    return sprintf("<a href='user.php?who=%d' class='usera' title=\"%s\"><img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/></a>",
-      $this->id,_html($this->nickname),rawurlencode($this->avatar),_html($this->nickname));
+  
+  function PrintAvatar()
+  {
+    return sprintf("<img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/>",rawurlencode($this->avatar),_html($this->nickname));
   }
-  function PrintLinkedName() {
+  function PrintLinkedAvatar()
+  {
+    return sprintf("<a href='user.php?who=%d' class='usera' title=\"%s\">%s</a>", $this->id,_html($this->nickname),$this->PrintAvatar());
+  }
+  function PrintLinkedName()
+  {
     $classes = array("user");
     if ((time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
     if ($this->IsBanned()) $classes[] = "banned";

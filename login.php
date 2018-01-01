@@ -30,10 +30,11 @@ try
 
   if (!$SceneIDuser["success"] || !$SceneIDuser["user"]["id"])
   {
-		redirect("error.php?e=".rawurlencode("User not found."));
+    redirect("error.php?e=".rawurlencode("User not found."));
   }
   
   $user = PouetUser::Spawn( (int)$SceneIDuser["user"]["id"] );
+  $welcome = false;
   if (!$user || !$user->id)
   {
     $entry = glob(POUET_CONTENT_LOCAL."avatars/*.gif");
@@ -48,11 +49,13 @@ try
     $user->Create();
 
     $user = PouetUser::Spawn( $user->id );
+    
+    $welcome = true;
   }
 
   if ( $user->IsBanned() )
   {
-		redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
+    redirect("error.php?e=".rawurlencode("We dun like yer type 'round these parts."));
   }
 
   $_SESSION["user"] = $user;
@@ -61,12 +64,19 @@ try
   if ($currentUserSettings)
     $ephemeralStorage->set( "settings:".$user->id, $currentUserSettings );
 
-  redirect( basename( $returnURL ? $returnURL : "index.php" ) );
+  if ($welcome)
+  {
+    redirect( "welcome.php" . $returnURL ? "?return=" . rawurlencode( basename( $returnURL ) ) : "" );
+  }
+  else
+  {
+    redirect( basename( $returnURL ? $returnURL : "index.php" ) );
+  }
   
 }
 catch(SceneID3Exception $e) 
 {
-	redirect("error.php?e=".rawurlencode( $e->GetMessage() ));
+  redirect("error.php?e=".rawurlencode( $e->GetMessage() ));
 }
 
 ?>
