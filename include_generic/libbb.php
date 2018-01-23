@@ -112,6 +112,7 @@ function bbencode( $text )
   $text = preg_replace("/\[url=&quot;(.*?)&quot;\](.*?)\[\/url\]/si","<a href='$1'>$2</a>",$text);
   $text = preg_replace("/\[url\](.*?)\[\/url\]/si","<a href='$1'>$1</a>",$text);
   $text = preg_replace("/\[url=(.*?)\](.*?)\[\/url\]/si","<a href='$1'>$2</a>",$text);
+  $text = preg_replace("/\[email\](.*?)\[\/email\]/si","<a href='mailto:$1'>$1</a>",$text);
   if (get_setting("displayimages") || $_GET["forceimages"])
     $text = preg_replace("/\[img\](.*?)\[\/img\]/i","<img src='$1' class='bbimage' alt='BB Image'/>",$text);
   else
