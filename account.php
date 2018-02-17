@@ -72,7 +72,6 @@ class PouetBoxAccount extends PouetBox
   {
     global $COUNTRIES;
     $this->cdcs = array();
-    global $sceneID;
 
     $query = new BM_Query( "users" );
     $query->AddExtendedFields();
@@ -84,26 +83,10 @@ class PouetBoxAccount extends PouetBox
     $s = $query->perform();
     $this->user = reset( $s );
 
-    $this->sceneID = $this->user->GetSceneIDData( false );
-    
     $rows = SQLLib::SelectRows(sprintf_esc("select cdc from users_cdcs where user=%d",get_login_id()));
     foreach($rows as $r)
       $this->cdcs[] = $r->cdc;
       
-    /*
-    $this->fieldsSceneID = array(
-      "login"=>array(
-        "info"=>"which word can you type very fast ?",
-        "value"=> $this->sceneID["first_name"]." ".$this->sceneID["last_name"],
-      ),
-      "captcha"=>array(
-        "info"=>"real sceners are proficient in the skill of reading letters",
-        "name"=>"captcha thingy",
-        "type"=>"captcha",
-      ),
-    );
-    */
-    
     $this->fieldsPouet = array(
       "nickname"=>array(
         "info"=>"how do you look on IRC ?",
@@ -146,9 +129,6 @@ class PouetBoxAccount extends PouetBox
       ),
     );
     $this->fieldsCDC = array();
-
-    //$this->fieldsSceneID["login"]["type"] = "static";
-    //unset($this->fieldsSceneID["captcha"]);
 
     $glop = POUET_CDC_MINGLOP;
     for ($x=1; $x < 10; $x++)
