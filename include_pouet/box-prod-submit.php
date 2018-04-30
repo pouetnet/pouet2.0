@@ -120,8 +120,8 @@ class PouetBoxSubmitProd extends PouetBox
     // everything has been validated (..., the new album by BT!)
 
     $a = array();
-    $a["name"] = $data["name"];
-    $a["download"] = $data["download"];
+    $a["name"] = trim($data["name"]);
+    $a["download"] = trim($data["download"]);
 
     $a["addedUser"] = get_login_id();
     $a["addedDate"] = date("Y-m-d H:i:s");

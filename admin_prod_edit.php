@@ -34,8 +34,8 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
   {
     //die("almost there");
     $a = array();
-    $a["name"] = $data["name"];
-    $a["download"] = $data["download"];
+    $a["name"] = trim($data["name"]);
+    $a["download"] = trim($data["download"]);
 
     if ($data["releaseDate_month"] && $data["releaseDate_year"] && checkdate( (int)$data["releaseDate_month"], 15, (int)$data["releaseDate_year"]) )
       $a["releaseDate"] = sprintf("%04d-%02d-15",$data["releaseDate_year"],$data["releaseDate_month"]);
