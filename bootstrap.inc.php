@@ -55,7 +55,7 @@ else if (class_exists("SceneID3"))
   $sceneID = new SceneID3( array(
     "clientID" => SCENEID_USER,
     "clientSecret" => SCENEID_PASS,
-    "redirectURI" => POUET_ROOT_URL . "login.php",
+    "redirectURI" => POUET_ROOT_URL_SECURE . "login.php",
   ) );
 }
 
