@@ -181,6 +181,10 @@ class PouetUser extends BM_Class {
   {
     $array = $this->ToAPISuper();
     unset($array["lastLogin"]);
+    unset($array["lastip"]);
+    unset($array["lasthost"]);
+    unset($array["sceneIDLastRefresh"]);
+    unset($array["sceneIDData"]);
     unset($array["permissionSubmitItems"]);
     unset($array["permissionPostBBS"]);
     return $array;
