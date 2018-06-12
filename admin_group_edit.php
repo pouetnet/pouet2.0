@@ -12,7 +12,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 {
-  function PouetBoxAdminEditGroup( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -60,7 +60,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
 {
   public static $slug = "BoardAffil";
-  function PouetBoxAdminEditGroupAffil( $group )
+  function __construct( $group )
   {
     parent::__construct();
 
@@ -155,7 +155,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminDeleteGroup extends PouetBox
 {
-  function PouetBoxAdminDeleteGroup( $group )
+  function __construct( $group )
   {
     parent::__construct();
 

@@ -12,7 +12,7 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
 {
-  function PouetBoxSubmitPartyEditionInfo( $id, $year )
+  function __construct( $id, $year )
   {
     parent::__construct();
 

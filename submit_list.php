@@ -10,7 +10,7 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitList extends PouetBox
 {
-  function PouetBoxSubmitList()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitlist";

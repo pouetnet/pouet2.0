@@ -2,7 +2,7 @@
 class PouetBoxIndexLatestAdded extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxIndexLatestAdded() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestadded";
     $this->title = "latest added prods";

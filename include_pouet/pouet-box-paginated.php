@@ -1,7 +1,7 @@
 <?
 class PouetBoxPaginated extends PouetBox 
 {
-  function PouetBoxPaginated() {
+  function __construct() {
     parent::__construct();
   }
   

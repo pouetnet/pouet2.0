@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexLatestParties extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxIndexLatestParties() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestparties";
     $this->title = "latest parties";

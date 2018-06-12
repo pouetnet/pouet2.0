@@ -4,7 +4,7 @@ require_once("bootstrap.inc.php");
 class PouetBoxListsList extends PouetBox  /* pf lol */
 {
   var $letter;
-  function PouetBoxListsList($letter) {
+  function __construct($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_listslist";
 
@@ -73,7 +73,7 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
 
 class PouetBoxListsMain extends PouetBox
 {
-  function PouetBoxListsMain($id) {
+  function __construct($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_listsmain";
     $this->id = (int)$id;
@@ -257,7 +257,7 @@ class PouetBoxListsMain extends PouetBox
 
 class PouetBoxListsAdd extends PouetBox
 {
-  function PouetBoxListsAdd($box)
+  function __construct($box)
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_listsadd";
@@ -353,7 +353,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxListsAddMaintainer extends PouetBox
 {
-  function PouetBoxListsAddMaintainer($box)
+  function __construct($box)
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_listsaddmaintainer";

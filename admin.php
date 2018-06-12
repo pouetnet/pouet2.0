@@ -18,7 +18,7 @@ function PouetAdmin_recacheFrontPagePartial_Form()
 }
 
 class PouetBoxAdmin extends PouetBox {
-  function PouetBoxAdmin() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_admin";
     $this->title = "i'm gonna wreck it !";

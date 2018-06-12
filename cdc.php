@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxCDCModerator extends PouetBox {
-  function PouetBoxCDCModerator() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdcmoderator";
     $this->title = "moderators' coup de coeur history";
@@ -51,7 +51,7 @@ class PouetBoxCDCModerator extends PouetBox {
 };
 
 class PouetBoxCDCUser extends PouetBox {
-  function PouetBoxCDCUser() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdcuser";
     $this->title = "users' coup de coeur toplist";

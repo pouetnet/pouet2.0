@@ -8,7 +8,7 @@ class PouetProd extends BM_Class {
   var $group2;
   var $group3;
 
-  function PouetProd()
+  function __construct()
   {
     $this->types = array();
     $this->platforms = array();

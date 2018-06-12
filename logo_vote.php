@@ -3,7 +3,7 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-post.php");
 
 class PouetBoxLogoVote extends PouetBox {
-  function PouetBoxLogoVote($logo) {
+  function __construct($logo) {
     parent::__construct();
     $this->uniqueID = "";
     $this->classes[] = "logovote";
@@ -31,7 +31,7 @@ class PouetBoxLogoVote extends PouetBox {
 
 
 class PouetBoxLogoLama extends PouetBox {
-  function PouetBoxLogoLama() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_logolama";
     $this->title = "no logo left, you are now a l4m4h";

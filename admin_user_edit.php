@@ -10,7 +10,7 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminEditUser extends PouetBox
 {
-  function PouetBoxAdminEditUser( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -103,7 +103,7 @@ class PouetBoxAdminEditUser extends PouetBox
 
 class PouetBoxAdminUserNicks extends PouetBox
 {
-  function PouetBoxAdminUserNicks( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -131,7 +131,7 @@ class PouetBoxAdminUserNicks extends PouetBox
 
 class PouetBoxAdminUserIPs extends PouetBox
 {
-  function PouetBoxAdminUserIPs( $ip )
+  function __construct( $ip )
   {
     parent::__construct();
 

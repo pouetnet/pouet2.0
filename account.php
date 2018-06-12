@@ -60,7 +60,7 @@ $namesSwitch = array(
 
 class PouetBoxAccount extends PouetBox
 {
-  function PouetBoxAccount( )
+  function __construct( )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_account";
@@ -297,7 +297,7 @@ class PouetBoxAccount extends PouetBox
 
 class PouetBoxAccountModificationRequests extends PouetBox
 {
-  function PouetBoxAccountModificationRequests( )
+  function __construct( )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_accountreq";

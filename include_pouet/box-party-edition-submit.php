@@ -2,7 +2,7 @@
 
 class PouetBoxSubmitPartyEdition extends PouetBox
 {
-  function PouetBoxSubmitPartyEdition()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitpartyedition";

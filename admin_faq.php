@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminEditFAQ extends PouetBox
 {
-  function PouetBoxAdminEditFAQ( $id )
+  function __construct( $id )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_admineditfaq";
@@ -111,7 +111,7 @@ class PouetBoxAdminEditFAQ extends PouetBox
 
 class PouetBoxAdminEditFAQList extends PouetBox
 {
-  function PouetBoxAdminEditFAQList( )
+  function __construct( )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_admineditfaqlist";

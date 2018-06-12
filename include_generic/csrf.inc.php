@@ -1,7 +1,7 @@
 <?
 class CSRFProtect
 {
-  public function CSRFProtect()
+  public function __construct()
   {
     if(session_id() == '')
       die("Initialize sessions please!");

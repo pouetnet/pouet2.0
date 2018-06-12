@@ -2,7 +2,7 @@
 
 class PouetBoxBBSPost extends PouetBox {
   var $topic;
-  function PouetBoxBBSPost($topic) {
+  function __construct($topic) {
     parent::__construct();
     $this->topic = (int)$topic;
     $this->uniqueID = "pouetbox_bbspost";

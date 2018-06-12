@@ -1,7 +1,7 @@
 <?
 class PouetBoxSubmitProd extends PouetBox
 {
-  function PouetBoxSubmitProd()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitprod";

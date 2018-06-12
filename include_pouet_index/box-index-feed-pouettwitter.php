@@ -4,7 +4,7 @@ require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
 class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
-  function PouetBoxIndexFeedPouetTwitter() 
+  function __construct() 
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_feedpouettwitter";

@@ -4,7 +4,7 @@ require_once("include_generic/recaptchalib.php");
 
 class PouetBoxUserMain extends PouetBox
 {
-  function PouetBoxUserMain($id,$show) {
+  function __construct($id,$show) {
     parent::__construct();
     $this->uniqueID = "pouetbox_usermain";
     $this->title = "";

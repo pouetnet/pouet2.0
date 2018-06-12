@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxGloperatorLog extends PouetBox {
-  function PouetBoxGloperatorLog() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_gloperatorlog";
     $this->title = "edits for this "._html($_GET["what"]).":";

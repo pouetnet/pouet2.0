@@ -3,7 +3,7 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxSearchBoxMain extends PouetBox
 {
-  function PouetBoxSearchBoxMain() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchmain";
     $this->title = "search in pou&euml;t.net";
@@ -31,7 +31,7 @@ class PouetBoxSearchBoxMain extends PouetBox
 
 class PouetBoxSearchProd extends PouetBox
 {
-  function PouetBoxSearchProd($terms = array()) {
+  function __construct($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchprod";
     $this->terms = $terms;
@@ -144,7 +144,7 @@ class PouetBoxSearchProd extends PouetBox
 
 class PouetBoxSearchGroup extends PouetBox
 {
-  function PouetBoxSearchGroup($terms = array()) {
+  function __construct($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchgroup";
     $this->terms = $terms;
@@ -235,7 +235,7 @@ class PouetBoxSearchGroup extends PouetBox
 
 class PouetBoxSearchParty extends PouetBox
 {
-  function PouetBoxSearchParty($terms = array()) {
+  function __construct($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchparty";
     $this->terms = $terms;
@@ -322,7 +322,7 @@ class PouetBoxSearchParty extends PouetBox
 
 class PouetBoxSearchUser extends PouetBox
 {
-  function PouetBoxSearchUser($terms = array()) {
+  function __construct($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchuser";
     $this->terms = $terms;
@@ -411,7 +411,7 @@ class PouetBoxSearchUser extends PouetBox
 
 class PouetBoxSearchBBS extends PouetBox
 {
-  function PouetBoxSearchBBS($terms = array()) {
+  function __construct($terms = array()) {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchbbs";
     $this->terms = $terms;

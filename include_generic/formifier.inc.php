@@ -1,6 +1,6 @@
 <?
 class Formifier {
-  function Formifier()
+  function __construct()
   {
     $this->canDeleteFiles = false;
   }

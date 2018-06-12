@@ -5,7 +5,7 @@ require_once("include_pouet/box-bbs-post.php");
 $POSTS_PER_PAGE = 25;
 
 class PouetBoxOnelinerView extends PouetBox {
-  function PouetBoxOnelinerView() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_onelinerview";
     $this->title = "the so complete pou&euml;t.net oneliner";

@@ -5,7 +5,7 @@ require_once("include_pouet/pouet-prod.php");
 
 class PouetBoxIndexAffilButton extends PouetBoxCachable {
   var $data;
-  function PouetBoxIndexAffilButton() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_affilbutton";
     $this->title = "affiliate buttons";

@@ -3,7 +3,7 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-post.php");
 
 class PouetBoxMirrors extends PouetBox {
-  function PouetBoxMirrors() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_mirrors";
   }

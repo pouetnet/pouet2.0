@@ -12,7 +12,7 @@ class PouetFormProcessor
   
   const fieldName = "formProcessorAction";
 
-  function PouetFormProcessor()
+  function __construct()
   {
     $this->objects = array();
     $this->errors = array();

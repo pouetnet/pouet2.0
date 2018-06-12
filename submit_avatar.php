@@ -4,7 +4,7 @@ require_once("include_pouet/box-modalmessage.php");
 
 class PouetBoxAvatarGallery extends PouetBox
 {
-  function PouetBoxAvatarGallery()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_avatargallery";
@@ -43,7 +43,7 @@ class PouetBoxAvatarGallery extends PouetBox
 };
 class PouetBoxSubmitAvatar extends PouetBox
 {
-  function PouetBoxSubmitAvatar()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitavatar";

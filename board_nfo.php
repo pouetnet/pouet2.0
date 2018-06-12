@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxBoardNfo extends PouetBox {
-  function PouetBoxBoardNfo() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_boardnfo";
     $this->title = "board nfo";

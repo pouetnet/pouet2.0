@@ -10,7 +10,7 @@ class PouetBoxIndexNews extends PouetBox {
   var $title;
   var $content;
   var $timestamp;
-  function PouetBoxIndexNews() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_newsbox";
     $this->title = "news box";
@@ -27,7 +27,7 @@ class PouetBoxIndexNews extends PouetBox {
 
 class PouetBoxIndexNewsBoxes extends PouetBoxCachable
 {
-  function PouetBoxIndexNewsBoxes()
+  function __construct()
   {
     parent::__construct();
 

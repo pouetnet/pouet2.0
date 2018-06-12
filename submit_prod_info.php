@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 {
-  function PouetBoxSubmitProdInfo( $id )
+  function __construct( $id )
   {
     parent::__construct();
 

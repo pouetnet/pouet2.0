@@ -14,7 +14,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 {
-  function PouetBoxAdminEditProd( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -164,7 +164,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
 class PouetBoxAdminDeleteProd extends PouetBox
 {
-  function PouetBoxAdminDeleteProd( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 
@@ -225,7 +225,7 @@ document.observe("dom:loaded",function(){
 class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Sceneorg";
-  function PouetBoxAdminEditProdSceneorg( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 
@@ -323,7 +323,7 @@ document.observe("dom:loaded",function(){
 class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Link";
-  function PouetBoxAdminEditProdLinks( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 
@@ -398,7 +398,7 @@ document.observe("dom:loaded",function(){
 class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Party";
-  function PouetBoxAdminEditProdParties( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 
@@ -524,7 +524,7 @@ document.observe("dom:loaded",function(){
 class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Credit";
-  function PouetBoxAdminEditProdCredits( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 
@@ -618,7 +618,7 @@ document.observe("dom:loaded",function(){
 class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
 {
   public static $slug = "Affil";
-  function PouetBoxAdminEditProdAffil( $prod )
+  function __construct( $prod )
   {
     parent::__construct();
 

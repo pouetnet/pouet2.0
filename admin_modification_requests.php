@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminModificationRequests extends PouetBox
 {
-  function PouetBoxAdminModificationRequests( )
+  function __construct( )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_adminreq";

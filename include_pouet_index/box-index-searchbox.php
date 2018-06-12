@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexSearchBox extends PouetBoxCachable {
   var $data;
   var $prod;
-  function PouetBoxIndexSearchBox() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_search";
     $this->title = "search box";

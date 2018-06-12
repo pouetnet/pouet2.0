@@ -15,7 +15,7 @@ class BM_Node {
   var $table;
   var $class;
   var $attachments;
-  function BM_Node( &$query, $a = array() )
+  function __construct( &$query, $a = array() )
   {
     global $BM_ORM_CLASSES;
     $this->attachments = array();
@@ -82,7 +82,7 @@ class BM_Node {
 
 class BM_Query extends SQLSelect {
   var $root;
-  function BM_Query($table = null)
+  function __construct($table = null)
   {
     global $BM_ORM_CLASSES;
     $this->root = array();

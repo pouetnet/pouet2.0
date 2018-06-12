@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxFAQ extends PouetBox {
-  function PouetBoxFAQ() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_faq";
     $this->title = "the always incomplete pouët.net faq";

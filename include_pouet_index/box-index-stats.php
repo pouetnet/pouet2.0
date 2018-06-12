@@ -7,7 +7,7 @@ class PouetBoxIndexStats extends PouetBoxCachable {
   var $data;
   var $fields;
   var $links;
-  function PouetBoxIndexStats() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_stats";
     $this->title = "some stats";

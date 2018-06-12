@@ -4,7 +4,7 @@ class PouetBox {
   var $uniqueID;
   var $logz;
   var $classes;
-  function PouetBox() { // constructor
+  function __construct() { // constructor
     $this->title = "";
     $this->uniqueID = "pouetbox";
     $this->classes = array();
@@ -112,7 +112,7 @@ trait PouetFrontPage
 
 class PouetBoxCachable extends PouetBox {
   var $cacheTime;
-  function PouetBoxCachable() {
+  function __construct() {
     parent::__construct();
     $this->cacheTime = 60*60*24;
   }

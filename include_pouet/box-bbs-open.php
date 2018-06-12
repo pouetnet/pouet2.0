@@ -1,7 +1,7 @@
 <?
 class PouetBoxBBSOpen extends PouetBox {
   var $topic;
-  function PouetBoxBBSOpen() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbsopen";
     $this->title = "open a new bbs thread";

@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexCDC extends PouetBoxCachable {
   var $data;
   var $prod;
-  function PouetBoxIndexCDC() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdc";
     $this->title = "coup de coeur";

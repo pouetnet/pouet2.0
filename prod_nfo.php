@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxProdNfo extends PouetBox {
-  function PouetBoxProdNfo() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodnfo";
     $this->title = "prod nfo";

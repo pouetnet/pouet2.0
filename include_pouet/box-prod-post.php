@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-user.php");
 
 class PouetBoxProdPost extends PouetBox {
   var $prod;
-  function PouetBoxProdPost($prod) {
+  function __construct($prod) {
     global $currentUser;
     
     parent::__construct();

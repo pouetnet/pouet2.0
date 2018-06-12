@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxPreview extends PouetBox {
-  function PouetBoxPreview() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_preview";
     $this->title = "this is what marcellus wallace looks like";

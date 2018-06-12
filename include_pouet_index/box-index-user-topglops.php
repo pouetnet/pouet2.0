@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexTopGlops extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxIndexTopGlops() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_topglops";
     $this->title = "top of the glöps";

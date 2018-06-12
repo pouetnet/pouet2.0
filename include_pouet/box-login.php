@@ -7,7 +7,7 @@ require_once("include_pouet/pouet-user.php");
 class PouetBoxLogin extends PouetBox {
   var $data;
   var $prod;
-  function PouetBoxLogin() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_login";
     $this->title = "login";

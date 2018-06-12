@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
 {
-  function PouetBoxAdminEditBoard( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -81,7 +81,7 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
 
 class PouetBoxAdminDeleteBoard extends PouetBox
 {
-  function PouetBoxAdminDeleteBoard( $board )
+  function __construct( $board )
   {
     parent::__construct();
 

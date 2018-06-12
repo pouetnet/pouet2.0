@@ -5,7 +5,7 @@ require_once(POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
 
 class PouetBoxModalMessage extends PouetBox
 {
-  function PouetBoxModalMessage( $allowHTML = false, $enableFooter = false )
+  function __construct( $allowHTML = false, $enableFooter = false )
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_modalmessage";

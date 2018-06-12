@@ -4,7 +4,7 @@ require_once("bootstrap.inc.php");
 class PouetBoxPartyList extends PouetBox
 {
   var $letter;
-  function PouetBoxPartyList($letter) {
+  function __construct($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_partylist";
 

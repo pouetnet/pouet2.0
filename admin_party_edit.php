@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditParty extends PouetBoxSubmitParty
 {
-  function PouetBoxAdminEditParty( $id )
+  function __construct( $id )
   {
     parent::__construct();
 
@@ -46,7 +46,7 @@ class PouetBoxAdminEditParty extends PouetBoxSubmitParty
 
 class PouetBoxAdminDeleteParty extends PouetBox
 {
-  function PouetBoxAdminDeleteParty( $party )
+  function __construct( $party )
   {
     parent::__construct();
 

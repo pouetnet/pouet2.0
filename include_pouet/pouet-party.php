@@ -53,7 +53,7 @@ class PouetPlacing {
   var $compo;
   var $ranking;
   var $year;
-  function PouetPlacing($initarray)
+  function __construct($initarray)
   {
     $this->party = $initarray["party"];
     $this->compo = $initarray["compo"];

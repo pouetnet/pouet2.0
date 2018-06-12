@@ -6,7 +6,7 @@ require_once("include_pouet/box-login.php");
 require_once("include_pouet_index/index_bootstrap.inc.php");
 
 class PouetBoxCustomizer extends PouetBox {
-  function PouetBoxCustomizer() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_customizer";
     $this->title = "custom\xC3\xB6olobstormaziabletic 7004+ super MK2!";
@@ -383,7 +383,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxCustomizerSitewide extends PouetBox
 {
-  function PouetBoxCustomizerSitewide( )
+  function __construct( )
   {
     parent::__construct();
 
@@ -533,7 +533,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
 
 class PouetBoxCustomizerPanic extends PouetBox
 {
-  function PouetBoxCustomizerPanic( )
+  function __construct( )
   {
     parent::__construct();
 

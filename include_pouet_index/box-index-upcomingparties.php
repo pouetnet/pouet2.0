@@ -4,7 +4,7 @@ require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 
 class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
-  function PouetBoxIndexUpcomingParties() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_upcomingparties";
     $this->title = "upcoming parties";

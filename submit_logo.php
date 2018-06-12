@@ -4,7 +4,7 @@ require_once("include_pouet/box-modalmessage.php");
 
 class PouetBoxSubmitLogo extends PouetBox
 {
-  function PouetBoxSubmitLogo()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitlogo";

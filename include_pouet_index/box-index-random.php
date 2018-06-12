@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexRandom extends PouetBox {
   var $data;
   var $prod;
-  function PouetBoxIndexRandom() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_random";
     $this->title = "a random prod";

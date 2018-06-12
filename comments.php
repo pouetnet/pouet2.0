@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxLatestComments extends PouetBox {
-  function PouetBoxLatestComments() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
     $this->title = "latest comments in the last 24 hours";

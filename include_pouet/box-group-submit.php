@@ -2,7 +2,7 @@
 
 class PouetBoxSubmitGroup extends PouetBox
 {
-  function PouetBoxSubmitGroup()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_submitgroup";

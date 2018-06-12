@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-user.php");
 
 class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   var $data;
-  function PouetBoxIndexLatestOneliner() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestoneliner";
     $this->title = "the so famous pouët.net oneliner";

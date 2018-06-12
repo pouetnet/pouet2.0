@@ -237,7 +237,7 @@ class SQLSelect
   var $limit;
   var $offset;
 
-  function SQLSelect()
+  function __construct()
 	{
     $this->fields = array();
     $this->tables = array();

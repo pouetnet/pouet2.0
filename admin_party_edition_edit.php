@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 {
-  function PouetBoxAdminEditPartyEdition( $id, $year )
+  function __construct( $id, $year )
   {
     parent::__construct();
 

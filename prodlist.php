@@ -6,7 +6,7 @@ class PouetBoxProdlist extends PouetBox
   var $id;
   var $group;
 
-  function PouetBoxProdlist() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodlist";
   }

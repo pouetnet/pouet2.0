@@ -8,7 +8,7 @@ class PouetBoxBBSTopicList extends PouetBox
   var $id;
   var $group;
 
-  function PouetBoxBBSTopicList() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbslist";
 

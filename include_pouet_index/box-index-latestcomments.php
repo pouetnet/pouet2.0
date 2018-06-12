@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexLatestComments extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxIndexLatestComments() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
     $this->title = "latest comments added";

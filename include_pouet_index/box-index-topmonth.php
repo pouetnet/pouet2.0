@@ -6,7 +6,7 @@ require_once("include_pouet/pouet-prod.php");
 class PouetBoxIndexTopMonth extends PouetBoxCachable {
   var $data;
   var $prods;
-  function PouetBoxIndexTopMonth() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_topmonth";
     $this->title = "top of the month";

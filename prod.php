@@ -31,7 +31,7 @@ class PouetBoxProdMain extends PouetBox {
   var $prod;
   var $votes;
 
-  function PouetBoxProdMain($id) {
+  function __construct($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodmain";
     $this->id = (int)$id;
@@ -536,7 +536,7 @@ class PouetBoxProdPopularityHelper extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function PouetBoxProdPopularityHelper($prod) {
+  function __construct($prod) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodpopularityhelper";
     $this->title = "popularity helper";
@@ -567,7 +567,7 @@ class PouetBoxProdComments extends PouetBox {
   var $id;
   var $topic;
   var $posts;
-  function PouetBoxProdComments($id,$main) {
+  function __construct($id,$main) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
@@ -671,7 +671,7 @@ class PouetBoxProdSubmitChanges extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function PouetBoxProdSubmitChanges($id) {
+  function __construct($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodsubmitchanges";
     $this->title = "submit changes";
@@ -693,7 +693,7 @@ class PouetBoxProdSneakyCDCs extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function PouetBoxProdSneakyCDCs() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodsneakycdcs";
     $this->title = "sneaky cdcs";

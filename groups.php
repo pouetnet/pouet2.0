@@ -6,7 +6,7 @@ class PouetBoxGroupMain extends PouetBox
   var $id;
   var $group;
 
-  function PouetBoxGroupMain($id) {
+  function __construct($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_groupmain";
     $this->id = (int)$id;
@@ -203,7 +203,7 @@ class PouetBoxGroupMain extends PouetBox
 class PouetBoxGroupList extends PouetBox
 {
   var $letter;
-  function PouetBoxGroupList($letter) {
+  function __construct($letter) {
     parent::__construct();
     $this->uniqueID = "pouetbox_grouplist";
 

@@ -24,7 +24,7 @@ class PouetBoxBBSView extends PouetBox {
   var $id;
   var $page;
   var $postcount;
-  function PouetBoxBBSView($id) {
+  function __construct($id) {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbsview";
     $this->title = "comments";

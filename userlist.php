@@ -6,7 +6,7 @@ class PouetBoxUserlist extends PouetBox
   var $id;
   var $group;
 
-  function PouetBoxUserlist() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_userlist";
   }

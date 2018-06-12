@@ -3,7 +3,7 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxPartyHeader extends PouetBox
 {
-  function PouetBoxPartyHeader( $partyView ) {
+  function __construct( $partyView ) {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyheader";
 
@@ -91,7 +91,7 @@ class PouetBoxPartyHeader extends PouetBox
 
 class PouetBoxPartyView extends PouetBox
 {
-  function PouetBoxPartyView() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyview";
   }

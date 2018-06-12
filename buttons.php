@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxButtons extends PouetBox {
-  function PouetBoxButtons() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_buttons";
   }

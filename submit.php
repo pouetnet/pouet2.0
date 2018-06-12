@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxSubmit extends PouetBox {
-  function PouetBoxSubmit() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_submit";
     $this->title = "What do you want to do?";

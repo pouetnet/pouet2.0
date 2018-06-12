@@ -11,7 +11,7 @@ if ($currentUser && !$currentUser->CanEditBBS())
 
 class PouetBoxAdminEditTopic extends PouetBox
 {
-  function PouetBoxAdminEditTopic( $id )
+  function __construct( $id )
   {
     parent::__construct();
     $this->id = (int)$id;

@@ -4,7 +4,7 @@ require_once("include_pouet/box-modalmessage.php");
 
 class PouetBoxModificationRequest extends PouetBox
 {
-  function PouetBoxModificationRequest()
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_modificationrequest";

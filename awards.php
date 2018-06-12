@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxSceneOrgAwards extends PouetBox {
-  function PouetBoxSceneOrgAwards() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_sceneorgawards";
     $this->title = "scene.org awards";
@@ -66,7 +66,7 @@ class PouetBoxSceneOrgAwards extends PouetBox {
 };
 
 class PouetBoxMeteorikAwards extends PouetBoxSceneOrgAwards {
-  function PouetBoxMeteorikAwards() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_meteorikawards";
     $this->title = "meteorik awards";
@@ -91,7 +91,7 @@ class PouetBoxMeteorikAwards extends PouetBoxSceneOrgAwards {
 };
 
 class PouetBoxSceneOrgTips extends PouetBox {
-  function PouetBoxSceneOrgTips() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_sceneorgtips";
     $this->title = "scene.org viewing tips";

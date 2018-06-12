@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 
 class PouetBoxTopList extends PouetBox {
-  function PouetBoxTopList() {
+  function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_toplist";
 
