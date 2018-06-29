@@ -92,6 +92,17 @@ class PouetBoxSubmitParty extends PouetBox
 
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
+?>
+<script type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  $("name").observe("blur",function(ev){
+    $("name").value = $("name").value.replace(/ <?=date("Y")?>$/,"");
+  });
+});
+-->
+</script>
+<?
   }
 };
 
