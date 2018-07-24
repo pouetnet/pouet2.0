@@ -361,8 +361,8 @@ function softurlencode($string)
 }
 function verysofturlencode($string) 
 {
-  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",    "@",   "&",   "+",  " ",   "$",   ",",    "#",   "[",   "]");
-  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%26', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
+  $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",    "@",   "+",  " ",   "$",   ",",    "#",   "[",   "]");
+  $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B',  '%40', '%2B', '%20', '%24', '%2C',  '%23', '%5B', '%5D');
   return str_replace($replacements, $entities, $string);
 }
 function handle_db_cache( $filename, $funcGenerateIfNotFound )
