@@ -4,62 +4,22 @@ require_once("include_pouet/pouet-box.php");
 require_once("include_pouet/pouet-prod.php");
 require_once("include_pouet/pouet-user.php");
 
-class PouetBoxLogin extends PouetBox {
+class PouetBoxLogin extends PouetBox 
+{
   var $data;
   var $prod;
-  function __construct() {
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_login";
     $this->title = "login";
   }
-  function RenderBody() {
-    if (!get_login_id())
-    {
-      echo "<div class='content loggedout'>\n";
-      printf( "<a href='login.php?return=%s'>login via SceneID</a>",_html(rawurlencode(rootRelativePath())) );
-      echo "</div>\n";
-    } else {
-      global $currentUser;
-      echo "<div class='content loggedin'>\n";
-      echo "you are logged in as<br/>\n";
-      echo $currentUser->PrintLinkedAvatar()." ";
-      echo $currentUser->PrintLinkedName();
-      echo "</div>\n";
-      if ($currentUser->IsGloperator())
-      {
-        $req = SQLLib::SelectRow("select count(*) as c from modification_requests where approved is null")->c;
-        if ($req)
-        {
-          echo "<div class='content notifications'>\n";
-          echo "[ <a href='admin_modification_requests.php' class='adminlink'>";
-          echo $req;
-          if ($req==1)
-            echo " request waiting!";
-          else
-            echo " requests waiting!";
-          echo "</a> ]";
-          echo "</div>\n";
-        }
-      }
-      $broken = SQLLib::SelectRow(sprintf_esc(
-        " select count(*) as c from prods_linkcheck".
-        " left join prods on prods.id = prods_linkcheck.prodID".
-        " where prods.addedUser = %d and (returnCode = 0 or (returnCode >= 400 && returnCode <= 599))",$currentUser->id));
-      if ($broken->c)
-      {
-        echo "<div class='content notifications'>\n";
-        printf("[ <a href='http://cardboard.pouet.net/broken_links.php?userID=me'>you have %d broken links !</a> ]",$broken->c);
-        echo "</div>\n";
-      }
-      
-      echo "<div class='foot'>\n";
-      echo "<a href='account.php'>edit profile</a> ::\n";
-      echo "<a href='customizer.php'>cust&ouml;omizer</a> ::\n";
-      echo "<a href='logout.php'>logout</a>\n";
-      echo "</div>";
-    }
+  function RenderBody() 
+  {
+    echo "<div class='content loggedout'>\n";
+    printf( "<a href='login.php?return=%s'>login via SceneID</a>",_html(rawurlencode(rootRelativePath())) );
+    echo "</div>\n";
   }
-
 };
 
 ?>
