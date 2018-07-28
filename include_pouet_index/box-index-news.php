@@ -10,13 +10,15 @@ class PouetBoxIndexNews extends PouetBox {
   var $title;
   var $content;
   var $timestamp;
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_newsbox";
     $this->title = "news box";
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<div class='pouettbl ".$this->uniqueID."'>\n";
     echo " <h3><a href='".$this->link."'>"._html($this->title)."</a></h3>\n";
     echo " <div class='content'>\n".str_replace("<br>","<br/>",$this->content)."\n</div>\n";
@@ -72,9 +74,12 @@ class PouetBoxIndexNewsBoxes extends PouetBoxCachable
 
   function Render()
   {
-    if (!$this->rssBitfellasNews['items']) {
+    if (!$this->rssBitfellasNews['items'])
+    {
     	printf('Error: Unable to open BitFeed !');
-    } else {
+    }
+    else
+    {
       $p = new PouetBoxIndexNews();
       for($i=0; $i < min(count($this->rssBitfellasNews['items']),$this->limit); $i++)
       {
