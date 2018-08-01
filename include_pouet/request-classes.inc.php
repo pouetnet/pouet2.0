@@ -878,6 +878,13 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
   {
     global $PLATFORMS;
     global $COMPOTYPES;
+
+    $ranks = array(0=>"");
+    $ranks[97] = "disqualified";
+    $ranks[98] = "not applicable";
+    $ranks[99] = "not shown";
+    for ($x=1; $x<=96; $x++) $ranks[$x] = $x;
+
     $prod = PouetProd::Spawn( $itemID );
     $a = array(&$prod);
     PouetCollectPlatforms( $a );
@@ -888,6 +895,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $s = "";
     foreach($data as $k=>$v)
     {
+      $groupIdx = 0;
       switch($k)
       {
         case "type":
@@ -909,10 +917,12 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= $prod->RenderPlatformIcons();
           $s .= "<br/>";
           break;
-        case "group1":
-        case "group2":
         case "group3":
-          $group = PouetGroup::Spawn( $prod->{$k} );
+          $groupIdx++;
+        case "group2":
+          $groupIdx++;
+        case "group1":
+          $group = $prod->groups[$groupIdx];
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= $group ? $group->RenderLong() : "<i>none</i>";
           $s .= "<br/>";
@@ -921,8 +931,9 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= $group->RenderLong();
           $s .= "<br/>";
           break;
+        case "invitationParty":
         case "partyID":
-          $party = PouetParty::Spawn( $prod->{$k} );
+          $party = PouetParty::Spawn( $prod->party );
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= $party ? $party->PrintLinked() : "<i>none</i>";
           $s .= "<br/>";
@@ -949,12 +960,22 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           break;
         case "partyRank":
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
-          $s .= _html($prod->placings[0]->ranking);
+          $s .= _html($ranks[$prod->placings[0]->ranking]);
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $s .= _html($v);
+          $s .= _html($ranks[$v]);
           $s .= "<br/>";
           break;
+        case "boardID":
+          $board = PouetBoard::Spawn( $prod->{$k} );
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $board ? $board->RenderLink() : "<i>none</i>";
+          $s .= "<br/>";
+          $board = PouetBoard::Spawn( $v );
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $board ? $board->RenderLink() : "<i>none</i>";
+          $s .= "<br/>";
+          break;          
         default:
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= _html($prod->{$k});
@@ -982,6 +1003,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
         case "platform":   break; // deal with this underneath
         case "demozooID":  $sql["demozoo"] = $v; break;
         case "csdbID":     $sql["csdb"] = $v; break;
+        case "invitationParty": $sql["invitation"] = $v; break;
         default:
           $sql[$k] = $v;
       }
