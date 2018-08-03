@@ -448,13 +448,13 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     $row = reset($l);
 
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
-    $s = "<b>current</b>: ";
+    $out = "<b>current</b>: ";
     if ($row->user)
     {
-      $s .= $row->user->PrintLinkedAvatar()." ";
-      $s .= $row->user->PrintLinkedName();
+      $out .= $row->user->PrintLinkedAvatar()." ";
+      $out .= $row->user->PrintLinkedName();
     }
-    $s .= " - "._html($row->role);
+    $out .= " - "._html($row->role);
 
     $s = new BM_Query("credits");
     $s->AddField("credits.id");
@@ -465,23 +465,15 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     $l = $s->perform();
     $row = reset($l);
 
-    $s = "<br/><b>old</b>: ";
-    if ($row->user)
-    {
-      $s .= $row->user->PrintLinkedAvatar()." ";
-      $s .= $row->user->PrintLinkedName();
-    }
-    $s .= " - "._html($row->role);
-
     $user = PouetUser::Spawn($data["userID"]);
-    $s .= "<br/><b>new</b>: ";
+    $out .= "<br/><b>new</b>: ";
     if ($user)
     {
-      $s .= $user->PrintLinkedAvatar()." ";
-      $s .= $user->PrintLinkedName();
+      $out .= $user->PrintLinkedAvatar()." ";
+      $out .= $user->PrintLinkedName();
     }
-    $s .= " - "._html($data["userRole"]);
-    return $s;
+    $out .= " - "._html($data["userRole"]);
+    return $out;
   }
 
   static function Process($itemID, $reqData)
