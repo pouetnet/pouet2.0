@@ -36,6 +36,7 @@ class PouetBoxAdminEditUser extends PouetBox
       $a["level"] = $data["level"];
     $a["permissionSubmitItems"] = $data["permissionSubmitItems"] == "on";
     $a["permissionPostBBS"] = $data["permissionPostBBS"] == "on";
+    $a["permissionPostOneliner"] = $data["permissionPostOneliner"] == "on";    
     SQLLib::UpdateRow("users",$a,"id=".(int)$this->user->id);
   }
   function LoadFromDB()
@@ -43,31 +44,36 @@ class PouetBoxAdminEditUser extends PouetBox
     global $currentUser;
     $this->fields = array(
       "lastLogin"=>array(
-        "name"=>"last logged in",
+        "name" => "last logged in",
         "type" => "static",
         "value" => $this->user->lastLogin . " (".dateDiffReadable(time(),$this->user->lastLogin)." ago)",
       ),
       "lastIP"=>array(
-        "name"=>"last IP",
+        "name" => "last IP",
         "type" => "static",
         "value" => "<a href='admin_user_edit.php?ip=".rawurlencode($this->user->lastip)."'>"._html($this->user->lastip)."</a> ("._html($this->user->lasthost).") [<a href='https://geoiptool.com/en/?IP="._html($this->user->lastip)."'>geoip</a>]",
       ),
       "level"=>array(
-        "name"=>"level",
+        "name" => "level",
         "type" => "select",
         "value" => $this->user->level,
         "fields" => $this->levels,
       ),
       "permissionSubmitItems" => array(
-        "name"=>"allow user to add items",
+        "name" => "allow user to add items",
         "type" => "checkbox",
         "value" => $this->user->permissionSubmitItems,
       ),
       "permissionPostBBS" => array(
-        "name"=>"allow user to post to the BBS",
+        "name" => "allow user to post to the BBS",
         "type" => "checkbox",
         "value" => $this->user->permissionPostBBS,
       ),
+      "permissionPostOneliner" => array(
+        "name" => "allow user to post to in the oneliner",
+        "type" => "checkbox",
+        "value" => $this->user->permissionPostOneliner,
+      ),      
     );
     if ($currentUser && !$currentUser->IsAdministrator())
     {

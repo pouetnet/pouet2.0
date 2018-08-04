@@ -1,7 +1,7 @@
 <?
 class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
-  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","avatar","glops","registerDate","lastLogin"); }
+  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
   static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
 
   function PrintAvatar()
@@ -148,7 +148,7 @@ class PouetUser extends BM_Class {
 
   function CanPostInOneliner()
   {
-    return true;
+    return $this->permissionPostOneliner != 0;
   }
   function CanPostInBBS()
   {
@@ -187,6 +187,7 @@ class PouetUser extends BM_Class {
     unset($array["sceneIDData"]);
     unset($array["permissionSubmitItems"]);
     unset($array["permissionPostBBS"]);
+    unset($array["permissionPostOneliner"]);    
     return $array;
   }
 };

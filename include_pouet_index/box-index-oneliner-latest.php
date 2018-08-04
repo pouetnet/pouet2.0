@@ -23,8 +23,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     if (!is_string_meaningful($message))
       return array("not too meaningful, is it...");
 
-    if (strstr($message,"tinybrain") !== false)
-      return array("</spam>");
+    if (!$currentUser || !$currentUser->CanPostInOneliner())
+      return array("just no.");
 
     $r = SQLLib::SelectRow("SELECT who FROM oneliner ORDER BY addedDate DESC LIMIT 1");
 
@@ -112,9 +112,12 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   }
   function RenderFooter() {
     global $currentUser;
-    if (!$currentUser) {
+    if (!$currentUser || !$currentUser->CanPostInOneliner())
+    {
       echo "  <div class='foot'><a href='oneliner.php'>more</a>...</div>\n";
-    } else {
+    }
+    else
+    {
       //$funnytext = "have fun";
       //$funnytext = "get a cookie coz u'll need one to post";
       //$funnytext = "demo my ipod me beautiful!";
