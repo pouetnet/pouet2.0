@@ -171,7 +171,7 @@ class PouetBoxListsMain extends PouetBox
         echo "<span>\n";
         echo $d->prod->RenderTypeIcons();
         echo $d->prod->RenderPlatformIcons();
-        echo "<span class='prod'>".$d->prod->RenderLink()."</span>\n";
+        echo $d->prod->RenderSingleRowShort();
         echo "</span>\n";
         echo "<span>\n";
         if ($d->prod->placings)
