@@ -162,6 +162,17 @@ document.observe("dom:loaded",function(){
   {
     toggleDateFields(false);
   }
+  $$("form").first().observe("submit",function(ev){
+    if (!$("row_days").visible())
+    {
+      $("row_days").remove();
+    }
+    else
+    {
+      $("row_dateFrom").remove();
+      $("row_dateTo").remove();
+    }
+  });
 });
 //-->
 </script>
