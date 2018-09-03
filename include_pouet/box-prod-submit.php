@@ -240,7 +240,7 @@ class PouetBoxSubmitProd extends PouetBox
       ),
       "releaseDate"=>array(
         "name"=>"release date",
-        "type"=>"date",
+        "type"=>"dateMonth",
       ),
       "type"=>array(
         "name"=>"type",

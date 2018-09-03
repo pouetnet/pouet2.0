@@ -43,17 +43,27 @@ class PouetBoxTopList extends PouetBox {
         "info"=>" ",
         //"required"=>true,
       ),
+      "limit"=>array(
+        "name"=>"number of prods",
+        "type"=>"number",
+        "value"=>10,
+        "max"=>50,
+      ),
       "days"=>array(
         "name"=>"days to go back",
         "type"=>"number",
         "value"=>0,
         "info"=>"0 means alltime",
       ),
-      "limit"=>array(
-        "name"=>"number of prods",
-        "type"=>"number",
-        "value"=>10,
-        "max"=>50,
+      "dateFrom"=>array(
+        "name"=>"starting date [inclusive]",
+        "type"=>"date",
+        "value"=>date("Y-m-d",time()-30*24*60*60),
+      ),
+      "dateTo"=>array(
+        "name"=>"ending date [inclusive]",
+        "type"=>"date",
+        "value"=>date("Y-m-d"),
       ),
     );
 
@@ -68,16 +78,16 @@ class PouetBoxTopList extends PouetBox {
     $s = new BM_Query("prods");
     if ($_GET["days"])
     {
-      $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
-      $s->AddWhere(sprintf_esc("prods.addedDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
+      $s->AddOrder("(prods.views/((NOW()-prods.releaseDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+      $s->AddWhere(sprintf_esc("prods.releaseDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
     }
     else if ($_GET["dateFrom"] || $_GET["dateTo"])
     {
-      $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+      $s->AddOrder("(prods.views/((NOW()-prods.releaseDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
       if ($_GET["dateFrom"])
-        $s->AddWhere(sprintf_esc("prods.addedDate >= '%s'",$_GET["dateFrom"]));
+        $s->AddWhere(sprintf_esc("prods.releaseDate >= '%s'",$_GET["dateFrom"]));
       if ($_GET["dateTo"])
-        $s->AddWhere(sprintf_esc("prods.addedDate <= '%s'",$_GET["dateTo"]));
+        $s->AddWhere(sprintf_esc("prods.releaseDate <= '%s'",$_GET["dateTo"]));
     }
     else
     {
@@ -126,6 +136,36 @@ class PouetBoxTopList extends PouetBox {
       printf("  </li>\n");
     }
     echo "</ul>\n";
+?>
+<script type="text/javascript">
+<!--
+function toggleDateFields(range)
+{
+  $("row_dateFrom").toggle(range);
+  $("row_dateTo").toggle(range);
+  $("row_days").toggle(!range);
+  $("specify-range").toggle(!range);
+  $("specify-duration").toggle(range);
+}
+
+document.observe("dom:loaded",function(){
+  var query = location.search.toQueryParams();
+  var div = new Element("div",{"id":"range-selector"});
+  div.insert(new Element("a",{"href":"#","id":"specify-range"   }).update("specify range instead").observe('click',function(ev){ ev.stop(); toggleDateFields(true); }));
+  div.insert(new Element("a",{"href":"#","id":"specify-duration"}).update("specify duration instead").observe('click',function(ev){ ev.stop(); toggleDateFields(false); }));
+  $("row_dateTo").insert({after:div});
+  if (query["dateFrom"] || query["dateTo"])
+  {
+    toggleDateFields(true);
+  }
+  else
+  {
+    toggleDateFields(false);
+  }
+});
+//-->
+</script>
+<?    
   }
 };
 

@@ -84,11 +84,11 @@ class PouetBoxSubmitBoard extends PouetBox
       ),
       "started"=>array(
         "name"=>"board inception date",
-        "type"=>"date",
+        "type"=>"dateMonth",
       ),
       "closed"=>array(
         "name"=>"board closure date",
-        "type"=>"date",
+        "type"=>"dateMonth",
       ),
       "platform"=>array(
         "name"=>"platforms",

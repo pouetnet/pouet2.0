@@ -29,6 +29,9 @@ class Formifier {
           echo "    <input type='hidden' name='".$k."' id='".$k."' value='".$v["value"]."'/>\n";
           break;
         case "date":
+          echo "    <input type='date' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          break;
+        case "dateMonth":
           $year = $month = null;
           if ($v["value"])
           {
