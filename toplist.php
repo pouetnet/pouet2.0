@@ -78,16 +78,16 @@ class PouetBoxTopList extends PouetBox {
     $s = new BM_Query("prods");
     if ($_GET["days"])
     {
-      $s->AddOrder("(prods.views/((NOW()-prods.releaseDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
-      $s->AddWhere(sprintf_esc("prods.releaseDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
+      $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+      $s->AddWhere(sprintf_esc("prods.addedDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
     }
     else if ($_GET["dateFrom"] || $_GET["dateTo"])
     {
-      $s->AddOrder("(prods.views/((NOW()-prods.releaseDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+      $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
       if ($_GET["dateFrom"])
-        $s->AddWhere(sprintf_esc("prods.releaseDate >= '%s'",$_GET["dateFrom"]));
+        $s->AddWhere(sprintf_esc("prods.addedDate >= '%s'",$_GET["dateFrom"]));
       if ($_GET["dateTo"])
-        $s->AddWhere(sprintf_esc("prods.releaseDate <= '%s'",$_GET["dateTo"]));
+        $s->AddWhere(sprintf_esc("prods.addedDate <= '%s'",$_GET["dateTo"]));
     }
     else
     {
