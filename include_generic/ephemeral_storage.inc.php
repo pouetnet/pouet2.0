@@ -45,7 +45,7 @@ class FileStorage implements IEphemeralStorage
   function __construct()
   {
     $this->dir = "/tmp/ephstor/";
-    @mkdir();
+    @mkdir($this->dir);
   }
   function keyToFilename($key)
   {
