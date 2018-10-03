@@ -11,8 +11,11 @@ class PouetGroup extends BM_Class
 
   function RenderShort()
   {
-    return sprintf("<a href='groups.php?which=%d'>%s</a>",
-      $this->id, _html( ($this->acronym && strlen($this->name)>15) ? $this->acronym : $this->name ) );
+    if ($this->acronym && strlen($this->name)>15)
+    {
+      return sprintf("<a href='groups.php?which=%d'><acronym title='%s'>%s</acronym></a>", $this->id, _html( $this->name ), _html( $this->acronym ) );
+    }
+    return $this->RenderLong();
   }
   function RenderLong()
   {
