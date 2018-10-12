@@ -18,6 +18,7 @@ class PouetBoxAdminEditUser extends PouetBox
 
     $this->user = PouetUser::Spawn( $this->id );
 
+    $this->uniqueID = "pouetbox_adminedituser";
     $this->title = "edit this user: <a href='user.php?who=".$this->user->id."'>"._html( $this->user->nickname )."</a>";
     $this->sceneID = $this->user->GetSceneIDData( false );
     $this->formifier = new Formifier();
