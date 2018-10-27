@@ -223,6 +223,8 @@ class PouetProd extends BM_Class
     @unlink( get_local_nfo_path( (int)$this->id ) );
     foreach( array( "jpg","gif","png" ) as $v )
       @unlink( get_local_screenshot_path( (int)$this->id, $v ) );
+    foreach( array( "jpg","gif","png" ) as $v )
+      @unlink( get_local_screenshot_large_path( (int)$this->id, $v ) );
 
     gloperator_log( "prod", (int)$this->id, "prod_delete", get_object_vars($this) );
   }
@@ -278,7 +280,13 @@ class PouetProd extends BM_Class
     {
       $array["screenshot"] = POUET_CONTENT_URL . $screenshot;
     }
-
+  
+    $screenshotLarge = find_screenshot_large( $this->id );
+    if ($screenshotLarge)
+    {
+      $array["screenshot_large"] = POUET_CONTENT_URL . $screenshotLarge;
+    }
+  
     global $COMPOTYPES;
     $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
     foreach($this->placings as &$p)

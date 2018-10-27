@@ -137,13 +137,24 @@ class PouetBoxProdMain extends PouetBox {
     }
     $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$this->id)));
     $this->screenshotPath = find_screenshot($this->prod->id);
+    $this->screenshotPathLarge = find_screenshot_large($this->prod->id);
   }
 
   function RenderScreenshot() {
     if ($this->screenshotPath)
     {
       $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
-      return "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+      if ($this->screenshotPathLarge)
+      {
+        $s = "<a href='".POUET_CONTENT_URL.$this->screenshotPathLarge."' id='screenshotLink'>";
+        $s .= "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+        $s .= "</a>\n";
+      }
+      else
+      {
+        $s .= "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+      }
+      return $s;
     }
     else
     {
@@ -338,34 +349,6 @@ class PouetBoxProdMain extends PouetBox {
         echo "<input type='submit' value='add to watchlist' class='add'/>";
       }
       echo "</form>";
-?>
-<script>
-<!--
-document.observe("dom:loaded",function(){
-  $("watchlistFrm").observe("submit",function(e){
-    e.stop();
-    var opt = Form.serializeElements( $("watchlistFrm").select("input"), {hash:true} );
-    opt["partial"] = true;
-    new Ajax.Request( $("watchlistFrm").action, {
-      method: "post",
-      parameters: opt,
-      onSuccess: function(transport) {
-        if (transport.responseText.length)
-        {
-          fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
-          $("watchlistFrm").update( transport.responseText );
-        }
-        else
-        {
-          fireErrorOverlay();
-        }
-      }
-    });
-  });
-});
-//-->
-</script>
-<?php
       echo "</li>\n";
     }
     
@@ -1181,6 +1164,48 @@ document.observe("dom:loaded",function(){
     
     $("prodheader").parentNode.insertBefore( tr, $("prodheader").nextSibling);
   }
+  else
+  {
+    if ($("screenshotLink"))
+    {
+      var overlay = new Element("div",{"id":"overlay"});
+      overlay.insert(new Element("img",{"src":$("screenshotLink").getAttribute("href")}));
+      overlay.hide();
+      document.body.insert(overlay);
+  
+      overlay.observe("click",function(ev){
+        overlay.hide();
+        ev.stop();
+      });
+      
+      $("screenshotLink").observe("click",function(ev){
+        overlay.show();
+        ev.stop();
+      });
+    }
+  }
+<?php if ($currentUser) { ?>
+  $("watchlistFrm").observe("submit",function(e){
+    e.stop();
+    var opt = Form.serializeElements( $("watchlistFrm").select("input"), {hash:true} );
+    opt["partial"] = true;
+    new Ajax.Request( $("watchlistFrm").action, {
+      method: "post",
+      parameters: opt,
+      onSuccess: function(transport) {
+        if (transport.responseText.length)
+        {
+          fireSuccessOverlay( opt["wlAction"] == "addToWatchlist" ? "added to watchlist !" : "removed from watchlist !" );
+          $("watchlistFrm").update( transport.responseText );
+        }
+        else
+        {
+          fireErrorOverlay();
+        }
+      }
+    });
+  });
+<?php } ?>
 });
 //-->
 </script>
