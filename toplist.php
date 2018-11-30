@@ -133,6 +133,14 @@ class PouetBoxTopList extends PouetBox {
       echo $p->RenderSingleRowShort();
       echo " ".$p->RenderAwards();
       printf("    </span>");
+
+      echo "<span><img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />&nbsp;".$p->voteup."</span>\n";
+      echo "<span><img src='".POUET_CONTENT_URL."gfx/isok.gif'  alt='is ok' />&nbsp;".$p->votepig."</span>\n";
+      echo "<span><img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />&nbsp;".$p->votedown."</span>\n";
+
+      $pop = (int)calculate_popularity( $p->views );
+      echo "<span>".progress_bar_solo( $pop, $pop."%" )."</span>";
+
       printf("  </li>\n");
     }
     echo "</ul>\n";
