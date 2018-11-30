@@ -11,6 +11,32 @@ class PouetBoxProdNfo extends PouetBox {
   function LoadFromDB()
   {
     $this->prod = PouetProd::spawn( $_GET["which"] );
+    $this->fonts = array(
+      "none" => array(
+        "name"=>"html",
+        "class"=>"",
+      ),
+      "1" => array(
+        "name"=>"dos 80*25",
+        "class"=>"dos-80x25",
+      ),
+      "2" => array(
+        "name"=>"dos 80*50",
+        "class"=>"dos-80x50",
+      ),
+      "3" => array(
+        "name"=>"rez's ascii",
+        "image"=>true,
+      ),
+      "4" => array(
+        "name"=>"amiga medres",
+        "class"=>"amiga-medres",
+      ),
+      "5" => array(
+        "name"=>"amiga hires",
+        "class"=>"amiga-hires",
+      ),
+    );
 
     $s = new BM_Query();
     $s->AddField("added");
@@ -33,15 +59,17 @@ class PouetBoxProdNfo extends PouetBox {
   {
     $title = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
     echo "<div class='content' title='".$title."'>\n";
-    if ($_GET["font"]=="none")
+    if (!$this->fonts[$_GET["font"]]["image"])
     {
-      echo "<pre>";
+      printf("<pre class='%s'>",_html($this->fonts[$_GET["font"]]["class"]));
       $text = file_get_contents( get_local_nfo_path( $_GET["which"] ) );
       echo _html( process_ascii( $text ) );
-      echo "</pre>";
+      printf("</pre>");
     }
     else
+    {
       printf("<img src='img_ascii.php?nfo=%d&amp;font=%d' alt='nfo'/>\n",$_GET["which"],$_GET["font"]);
+    }
     echo "</div>\n";
   }
   function RenderFooter()
@@ -49,16 +77,10 @@ class PouetBoxProdNfo extends PouetBox {
     global $currentUser;
 
     echo "  <div class='content' id='fontlist'>";
-    $fonts = array(
-      "none" => "html",
-      "1" => "dos 80*25",
-      "2" => "dos 80*50",
-      "3" => "rez's ascii",
-      "4" => "amiga medres",
-      "5" => "amiga hires",
-    );
-    foreach($fonts as $k=>$v)
-      $a[] = sprintf("<a href='prod_nfo.php?which=%d&amp;font=%s'>%s</a>\n",$_GET["which"],$k,$v);
+    foreach($this->fonts as $k=>$v)
+    {
+      $a[] = sprintf("<a href='prod_nfo.php?which=%d&amp;font=%s'>%s</a>\n",$_GET["which"],$k,$v["name"]);
+    }
     echo "[ ".implode(" | \n",$a)." ]";
     echo "  </div>";
     echo "  <div class='foot'>";
