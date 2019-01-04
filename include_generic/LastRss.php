@@ -170,7 +170,7 @@ class LastRss
 	// @todo: prejmenovat na downloadUrl()
 	{
 		if (!function_exists('curl_init')) {
-			throw new Exception('CURL is not installed!');
+			return file_get_contents($url);
 		}
 		$ch = curl_init();
 		curl_setopt_array($ch, $this->curlOptions);
