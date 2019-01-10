@@ -16,6 +16,7 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/LastRss.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/rewriter.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/ephemeral_storage.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/sideload.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes.inc.php");
