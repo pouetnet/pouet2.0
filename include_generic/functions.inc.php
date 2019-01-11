@@ -255,13 +255,13 @@ function cp437_to_utf8( $text )
   return preg_replace_callback("/([\x80-\xff])/",function($m)use($CP437_to_utf8){ return $CP437_to_utf8[$m[1]]; },$text);
 }
 
-function process_ascii( $text, $enc = null  )
+function process_ascii( $text, $enc = null )
 {
   if ($enc == null)
   {
     $enc = mb_detect_encoding( $text, "utf-8, iso-8859-1" );
   }
-  if ($enc == cp437)
+  if ($enc == "cp437")
   {
     return cp437_to_utf8($text);
   }

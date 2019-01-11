@@ -1,7 +1,9 @@
 <?
 require_once("bootstrap.inc.php");
+require_once("include_pouet/pouet-asciiviewer.php");
 
-class PouetBoxBoardNfo extends PouetBox {
+class PouetBoxBoardNfo extends PouetBoxASCIIViewer
+{
   function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_boardnfo";
@@ -10,8 +12,8 @@ class PouetBoxBoardNfo extends PouetBox {
 
   function LoadFromDB()
   {
-///    $this->nfo = SQLLib::SelectRow( sprintf_esc("select * from othernfos where id = %d", $_GET["which"] ) );
-
+    parent::LoadFromDB();
+    
     $s = new BM_Query();
     $s->AddField("othernfos.added");
     $s->AddField("othernfos_board.name");
@@ -25,43 +27,25 @@ class PouetBoxBoardNfo extends PouetBox {
   }
   function RenderHeader()
   {
-    echo "\n\n";
-    echo "<div class='pouettbl asciiviewer' id='".$this->uniqueID."'>\n";
+    parent::RenderHeader();
+    
     echo " <h2><big>"._html($this->nfo->name)."</big>";
     echo "</h2>\n";
   }
   function RenderBody()
   {
-    $title = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
-    echo "<div class='content' title='".$title."'>\n";
-    if ($_GET["font"]=="none")
-    {
-      echo "<pre>";
-      $text = file_get_contents( get_local_boardnfo_path( $_GET["which"] ) );
-      echo _html( process_ascii( $text ) );
-      echo "</pre>";
-    }
-    else
-      printf("<img src='img_ascii.php?boardnfo=%d&amp;font=%d' alt='nfo'/>\n",$_GET["which"],$_GET["font"]);
-    echo "</div>\n";
+    $this->asciiFilename = get_local_boardnfo_path( $_GET["which"] );;
+    $this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
+    $this->imageURL = sprintf("img_ascii.php?boardnfo=%d",$_GET["which"]);
+    
+    parent::RenderBody();
   }
   function RenderFooter()
   {
+    parent::RenderFooter();
+    
     global $currentUser;
 
-    echo "  <div class='content' id='fontlist'>";
-    $fonts = array(
-      "none" => "html",
-      "1" => "dos 80*25",
-      "2" => "dos 80*50",
-      "3" => "rez's ascii",
-      "4" => "amiga medres",
-      "5" => "amiga hires",
-    );
-    foreach($fonts as $k=>$v)
-      $a[] = sprintf("<a href='board_nfo.php?which=%d&amp;font=%s'>%s</a>\n",$_GET["which"],$k,$v);
-    echo "[ ".implode(" | \n",$a)." ]";
-    echo "  </div>";
     echo "  <div class='foot'>";
     if ($currentUser && $currentUser->IsGloperator())
     {

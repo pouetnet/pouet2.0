@@ -1,7 +1,9 @@
 <?
 require_once("bootstrap.inc.php");
+require_once("include_pouet/pouet-asciiviewer.php");
 
-class PouetBoxPartyResults extends PouetBox {
+class PouetBoxPartyResults extends PouetBoxASCIIViewer
+{
   function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyresults";
@@ -9,44 +11,29 @@ class PouetBoxPartyResults extends PouetBox {
 
   function LoadFromDB()
   {
+    parent::LoadFromDB();
+    
     $this->party = PouetParty::spawn( $_GET["which"] );
     if (!$this->party) return;
     $this->title = $this->party->name." ".(int)$_GET["when"]." results";
   }
   function RenderHeader()
   {
-    echo "\n\n";
-    echo "<div class='pouettbl asciiviewer' id='".$this->uniqueID."'>\n";
+    parent::RenderHeader();
     echo " <h2><big>".$this->party->PrintLinked( $_GET["when"] )." results"."</big></h2>\n";
   }
-  function RenderContent()
+  function RenderBody()
   {
-    if ($_GET["font"]=="none")
-    {
-      echo "<pre>";
-      echo _html( process_ascii( file_get_contents( get_local_partyresult_path( $_GET["which"], $_GET["when"] ) ) ) );
-      echo "</pre>";
-    }
-    else
-      printf("<img src='img_ascii.php?results=%d&amp;year=%d&amp;font=%d' alt='nfo'/>\n",$_GET["which"],$_GET["when"],$_GET["font"]);
+    $this->asciiFilename = get_local_partyresult_path( $_GET["which"], $_GET["when"] );
+    $this->imageURL = sprintf("img_ascii.php?results=%d&amp;year=%d",$_GET["which"],$_GET["when"]);
+    
+    parent::RenderBody();
   }
   function RenderFooter()
   {
-    global $currentUser;
+    parent::RenderFooter();
 
-    echo "  <div class='content' id='fontlist'>";
-    $fonts = array(
-      "none" => "html",
-      "1" => "dos 80*25",
-      "2" => "dos 80*50",
-      "3" => "rez's ascii",
-      "4" => "amiga medres",
-      "5" => "amiga hires",
-    );
-    foreach($fonts as $k=>$v)
-      $a[] = sprintf("<a href='party_results.php?which=%d&amp;when=%d&amp;font=%s'>%s</a>\n",$_GET["which"],$_GET["when"],$k,$v);
-    echo "[ ".implode(" | \n",$a)." ]";
-    echo "  </div>";
+    global $currentUser;
     echo "  <div class='foot'>";
     if ($currentUser && $currentUser->IsGloperator())
     {
