@@ -77,16 +77,21 @@ class Sideload
     }
 
     if (strstr($url,"http://")!==false || strstr($url,"https://")!==false)
-    {    
-      foreach($http_response_header as $header)
-      {
-        if (preg_match('/HTTP\/.*\s(\d+)/', $header, $match))
+    {
+      $this->httpReturnCode = 0;
+      $this->httpReturnContentType = "";
+      if ($http_response_header)
+      { 
+        foreach($http_response_header as $header)
         {
-          $this->httpReturnCode = (int)$match[1];
-        }
-        if (preg_match('/Content-type: (.*)/i', $header, $match))
-        {
-          $this->httpReturnContentType = $match[1];
+          if (preg_match('/HTTP\/.*\s(\d+)/', $header, $match))
+          {
+            $this->httpReturnCode = (int)$match[1];
+          }
+          if (preg_match('/Content-type: (.*)/i', $header, $match))
+          {
+            $this->httpReturnContentType = $match[1];
+          }
         }
       }
     }
