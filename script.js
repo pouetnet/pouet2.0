@@ -417,7 +417,7 @@ function Youtubify( e )
     var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
     if (pouetID)
     {
-      new Ajax.JSONRequest("http://api.pouet.net/v1/prod/?id="+pouetID[1],{
+      new Ajax.JSONRequest("https://api.pouet.net/v1/prod/?id="+pouetID[1],{
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON.success)
@@ -434,7 +434,7 @@ function Youtubify( e )
     var demozooProdID = item.href.match(/demozoo\.org\/productions\/([0-9]+)/);
     if (demozooProdID)
     {
-      new Ajax.JSONRequest("http://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=jsonp",{
+      new Ajax.JSONRequest("https://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=jsonp",{
         method: "get",
         onSuccess: function(transport) {
           if (transport.responseJSON)
