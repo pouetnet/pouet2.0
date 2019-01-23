@@ -48,7 +48,7 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
   }
 
   function LoadFromDB() {
-    $this->rssData = $this->rss->get('http://wanted.scene.org/rss/?random=true');
+    $this->rssData = $this->rss->get('http://wanted.scene.org/rss/?random=weighted');
   }
 
   function RenderBody() {
