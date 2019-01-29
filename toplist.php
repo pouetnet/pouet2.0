@@ -47,7 +47,7 @@ class PouetBoxTopList extends PouetBox {
         "name"=>"number of prods",
         "type"=>"number",
         "value"=>10,
-        "max"=>50,
+        "max"=>64,
       ),
       "days"=>array(
         "name"=>"days to go back",
@@ -103,7 +103,7 @@ class PouetBoxTopList extends PouetBox {
       $s->AddJoin("","prods_platforms",sprintf_esc("prods_platforms.prod = prods.id AND prods_platforms.platform=%d",$_GET["platform"]));
     }
     $limit = (int)($_GET["limit"] ? $_GET["limit"] : 10);
-    $limit = min($limit,50);
+    $limit = min($limit,64);
     $limit = max($limit,10);
     $s->SetLimit($limit);
     $this->prods = $s->perform();
