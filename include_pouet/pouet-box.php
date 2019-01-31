@@ -87,7 +87,7 @@ trait PouetForm
   {
     $errors = $this->Validate( $data );
 
-    if (count($errors))
+    if ($errors && count($errors))
       return $errors;
 
     return $this->Commit( $data );
