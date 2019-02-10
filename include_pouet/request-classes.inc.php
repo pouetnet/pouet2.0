@@ -421,7 +421,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
     if (!$row)
       return array("nice try :|");
 
-    if (strcasecmp($row->role,$input["userRole"])===0 && $row->userID == $input["userID"])
+    if (strcmp($row->role,$input["userRole"])===0 && $row->userID == $input["userID"])
       return array("you didn't change anything :|");
 
     if (!SQLLib::selectRow(sprintf_esc("select * from users where id = %d",$input["userID"])))
