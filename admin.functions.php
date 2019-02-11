@@ -70,7 +70,7 @@ function pouetAdmin_recacheTopDemos()
   unset($tmp);
   unset($top_demos);
   $a = array();
-  while ((list ($key, $val)=each($total))) 
+  foreach($total as $key=>$val)
   {
     $a[] = array(
       "id" => $key,
