@@ -12,10 +12,10 @@ class Sideload
     @curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    if ($this->options["connectTimeout"])
-      curl_setopt($curl, CURLOPT_TIMEOUT, (int)$this->options["connectTimeout"]);
-    if ($this->options["userAgent"])
-      curl_setopt($ch, CURLOPT_USERAGENT, $this->options["userAgent"]);
+    if ($this->options["connect_timeout"])
+      curl_setopt($curl, CURLOPT_TIMEOUT, (int)$this->options["connect_timeout"]);
+    if ($this->options["user_agent"])
+      curl_setopt($curl, CURLOPT_USERAGENT, $this->options["user_agent"]);
     if ($this->options["max_length"])
     {
       $maxlen = $this->options["max_length"];
@@ -27,9 +27,9 @@ class Sideload
       });
     }
     curl_setopt($curl, CURLOPT_NOPROGRESS, true);
-    if ($this->options["sslVerifyPeer"])
+    if ($this->options["verify_peer"])
     {
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->options["sslVerifyPeer"]);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->options["verify_peer"]);
     }
     if ($this->options["method"] == "GET")
     {
@@ -50,21 +50,21 @@ class Sideload
   {
     $opt = array();
     $param = array();
-    if ($this->options["connectTimeout"])
+    if ($this->options["connect_timeout"])
     {
-      $opt["http"]["timeout"] = $this->options["connectTimeout"];
+      $opt["http"]["timeout"] = $this->options["connect_timeout"];
     }
     if ($this->options["method"])
     {
       $opt["http"]["method"] = $this->options["method"];
     }
-    if ($this->options["sslVerifyPeer"])
+    if ($this->options["verify_peer"])
     {
-      $opt["ssl"]["verify_peer"] = $this->options["sslVerifyPeer"];
+      $opt["ssl"]["verify_peer"] = $this->options["verify_peer"];
     }
-    if ($this->options["userAgent"])
+    if ($this->options["user_agent"])
     {
-      $opt["ssl"]["user_agent"] = $this->options["userAgent"];
+      $opt["ssl"]["user_agent"] = $this->options["user_agent"];
     }
     $ctx = stream_context_create($opt);
     if ($this->options["max_length"])
