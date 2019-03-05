@@ -175,7 +175,6 @@ class PouetBoxAccount extends PouetBox
 
     $row = SQLLib::SelectRow("DESC users im_type");
     $m = enum2array($row->Type);
-    array_unshift($m,"");
     $this->fieldsPouet["im_type"]["fields"] = $m;
   }
 
