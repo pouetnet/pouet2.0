@@ -55,16 +55,16 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     if (count($groups)) $a["group2"] = array_shift($groups); else $a["group2"] = null;
     if (count($groups)) $a["group3"] = array_shift($groups); else $a["group3"] = null;
 
-    $a["csdb"] = $data["csdbID"];
+    $a["csdb"] = (int)$data["csdbID"];
     //$a["sceneorg"] = $data["sceneOrgID"];
     //$a["zxdemo"] = $data["zxdemoID"];
-    $a["demozoo"] = $data["demozooID"];
+    $a["demozoo"] = (int)$data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
-    $a["party_year"] = $data["partyYear"];
+    $a["party_year"] = (int)$data["partyYear"];
     $a["party_compo"] = nullify($data["partyCompo"]);
-    $a["party_place"] = $data["partyRank"];
+    $a["party_place"] = (int)$data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
-    $a["invitationyear"] = $data["invitationYear"];
+    $a["invitationyear"] = (int)$data["invitationYear"];
     $a["boardID"] = nullify($data["boardID"]);
     global $prodID;
     SQLLib::UpdateRow("prods",$a,"id=".(int)$this->id);

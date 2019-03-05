@@ -19,6 +19,8 @@ $s->SetLimit($limit);
 $data = $s->perform();
 
 $first = reset($data);
+if (!$first || !$first->prod) exit();
+
 $rss = new PouetRSS(array(
   "title"=>"pouët.net - prod comments for ".$first->prod->name,
   "link"=>$first->prod->GetLink(),
