@@ -48,9 +48,9 @@ class PouetBoxSubmitGroup extends PouetBox
     $a["acronym"] = $data["acronym"];
     $a["web"] = $data["website"];
     $a["addedUser"] = get_login_id();
-    $a["csdb"] = $data["csdbID"];
+    $a["csdb"] = (int)$data["csdbID"];
     //$a["zxdemo"] = $data["zxdemoID"];
-    $a["demozoo"] = $data["demozooID"];
+    $a["demozoo"] = (int)$data["demozooID"];
     $a["addedDate"] = date("Y-m-d H:i:s");
     $this->groupID = SQLLib::InsertRow("groups",$a);
 
