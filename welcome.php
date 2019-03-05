@@ -28,6 +28,7 @@ if ($currentUser)
   {
     function __construct()
     {
+      $this->uniqueID = "pouetbox_welcome";
       $this->title = "welcome to pou&euml;t.net !";
     }
     function RenderBody()
