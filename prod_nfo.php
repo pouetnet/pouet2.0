@@ -69,7 +69,14 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-$box->Render();
+if ($box->prod)
+{
+  $box->Render();
+}
+else
+{
+  echo "ó, te zengővirágillatfelhőben illatozó, trabantautószárnyascsikó, bénaságtiportlelkű, röppenőszárnyú lovasa!";
+}
 
 echo "</div>\n";
 
