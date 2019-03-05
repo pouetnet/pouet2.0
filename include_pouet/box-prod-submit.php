@@ -142,16 +142,16 @@ class PouetBoxSubmitProd extends PouetBox
     $a["group2"] = nullify( array_shift($groups) );
     $a["group3"] = nullify( array_shift($groups) );
 
-    $a["csdb"] = $data["csdbID"];
+    $a["csdb"] = (int)$data["csdbID"];
     //$a["sceneorg"] = $data["sceneOrgID"];
     //$a["zxdemo"] = $data["zxdemoID"];
-    $a["demozoo"] = $data["demozooID"];
+    $a["demozoo"] = (int)$data["demozooID"];
     $a["party"] = nullify($data["partyID"]);
-    $a["party_year"] = $data["partyYear"];
+    $a["party_year"] = (int)$data["partyYear"];
     $a["party_compo"] = nullify($data["partyCompo"]);
-    $a["party_place"] = $data["partyRank"];
+    $a["party_place"] = (int)$data["partyRank"];
     $a["invitation"] = nullify($data["invitationParty"]);
-    $a["invitationyear"] = $data["invitationYear"];
+    $a["invitationyear"] = (int)$data["invitationYear"];
     $a["boardID"] = nullify($data["boardID"]);
 
     $this->prodID = SQLLib::InsertRow("prods",$a);
