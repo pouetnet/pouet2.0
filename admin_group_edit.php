@@ -31,9 +31,9 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
     $a["name"] = trim($data["name"]);
     $a["acronym"] = $data["acronym"];
     $a["web"] = $data["website"];
-    $a["csdb"] = $data["csdbID"];
+    $a["csdb"] = (int)$data["csdbID"];
 //    $a["zxdemo"] = $data["zxdemoID"];
-    $a["demozoo"] = $data["demozooID"];
+    $a["demozoo"] = (int)$data["demozooID"];
     SQLLib::UpdateRow("groups",$a,"id=".$this->id);
 
     gloperator_log( "group", $this->id, "group_edit" );

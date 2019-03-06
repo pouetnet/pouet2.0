@@ -36,15 +36,15 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
     if ($this->fields["download"])
       $sql["download"] = $data["download"];
     if ($this->fields["csdbID"])
-      $sql["csdb"] = $data["csdbID"];
+      $sql["csdb"] = (int)$data["csdbID"];
     if ($this->fields["slengpungID"])
-      $sql["slengpung"] = $data["slengpungID"];
+      $sql["slengpung"] = (int)$data["slengpungID"];
 /*
     if ($this->fields["zxdemoID"])
       $sql["zxdemo"] = $data["zxdemoID"];
 */
     if ($this->fields["demozooID"])
-      $sql["demozoo"] = $data["demozooID"];
+      $sql["demozoo"] = (int)$data["demozooID"];
     if ($this->fields["artcity"])
       $sql["artcity"] = $data["artcity"];
 
