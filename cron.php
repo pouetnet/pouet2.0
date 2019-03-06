@@ -46,6 +46,13 @@ function cron_CheckLinks( $id = null )
       $url = $lastUrl;
     }
 
+    // temporary hack for csdb, they tend to occasionally return 503 for
+    // links that would normally work just fine
+    if ($sideload->httpReturnCode == 503 && strstr($lastUrl,"csdb")!==false)
+    {
+      continue;
+    }
+    
     $a = array();
     $a["prodID"] = $prod->id;
     $a["protocol"] = "http";
@@ -57,7 +64,7 @@ function cron_CheckLinks( $id = null )
 
     SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
     
-      if ($id)
+    if ($id)
     {
       $out[] = json_encode($a);
       $out[] = "\n[".$prod->id."] " . json_encode($urls) . " >> ". $a["returnCode"];
