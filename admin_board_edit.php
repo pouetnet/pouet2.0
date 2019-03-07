@@ -2,6 +2,7 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-board-submit.php");
+require_once("include_pouet/pouet-box-editbase.php");
 
 if ($currentUser && !$currentUser->CanEditItems())
 {
@@ -79,6 +80,103 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
+{
+  public static $slug = "BoardAffil";
+  function __construct( $board )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_boardeditaffil";
+    $this->board = $board;
+    $this->id = $board->id;
+    $this->title = "board affiliations links";
+
+    $this->headers = array("board","type");
+
+    $row = SQLLib::selectRow("DESC affiliatedboards type");
+    $this->types = enum2array($row->Type);
+    
+    $s = new BM_Query();
+    $s->AddField("affiliatedboards.id");
+    $s->AddField("affiliatedboards.type");
+    $s->AddTable("affiliatedboards");
+    $s->attach(array("affiliatedboards"=>"group"),array("groups as group"=>"id"));
+    $s->AddField("affiliatedboards_group.id as affiliatedboards_group_id");
+    $s->AddWhere(sprintf_esc("`board`=%d",$this->board->id));
+    $this->data = $s->perform();
+  }
+  use PouetForm;
+  function Commit($data)
+  {
+    if ($data["delBoardAffil"])
+    {
+      SQLLib::Query("delete from affiliatedboards where id=".(int)$data["delBoardAffil"]);
+      gloperator_log( "board", (int)$this->board->id, "board_affil_del" );
+      return array();
+    }
+
+    $a = array();
+    $a["group"] = $data["group"];
+    $a["type"] = $data["type"];
+    if ($data["editBoardAffilID"])
+    {
+      SQLLib::UpdateRow("affiliatedboards",$a,"id=".(int)$data["editBoardAffilID"]);
+      $a["id"] = $data["editBoardAffilID"];
+      gloperator_log( "board", (int)$this->board->id, "board_affil_edit", array("id"=>$a["id"]) );
+    }
+    else
+    {
+      $a["board"] = $this->board->id;
+      $a["id"] = SQLLib::InsertRow("affiliatedboards",$a);
+      gloperator_log( "board", (int)$this->board->id, "board_affil_add", array("id"=>$a["id"]) );
+    }
+    if ($data["partial"])
+    {
+      $o = toObject($a);
+      $o->group = PouetGroup::Spawn($a["group"]);
+      $this->RenderNormalRow($o);
+      $this->RenderNormalRowEnd($o);
+      exit();
+    }
+    return array();
+  }
+  function RenderEditRow($row)
+  {
+    echo "    <td><input name='group' value='"._html($row->group->id)."'/></td>\n";
+    echo "    <td><select name='type'>\n";
+    foreach($this->types as $v)
+      printf("<option%s>%s</option>",$row->type==$v?" selected='selected'":"",_html($v));
+    echo "</select></td>\n";
+  }
+  function RenderNormalRow($v)
+  {
+    echo "    <td>".$v->group->RenderLong()."</td>\n";
+    echo "    <td>"._html($v->type)."</td>\n";
+  }
+  function RenderBody()
+  {
+    parent::RenderBody();
+?>
+<script language="JavaScript" type="text/javascript">
+<!--
+document.observe("dom:loaded",function(){
+  InstrumentAdminEditorForAjax( $("pouetbox_boardeditaffil"), "groupBoardAffil", {
+    onRowLoad: function(tr){
+      new Autocompleter(tr.down("[name='group']"), {"dataUrl":"./ajax_groups.php"});
+    }
+  } );
+});
+//-->
+</script>
+<?
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 class PouetBoxAdminDeleteBoard extends PouetBox
 {
   function __construct( $board )
@@ -143,13 +241,42 @@ document.observe("dom:loaded",function(){
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+$boxen = array(
+  "PouetBoxAdminEditBoardAffil",
+);
+if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
+{
+  // ajax responses
+  $group = new stdClass();
+  $group->id = $_GET["which"];
+  foreach($boxen as $class)
+  {
+    if ($_GET["edit" . $class::$slug])
+    {
+      $box = new $class( $group );
+      $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
+      $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
+    }
+    if ($_GET["new" . $class::$slug])
+    {
+      $box = new $class( $group );
+      $box->RenderEditRow( new stdClass() );
+      $box->RenderEditRowEnd( new stdClass() );
+    }
+  }
+  exit();
+}
+
+
 $form = new PouetFormProcessor();
 
 $form->SetSuccessURL( "boards.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditBoard( $_GET["which"] );
 $form->Add( "board", $box );
-
+$form->Add( "boardaffil", new PouetBoxAdminEditBoardAffil( $box->board ) );
 $form->Add( "boarddelete", new PouetBoxAdminDeleteBoard( $box->board ) );
 
 if ($currentUser && $currentUser->CanEditItems())
