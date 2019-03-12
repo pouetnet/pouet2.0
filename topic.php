@@ -146,23 +146,21 @@ if ($view->topic)
   animation-duration: 0.5s;
   animation-name: blink;
   animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-timing-function: linear;
+  animation-timing-function: ease;
   -webkit-animation-duration: 0.5s;
   -webkit-animation-name: blink;
   -webkit-animation-iteration-count: infinite;
-  -webkit-animation-direction: alternate;
-  -webkit-animation-timing-function: linear;
+  -webkit-animation-timing-function: ease;
 }
 @keyframes blink {
-    0% { padding-left: 10px; padding-right:  1px; }
-   50% { padding-left:  1px; padding-right: 10px; }
-  100% { padding-left: 10px; padding-right:  1px; }
+    0% { transform:scale(1); }
+   50% { transform:scale(1.1); }
+  100% { transform:scale(1); }
 }
 @-webkit-keyframes blink {
-    0% { padding-left: 10px; padding-right:  1px; }
-   50% { padding-left:  1px; padding-right: 10px; }
-  100% { padding-left: 10px; padding-right:  1px; }
+    0% { transform:scale(1); }
+   50% { transform:scale(1.1); }
+  100% { transform:scale(1); }
 }
 </style>
 <script type="text/javascript">
