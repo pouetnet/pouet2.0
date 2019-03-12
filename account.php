@@ -66,6 +66,7 @@ class PouetBoxAccount extends PouetBox
     $this->uniqueID = "pouetbox_account";
     $this->title = "e-e-e-edit your account";
     $this->formifier = new Formifier();
+    $this->maxCDCs = 20;
   }
 
   function LoadFromDB()
@@ -131,7 +132,7 @@ class PouetBoxAccount extends PouetBox
     $this->fieldsCDC = array();
 
     $glop = POUET_CDC_MINGLOP;
-    for ($x=1; $x < 10; $x++)
+    for ($x=1; $x < $this->maxCDCs; $x++)
     {
       /*
       $cdcText = array(
@@ -152,7 +153,7 @@ class PouetBoxAccount extends PouetBox
       {
         $this->fieldsCDC["cdc".$x] = array(
           "value" => $this->cdcs[$x-1],
-          "name" => "coup de coeur ".$x,
+          "name" => "coup de coeur ".$x." (".$glop." glöps)",
           "info" => $cdcText[$x], // is this cool?
         );
       }
@@ -188,7 +189,7 @@ class PouetBoxAccount extends PouetBox
 
     $cdcUnique = array();
     $glop = POUET_CDC_MINGLOP;
-    for ($x=1; $x < 10; $x++)
+    for ($x=1; $x < $this->maxCDCs; $x++)
     {
       if ($this->user->glops >= $glop && $data["cdc".$x])
       {
@@ -285,7 +286,7 @@ class PouetBoxAccount extends PouetBox
     if ($this->fieldsCDC)
     {
       echo "  <h2>coup de coeurs</h2>\n";
-      echo "  <div class='accountsection content'>\n";
+      echo "  <div class='accountsection content account-cdcs'>\n";
       $this->formifier->RenderForm( $this->fieldsCDC );
       echo "  </div>\n";
     }
@@ -384,7 +385,8 @@ else
     
   $form->SetSuccessURL( "index.php", false );
   
-  $form->Add( "account", new PouetBoxAccount() );
+  $account = new PouetBoxAccount();
+  $form->Add( "account", $account );
   $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
   
   $form->Process();
@@ -458,7 +460,7 @@ document.observe("dom:loaded",function(){
     $("avatarPickerPalette").show();
   });
 
-  for (var i=1; i<10; i++)
+  for (var i=1; i<<?=$account->maxCDCs?>; i++)
   {
     if (!$("cdc"+i)) continue;
     new Autocompleter($("cdc"+i), {
