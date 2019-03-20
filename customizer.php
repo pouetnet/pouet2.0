@@ -304,6 +304,7 @@ document.observe("dom:loaded",function(){
     });
     item.down("h2").observe("mouseup",function(ev){
       if (ev.isRightClick()) return;
+      if (ev.findElement(".close")) return;
       ev.stop();
       item.removeClassName("floaty");
       $$(".placeholder").invoke("remove");
