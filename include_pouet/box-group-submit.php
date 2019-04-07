@@ -75,6 +75,7 @@ class PouetBoxSubmitGroup extends PouetBox
       ),
       "acronym"=>array(
         "name"=>"acronym",
+        "html"=>"maxlength='8'",
       ),
       "website"=>array(
         "name"=>"website url",

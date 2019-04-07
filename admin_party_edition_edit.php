@@ -29,10 +29,10 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
     $sql = array();
     $sql["download"] = $data["download"];
-    $sql["csdb"] = $data["csdbID"];
-    $sql["slengpung"] = $data["slengpungID"];
+    $sql["csdb"] = (int)$data["csdbID"];
+    $sql["slengpung"] = (int)$data["slengpungID"];
     //$sql["zxdemo"] = $data["zxdemoID"];
-    $sql["demozoo"] = $data["demozooID"];
+    $sql["demozoo"] = (int)$data["demozooID"];
     $sql["artcity"] = $data["artcity"];
 
     $links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));

@@ -147,7 +147,7 @@ document.observe("dom:loaded",function(){
           echo "    <textarea name='".$k."' id='".$k."'>"._html($v["value"])."</textarea>\n";
           break;
         default:
-          echo "    <input name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          echo "    <input name='".$k."' id='".$k."'".($v["html"]?" ".$v["html"]:"")." value='"._html($v["value"])."'/>\n";
           break;
       }
       if ($v["info"])

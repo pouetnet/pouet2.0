@@ -93,6 +93,7 @@ class PouetBoxAccount extends PouetBox
         "info"=>"how do you look on IRC ?",
         "required"=>true,
         "value"=>$this->user->nickname,
+        "html"=>"maxlength='16'",
       ),
       "im_type"=>array(
         "info"=>"the one you really use",

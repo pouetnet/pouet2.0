@@ -378,6 +378,9 @@ class PouetBoxListsAddMaintainer extends PouetBox
     if (!$this->box->CanDelete())
       return array("not allowed lol !");
     
+    if (!$post["maintainerID"])
+      return array("something is missing ?!");
+
     return array();
   }
 
@@ -385,7 +388,7 @@ class PouetBoxListsAddMaintainer extends PouetBox
   {
     $a = array();
     $a["listID"] = $this->list->id;
-    $a["userID"] = $post["maintainerID"];
+    $a["userID"] = (int)$post["maintainerID"];
     SQLLib::InsertRow("list_maintainers",$a);
     return array();
   }
