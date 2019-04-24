@@ -49,7 +49,7 @@ class PouetBoxASCIIViewer extends PouetBox
     if (!$this->fonts[$_GET["font"]]["image"])
     {
       printf("<pre class='%s'>",_html($this->fonts[$_GET["font"]]["class"]));
-      $text = file_get_contents( $this->asciiFilename );
+      $text = @file_get_contents( $this->asciiFilename );
       echo _html( process_ascii( $text, $this->fonts[$_GET["font"]]["encoding"] ) );
       printf("</pre>");
     }
