@@ -24,6 +24,11 @@ class PouetRequestClassBase
 
 class PouetRequestClassAddLink extends PouetRequestClassBase
 {
+  static $links = array(
+    "/https:\/\/(?:www\.)?demozoo\.org\/productions\/(\d+)/" => "demozooID",
+    "/https:\/\/(?:www\.)?csdb\.dk\/release\/\?id=(\d+)/" => "csdbID",
+  );
+  
   static function GetItemType() { return "prod"; }
   static function Describe() { return "add a new extra link to a prod"; }
 
@@ -59,11 +64,28 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
   {
     $s =  _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."' rel='external'>"._html(shortify_cut($data["newLink"],50))."</a>";
+    foreach(self::$links as $k=>$v)
+    {
+      if (preg_match($k,$data["newLink"]))
+      {
+        $s.="<br/><b>(will be stored as ".$v." instead of a link)</b>";
+      }
+    }
     return $s;
   }
 
   static function Process($itemID, $reqData)
   {
+    foreach(self::$links as $k=>$v)
+    {
+      if (preg_match($k,$data["newLink"],$m))
+      {
+        $a = array();
+        $a[$v] = $m[1];
+        SQLLib::UpdateRow("prods",$a,sprintf_esc("id=%d",$itemID));
+        return array();
+      }
+    }
     $a = array();
     $a["prod"] = $itemID;
     $a["type"] = $reqData["newLinkKey"];
