@@ -25,8 +25,8 @@ class PouetRequestClassBase
 class PouetRequestClassAddLink extends PouetRequestClassBase
 {
   static $links = array(
-    "/https:\/\/(?:www\.)?demozoo\.org\/productions\/(\d+)/" => "demozooID",
-    "/https:\/\/(?:www\.)?csdb\.dk\/release\/\?id=(\d+)/" => "csdbID",
+    "/https:\/\/(?:www\.)?demozoo\.org\/productions\/(\d+)/" => "demozoo",
+    "/https:\/\/(?:www\.)?csdb\.dk\/release\/\?id=(\d+)/" => "csdb",
   );
   
   static function GetItemType() { return "prod"; }
@@ -68,7 +68,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
     {
       if (preg_match($k,$data["newLink"]))
       {
-        $s.="<br/><b>(will be stored as ".$v." instead of a link)</b>";
+        $s.="<br/><b>(will be stored as ".$v." ID instead of a link)</b>";
       }
     }
     return $s;
@@ -78,7 +78,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
   {
     foreach(self::$links as $k=>$v)
     {
-      if (preg_match($k,$data["newLink"],$m))
+      if (preg_match($k,$reqData["newLink"],$m))
       {
         $a = array();
         $a[$v] = $m[1];
