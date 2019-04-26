@@ -212,7 +212,7 @@ class PouetBoxPartyView extends PouetBox
             adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
-          if ($key == "compo" && $this->sortByCompo) $out = "<th>".$COMPOTYPES[$p->party_compo]."</th>";
+          if ($key == "compo" && $this->sortByCompo) $out = sprintf("<th id='%s'>%s</th>",hashify($COMPOTYPES[$p->party_compo]),$COMPOTYPES[$p->party_compo]);
           echo $out;
         }
         echo "</tr>\n";
