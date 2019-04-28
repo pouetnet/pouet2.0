@@ -762,7 +762,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
       ),
       "releaseDate"=>array(
         "name"=>"release date",
-        "type"=>"date",
+        "type"=>"dateMonth",
       ),
       "type"=>array(
         "name"=>"type",
@@ -1030,6 +1030,9 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
 };
 
 $REQUESTTYPES = array(
+  "prod_change_info" => "PouetRequestClassChangeInfo",
+  "prod_change_downloadlink" => "PouetRequestClassChangeDownloadLink",
+
   "prod_add_link" => "PouetRequestClassAddLink",
   "prod_change_link" => "PouetRequestClassChangeLink",
   "prod_remove_link" => "PouetRequestClassRemoveLink",
@@ -1037,8 +1040,5 @@ $REQUESTTYPES = array(
   "prod_add_credit" => "PouetRequestClassAddCredit",
   "prod_change_credit" => "PouetRequestClassChangeCredit",
   "prod_remove_credit" => "PouetRequestClassRemoveCredit",
-
-  "prod_change_downloadlink" => "PouetRequestClassChangeDownloadLink",
-  "prod_change_info" => "PouetRequestClassChangeInfo",
 );
 ?>
