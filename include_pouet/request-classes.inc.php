@@ -846,6 +846,11 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
 
   static function ValidateRequest($input,&$output) 
   {
+    if (!trim($input["name"]))
+    {
+      return array("prod name can't be empty !");
+    }
+    
     $fields = array();
     static::GetFields(array(),$fields,$js);
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
@@ -861,13 +866,23 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     else if ($input["releaseDate_year"])
       $_in["releaseDate"] = sprintf("%04d-00-15",$input["releaseDate_year"]);
     
-    $output = array_diff( $_in, $pa );
+    if (!$_in["partyID"])
+    {
+      unset( $_in["partyYear"] );
+      unset( $_in["partyCompo"] );
+      unset( $_in["partyRank"] );
+    }
+    $output = array_diff_meaningful( $_in, $pa );
 
     if (array_diff( $_in["type"] ?: array(), $pa["type"] ))
+    {
       $output["type"] = $_in["type"];
+    }
       
     if (array_diff( $_in["platform"] ?: array(), $pa["platform"] ))
+    {
       $output["platform"] = $_in["platform"];
+    }
 
     unset($output["finalStep"]);
     
@@ -928,7 +943,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= "<br/>";
           $group = PouetGroup::Spawn( $v );
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $s .= $group->RenderLong();
+          $s .= $group ? $group->RenderLong() : "<i>none</i>";
           $s .= "<br/>";
           break;
         case "invitationParty":
@@ -939,7 +954,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= "<br/>";
           $party = PouetParty::Spawn( $v );
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $s .= $party->PrintLinked();
+          $s .= $party ? $party->PrintLinked() : "<i>none</i>";
           $s .= "<br/>";
           break;
         case "partyYear":
@@ -964,6 +979,14 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
           $s .= _html($ranks[$v]);
+          $s .= "<br/>";
+          break;
+        case "releaseDate":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= _html(renderHalfDate($prod->releaseDate));
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= _html(renderHalfDate($v));
           $s .= "<br/>";
           break;
         case "boardID":
@@ -995,7 +1018,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     {
       switch($k)
       {
-        case "partyID":    $sql["party"] = $v; break;
+        case "partyID":    $sql["party"] = nullify($v); break;
         case "partyYear":  $sql["party_year"] = $v; break;
         case "partyCompo": $sql["party_compo"] = $v; break;
         case "partyRank":  $sql["party_place"] = $v; break;
@@ -1004,6 +1027,9 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
         case "demozooID":  $sql["demozoo"] = $v; break;
         case "csdbID":     $sql["csdb"] = $v; break;
         case "invitationParty": $sql["invitation"] = $v; break;
+        case "group1":     $sql["group1"] = nullify($v); break;
+        case "group2":     $sql["group2"] = nullify($v); break;
+        case "group3":     $sql["group3"] = nullify($v); break;
         default:
           $sql[$k] = $v;
       }

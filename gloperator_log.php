@@ -40,7 +40,7 @@ class PouetBoxGloperatorLog extends PouetBox {
       global $REQUESTTYPES;
       if ($REQUESTTYPES[$r->action])
       {
-        echo $REQUESTTYPES[$r->action]::Display( $_GET["what"], json_decode($r->additionalData,true) ); 
+        echo $REQUESTTYPES[$r->action]::Display( $_GET["which"], json_decode($r->additionalData,true) ); 
       }
       else
       {
