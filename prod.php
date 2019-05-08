@@ -667,6 +667,46 @@ class PouetBoxProdComments extends PouetBox {
   }
 };
 
+class PouetBoxProdLists extends PouetBox 
+{
+  var $id;
+  var $topic;
+  var $posts;
+  function __construct($id)
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_prodlists";
+    $this->title = "lists containing this prod";
+    $this->id = (int)$id;
+  }
+
+  function LoadFromDB() {
+    $s = new BM_Query();
+    $s->AddField("lists.id as id");
+    $s->AddField("lists.name as name");
+    $s->AddTable("list_items");
+    $s->AddJoin("","lists","list_items.list=lists.id");
+    $s->attach(array("lists"=>"addeduser"),array("users as user"=>"id"));
+    $s->AddWhere("list_items.itemid=".$this->id);
+    $s->AddWhere("list_items.type='prod'");
+    $s->AddOrder("lists.name");
+    $this->data = $s->perform();
+  }
+
+  function RenderBody()
+  {
+    echo "<ul class='boxlist boxlisttable'>\n";
+    foreach($this->data as $list)
+    {
+      echo "<li>\n";
+      printf("  <span><a href='lists.php?which=%d'>%s</a></span>\n",$list->id,_html($list->name));
+      echo "  <span>".$list->user->PrintLinkedAvatar()." ".$list->user->PrintLinkedName()."</span>\n";
+      echo "</li>\n";
+    }
+    echo "</ul>\n";
+  }
+};
+
 class PouetBoxProdSubmitChanges extends PouetBox {
   var $data;
   var $prod;
@@ -794,6 +834,13 @@ if ($main->prod)
   if ($main->userCDCs)
   {
     $p = new PouetBoxProdSneakyCDCs($prodid);
+    $p->Render();
+  }
+
+  $p = new PouetBoxProdLists($prodid);
+  $p->Load();
+  if ($p->data)
+  {
     $p->Render();
   }
 
