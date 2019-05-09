@@ -54,7 +54,7 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     {
       echo "<li>\n";
       printf("  <span><a href='lists.php?which=%d'>%s</a></span>\n",$l->id,_html($l->name));
-      echo "  <span>".$l->user->PrintLinkedAvatar()."</span>\n";
+      echo "  <span class='rowuser'>".$l->user->PrintLinkedAvatar()."</span>\n";
       echo "</li>\n";
       if (++$n == $this->limit) break;
     }
