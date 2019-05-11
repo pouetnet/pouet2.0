@@ -78,6 +78,8 @@ class PouetBoxListsMain extends PouetBox
     $this->uniqueID = "pouetbox_listsmain";
     $this->id = (int)$id;
 
+    $this->canEdit = false;
+    $this->canDelete = false;
   }
 
   function LoadFromDB()
@@ -125,6 +127,24 @@ class PouetBoxListsMain extends PouetBox
     $s->AddWhere(sprintf_esc("list_maintainers.listID = %d",$this->id));
     $this->maintainers = $s->perform();
 
+    global $currentUser;
+    if ($currentUser)
+    {    
+      if ($currentUser->id == $this->list->owner->id 
+        || $currentUser->id == $this->list->addedUser->id
+        || $currentUser->IsModerator())
+      {
+        $this->canEdit = true;
+        $this->canDelete = true;
+      }
+      foreach($this->maintainers as $user)
+      {
+        if ($currentUser->id == $user->user->id)
+        {
+          $this->canEdit = true;
+        }
+      }
+    }
   }
 
   function Render()
@@ -156,6 +176,10 @@ class PouetBoxListsMain extends PouetBox
         echo "<span>\n";
         echo $d->group->RenderFull();
         echo "</span>\n";
+        if ($this->CanEdit())
+        {
+          printf("  <span class='list-delete'><input type='submit' name='listDeleteGroup[%d]' value='delete'/></span>",$d->group->id);
+        }
         echo "</li>\n";
       }
       echo "</ul>\n";
@@ -180,6 +204,10 @@ class PouetBoxListsMain extends PouetBox
         echo "<span>\n";
         echo $d->prod->RenderReleaseDate();
         echo "</span>\n";
+        if ($this->CanEdit())
+        {
+          printf("  <span class='list-delete'><input type='submit' name='listDeleteProd[%d]' value='delete'/></span>",$d->prod->id);
+        }
         echo "</li>\n";
       }
       echo "</ul>\n";
@@ -195,6 +223,10 @@ class PouetBoxListsMain extends PouetBox
         echo "<span>\n";
         echo $d->party->RenderFull();
         echo "</span>\n";
+        if ($this->CanEdit())
+        {
+          printf("  <span class='list-delete'><input type='submit' name='listDeleteParty[%d]' value='delete'/></span>",$d->party->id);
+        }
         echo "</li>\n";
       }
       echo "</ul>\n";
@@ -214,6 +246,10 @@ class PouetBoxListsMain extends PouetBox
         echo "<span>\n";
         echo $d->user->glops." glöps";
         echo "</span>\n";
+        if ($this->CanEdit())
+        {
+          printf("  <span class='list-delete'><input type='submit' name='listDeleteUser[%d]' value='delete'/></span>",$d->user->id);
+        }
         echo "</li>\n";
       }
       echo "</ul>\n";
@@ -223,34 +259,40 @@ class PouetBoxListsMain extends PouetBox
   }
   function CanEdit()
   {
-    global $currentUser;    
-    if (!$currentUser) return false;
-    
-    if ($currentUser->id == $this->list->owner->id 
-      || $currentUser->id == $this->list->addedUser->id
-      || $currentUser->IsModerator())
-      return true;
-    
-    foreach($this->maintainers as $user)
-    {
-      if ($user->user->id == $currentUser->id)
-      {
-        return true;
-      }
-    }
-    return false;
+    return $this->canEdit;
   }
   function CanDelete()
   {
-    global $currentUser;    
-    if (!$currentUser) return false;
-    
-    if ($currentUser->id == $this->list->owner->id 
-      || $currentUser->id == $this->list->addedUser->id
-      || $currentUser->IsModerator())
-      return true;
-    
-    return false;
+    return $this->canDelete;
+  }
+  use PouetForm;
+  function Validate($post)
+  {
+    return $this->CanEdit() ? array() : array("lol no !");
+  }
+  function Commit($post)
+  {
+    if ($post["listDeleteParty"])
+    {
+      $ids = array_map(function($i){ return (int)$i; },array_keys($post["listDeleteParty"]));
+      SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d AND type='party' AND itemid IN (".implode(",",$ids).")",$this->list->id));
+    }
+    if ($post["listDeleteProd"])
+    {
+      $ids = array_map(function($i){ return (int)$i; },array_keys($post["listDeleteProd"]));
+      SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d AND type='prod' AND itemid IN (".implode(",",$ids).")",$this->list->id));
+    }
+    if ($post["listDeleteGroup"])
+    {
+      $ids = array_map(function($i){ return (int)$i; },array_keys($post["listDeleteGroup"]));
+      SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d AND type='group' AND itemid IN (".implode(",",$ids).")",$this->list->id));
+    }
+    if ($post["listDeleteUser"])
+    {
+      $ids = array_map(function($i){ return (int)$i; },array_keys($post["listDeleteUser"]));
+      SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d AND type='user' AND itemid IN (".implode(",",$ids).")",$this->list->id));
+    }
+    return array();
   }
 };
 ///////////////////////////////////////////////////////////////////////////////
@@ -418,6 +460,68 @@ document.observe("dom:loaded",function(){
     echo "</div>";
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+class PouetBoxListsDelete extends PouetBox
+{
+  function __construct( $list )
+  {
+    parent::__construct();
+
+    $this->uniqueID = "pouetbox_listsdelete";
+
+    $this->classes[] = "errorbox";
+
+    $this->list = $list;
+
+    global $verificationStrings;
+    $this->checkString = $verificationStrings[ array_rand($verificationStrings) ];
+
+    $this->title = "delete this list: "._html( $this->list->name );
+  }
+  use PouetForm;
+  function Validate($data)
+  {
+    if ($data["check"] != $data["checkOrig"])
+      return array("wrong verification string !");
+    return array();
+  }
+  function Commit($data)
+  {
+    SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d",$this->list->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM lists WHERE id=%d",$this->list->id));
+    return array();
+  }
+  function RenderBody()
+  {
+    echo "<div class='content'/>";
+    echo "  <p>To make sure you want to delete <b>this</b> list, type \"".$this->checkString."\" here:</p>";
+    echo "  <input name='checkOrig' type='hidden' value='"._html($this->checkString)."'/>";
+    echo "  <input id='check' name='check' autocomplete='no'/>";
+    echo "</div>";
+    echo "<div class='foot'/>";
+    echo "  <input type='submit' value='Submit' />";
+    echo "</div>";
+    ?>
+<script type="text/javascript">
+document.observe("dom:loaded",function(){
+  $("pouetbox_listsdelete").up("form").observe("submit",function(e){
+    if ($F("check") != "<?=_js($this->checkString)?>")
+    {
+      alert("Enter the verification string!");
+      e.stop();
+      return;
+    }
+    if (!confirm("ARE YOU REALLY SURE YOU WANT TO DELETE \"<?=_js($this->list->name)?>\"?!"))
+      e.stop();
+  });
+});
+</script>
+    <?
+  }
+}
+
 $listID = (int)$_GET["which"];
 
 $form = null;
@@ -431,20 +535,22 @@ if (!$listID)
 }
 else
 {
-  $p = new PouetBoxListsMain($listID);
-  $p->Load();
-  if ($p->list)
+  $form = new PouetFormProcessor();
+  $main = new PouetBoxListsMain($listID);
+  $form->Add( "listmain", $main );
+  $main->Load();
+  if ($main->list)
   {
-    $TITLE = $p->list->name;
+    $TITLE = $main->list->name;
     
-    if ($p->CanEdit())
+    if ($main->CanEdit())
     {
-      $form = new PouetFormProcessor();
       $form->SetSuccessURL( "lists.php?which=".(int)$listID, true );
-      $form->Add( "list_add", new PouetBoxListsAdd($p) );
-      if ($p->CanDelete())
+      $form->Add( "list_add", new PouetBoxListsAdd($main) );
+      if ($main->CanDelete())
       {
-        $form->Add( "list_addmaintainer", new PouetBoxListsAddMaintainer($p) );
+        $form->Add( "list_addmaintainer", new PouetBoxListsAddMaintainer($main) );
+        $form->Add( "list_delete", new PouetBoxListsDelete($main->list) );
       }
   
       $form->Process();
