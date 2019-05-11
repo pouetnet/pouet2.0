@@ -168,15 +168,15 @@ function array_select( $array, $keys )
 function shortify( $text, $length = 100 )
 {
   if (mb_strlen($text,"utf-8") <= $length) return $text;
-  $z = mb_stripos($text," ",$length,"utf-8");
-  return mb_substr($text,0,$z?$z:$length,"utf-8")."...";
+  $z = mb_stripos($text," ",$length-3,"utf-8");
+  return mb_substr($text,0,$z?$z:$length-3,"utf-8")."...";
 }
 
 function shortify_cut( $text, $length = 100 )
 {
   if (mb_strlen($text,"utf-8") <= $length) return $text;
   //$z = mb_stripos($text," ",$length);
-  return mb_substr($text,0,$length,"utf-8")."...";
+  return mb_substr($text,0,$length-3,"utf-8")."...";
 }
 
 function parse_message( $p )
