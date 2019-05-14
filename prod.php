@@ -553,8 +553,6 @@ class PouetBoxProdPopularityHelper extends PouetBox {
     
     $text = "You should watch \"".$this->prod->name."\" on @pouetdotnet: ".$url;
     echo "  <a href='https://twitter.com/intent/tweet?text="._html(rawurlencode($text))."'>twitter</a>\n";
-    
-    echo "  <a href='https://plus.google.com/share?url="._html(rawurlencode($url))."'>google+</a>\n";
 
     echo "  <a href='http://pinterest.com/pin/create/button/?url="._html(rawurlencode($url))."'>pinterest</a>\n";
 
