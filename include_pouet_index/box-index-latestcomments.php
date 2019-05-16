@@ -34,7 +34,7 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of comments visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "limit" => array("name"=>"number of comments visible","default"=>5,"min"=>1,"max"=>POUET_CACHE_MAX),
       "showUser" => array("name"=>"show user avatar","default"=>true,"type"=>"checkbox"),
       "showVote" => array("name"=>"show vote with comment","default"=>false,"type"=>"checkbox"),
     );

@@ -64,7 +64,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of oneliners visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "limit" => array("name"=>"number of oneliners visible","default"=>5,"min"=>1,"max"=>POUET_CACHE_MAX),
       "showTimestamps" => array("name"=>"show timestamps","type"=>"checkbox"),
     );
   }

@@ -30,7 +30,7 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of prods visible","default"=>10,"max"=>POUET_CACHE_MAX),
+      "limit" => array("name"=>"number of prods visible","default"=>10,"min"=>1,"max"=>POUET_CACHE_MAX),
     );
   }
 

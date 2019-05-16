@@ -23,7 +23,7 @@ class PouetBoxIndexWatchlist extends PouetBox {
   function GetParameterSettings()
   {
     return array(
-      "limit"      => array("name"=>"number of prods visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "limit"      => array("name"=>"number of prods visible","default"=>5,"min"=>1,"max"=>POUET_CACHE_MAX),
     );
   }
   

@@ -23,7 +23,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of posts visible","default"=>5,"max"=>10),
+      "limit" => array("name"=>"number of posts visible","default"=>5,"min"=>1,"max"=>10),
     );
   }
 

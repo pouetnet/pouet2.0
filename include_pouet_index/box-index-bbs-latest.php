@@ -27,7 +27,7 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit"      => array("name"=>"number of topics visible","default"=>10,"min"=>0,"max"=>POUET_CACHE_MAX),
+      "limit"      => array("name"=>"number of topics visible","default"=>10,"min"=>1,"max"=>POUET_CACHE_MAX),
       "hideResidue"=> array("name"=>"hide residue topics","default"=>true,"type"=>"checkbox"),
     );
   }

@@ -30,7 +30,7 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
   function GetParameterSettings()
   {
     return array(
-      "limit" => array("name"=>"number of parties visible","default"=>5,"max"=>POUET_CACHE_MAX),
+      "limit" => array("name"=>"number of parties visible","default"=>5,"min"=>1,"max"=>POUET_CACHE_MAX),
     );
   }
 
