@@ -40,7 +40,7 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     $s->AddField("lists.id as id");
     $s->AddField("lists.name as name");
     $s->AddTable("lists");
-    $s->attach(array("lists"=>"addeduser"),array("users as user"=>"id"));
+    $s->attach(array("lists"=>"owner"),array("users as user"=>"id"));
     $s->AddOrder("lists.addedDate desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();

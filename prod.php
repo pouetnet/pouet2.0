@@ -684,7 +684,7 @@ class PouetBoxProdLists extends PouetBox
     $s->AddField("lists.name as name");
     $s->AddTable("list_items");
     $s->AddJoin("","lists","list_items.list=lists.id");
-    $s->attach(array("lists"=>"addeduser"),array("users as user"=>"id"));
+    $s->attach(array("lists"=>"owner"),array("users as user"=>"id"));
     $s->AddWhere("list_items.itemid=".$this->id);
     $s->AddWhere("list_items.type='prod'");
     $s->AddOrder("lists.name");
