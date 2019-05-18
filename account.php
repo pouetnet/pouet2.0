@@ -81,6 +81,10 @@ class PouetBoxAccount extends PouetBox
     $query->AddWhere(sprintf_esc("users.id = %d",get_login_id()));
     $query->SetLimit(1);
 
+    $s = new BM_Query("users_im");
+    $s->AddWhere(sprintf_esc("users_im.userID = %d",get_login_id()));
+    $this->ims = $s->perform();
+
     $s = $query->perform();
     $this->user = reset( $s );
 
@@ -94,17 +98,6 @@ class PouetBoxAccount extends PouetBox
         "required"=>true,
         "value"=>$this->user->nickname,
         "html"=>"maxlength='16'",
-      ),
-      "im_type"=>array(
-        "info"=>"the one you really use",
-        "name"=>"instant messenger type",
-        "type"=>"select",
-        "value"=>$this->user->im_type,
-      ),
-      "im_id"=>array(
-        "info"=>"buuuuuuuuuuuuuuuu .... hiho !",
-        "name"=>"instant messenger id",
-        "value"=>$this->user->im_id,
       ),
       "avatar"=>array(
         "info"=>"your faaaaaaace is like a song",
@@ -130,8 +123,8 @@ class PouetBoxAccount extends PouetBox
         "value"=>$this->user->demozoo,
       ),
     );
-    $this->fieldsCDC = array();
 
+    $this->fieldsCDC = array();
     $glop = POUET_CDC_MINGLOP;
     for ($x=1; $x < $this->maxCDCs; $x++)
     {
@@ -161,6 +154,30 @@ class PouetBoxAccount extends PouetBox
       $glop *= 2;
     }
 
+
+    $row = SQLLib::SelectRow("DESC users im_type");
+    $this->imTypes = enum2array($row->Type);
+
+    $this->ims[] = new stdClass();
+    $this->fieldsIM = array();
+    $n = 0;
+    foreach($this->ims as $im)
+    {
+      $this->fieldsIM["im_type".$n] = array(
+        //"info"=>"the one you really use",
+        "name"=>"instant messenger type",
+        "type"=>"select",
+        "value"=>$im->im_type,
+        "fields"=>$this->imTypes,
+      );
+      $this->fieldsIM["im_id".$n] = array(
+        //"info"=>"buuuuuuuuuuuuuuuu .... hiho !",
+        "name"=>"instant messenger id",
+        "value"=>$im->im_id,
+      );
+      $n++;
+    }
+
     global $namesNumeric;
     global $namesSwitch;
 
@@ -172,12 +189,6 @@ class PouetBoxAccount extends PouetBox
         if ($this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
       }
     }
-
-
-
-    $row = SQLLib::SelectRow("DESC users im_type");
-    $m = enum2array($row->Type);
-    $this->fieldsPouet["im_type"]["fields"] = $m;
   }
 
   function ParsePostLoggedIn( $data )
@@ -200,13 +211,27 @@ class PouetBoxAccount extends PouetBox
     }
     $cdcUnique = array_unique($cdcUnique);
     SQLLib::Query(sprintf_esc("delete from users_cdcs where user = %d",get_login_id()));
-
     foreach($cdcUnique as $c)
     {
       $a = array();
       $a["user"] = get_login_id();
       $a["cdc"] = $c;
       SQLLib::InsertRow("users_cdcs",$a);
+    }
+
+    // im bit
+
+    SQLLib::Query(sprintf_esc("delete from users_im where userID = %d",get_login_id()));
+    for ($n = 0; $n < count($this->imTypes); $n++)
+    {
+      $a = array();
+      $a["userID"] = get_login_id();
+      $a["im_type"] = $data["im_type".$n];
+      $a["im_id"] = $data["im_id".$n];
+      if ($a["im_type"] && $a["im_id"])
+      {
+        SQLLib::InsertRow("users_im",$a);
+      }
     }
 
     // pouet bit
@@ -289,6 +314,13 @@ class PouetBoxAccount extends PouetBox
       echo "  <h2>coup de coeurs</h2>\n";
       echo "  <div class='accountsection content account-cdcs'>\n";
       $this->formifier->RenderForm( $this->fieldsCDC );
+      echo "  </div>\n";
+    }
+    if ($this->fieldsIM)
+    {
+      echo "  <h2>contact details</h2>\n";
+      echo "  <div class='accountsection content account-ims'>\n";
+      $this->formifier->RenderForm( $this->fieldsIM );
       echo "  </div>\n";
     }
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";

@@ -23,6 +23,10 @@ class PouetBoxUserMain extends PouetBox
 
     $this->sceneID = $this->user->GetSceneIDData();
 
+    $s = new BM_Query("users_im");
+    $s->AddWhere(sprintf_esc("users_im.userID = %d",$this->id));
+    $this->ims = $s->perform();
+
     $s = new BM_Query("users_cdcs");
     $s->AddWhere(sprintf_esc("users_cdcs.user = %d",$this->id));
     $s->Attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));
@@ -471,8 +475,10 @@ class PouetBoxUserMain extends PouetBox
       echo $this->AddRow("website","<a href='".$site."'>".$site."</a>",true);
     }
 
-    if ($this->user->im_type)
-      $this->AddRow($this->user->im_type,$this->user->im_id);
+    foreach($this->ims as $im)
+    {
+      $this->AddRow( $im->im_type, $im->im_id );
+    }
 
     if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo || $this->user->demozoo)
     {
