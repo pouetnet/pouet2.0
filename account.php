@@ -165,14 +165,14 @@ class PouetBoxAccount extends PouetBox
     {
       $this->fieldsIM["im_type".$n] = array(
         //"info"=>"the one you really use",
-        "name"=>"instant messenger type",
+        "name"=>"contact type",
         "type"=>"select",
         "value"=>$im->im_type,
         "fields"=>$this->imTypes,
       );
       $this->fieldsIM["im_id".$n] = array(
         //"info"=>"buuuuuuuuuuuuuuuu .... hiho !",
-        "name"=>"instant messenger id",
+        "name"=>"contact address",
         "value"=>$im->im_id,
       );
       $n++;
