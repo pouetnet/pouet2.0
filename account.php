@@ -155,7 +155,7 @@ class PouetBoxAccount extends PouetBox
     }
 
 
-    $row = SQLLib::SelectRow("DESC users im_type");
+    $row = SQLLib::SelectRow("DESC users_im im_type");
     $this->imTypes = enum2array($row->Type);
 
     $this->ims[] = new stdClass();
