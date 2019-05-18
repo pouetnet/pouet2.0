@@ -2,7 +2,7 @@
 class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
-  static function getExtendedFields() { return array("im_id","im_type","udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
+  static function getExtendedFields() { return array("udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
 
   function PrintAvatar()
   {
