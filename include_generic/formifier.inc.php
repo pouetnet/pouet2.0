@@ -49,7 +49,7 @@ class Formifier {
             echo "      <option".($year==$x?" selected='selected'":"").">".$x."</option>\n";
           echo "    </select>\n";
 ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   var i = new Element("a",{href:"#"}).update("this month");
   i.observe("click",function(ev){
@@ -118,11 +118,6 @@ document.observe("dom:loaded",function(){
           }
           echo "    </div>\n";
           break;
-        case "captcha":
-          echo "    <div>\n";
-          echo recaptcha_get_html( CAPTCHA_PUBLICKEY, null, true );
-          echo "    </div>\n";
-          break;
         case "number":
           echo "    <input type='number'";
           if (isset($v["min"]))
@@ -160,7 +155,7 @@ document.observe("dom:loaded",function(){
     if ($confirmFields)
     {
 ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   var frm = $("<?=$confirmFields[0]?>").up("form");
   frm.observe("submit",function(ev){

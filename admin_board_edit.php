@@ -160,7 +160,7 @@ class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_boardeditaffil"), "groupBoardAffil", {
@@ -223,7 +223,7 @@ class PouetBoxAdminDeleteBoard extends PouetBox
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
     ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   $("pouetbox_boarddelete").up("form").observe("submit",function(e){
     if ($F("check") != "<?=_js($this->checkString)?>")

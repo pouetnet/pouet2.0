@@ -1,6 +1,5 @@
 <?
 require_once("bootstrap.inc.php");
-require_once("include_generic/recaptchalib.php");
 require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 
@@ -436,7 +435,7 @@ else
   echo "</div>\n";
 
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   if (!$("avatarlist"))

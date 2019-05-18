@@ -65,7 +65,7 @@ class PouetBoxOnelinerView extends PouetBox {
 
     $this->paginator->RenderNavbar();
     ?>
-    <script type="text/javascript">
+    <script>
     document.observe("dom:loaded",function(){ Youtubify($("pouetbox_onelinerview")); });
     </script>
     <?

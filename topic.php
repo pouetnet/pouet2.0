@@ -163,7 +163,7 @@ if ($view->topic)
   100% { transform:scale(1); }
 }
 </style>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   var t = $$("textarea").first();
@@ -196,7 +196,7 @@ document.observe("dom:loaded",function(){
     {
       echo $post->Render();
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $$(".tools").each(function(item){

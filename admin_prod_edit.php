@@ -202,7 +202,7 @@ class PouetBoxAdminDeleteProd extends PouetBox
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
     ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   $("pouetbox_proddelete").up("form").observe("submit",function(e){
     if ($F("check") != "<?=_js($this->checkString)?>")
@@ -298,7 +298,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodsceneorg"), "prodSceneorg",{
@@ -382,7 +382,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodlinks"), "prodLink" );
@@ -503,7 +503,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodparties"), "prodParty", {
@@ -591,7 +591,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodcredits"), "prodCredit", {
@@ -707,7 +707,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
   {
     parent::RenderBody();
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodaffil"), "prodAffil", {
@@ -791,7 +791,7 @@ if ($box->prod)
   {
     $form->Display();
   ?>
-  <script type="text/javascript">
+  <script>
   document.observe("dom:loaded",function(){
     if (!$("row_csdbID")) return;
     PrepareSubmitForm();

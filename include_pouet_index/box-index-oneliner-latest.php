@@ -105,7 +105,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     }
     echo "</ul>\n";
     ?>
-    <script type="text/javascript">
+    <script>
     document.observe("dom:loaded",function(){ Youtubify($("pouetbox_latestoneliner")); });
     </script>
     <?
@@ -153,7 +153,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
       echo "   </form>\n";
       echo "  </div>\n";
 ?>
-<script type="text/javascript">
+<script>
 var onelinerClicked = false;
 $("onelinermsg").observe("focus",function(){
   if (!onelinerClicked)

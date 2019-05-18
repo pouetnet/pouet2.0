@@ -62,7 +62,7 @@ if ($currentUser)
       echo " <p>...or, again, you can go to your <a href='account.php'>profile</a> to pick from some more.</p>";
       echo " </div>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $$("#welcome-avatarlist li a").invoke("observe","click",function(ev){

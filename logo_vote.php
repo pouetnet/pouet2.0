@@ -137,7 +137,7 @@ if (get_login_id())
   }
 
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 function InstrumentForm(form)
 {

@@ -56,14 +56,14 @@ class PouetProd extends BM_Class {
   function RenderTypeNames() {
     $s = "<ul>";
     foreach($this->types as $t)
-      $s .= "<li><a href='prodlist.php?type[]=".rawurlencode($t)."'><span class='type type_".str_replace(" ","_",$t)."'>".$t."</span> ".$t."</a></li>\n";
+      $s .= "<li><a href='prodlist.php?type%5B%5D=".rawurlencode($t)."'><span class='type type_".str_replace(" ","_",$t)."'>".$t."</span> ".$t."</a></li>\n";
     $s .= "</ul>";
     return $s;
   }
   function RenderPlatformNames() {
     $s = "<ul>";
     foreach($this->platforms as $t)
-      $s .= "<li><a href='prodlist.php?platform[]=".rawurlencode($t["name"])."'><span class='platform os_".$t["slug"]."'>".$t["name"]."</span> ".$t["name"]."</a></li>\n";
+      $s .= "<li><a href='prodlist.php?platform%5B%5D=".rawurlencode($t["name"])."'><span class='platform os_".$t["slug"]."'>".$t["name"]."</span> ".$t["name"]."</a></li>\n";
     $s .= "</ul>";
     return $s;
   }

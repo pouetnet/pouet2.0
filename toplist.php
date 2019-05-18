@@ -145,7 +145,7 @@ class PouetBoxTopList extends PouetBox {
     }
     echo "</ul>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 function toggleDateFields(range)
 {

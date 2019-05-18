@@ -64,7 +64,7 @@ $box->Render();
 echo "</div>\n";
 
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $("faq_toc").hide();

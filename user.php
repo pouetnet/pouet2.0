@@ -1,6 +1,5 @@
 <?
 require_once("bootstrap.inc.php");
-require_once("include_generic/recaptchalib.php");
 
 class PouetBoxUserMain extends PouetBox
 {
@@ -456,24 +455,6 @@ class PouetBoxUserMain extends PouetBox
     echo $this->AddRow("first name",$this->sceneID["first_name"]);
     echo $this->AddRow("last name",$this->sceneID["last_name"]);
     //echo $this->AddRow("country",$this->sceneID["country"]);
-
-    if ($this->sceneID["email"])
-    {
-      if ($this->sceneID["emailHidden"]=="yes")
-      {
-        echo $this->AddRow("email","<span style='color:#9999AA'>hidden</span>",true);
-      }
-      else
-      {
-        echo $this->AddRow("email",recaptcha_mailhide_html(CAPTCHA_MAILHIDE_PUBLICKEY,CAPTCHA_MAILHIDE_PRIVATEKEY,$this->sceneID["email"]),true);
-      }
-    }
-    if ($this->sceneID["url"]) {
-      $site = _html($this->sceneID["url"]);
-      if (substr($site,0,7)!="http://")
-        $site = "http://".$site;
-      echo $this->AddRow("website","<a href='".$site."'>".$site."</a>",true);
-    }
 
     foreach($this->ims as $im)
     {

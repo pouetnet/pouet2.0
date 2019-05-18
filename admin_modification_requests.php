@@ -125,7 +125,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
     }
     echo "</table>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $$("#pouetbox_adminreq th[colspan]").first().insert( " [" );

@@ -93,7 +93,7 @@ class PouetBoxAdminDeleteParty extends PouetBox
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
     ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   $("pouetbox_partydelete").up("form").observe("submit",function(e){
     if ($F("check") != "<?=_js($this->checkString)?>")

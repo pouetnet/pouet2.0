@@ -273,7 +273,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       echo " <tr>\n";
       echo "  <td>advertising for :</td>\n";
-      echo "  <td><a href='boards.php?which=".(int)$this->board->id."'>"._html($this->board->name)."</td>\n";
+      echo "  <td><a href='boards.php?which=".(int)$this->board->id."'>"._html($this->board->name)."</a></td>\n";
       echo " </tr>\n";
     }
     echo "</table>\n";
@@ -350,7 +350,7 @@ class PouetBoxProdMain extends PouetBox {
       }
       echo "</form>";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $("watchlistFrm").observe("submit",function(e){
@@ -442,7 +442,7 @@ document.observe("dom:loaded",function(){
     echo "<table id='pouetbox_prodmain'>\n";
     echo "<tr id='prodheader'>\n";
     echo "<th colspan='3'>\n";
-    echo " <span id='title'><big>"._html($this->prod->name)."</big>";
+    echo " <span id='title'><span id='prod-title'>"._html($this->prod->name)."</span>";
     if ($this->prod->groups)
       echo " by ".$this->prod->RenderGroupsLong();
     echo "</span>\n";
@@ -848,7 +848,7 @@ if ($main->prod)
   $p = new PouetBoxProdPost($prodid);
   $p->Render();
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   if (Pouet.isMobile)

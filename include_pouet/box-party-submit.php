@@ -93,7 +93,7 @@ class PouetBoxSubmitParty extends PouetBox
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
     echo "</div>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $("name").observe("blur",function(ev){

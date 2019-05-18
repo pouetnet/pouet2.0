@@ -359,7 +359,7 @@ class PouetBoxListsAdd extends PouetBox
   {
     $this->formifier->RenderForm( $this->fields );
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   new Autocompleter($("prodID"), {"dataUrl":"./ajax_prods.php",
@@ -439,7 +439,7 @@ class PouetBoxListsAddMaintainer extends PouetBox
   {
     $this->formifier->RenderForm( $this->fields );
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   new Autocompleter($("maintainerID"),  {"dataUrl":"./ajax_users.php",
@@ -504,7 +504,7 @@ class PouetBoxListsDelete extends PouetBox
     echo "  <input type='submit' value='Submit' />";
     echo "</div>";
     ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   $("pouetbox_listsdelete").up("form").observe("submit",function(e){
     if ($F("check") != "<?=_js($this->checkString)?>")

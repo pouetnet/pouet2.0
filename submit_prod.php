@@ -30,7 +30,7 @@ if (get_login_id())
   $form->Display();
 
 ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   if (!$("row_csdbID")) return;
   PrepareSubmitForm();

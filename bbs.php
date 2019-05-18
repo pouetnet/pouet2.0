@@ -137,7 +137,7 @@ class PouetBoxBBSTopicList extends PouetBox
     echo "</tr>\n";
     echo "</table>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 var threadCategories = $A([<?
 foreach($this->categories as $v) echo "'"._js($v)."',";

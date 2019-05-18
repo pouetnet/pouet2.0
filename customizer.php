@@ -247,7 +247,7 @@ class PouetBoxCustomizer extends PouetBox {
     }
     echo " </div>\n";
 ?>
-<script type="text/javascript">
+<script>
 <!--
 function isMouseOverElement( el, x, y )
 {
@@ -568,7 +568,7 @@ class PouetBoxCustomizerPanic extends PouetBox
     echo "  <p>Click this button to reset your front page to 'factory default', in case something breaks !</p>";
     echo "  <input type='submit' value='reset front page settings !'/>";
     ?>
-<script type="text/javascript">
+<script>
 document.observe("dom:loaded",function(){
   $("pouetbox_customizerpanic").up("form").observe("submit",function(e){
     if (!confirm("are you sure you want to reset ?"))

@@ -43,7 +43,7 @@ foreach($boxes as $bar=>$boxlist)
 echo "</div>\n";
 
 ?>
-<script type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   if (Pouet.isMobile)

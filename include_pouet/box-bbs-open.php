@@ -85,7 +85,7 @@ class PouetBoxBBSOpen extends PouetBox {
     echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
     echo "</div>\n";
     echo "<div class='foot'>\n";
-    echo " <script language='JavaScript' type='text/javascript'>\n";
+    echo " <script>\n";
     echo " <!--\n";
     echo "   document.observe('dom:loaded',function(){ AddPreviewButton($('submit')); });\n";
     echo " //-->\n";

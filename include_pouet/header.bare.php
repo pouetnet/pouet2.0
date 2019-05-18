@@ -5,7 +5,7 @@ $RSS["export/lastprodsadded.rss.php"] = "last prods added";
 $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <title><?=_html($TITLE?$TITLE." :: pouët.net":"pouët.net :: your online demoscene resource")?></title>
 
@@ -29,18 +29,18 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   }
 ?>  
 
-  <script type="text/javascript">
+  <script>
   <!--
     var pixelWidth = screen.width;
     var Pouet = {};
     Pouet.isMobile = <?=POUET_MOBILE?"true":"false"?>;
   //-->
   </script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
-  <script type="text/javascript" src="./jsonp.js"></script>
-  <script type="text/javascript" src="./cookie.js"></script>
-  <script type="text/javascript" src="./autocompleter.js"></script>
-  <script type="text/javascript" src="./script.js?<?=filemtime("script.js")?>"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
+  <script src="./jsonp.js"></script>
+  <script src="./cookie.js"></script>
+  <script src="./autocompleter.js"></script>
+  <script src="./script.js?<?=filemtime("script.js")?>"></script>
 
   <!--[if lt IE 9]><script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->

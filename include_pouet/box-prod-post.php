@@ -138,7 +138,7 @@ class PouetBoxProdPost extends PouetBox {
       echo "</div>\n";
       echo "</form>\n";
 ?>
-<script language="JavaScript" type="text/javascript">
+<script>
 <!--
 document.observe("dom:loaded",function(){
   $$(".tools").each(function(item){
