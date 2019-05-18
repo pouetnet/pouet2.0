@@ -104,8 +104,8 @@ function bbencode( $text )
   $text = preg_replace("/\[i\](.*?)\[\/i\]/si","<i>$1</i>",$text);
   $text = preg_replace("/\[u\](.*?)\[\/u\]/si","<u>$1</u>",$text);
   $text = preg_replace("/\[s\](.*?)\[\/s\]/si","<s>$1</s>",$text);
-  $text = bbencode_parse_tag($text,"quote","<section class=\"bbs_quote\"><b>Quote:</b><blockquote>","</blockquote></section>");
-  $text = bbencode_parse_tag($text,"code","<section class=\"bbs_code\"><b>Code:</b><code>","</code></section>");
+  $text = bbencode_parse_tag($text,"quote","<div class=\"bbs_quote\"><b>Quote:</b><blockquote>","</blockquote></div>");
+  $text = bbencode_parse_tag($text,"code","<div class=\"bbs_code\"><b>Code:</b><code>","</code></div>");
   $text = preg_replace("/\[list\](.*?)\[\/list\]/si","<ul>$1</ul>",$text);
   $text = preg_replace("/\[list=(.*?)\](.*?)\[\/list\]/si","<ol type='$1'>$2</ol>",$text);
   $text = preg_replace("/\[\*\](.*)[\r\n]/","<li>$1</li>",$text);
