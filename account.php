@@ -108,18 +108,22 @@ class PouetBoxAccount extends PouetBox
       "slengpung"=>array(
         "info"=>"your slengpung id, if you have one",
         "value"=>$this->user->slengpung,
+        "type"=>"number",
       ),
       "csdb"=>array(
         "info"=>"your csdb id, if you have one",
         "value"=>$this->user->csdb,
+        "type"=>"number",
       ),
       "zxdemo"=>array(
         "info"=>"your zxdemo id, if you have one",
         "value"=>$this->user->zxdemo,
+        "type"=>"number",
       ),
       "demozoo"=>array(
         "info"=>"your demozoo id, if you have one",
         "value"=>$this->user->demozoo,
+        "type"=>"number",
       ),
     );
 

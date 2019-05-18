@@ -83,6 +83,7 @@ class PouetBoxSubmitGroup extends PouetBox
       ),
       "csdbID"=>array(
         "name"=>"csdb ID",
+        "type"=>"number",
       ),
 /*
       "zxdemoID"=>array(
@@ -91,6 +92,7 @@ class PouetBoxSubmitGroup extends PouetBox
 */
       "demozooID"=>array(
         "name"=>"demozoo ID",
+        "type"=>"number",
       ),
     );
     foreach($_POST as $k=>$v)

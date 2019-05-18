@@ -261,6 +261,7 @@ class PouetBoxSubmitProd extends PouetBox
       ),
       "csdbID"=>array(
         "name"=>"csdb ID",
+        "type"=>"number",
       ),
       /*
       "sceneOrgID"=>array(
@@ -269,6 +270,7 @@ class PouetBoxSubmitProd extends PouetBox
       */
       "demozooID"=>array(
         "name"=>"demozoo ID",
+        "type"=>"number",
       ),
       "partyID"=>array(
         "name"=>"party",

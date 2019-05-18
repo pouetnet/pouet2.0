@@ -43,7 +43,7 @@ try
 
     $user = new PouetUser();
     $user->id = (int)$SceneIDuser["user"]["id"];
-    $user->nickname = $SceneIDuser["user"]["display_name"];
+    $user->nickname = substr($SceneIDuser["user"]["display_name"],0,16);
     $user->avatar = $a;
 
     $user->Create();

@@ -61,6 +61,7 @@ class PouetBoxSubmitPartyEdition extends PouetBox
       ),
       "csdbID"=>array(
         "name"=>"csdb id",
+        "type"=>"number",
       ),
 /*
       "zxdemoID"=>array(
@@ -69,9 +70,11 @@ class PouetBoxSubmitPartyEdition extends PouetBox
 */
       "demozooID"=>array(
         "name"=>"demozoo id",
+        "type"=>"number",
       ),
       "slengpungID"=>array(
         "name"=>"slengpung id",
+        "type"=>"number",
       ),
       "artcity"=>array(
         "name"=>"artcity tags",
