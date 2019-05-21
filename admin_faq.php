@@ -57,7 +57,7 @@ class PouetBoxAdminEditFAQ extends PouetBox
     $a["category"] = $data["category"];
     $a["question"] = $data["question"];
     $a["answer"] = $data["answer"];
-    $a["deprecated"] = $data["deprecated"] == "on";
+    $a["deprecated"] = (int)($data["deprecated"] == "on");
     if ($data["faqID"])
     {
       //gloperator_log( "faq", $data["faqID"], "faq_edit" );
