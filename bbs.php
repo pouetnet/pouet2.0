@@ -73,7 +73,7 @@ class PouetBoxBBSTopicList extends PouetBox
       "lastpost"=>"last post",
       "userlastpost"=>"by",
     );
-    echo "<tr><th colspan='".count($headers)."'><h2>the oldskool pouët.net bbs</h2></th></tr>\n";
+    echo "<caption>the oldskool pouët.net bbs</caption>\n";
     echo "<tr class='sortable'>\n";
     foreach($headers as $key=>$text)
     {
