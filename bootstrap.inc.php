@@ -17,6 +17,7 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/csrf.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/rewriter.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/ephemeral_storage.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/sideload.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_generic/logging.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes.inc.php");
@@ -83,11 +84,7 @@ if (get_login_id())
 if (defined("POUET_EXCEPTION_LOG"))
 {
   set_exception_handler( function($ex){
-    if ($f = fopen( POUET_EXCEPTION_LOG, "a" ))
-    {
-      fwrite( $f, str_pad("\n",60,"=") . "\n" . $ex );
-      fclose($f);
-    }
+    LOG::Error($ex);
   } );
 }
 

@@ -12,6 +12,12 @@ class PouetBoxIndexLogin extends PouetBoxLogin
     }
     
     global $currentUser;
+    if (!$currentUser)
+    {
+      LOG::Warning("Login ID is ".get_login_id()." but currentUser is null!");
+      parent::RenderBody();
+      return;
+    }
     echo "<div class='content loggedin'>\n";
     echo "you are logged in as<br/>\n";
     echo $currentUser->PrintLinkedAvatar()." ";
