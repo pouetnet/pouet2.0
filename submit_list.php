@@ -56,6 +56,8 @@ class PouetBoxSubmitList extends PouetBox
     $a["addedDate"] = date("Y-m-d H:i:s");
     $this->listID = SQLLib::InsertRow("lists",$a);
 
+    @unlink("cache/pouetbox_latestlists.cache");
+    
     return array();
   }
   function GetInsertionID()
