@@ -441,7 +441,9 @@ class PouetBoxUserMain extends PouetBox
     return $data;
   }
 
-  function RenderBody() {
+  function RenderBody() 
+  {
+    global $currentUser;
     $s = "";
     echo "<div class='content'>\n";
     echo "<div class='bigavatar'><img src='".POUET_CONTENT_URL."avatars/"._html($this->user->avatar)."' alt='big avatar'/></div>\n";
@@ -456,9 +458,12 @@ class PouetBoxUserMain extends PouetBox
     echo $this->AddRow("last name",$this->sceneID["last_name"]);
     //echo $this->AddRow("country",$this->sceneID["country"]);
 
-    foreach($this->ims as $im)
+    if ($currentUser)
     {
-      $this->AddRow( $im->im_type, $im->im_id );
+      foreach($this->ims as $im)
+      {
+        $this->AddRow( $im->im_type, $im->im_id );
+      }
     }
 
     if ($this->user->csdb || $this->user->slengpung || $this->user->zxdemo || $this->user->demozoo)
