@@ -4,7 +4,8 @@ require_once("include_pouet/pouet-asciiviewer.php");
 
 class PouetBoxBoardNfo extends PouetBoxASCIIViewer
 {
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_boardnfo";
     $this->title = "board nfo";
@@ -24,6 +25,8 @@ class PouetBoxBoardNfo extends PouetBoxASCIIViewer
     $s->AddWhere(sprintf_esc("othernfos.id=%d",$_GET["which"]));
     $s->GetQuery();
     list($this->nfo) = $s->perform();
+    
+    $this->preferredEncoding = $this->nfo ? $this->nfo->encoding : null;
   }
   function RenderHeader()
   {
