@@ -36,6 +36,7 @@ $AFFILIATIONS_INVERSE = array(
   "port" => "ported from",
   "final" => "party version",
   "pack" => "includes",
+  "related" => "includes",
   "sequel" => "sequel to",
 );
 
