@@ -130,7 +130,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
 document.observe("dom:loaded",function(){
   $$("#pouetbox_adminreq th[colspan]").first().insert( " [" );
   $$("#pouetbox_adminreq th[colspan]").first().insert( new Element("a",{"href":"#"}).update("resolve youtube links").observe("click",function(){
-    Youtubify( $("pouetbox_adminreq").down('tbody') );
+    Youtubify( $("pouetbox_adminreq").down('tbody'), true );
   }) );
   $$("#pouetbox_adminreq th[colspan]").first().insert( "]" );
   

@@ -377,9 +377,9 @@ document.observe("dom:loaded",function(){
   }
 });
 
-function Youtubify( e )
+function Youtubify( parentElement, detailed )
 {
-  e.select("a[rel='external']").each(function(item){
+  parentElement.select("a[rel='external']").each(function(item){
     var ytAPIKey = "AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s";
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
@@ -389,8 +389,12 @@ function Youtubify( e )
         onSuccess: function(transport) {
           if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
           {
-            var s = transport.responseJSON.items[0].snippet.title;
-            item.update( s.escapeHTML() );
+            var s = transport.responseJSON.items[0].snippet.title.escapeHTML();
+            if (detailed)
+            {
+              s += " <small>("+transport.responseJSON.items[0].snippet.channelTitle.escapeHTML()+")</small>";
+            }
+            item.update( s );
             item.addClassName("youtube");
           }
         },
