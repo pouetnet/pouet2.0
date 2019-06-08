@@ -113,7 +113,9 @@ class PouetUser extends BM_Class {
     }
     catch(SceneID3Exception $e)
     {
-      return die($e->getMessage());
+      // If there's a failure, just return cached data
+      echo "<!--".$e->getMessage()."-->";
+      return unserialize( $this->sceneIDData );
     }
   }
 
