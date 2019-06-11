@@ -946,9 +946,18 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= $group ? $group->RenderLong() : "<i>none</i>";
           $s .= "<br/>";
           break;
-        case "invitationParty":
         case "partyID":
-          $party = PouetParty::Spawn( $prod->party );
+          $party = PouetParty::Spawn( $prod->party->id );
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $party ? $party->PrintLinked() : "<i>none</i>";
+          $s .= "<br/>";
+          $party = PouetParty::Spawn( $v );
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $party ? $party->PrintLinked() : "<i>none</i>";
+          $s .= "<br/>";
+          break;
+        case "invitationParty":
+          $party = PouetParty::Spawn( $prod->invitation );
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= $party ? $party->PrintLinked() : "<i>none</i>";
           $s .= "<br/>";
