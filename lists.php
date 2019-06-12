@@ -93,6 +93,11 @@ class PouetBoxListsMain extends PouetBox
     $s->Attach(array("lists"=>"owner"),array("users as owner"=>"id"));
     $s->AddWhere(sprintf_esc("lists.id=%d",$this->id));
     list($this->list) = $s->perform();
+    
+    if (!$this->list)
+    {
+      return;
+    }
 
     $s = new BM_query("list_items");
     $s->Attach(array("list_items"=>"itemid"),array("prods as prod"=>"id"));
@@ -558,7 +563,7 @@ else
   }
   else
   {
-    $p = null;
+    $form = null;
   }
 }
 
