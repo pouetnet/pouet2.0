@@ -36,7 +36,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
     Pouet.isMobile = <?=POUET_MOBILE?"true":"false"?>;
   //-->
   </script>
-  <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
+  <script src="./prototype.js"></script>
   <script src="./jsonp.js"></script>
   <script src="./cookie.js"></script>
   <script src="./autocompleter.js"></script>
