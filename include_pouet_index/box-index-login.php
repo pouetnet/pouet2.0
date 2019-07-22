@@ -1,5 +1,5 @@
 <?
-require_once("include_pouet/box-login.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/box-login.php");
 
 class PouetBoxIndexLogin extends PouetBoxLogin
 {

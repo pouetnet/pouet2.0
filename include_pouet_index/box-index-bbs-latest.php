@@ -1,5 +1,4 @@
 <?
-
 class PouetBoxIndexLatestBBS extends PouetBoxCachable {
   var $data;
   function __construct() {

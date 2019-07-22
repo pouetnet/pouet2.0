@@ -1,9 +1,4 @@
 <?
-require_once("include_generic/sqllib.inc.php");
-require_once("include_pouet/pouet-box.php");
-require_once("include_pouet/pouet-prod.php");
-require_once("include_pouet/pouet-user.php");
-
 class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   var $data;
   function __construct() {

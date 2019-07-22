@@ -1,8 +1,4 @@
 <?
-require_once("include_generic/sqllib.inc.php");
-require_once("include_pouet/pouet-box.php");
-require_once("include_pouet/pouet-prod.php");
-
 class PouetBoxIndexRandom extends PouetBox {
   var $data;
   var $prod;

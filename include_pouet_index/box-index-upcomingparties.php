@@ -1,8 +1,4 @@
 <?
-require_once("include_generic/sqllib.inc.php");
-require_once("include_pouet/pouet-box.php");
-require_once("include_pouet/pouet-prod.php");
-
 class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
   function __construct() {
     parent::__construct();
