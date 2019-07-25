@@ -28,51 +28,7 @@ function cron_CheckLinks( $id = null )
   $out = array();
   foreach($prods as $prod)
   {
-    $sideload = new Sideload();
-    $urls = array();
-    $url = verysofturlencode($prod->download);
-    for ($x=0; $x<10; $x++)
-    {
-      $sideload->options["max_length"] = 1024; // abort download after 1k
-      $sideload->options["verify_peer"] = false;
-      $sideload->options["user_agent"] = "Pouet-BrokenLinkCheck/2.0";
-      $sideload->options["method"] = "GET";
-      $urls[] = $url;
-      $sideload->Request($url);
-      
-      $lastUrl = $sideload->httpURL;
-      if ($lastUrl == $url)
-        break;
-      $url = $lastUrl;
-    }
-
-    // temporary hack for csdb, they tend to occasionally return 503 for
-    // links that would normally work just fine
-    if ($sideload->httpReturnCode == 503 && strstr($lastUrl,"csdb")!==false)
-    {
-      continue;
-    }
-    
-    $a = array();
-    $a["prodID"] = $prod->id;
-    $a["protocol"] = "http";
-    if (strpos($lastUrl,"ftp://")===0)
-      $a["protocol"] = "ftp";
-    $a["testDate"] = date("Y-m-d H:i:s");
-    $a["returnCode"] = $sideload->httpReturnCode;
-    $a["returnContentType"] = $sideload->httpReturnContentType;
-
-    SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
-    
-    if ($id)
-    {
-      $out[] = json_encode($a);
-      $out[] = "\n[".$prod->id."] " . json_encode($urls) . " >> ". $a["returnCode"];
-    }
-    else
-    {
-      $out[] = $prod->id . " -> " . $a["returnCode"];
-    }
+    $out[] = pouetAdmin_recheckLinkProd($prod);
     sleep(5);
   }
   return implode(", ",$out);
@@ -89,6 +45,10 @@ switch($argv[1])
   case "linkCheck":
     $content = cron_CheckLinks( $argv[2] );
     echo " > linkCheck: ".$content."\n";
+    break;
+  case "createDataDump":
+    $content = pouetAdmin_createDataDump();
+    echo " > dataDump: ".$content."\n";
     break;
 }
 

@@ -92,4 +92,114 @@ function pouetAdmin_recacheTopDemos()
   return $content;
 }
 
+function pouetAdmin_recheckLinkProd($prod)
+{
+  $sideload = new Sideload();
+  $urls = array();
+  $url = verysofturlencode($prod->download);
+  for ($x=0; $x<10; $x++)
+  {
+    $sideload->options["max_length"] = 1024; // abort download after 1k
+    $sideload->options["verify_peer"] = false;
+    $sideload->options["user_agent"] = "Pouet-BrokenLinkCheck/2.0";
+    $sideload->options["method"] = "GET";
+    $urls[] = $url;
+    $sideload->Request($url);
+    
+    $lastUrl = $sideload->httpURL;
+    if ($lastUrl == $url)
+      break;
+    $url = $lastUrl;
+  }
+
+  // temporary hack for csdb, they tend to occasionally return 503 for
+  // links that would normally work just fine
+  if ($sideload->httpReturnCode == 503 && strstr($lastUrl,"csdb")!==false)
+  {
+    return "";
+  }
+  
+  $a = array();
+  $a["prodID"] = $prod->id;
+  $a["protocol"] = "http";
+  if (strpos($lastUrl,"ftp://")===0)
+    $a["protocol"] = "ftp";
+  $a["testDate"] = date("Y-m-d H:i:s");
+  $a["returnCode"] = $sideload->httpReturnCode;
+  $a["returnContentType"] = $sideload->httpReturnContentType;
+
+  SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
+  
+  if ($id)
+  {
+    $out .= json_encode($a);
+    $out .= "\n[".$prod->id."] " . json_encode($urls) . " >> ". $a["returnCode"];
+  }
+  else
+  {
+    $out = $prod->id . " -> " . $a["returnCode"];
+  }
+  return $out;
+}
+function pouetAdmin_recheckLink($id)
+{
+  $prod = PouetProd::Spawn($id);
+  return pouetAdmin_recheckLinkProd($prod);
+}
+function pouetAdmin_createDataDump()
+{
+  if (!defined("POUET_DATADUMP_PATH")) return;
+  
+  $dateStamp = date("Y-m-d H:i:s");
+
+  $rows = SQLLib::SelectRows("select id from prods order by id");
+  $filename = "pouetdatadump-prods-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","prods":[');
+  $first = true;
+  foreach($rows as $row)
+  {
+    if (!$first) gzwrite($gz, ",");
+    $first = false;
+    $item = PouetProd::Spawn($row->id);
+    gzwrite($gz, json_encode($item->ToAPI()) );
+  }
+  gzwrite($gz, ']}');
+  gzclose($gz);
+  $out[] = sprintf("dumped %d prods into %s",count($rows),$filename);
+  
+  $rows = SQLLib::SelectRows("select id from groups order by id");
+  $filename = "pouetdatadump-groups-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","groups":[');
+  $first = true;
+  foreach($rows as $row)
+  {
+    if (!$first) gzwrite($gz, ",");
+    $first = false;
+    $item = PouetGroup::Spawn($row->id);
+    gzwrite($gz, json_encode($item->ToAPI()) );
+  }
+  gzwrite($gz, ']}');
+  gzclose($gz);
+  $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
+
+  $rows = SQLLib::SelectRows("select id from parties order by id");
+  $filename = "pouetdatadump-parties-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","parties":[');
+  $first = true;
+  foreach($rows as $row)
+  {
+    if (!$first) gzwrite($gz, ",");
+    $first = false;
+    $item = PouetParty::Spawn($row->id);
+    gzwrite($gz, json_encode($item->ToAPI()) );
+  }
+  gzwrite($gz, ']}');
+  gzclose($gz);
+  $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
+  
+  return implode("\n",$out);
+}
 ?>
