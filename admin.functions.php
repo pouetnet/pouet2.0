@@ -154,7 +154,7 @@ function pouetAdmin_createDataDump()
 
   $rows = SQLLib::SelectRows("select id from prods order by id");
   $filename = "pouetdatadump-prods-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
-  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","prods":[');
   $first = true;
   foreach($rows as $row)
@@ -180,11 +180,12 @@ function pouetAdmin_createDataDump()
   }
   gzwrite($gz, ']}');
   gzclose($gz);
+  rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d prods into %s",count($rows),$filename);
   
   $rows = SQLLib::SelectRows("select id from groups order by id");
   $filename = "pouetdatadump-groups-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
-  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","groups":[');
   $first = true;
   foreach($rows as $row)
@@ -196,11 +197,12 @@ function pouetAdmin_createDataDump()
   }
   gzwrite($gz, ']}');
   gzclose($gz);
+  rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
 
   $rows = SQLLib::SelectRows("select id from parties order by id");
   $filename = "pouetdatadump-parties-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
-  $gz = gzopen(POUET_DATADUMP_PATH . $filename,'w9');
+  $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","parties":[');
   $first = true;
   foreach($rows as $row)
@@ -212,6 +214,7 @@ function pouetAdmin_createDataDump()
   }
   gzwrite($gz, ']}');
   gzclose($gz);
+  rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
   
   return implode("\n",$out);
