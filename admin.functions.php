@@ -162,6 +162,20 @@ function pouetAdmin_createDataDump()
     if (!$first) gzwrite($gz, ",");
     $first = false;
     $item = PouetProd::Spawn($row->id);
+    $a = array(&$item);
+    
+    PouetCollectPlatforms( $a );
+    PouetCollectAwards( $a );
+  
+    $item->downloadLinks = SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$item->id));
+    
+    $s = new BM_Query("credits");
+    $s->AddField("credits.role");
+    $s->AddWhere(sprintf("credits.prodID = %d",$prod->id));
+    $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
+    $s->AddOrder("credits.role");
+    $item->credits = $s->perform();
+    
     gzwrite($gz, json_encode($item->ToAPI()) );
   }
   gzwrite($gz, ']}');
