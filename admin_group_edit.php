@@ -251,16 +251,17 @@ $form = new PouetFormProcessor();
 $form->SetSuccessURL( "groups.php?which=".(int)$_GET["which"], true );
 
 $box = new PouetBoxAdminEditGroup( $_GET["which"] );
-$form->Add( "group", $box );
+if ($box->group)
+{
+  $form->Add( "group", $box );
+  $form->Add( "groupaffil", new PouetBoxAdminEditGroupAffil( $box->group ) );
+  $form->Add( "groupdelete", new PouetBoxAdminDeleteGroup( $box->group ) );
+  
+  if ($currentUser && $currentUser->CanEditItems())
+    $form->Process();
 
-$form->Add( "groupaffil", new PouetBoxAdminEditGroupAffil( $box->group ) );
-
-$form->Add( "groupdelete", new PouetBoxAdminDeleteGroup( $box->group ) );
-
-if ($currentUser && $currentUser->CanEditItems())
-  $form->Process();
-
-$TITLE = "edit a group: ".$box->group->name;
+  $TITLE = "edit a group: ".$box->group->name;
+}
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
