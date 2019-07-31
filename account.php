@@ -304,8 +304,8 @@ class PouetBoxAccount extends PouetBox
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "  <h2>".$this->title."</h2>\n";
     echo "  <div class='accountsection content'>\n";
-    echo "    <p><b>reminder:</b> pou&euml;t handles none of your personal information;";
-    echo "    if you want to change your password, you can do it <a href='https://id.scene.org/profile/'>here</a>.</p>\n";
+    echo "    <p><b>reminder:</b> pou&euml;t handles none of your personal information</p>";
+    echo "    <p> if you want to change your name or password, you can do it <a href='https://id.scene.org/profile/'>here</a> (changes might take a while to migrate)</p>\n";
     echo "  </div>\n";
     
     echo "  <h2>pou&euml;t things</h2>\n";
