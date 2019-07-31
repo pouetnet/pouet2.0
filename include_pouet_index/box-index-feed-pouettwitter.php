@@ -62,24 +62,32 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
     
     $auth = "Basic " . base64_encode( TWITTER_CONSUMER_KEY . ":" . TWITTER_CONSUMER_SECRET );
     
-    $authTokens = json_decode( $this->Sideload( "https://api.twitter.com/oauth2/token", array("grant_type"=>"client_credentials"), array("Authorization: ".$auth), "POST" ) );
+    $response = $this->Sideload( "https://api.twitter.com/oauth2/token", array("grant_type"=>"client_credentials"), array("Authorization: ".$auth), "POST" );
+    $authTokens = json_decode( $response );
     if (!$authTokens || !$authTokens->access_token)
+    {
+      LOG::Warning("Twitter login failed: ".$response);
       return;
+    }
     $auth2 = "Bearer ".$authTokens->access_token;
     
     // doc @ https://dev.twitter.com/rest/reference/get/statuses/user_timeline
   
     $statuses = array();
     
-    $data = json_decode( $this->Sideload( "https://api.twitter.com/1.1/statuses/user_timeline.json", array("screen_name"=>"pouetdotnet","count"=>10), array("Authorization: ".$auth2) ) );
+    $response = $this->Sideload( "https://api.twitter.com/1.1/statuses/user_timeline.json", array("screen_name"=>"pouetdotnet","count"=>10), array("Authorization: ".$auth2) );
+    $data = json_decode( $response );
     if (!$data || !is_array($data))
+    {
+      LOG::Warning("Twitter query failed: ".$response);
       return;
+    }
     
     $this->jsonData = $data;
   }
 
   function RenderBody() {
-    if ($this->jsonData)
+    if (!$this->jsonData)
       return;
     echo "<ul class='boxlist boxlisttable'>\n";
     for($i=0; $i < min( count($this->jsonData),$this->limit); $i++)
