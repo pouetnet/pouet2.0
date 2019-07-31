@@ -104,7 +104,9 @@ class PouetBoxAccount extends PouetBox
         "value"=>$this->user->avatar,
         "type"=>"avatar",
         "infoAfter"=>"(<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span> <span id='avatarPicker'></span>",
-      ),
+      )
+    );
+    $this->fieldsOtherSites = array(
       "slengpung"=>array(
         "info"=>"your slengpung id, if you have one",
         "value"=>$this->user->slengpung,
@@ -181,6 +183,8 @@ class PouetBoxAccount extends PouetBox
       $n++;
     }
 
+    $this->sceneID = $this->user->GetSceneIDData(false);
+
     global $namesNumeric;
     global $namesSwitch;
 
@@ -189,6 +193,7 @@ class PouetBoxAccount extends PouetBox
       foreach($_POST as $k=>$v)
       {
         if ($this->fieldsPouet[$k]) $this->fieldsPouet[$k]["value"] = $v;
+        if ($this->fieldsOtherSites[$k]) $this->fieldsOtherSites[$k]["value"] = $v;
         if ($this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
       }
     }
@@ -248,6 +253,10 @@ class PouetBoxAccount extends PouetBox
       //if (trim($data[$k]))
       $sql[$k] = trim($data[$k]);
     }
+    foreach ($this->fieldsOtherSites as $k=>$v)
+    {
+      $sql[$k] = trim($data[$k]);
+    }
 
     if (!$sql["avatar"] || !file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))
       $sql["avatar"] = basename( $avatars[ array_rand($avatars) ] );
@@ -300,30 +309,56 @@ class PouetBoxAccount extends PouetBox
 
   function Render()
   {
+    global $currentUser;
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "  <h2>".$this->title."</h2>\n";
+    
+    // sceneid
     echo "  <div class='accountsection content'>\n";
-    echo "    <p><b>reminder:</b> pou&euml;t handles none of your personal information</p>";
-    echo "    <p> if you want to change your name or password, you can do it <a href='https://id.scene.org/profile/'>here</a> (changes might take a while to migrate)</p>\n";
+    echo "    <div class='formifier'>\n";
+    echo "      <div class=\"row\">\n";
+    echo "        <label>your current profile:</label>\n";
+    echo "        <p>".$currentUser->PrintLinkedAvatar()." ".$currentUser->PrintLinkedName()."</p>\n";
+    echo "      </div>\n";
+    echo "      <div class=\"row\">\n";
+    echo "        <label>first name:</label>\n";
+    echo "        <p><b>"._html($this->sceneID["first_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
+    echo "      </div>\n";
+    echo "      <div class=\"row\">\n";
+    echo "        <label>last name:</label>\n";
+    echo "        <p><b>"._html($this->sceneID["last_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
+    echo "      </div>\n";
+    echo "      <div class=\"row\">\n";
+    echo "        <label>password:</label>\n";
+    echo "        <p><a href='https://id.scene.org/profile/'>change</a></p>\n";
+    echo "      </div>\n";
+    echo "    </div>\n";
     echo "  </div>\n";
     
     echo "  <h2>pou&euml;t things</h2>\n";
     echo "  <div class='accountsection content'>\n";
     $this->formifier->RenderForm( $this->fieldsPouet );
     echo "  </div>\n";
-    if ($this->fieldsCDC)
-    {
-      echo "  <h2>coup de coeurs</h2>\n";
-      echo "  <div class='accountsection content account-cdcs'>\n";
-      $this->formifier->RenderForm( $this->fieldsCDC );
-      echo "  </div>\n";
-    }
+
     if ($this->fieldsIM)
     {
       echo "  <h2>contact details</h2>\n";
       echo "  <div class='accountsection content account-ims'>\n";
       $this->formifier->RenderForm( $this->fieldsIM );
+      echo "  </div>\n";
+    }
+    
+    echo "  <h2>other sites</h2>\n";
+    echo "  <div class='accountsection content'>\n";
+    $this->formifier->RenderForm( $this->fieldsOtherSites );
+    echo "  </div>\n";
+
+    if ($this->fieldsCDC)
+    {
+      echo "  <h2>coup de coeurs</h2>\n";
+      echo "  <div class='accountsection content account-cdcs'>\n";
+      $this->formifier->RenderForm( $this->fieldsCDC );
       echo "  </div>\n";
     }
     echo "  <div class='foot'><input type='submit' value='Submit' /></div>";
