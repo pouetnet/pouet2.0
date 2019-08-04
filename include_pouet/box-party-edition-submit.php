@@ -21,18 +21,25 @@ class PouetBoxSubmitPartyEdition extends PouetBox
     if (!$currentUser->CanSubmitItems())
       return array("not allowed lol !");
 
+    $errors = array();
     if ($data["download"])
     {
       $url = parse_url($data["download"]);
       if (($url["scheme"]!="http" && $url["scheme"]!="ftp" && $url["scheme"]!="https") || strstr($data["download"],"://")===false)
-        return array("please only websites with ftp, http or https links, kthx");
+        $errors[] = "please only websites with ftp, http or https links, kthx";
     }
     if ($data["artcity"])
     {
       if (preg_match("/[^a-zA-Z0-9@\,\s]/",$data["artcity"]))
-        return array("that's not a valid artcity tag-collection!");
+        $errors[] = "that's not a valid artcity tag-collection!";
     }
-    return array();
+    if(is_uploaded_file($_FILES["results"]["tmp_name"]))
+    {
+      if(filesize($_FILES["results"]["tmp_name"]) > 128 * 1024) {
+        $errors[] = "the size of the results file must not be greater than 128Kb";
+      }
+    }
+    return $errors;
   }
   function Commit( $data )
   {
