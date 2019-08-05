@@ -495,6 +495,7 @@ class PouetBoxListsDelete extends PouetBox
   function Commit($data)
   {
     SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE list=%d",$this->list->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM list_maintainers WHERE listID=%d",$this->list->id));
     SQLLib::Query(sprintf_esc("DELETE FROM lists WHERE id=%d",$this->list->id));
     return array();
   }
