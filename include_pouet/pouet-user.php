@@ -6,7 +6,7 @@ class PouetUser extends BM_Class {
 
   function PrintAvatar()
   {
-    return sprintf("<img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" class='avatar'/>",rawurlencode($this->avatar),_html($this->nickname));
+    return sprintf("<img src='".POUET_CONTENT_URL."avatars/%s' alt=\"%s\" loading='lazy' class='avatar'/>",rawurlencode($this->avatar),_html($this->nickname));
   }
   function PrintLinkedAvatar()
   {
