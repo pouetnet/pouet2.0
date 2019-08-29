@@ -16,6 +16,7 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
     $this->rss->setItemTags(array(
       "link",
       "title",
+      "pubDate",
       "wanted:demand",
       "wanted:area",
     ));
@@ -51,7 +52,12 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
     echo "<ul class='boxlist'>\n";
     for($i=0; $i < min( count($this->rssData['items']),$this->limit); $i++)
     {
+      $time = strtotime($this->rssData['items'][$i]['pubDate']);
       echo "<li>\n";
+      if ((time() - $time) < 60 * 60 * 24 * 30)
+      {
+        echo "New! ";
+      }
       echo "<a href='".$this->rssData['items'][$i]['link']."'>".$this->rssData['items'][$i]['title']."</a> ";
       echo "</li>\n";
     }
