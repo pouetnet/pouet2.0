@@ -35,6 +35,7 @@ class PouetBoxAdmin extends PouetBox {
       "recacheFrontPagePartial" => "flush front page cache",
       "recacheFrontPage" => "flush entire front page cache",
       "recacheTopDemos" => "recalculate top demo list",
+      "recacheBBS" => "recalculate latest 20 BBS caches",
     );
     foreach($actions as $k=>$v)
     {

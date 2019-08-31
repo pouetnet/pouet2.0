@@ -1,4 +1,6 @@
 <?
+// recache kelemen
+
 function pouetAdmin_recacheFrontPage()
 {
   $content = "<ul>";
@@ -219,4 +221,30 @@ function pouetAdmin_createDataDump()
   
   return implode("\n",$out);
 }
+function pouetAdmin_recacheBBS()
+{
+  $topics = SQLLib::SelectRows("SELECT id FROM bbs_topics ORDER BY lastpost DESC LIMIT 20");
+
+  $content = "Updated ";
+  foreach($topics as $topic)
+  {
+    $post = SQLLib::SelectRow("SELECT * FROM bbs_posts WHERE topic=".(int)$topic->id." ORDER BY added DESC");
+
+  	$a = array();
+  	$a["userlastpost"] = $post->author;
+  	$a["lastpost"] = $post->added;
+  	
+  	$count = SQLLib::SelectRow("SELECT count(*) AS c FROM bbs_posts WHERE topic=".(int)$topic->id."");
+  	$a["count"] = $count->c - 1;
+  	
+  	$content .= $topic->id.", ";
+
+    SQLLib::UpdateRow("bbs_topics",$a,"id=".$topic->id);
+  }
+  
+  @unlink('cache/pouetbox_latestbbs.cache');
+
+  return $content;
+}
+
 ?>
