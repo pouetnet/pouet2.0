@@ -131,7 +131,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
       //$funnytext = "pou\303\253t 2.0: \303\274nic\303\270de \320\270ow \321\210\305\221rks in the \317\203neli\316\256er";
       //$funnytext = "that moment when you accidentally mistyped demozoo";
       //$funnytext = "I am actually more of a rebel than ever.";
-      $funnytext = "But seriously.";
+      //$funnytext = "But seriously.";
+      $funnytext = "It is just a video coming from the demoscene. We use it for the track.";
 
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";
