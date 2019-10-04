@@ -407,13 +407,15 @@ function calculate_popularity( $views )
 {
   global $MAX_PROD_VIEWS;
   global $MAX_PROD_VIEWS_LOG;
+  
+  $minViews = 100;
   if (!$MAX_PROD_VIEWS)
   {
-    $MAX_PROD_VIEWS = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
+    $MAX_PROD_VIEWS = max( 0, SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m - $minViews );
     $MAX_PROD_VIEWS_LOG = log10($MAX_PROD_VIEWS);
   }
   
-  return log10($views) / $MAX_PROD_VIEWS_LOG * 100.0;
+  return log10(max( 0, $views - $minViews )) / $MAX_PROD_VIEWS_LOG * 100.0;
 }
 
 function progress_bar( $val, $title = "" )
