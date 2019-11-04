@@ -26,7 +26,8 @@ class PouetBoxASCIIViewer extends PouetBox
       ),
       "3" => array(
         "name"=>"rez's ascii",
-        "image"=>true,
+        "class"=>"rez-ascii",
+        "encoding"=>"cp437",
       ),
       "4" => array(
         "name"=>"amiga medres",
@@ -49,17 +50,12 @@ class PouetBoxASCIIViewer extends PouetBox
   {
     echo "<div class='content' title='".$this->bodyTitle."'>\n";
     $font = $this->fonts[$_GET["font"]] ?: $this->fonts[0];
-    if (!$font["image"])
-    {
-      printf("<pre class='%s'>",_html($font["class"]));
-      $text = @file_get_contents( $this->asciiFilename );
-      echo _html( process_ascii( $text, $this->preferredEncoding ?: $font["encoding"] ) );
-      printf("</pre>");
-    }
-    else
-    {
-      printf("<img src='%s&amp;font=%d' alt='nfo'/>\n",$this->imageURL,$_GET["font"]);
-    }
+
+    printf("<pre class='%s'>",_html($font["class"]));
+    $text = @file_get_contents( $this->asciiFilename );
+    echo _html( process_ascii( $text, $this->preferredEncoding ?: $font["encoding"] ) );
+    printf("</pre>");
+
     echo "</div>\n";
   }
   function RenderFooter()

@@ -39,7 +39,6 @@ class PouetBoxBoardNfo extends PouetBoxASCIIViewer
   {
     $this->asciiFilename = get_local_boardnfo_path( $_GET["which"] );;
     $this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
-    $this->imageURL = sprintf("img_ascii.php?boardnfo=%d",$_GET["which"]);
     
     parent::RenderBody();
   }

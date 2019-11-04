@@ -25,7 +25,6 @@ class PouetBoxPartyResults extends PouetBoxASCIIViewer
   function RenderBody()
   {
     $this->asciiFilename = get_local_partyresult_path( $_GET["which"], $_GET["when"] );
-    $this->imageURL = sprintf("img_ascii.php?results=%d&amp;year=%d",$_GET["which"],$_GET["when"]);
     
     parent::RenderBody();
   }
