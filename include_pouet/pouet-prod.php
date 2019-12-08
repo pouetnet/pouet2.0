@@ -212,6 +212,9 @@ class PouetProd extends BM_Class {
     foreach($this->placings as &$p)
       $p->compo_name = $COMPOTYPES[ $p->compo ];
     
+    unset($array["group1"]);
+    unset($array["group2"]);
+    unset($array["group3"]);
     unset($array["views"]);
     unset($array["latestip"]);
     return $array;
