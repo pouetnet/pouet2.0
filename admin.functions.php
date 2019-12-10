@@ -173,7 +173,7 @@ function pouetAdmin_createDataDump()
     
     $s = new BM_Query("credits");
     $s->AddField("credits.role");
-    $s->AddWhere(sprintf("credits.prodID = %d",$prod->id));
+    $s->AddWhere(sprintf("credits.prodID = %d",$item->id));
     $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
     $s->AddOrder("credits.role");
     $item->credits = $s->perform();
