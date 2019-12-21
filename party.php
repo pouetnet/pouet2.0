@@ -255,31 +255,79 @@ class PouetBoxPartyView extends PouetBox
   }
 };
 
+class PouetBoxPartyLists extends PouetBox 
+{
+  var $id;
+  var $topic;
+  var $posts;
+  function __construct($id)
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_partylists";
+    $this->title = "lists containing this party";
+    $this->id = (int)$id;
+  }
+
+  function LoadFromDB() {
+    $s = new BM_Query();
+    $s->AddField("lists.id as id");
+    $s->AddField("lists.name as name");
+    $s->AddTable("list_items");
+    $s->AddJoin("","lists","list_items.list=lists.id");
+    $s->attach(array("lists"=>"owner"),array("users as user"=>"id"));
+    $s->AddWhere("list_items.itemid=".$this->id);
+    $s->AddWhere("list_items.type='party'");
+    $s->AddOrder("lists.name");
+    $this->data = $s->perform();
+  }
+
+  function RenderBody()
+  {
+    echo "<ul class='boxlist boxlisttable'>\n";
+    foreach($this->data as $list)
+    {
+      echo "<li>\n";
+      printf("  <span><a href='lists.php?which=%d'>%s</a></span>\n",$list->id,_html($list->name));
+      echo "  <span>".$list->user->PrintLinkedAvatar()." ".$list->user->PrintLinkedName()."</span>\n";
+      echo "</li>\n";
+    }
+    echo "</ul>\n";
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
-$p = new PouetBoxPartyView();
-$p->Load();
-if (!$p->party)
+$partyBox = new PouetBoxPartyView();
+$partyBox->Load();
+if (!$partyBox->party)
 {
   redirect("parties.php");
 }
-if (!$p->prods && isset($_GET["when"]))
+if (!$partyBox->prods && isset($_GET["when"]))
 {
   redirect("party.php?which=".(int)$p->party->id);
 }
 
-$h = new PouetBoxPartyHeader($p);
-$h->Load();
-$TITLE = $p->party->name." ".$p->year;
-
+$TITLE = $partyBox->party->name." ".$partyBox->year;
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-if($h) $h->Render();
-if($p) $p->Render();
+$headerBox = new PouetBoxPartyHeader($partyBox);
+$headerBox->Load();
+$headerBox->Render();
+
+$partyBox->Render();
+
+$lists = new PouetBoxPartyLists((int)$partyBox->party->id);
+$lists->Load();
+if ($lists->data)
+{
+  $lists->Render();
+}
+
 
 echo "</div>\n";
 

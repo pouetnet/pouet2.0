@@ -200,6 +200,46 @@ class PouetBoxGroupMain extends PouetBox
   }
 };
 
+class PouetBoxGroupLists extends PouetBox 
+{
+  var $id;
+  var $topic;
+  var $posts;
+  function __construct($id)
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_grouplists";
+    $this->title = "lists containing this group";
+    $this->id = (int)$id;
+  }
+
+  function LoadFromDB() {
+    $s = new BM_Query();
+    $s->AddField("lists.id as id");
+    $s->AddField("lists.name as name");
+    $s->AddTable("list_items");
+    $s->AddJoin("","lists","list_items.list=lists.id");
+    $s->attach(array("lists"=>"owner"),array("users as user"=>"id"));
+    $s->AddWhere("list_items.itemid=".$this->id);
+    $s->AddWhere("list_items.type='group'");
+    $s->AddOrder("lists.name");
+    $this->data = $s->perform();
+  }
+
+  function RenderBody()
+  {
+    echo "<ul class='boxlist boxlisttable'>\n";
+    foreach($this->data as $list)
+    {
+      echo "<li>\n";
+      printf("  <span><a href='lists.php?which=%d'>%s</a></span>\n",$list->id,_html($list->name));
+      echo "  <span>".$list->user->PrintLinkedAvatar()." ".$list->user->PrintLinkedName()."</span>\n";
+      echo "</li>\n";
+    }
+    echo "</ul>\n";
+  }
+};
+
 class PouetBoxGroupList extends PouetBox
 {
   var $letter;
@@ -283,31 +323,49 @@ class PouetBoxGroupList extends PouetBox
 
 $groupID = (int)$_GET["which"];
 
-$p = null;
+$listBox = null;
+$groupBox = null;
 if (!$groupID)
 {
   $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
-  $p = new PouetBoxGroupList($pattern);
-  $p->Load();
-  $TITLE = "groups: ".$p->letter;
+  $listBox = new PouetBoxGroupList($pattern);
+  $listBox->Load();
+  $TITLE = "groups: ".$listBox->letter;
 }
 else
 {
-  $p = new PouetBoxGroupMain($groupID);
-  $p->Load();
-  if (!$p->group)
+  $groupBox = new PouetBoxGroupMain($groupID);
+  $groupBox->Load();
+  if (!$groupBox->group)
   {
     redirect("groups.php");
     exit();
   }
-  $TITLE = $p->group->name;
+  
+  $TITLE = $groupBox->group->name;
 }
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
-if($p) $p->Render();
+
+if($listBox)
+{
+  $listBox->Render();
+}
+else
+{
+  $groupBox->Render();
+  
+  $lists = new PouetBoxGroupLists($groupID);
+  $lists->Load();
+  if ($lists->data)
+  {
+    $lists->Render();
+  }
+}
+
 echo "</div>\n";
 
 require("include_pouet/menu.inc.php");
