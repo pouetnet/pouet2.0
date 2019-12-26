@@ -312,7 +312,11 @@ class PouetBoxGroupList extends PouetBox
     echo "</tr>\n";
     foreach ($this->groups as $r) {
       echo "<tr>\n";
-      echo "  <td class='groupname'>".$r->RenderFull()."</td>\n";
+      echo "  <td class='groupname'>";
+      echo $r->RenderFull();
+      if ($r->disambiguation)
+        echo sprintf(" <small>(%s)</small>",$r->disambiguation);
+      echo "</td>\n";
       echo "  <td>\n";
       echo $this->prods[$r->id];
       echo "  </td>\n";

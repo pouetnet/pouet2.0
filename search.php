@@ -194,6 +194,8 @@ class PouetBoxSearchGroup extends PouetBox
 
       echo "<td class='name'>";
       echo $g->RenderLong();
+      if ($g->disambiguation)
+        echo sprintf(" <small>(%s)</small>",$g->disambiguation);
       echo "</td>\n";
 
       echo "<td>";
