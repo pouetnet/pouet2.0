@@ -6,6 +6,7 @@ header("Content-type: application/json; charset=utf-8");
 $sql = new SQLSelect();
 $sql->AddField("id");
 $sql->AddField("name");
+$sql->AddField("disambiguation");
 $sql->AddTable("groups");
 
 $r = array();

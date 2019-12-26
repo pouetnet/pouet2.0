@@ -165,7 +165,9 @@ class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
 document.observe("dom:loaded",function(){
   InstrumentAdminEditorForAjax( $("pouetbox_boardeditaffil"), "groupBoardAffil", {
     onRowLoad: function(tr){
-      new Autocompleter(tr.down("[name='group']"), {"dataUrl":"./ajax_groups.php"});
+      new Autocompleter(tr.down("[name='group']"), {"dataUrl":"./ajax_groups.php","processRow": function(item) {
+        return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+      }});
     }
   } );
 });

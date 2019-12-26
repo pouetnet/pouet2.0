@@ -69,6 +69,8 @@ class PouetBoxGroupMain extends PouetBox
     echo "<tr>\n";
     echo "<th colspan='9' id='groupname'>\n";
     echo sprintf("<a href='groups.php?which=%d'>%s",$this->id,_html($this->group->name));
+    if ($this->group->disambiguation)
+      echo sprintf(" <small>(%s)</small>",$this->group->disambiguation);
     if ($this->group->acronym)
       echo sprintf(" [%s]",$this->group->acronym);
     echo "</a>";

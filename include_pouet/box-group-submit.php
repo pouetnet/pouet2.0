@@ -46,6 +46,7 @@ class PouetBoxSubmitGroup extends PouetBox
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["acronym"] = $data["acronym"];
+    $a["disambiguation"] = $data["disambiguation"];
     $a["web"] = $data["website"];
     $a["addedUser"] = get_login_id();
     $a["csdb"] = (int)$data["csdbID"];
@@ -80,6 +81,10 @@ class PouetBoxSubmitGroup extends PouetBox
       "website"=>array(
         "name"=>"website url",
         "type"=>"url",
+      ),
+      "disambiguation"=>array(
+        "name"=>"disambiguation",
+        "infoAfter"=>"If there are a multiple groups with the same name, add distinguishing platforms or countries here, otherwise leave it empty.",
       ),
       "csdbID"=>array(
         "name"=>"csdb ID",

@@ -176,9 +176,15 @@ function PrepareSubmitForm()
   if ($("platform")) $("platform").observe("change",adjustSubmitFormFields);
   if ($("type")) $("type").observe("change",adjustSubmitFormFields);
   adjustSubmitFormFields();
-  if ($("group1")) new Autocompleter($("group1"), {"dataUrl":"./ajax_groups.php"});
-  if ($("group2")) new Autocompleter($("group2"), {"dataUrl":"./ajax_groups.php"});
-  if ($("group3")) new Autocompleter($("group3"), {"dataUrl":"./ajax_groups.php"});
+  if ($("group1")) new Autocompleter($("group1"), {"dataUrl":"./ajax_groups.php","processRow": function(item) {
+    return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+  }});
+  if ($("group2")) new Autocompleter($("group2"), {"dataUrl":"./ajax_groups.php","processRow": function(item) {
+    return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+  }});
+  if ($("group3")) new Autocompleter($("group3"), {"dataUrl":"./ajax_groups.php","processRow": function(item) {
+    return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+  }});
   if ($("partyID")) new Autocompleter($("partyID"), {"dataUrl":"./ajax_parties.php",onSelectItem:function(){
     $("row_partyYear").show();
     $("row_partyCompo").show();

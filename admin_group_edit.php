@@ -30,6 +30,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
     $a = array();
     $a["name"] = trim($data["name"]);
     $a["acronym"] = $data["acronym"];
+    $a["disambiguation"] = $data["disambiguation"];
     $a["web"] = $data["website"];
     $a["csdb"] = (int)$data["csdbID"];
 //    $a["zxdemo"] = $data["zxdemoID"];
@@ -48,6 +49,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 
     $this->fields["name"]["value"] = $group->name;
     $this->fields["acronym"]["value"] = $group->acronym;
+    $this->fields["disambiguation"]["value"] = $group->disambiguation;
     $this->fields["website"]["value"] = $group->web;
     $this->fields["csdbID"]["value"] = $group->csdb;
     //$this->fields["zxdemoID"]["value"] = $group->zxdemo;

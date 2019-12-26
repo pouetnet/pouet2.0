@@ -376,12 +376,12 @@ document.observe("dom:loaded",function(){
     }
   });
   new Autocompleter($("partyID"), {"dataUrl":"./ajax_parties.php"});
-  new Autocompleter($("groupID"), {"dataUrl":"./ajax_groups.php"});
-  new Autocompleter($("userID"),  {"dataUrl":"./ajax_users.php",
-    "processRow": function(item) {
-      return "<img class='avatar' src='<?=POUET_CONTENT_URL?>avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
-    }
-  });
+  new Autocompleter($("groupID"), {"dataUrl":"./ajax_groups.php","processRow": function(item) {
+    return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+  }});
+  new Autocompleter($("userID"),  {"dataUrl":"./ajax_users.php","processRow": function(item) {
+    return "<img class='avatar' src='<?=POUET_CONTENT_URL?>avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
+  }});
 });
 //-->
 </script>
