@@ -1,5 +1,6 @@
 <?
 require_once("bootstrap.inc.php");
+require_once("include_pouet/box-login.php");
 
 if ($_GET["post"]) // setting-independent post lookup
 {
@@ -971,7 +972,6 @@ class PouetBoxProdPost extends PouetBox {
     global $currentUser;
 
     if (!$currentUser) {
-      require_once("box-login.php");
       $box = new PouetBoxLogin();
       $box->RenderBody();
     } else {
