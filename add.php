@@ -3,7 +3,6 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet_index/box-index-oneliner-latest.php");
 require_once("include_pouet/box-bbs-post.php");
-require_once("include_pouet/box-prod-post.php");
 require_once("include_pouet/box-bbs-open.php");
 
 $errormessage = "";

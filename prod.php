@@ -1,10 +1,5 @@
 <?
 require_once("bootstrap.inc.php");
-//require_once("include_pouet/box-prod-comments.php");
-//require_once("include_pouet/box-prod-main.php");
-//require_once("include_pouet/box-prod-popularityhelper.php");
-//require_once("include_pouet/box-prod-submitchanges.php");
-require_once("include_pouet/box-prod-post.php");
 
 if ($_GET["post"]) // setting-independent post lookup
 {
@@ -872,6 +867,167 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
 
 };
 
+
+class PouetBoxProdPost extends PouetBox {
+  var $prod;
+  function __construct($prod) {
+    global $currentUser;
+    
+    parent::__construct();
+    $this->prod = (int)$prod;
+    $this->uniqueID = "pouetbox_prodpost";
+    $this->title = "add a comment";
+
+    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prod));
+  }
+  use PouetForm;
+  function Validate($post)
+  {
+    global $currentUser;
+
+    if (!$currentUser)
+      return array("you have to be logged in!");
+
+    if (!$currentUser->CanPostInProdComments())
+      return array("not allowed lol.");
+
+    if (!is_string_meaningful($post["comment"]))
+      return array("not too meaningful, is it...");
+
+    $r = SQLLib::SelectRow(sprintf_esc("SELECT id FROM prods where id=%d",$this->prod));
+    if (!$r)
+      return array("you sneaky bastard you >_<");
+
+    $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY addedDate DESC LIMIT 1",$this->prod));
+
+    if ($r && $r->who == get_login_id() && $r->comment == $post["comment"])
+      return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
+
+    return array();
+  }
+
+  function Commit($post)
+  {
+    $message = trim($post["comment"]);
+    $rating = $post["rating"];
+
+    if ($this->myVote)
+      $rating = "isok"; // user already has a vote
+
+    $vote = 0;
+    switch($rating) {
+      case "rulez": $vote = 1; break;
+      case "sucks": $vote = -1; break;
+      default: $vote = 0; break;
+    }
+
+    $a = array();
+    $a["addedDate"] = date("Y-m-d H:i:s");
+    $a["who"] = get_login_id();
+    $a["which"] = $this->prod;
+    $a["comment"] = $message;
+    $a["rating"] = $vote;
+    SQLLib::InsertRow("comments",$a);
+
+    $rulez=0;
+    $piggie=0;
+    $sucks=0;
+    $total=0;
+    $checktable = array();
+
+    $r = SQLLib::SelectRows("SELECT rating,who FROM comments WHERE which=".$this->prod);
+    foreach ($r as $t)
+      if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
+        $checktable[$t->who] = $t->rating;
+
+    foreach($checktable as $k=>$v)
+    {
+      if($v==1) $rulez++;
+      else if($v==-1) $sucks++;
+      else $piggie++;
+      $total++;
+    }
+
+    if ($total!=0)
+      $avg = sprintf("%.2f",(float)($rulez*1+$sucks*-1)/(float)$total);
+    else
+      $avg = "0.00";
+
+    $a = array();
+    $a["voteup"] = $rulez;
+    $a["votepig"] = $piggie;
+    $a["votedown"] = $sucks;
+    $a["voteavg"] = $avg;
+    SQLLib::UpdateRow("prods",$a,"id=".$this->prod);
+
+    @unlink("cache/pouetbox_latestcomments.cache");
+    @unlink("cache/pouetbox_topmonth.cache");
+    @unlink("cache/pouetbox_stats.cache");
+
+    return array();
+  }
+
+  function RenderBody() {
+    global $currentUser;
+
+    if (!$currentUser) {
+      require_once("box-login.php");
+      $box = new PouetBoxLogin();
+      $box->RenderBody();
+    } else {
+      if (!$currentUser->CanPostInProdComments())
+        return;
+
+      $csrf = new CSRFProtect();
+      $csrf->PrintToken();
+
+      echo "<div class='content'>\n";
+      echo " <input type='hidden' name='which' value='".(int)$this->prod."'>\n";
+      echo " <input type='hidden' name='type' value='comment'>\n";
+      if (!$this->myVote)
+      {
+        echo " <div id='prodvote'>\n";
+        echo " this prod\n";
+        echo " <input type='radio' name='rating' id='ratingrulez' value='rulez'/> <label for='ratingrulez'>rulez</label>\n";
+        echo " <input type='radio' name='rating' id='ratingpig' value='isok' checked='true'/> <label for='ratingpig'>is ok</label>\n";
+        echo " <input type='radio' name='rating' id='ratingsucks' value='sucks'/> <label for='ratingsucks'>sucks</label>\n";
+        echo " </div>\n";
+      }
+      echo " <textarea name='comment' id='comment'></textarea>\n";
+      echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
+      echo "</div>\n";
+      echo "<div class='foot'>\n";
+      echo " <input type='submit' value='Submit' id='prod-post-submit'>";
+      echo "</div>\n";
+?>
+<script>
+<!--
+document.observe("dom:loaded",function(){
+  $$(".tools").each(function(item){
+    var cid = item.readAttribute("data-cid");
+    item.update("<a href='#'>quote</a> |");
+    item.down("a").observe("click",function(e){
+      e.stop();
+      new Ajax.Request("ajax_prodcomment.php",{
+        "method":"post",
+        "parameters":$H({"id":cid}).toQueryString(),
+        "onSuccess":function(transport){
+          $("comment").value += "[quote]" + transport.responseJSON.comment.strip() + "[/quote]";
+          try { $("comment").scrollTo(); } catch(ex) {} // needs try-catch because of some dumbass popup blockers
+        }
+      });
+    });
+  });
+  AddPreviewButton($('prod-post-submit'));
+  PreparePostForm( $$("#pouetbox_prodpost form").first() );
+});
+//-->
+</script>
+<?
+    }
+  }
+
+};
 
 $prodid = (int)$_GET["which"];
 if (!$prodid)
