@@ -433,6 +433,69 @@ class PouetBoxAccountModificationRequests extends PouetBox
   }
 }
 
+class PouetBoxAccountProdAwardSuggestions extends PouetBox
+{
+  function __construct( )
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_accountawardsug";
+    $this->title = "your current award recommendations";
+  }
+  use PouetForm;
+  function LoadFromDB()
+  {
+    global $AWARDSSUGGESTIONS_EVENTS;
+    global $AWARDSSUGGESTIONS_CATEGORIES;
+
+    $cats = array();
+    $date = date("Y-m-d");
+    
+    foreach($AWARDSSUGGESTIONS_CATEGORIES as $category)
+    {
+      $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
+      if ($event->votingStartDate <= $date && $date <= $event->votingEndDate)
+      {
+        $cats[] = (int)$category->id;
+      }
+    }
+  
+    global $currentUser;
+    
+    if ($cats)
+    {
+      $s = new BM_Query("awardssuggestions_votes");
+      $s->AddField("awardssuggestions_votes.categoryID");
+      $s->AddWhere(sprintf("userID = %d and categoryID in (%s)",$currentUser->id,implode(",",$cats)));
+      $s->Attach(array("awardssuggestions_votes"=>"prodID"),array("prods as prod"=>"id"));
+      $this->votes = $s->perform();
+    }
+  }
+  function Render()
+  {
+    global $AWARDSSUGGESTIONS_CATEGORIES;
+    if (!$this->votes)
+    {
+      return;
+    }
+    echo "<table id='".$this->uniqueID."' class='boxtable'>\n";
+    echo "  <tr>\n";
+    echo "    <th colspan='4'>".$this->title."</th>\n";
+    echo "  </tr>\n";
+    echo "  <tr>\n";
+    echo "    <th>category</th>\n";
+    echo "    <th>prod</th>\n";
+    echo "  </tr>\n";
+    foreach($this->votes as $v)
+    {
+      echo "  <tr>\n";
+      echo "    <td>"._html($AWARDSSUGGESTIONS_CATEGORIES[$v->categoryID]->name)."</td>\n";
+      echo "    <td>".$v->prod->RenderSingleRowShort(). "</td>\n";
+      echo "  </tr>\n";
+    }
+    echo "</table>\n";
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 if (!get_login_id())
@@ -459,6 +522,7 @@ else
   $account = new PouetBoxAccount();
   $form->Add( "account", $account );
   $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
+  $form->Add( "accountAwardSug", new PouetBoxAccountProdAwardSuggestions() );
   
   $form->Process();
   

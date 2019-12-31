@@ -113,7 +113,6 @@ class PouetBoxProdPost extends PouetBox {
     } else {
       if (!$currentUser->CanPostInProdComments())
         return;
-      echo "<form action='add.php' method='post' id='frmProdComment'>\n";
 
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
@@ -134,9 +133,8 @@ class PouetBoxProdPost extends PouetBox {
       echo " <div><a href='faq.php#BB Code'><b>BB Code</b></a> is allowed here</div>\n";
       echo "</div>\n";
       echo "<div class='foot'>\n";
-      echo " <input type='submit' value='Submit' id='submit'>";
+      echo " <input type='submit' value='Submit' id='prod-post-submit'>";
       echo "</div>\n";
-      echo "</form>\n";
 ?>
 <script>
 <!--
@@ -156,7 +154,7 @@ document.observe("dom:loaded",function(){
       });
     });
   });
-  AddPreviewButton($('submit'));
+  AddPreviewButton($('prod-post-submit'));
   PreparePostForm( $$("#pouetbox_prodpost form").first() );
 });
 //-->

@@ -731,10 +731,24 @@ class PouetBoxProdSneakyCDCs extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function __construct() {
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodsneakycdcs";
     $this->title = "sneaky cdcs";
+  }
+
+  function LoadFromDB() {
+    $s = new BM_Query();
+    $s->AddField("lists.id as id");
+    $s->AddField("lists.name as name");
+    $s->AddTable("list_items");
+    $s->AddJoin("","lists","list_items.list=lists.id");
+    $s->attach(array("lists"=>"owner"),array("users as user"=>"id"));
+    $s->AddWhere("list_items.itemid=".$this->id);
+    $s->AddWhere("list_items.type='prod'");
+    $s->AddOrder("lists.name");
+    $this->data = $s->perform();
   }
 
   function RenderBody()
@@ -750,15 +764,142 @@ class PouetBoxProdSneakyCDCs extends PouetBox {
 
 };
 
+function isEventEligible($event, $prod)
+{
+  $date = date("Y-m-d");
+  if (!($event->votingStartDate <= $date && $date <= $event->votingEndDate))
+  {
+    return false;
+  }
+  if ($event->eligibleYear)
+  {
+    if ($event->eligibleYear != (int)substr($prod->releaseDate,0,4))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+class PouetBoxProdAwardSuggestions extends PouetBox {
+  var $data;
+  var $prod;
+  var $id;
+  function __construct($id)
+  {
+    parent::__construct();
+    $this->uniqueID = "pouetbox_prodawardsuggestions";
+    $this->title = "recommend this prod for an award !";
+    $this->prodID = $id;
+  }
+  
+  function LoadFromDB() 
+  {
+    $s = new BM_Query();
+    $s->AddTable("awardssuggestions_votes");
+    $s->AddWhere(sprintf_esc("awardssuggestions_votes.prodID='%d'",$this->prodID));
+    $_votes = $s->perform();
+    $this->votes = array();
+    foreach($_votes as $vote) $this->votes[] = $vote->categoryID;
+  }
+  
+  use PouetForm;
+  function Validate($post)
+  {
+    global $currentUser;
+
+    if (!$currentUser)
+      return array("you have to be logged in!");
+
+    return array();
+  }
+
+  function Commit($post)
+  {
+    global $currentUser;
+    global $main;
+    global $AWARDSSUGGESTIONS_EVENTS;
+    global $AWARDSSUGGESTIONS_CATEGORIES;
+    
+    SQLLib::Query(sprintf_esc("delete from awardssuggestions_votes where prodID = %d and userID = %d",$this->prodID,$currentUser->id));
+
+    foreach($post["cat"] as $catID)
+    {    
+      $category = $AWARDSSUGGESTIONS_CATEGORIES[$catID];
+      $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
+      
+      if (isEventEligible($event,$main->prod))
+      {
+        $a = array(
+          "prodID" => $this->prodID,
+          "userID" => $currentUser->id,
+          "categoryID" => $catID,
+        );
+        SQLLib::InsertRow("awardssuggestions_votes",$a);
+      }
+    }
+    
+    return array();
+  }
+
+  function RenderContent()
+  {
+    global $main;
+    global $AWARDSSUGGESTIONS_EVENTS;
+    global $AWARDSSUGGESTIONS_CATEGORIES;
+    
+	  echo "<p>it's awards season soon, time to remind the juries about what prods you consider outstanding ! recommend this prod to the juries of the following awards :</p>\n";
+	  
+    echo "<select name='cat[]' multiple='multiple'>";
+    foreach($AWARDSSUGGESTIONS_CATEGORIES as $category)
+    {
+      $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
+      if (isEventEligible($event,$main->prod))
+      {      
+        printf("<option value='%d'%s>%s - %s</option>\n",$category->id,in_array($category->id,$this->votes)?" selected='selected'":"",_html($event->name),_html($category->name));
+      }
+    }
+    echo "</select>\n";
+    
+	  echo "<p>(use ctrl+click to select or deselect more than one category ! you can see all your votes on your <a href='account.php#pouetbox_accountawardsug'>accounts page</a> !)</p>\n";    
+  }
+  function RenderFooter() {
+    echo "  <div class='foot'>\n";
+    echo "   <input type='submit' value='Submit' id='submit'>";
+    echo "  </div>\n";
+    echo "</div>\n";
+  }
+
+};
+
 
 $prodid = (int)$_GET["which"];
 if (!$prodid)
   $prodid = rand(1,20000);
 
+$form = new PouetFormProcessor();
+$form->SetSuccessURL( "prod.php?which=".(int)$prodid, true );
+
 $main = new PouetBoxProdMain($prodid);
 $main->Load();
+
+$post = new PouetBoxProdPost($prodid);
+
+$awardSugBox = NULL;
 if ($main->prod)
 {
+  foreach($AWARDSSUGGESTIONS_EVENTS as $event)
+  {
+    if (isEventEligible($event,$main->prod))
+    {
+      $awardSugBox = new PouetBoxProdAwardSuggestions($prodid);
+      $awardSugBox->Load();
+      $form->Add( "prodawardsuggest", $awardSugBox );
+      break;
+    }
+  }
+  $form->Add( "prodpost", $post );
+  
   $metaValues["og:title"] = 
   $metaValues["twitter:title"] = 
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
@@ -772,8 +913,11 @@ if ($main->prod)
     $metaValues["og:image"] = 
     $metaValues["twitter:image"] = POUET_CONTENT_URL . $main->screenshotPath;
   }
+  
+  $form->Process();
 }
 
+// AJAX
 $csrf = new CSRFProtect();
 if ($_POST["wlAction"] && $currentUser)
 {
@@ -845,8 +989,11 @@ if ($main->prod)
   $p = new PouetBoxProdSubmitChanges($prodid);
   $p->Render();
 
-  $p = new PouetBoxProdPost($prodid);
-  $p->Render();
+  if($form)
+  {
+    $form->Display();
+  }
+
 ?>
 <script>
 <!--

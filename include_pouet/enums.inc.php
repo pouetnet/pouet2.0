@@ -23,6 +23,26 @@ $COMPOTYPES = handle_db_cache( POUET_ROOT_LOCAL . "/cache/enum-compotypes.cache"
   return $compos;
 });
 
+global $AWARDSSUGGESTIONS_CATEGORIES;
+$AWARDSSUGGESTIONS_CATEGORIES = handle_db_cache( POUET_ROOT_LOCAL . "/cache/awardssuggestions-categories.cache", function() {
+  $rows = SQLLib::selectRows("select * from awardssuggestions_categories");
+  
+  $cats = array();
+  foreach($rows as $v) $cats[$v->id] = $v;
+  ksort($cats);
+  return $cats;
+});
+
+global $AWARDSSUGGESTIONS_EVENTS;
+$AWARDSSUGGESTIONS_EVENTS = handle_db_cache( POUET_ROOT_LOCAL . "/cache/awardssuggestions-events.cache", function() {
+  $rows = SQLLib::selectRows("select * from awardssuggestions_events");
+  
+  $cats = array();
+  foreach($rows as $v) $cats[$v->id] = $v;
+  ksort($cats);
+  return $cats;
+});
+
 $AFFILIATIONS_ORIGINAL = array(
   "remix" => "remixed in",
   "port" => "ported to",
