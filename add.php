@@ -30,12 +30,12 @@ if (!$currentUser) {
         $data = $_POST["message"];
         $message->returnPage = "index.php";
       } break;
-    case "comment":
+    case "post":
       {
-        $box = new PouetBoxProdPost($_POST["which"]);
-        $thing = "comment";
-        $data = $_POST["comment"];
-        $message->returnPage = "prod.php?which=".(int)$_POST["which"];
+        $box = new PouetBoxBBSPost($_POST["which"]);
+        $thing = "BBS post";
+        $data = $_POST["message"];
+        $message->returnPage = "topic.php?which=".(int)$_POST["which"];
       } break;
     case "bbs":
       {
