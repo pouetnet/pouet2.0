@@ -27,6 +27,10 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   {
     printf("  <meta property=\"%s\" content=\"%s\"/>\n",$k,_html($v));
   }
+  if ($linkedData)
+  {
+    printf("  <script type=\"application/ld+json\">%s</script>\n",json_encode($linkedData));
+  }
 ?>  
 
   <script>

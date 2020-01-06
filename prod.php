@@ -1064,12 +1064,24 @@ if ($main->prod)
   $metaValues["twitter:card"] = "photo";
   $metaValues["twitter:site"] = "@pouetdotnet";
   
+  $linkedData["@type"] = "CreativeWork"; // https://schema.org/CreativeWork
+  $linkedData["name"] = $main->prod->name;
+  $linkedData["author"] = $main->prod->RenderGroupsPlain();
+  $linkedData["aggregateRating"] = array(
+    "@type" => "AggregateRating",
+    "ratingValue" => $main->prod->voteavg,
+    "bestRating" => 1,
+    "worstRating" => -1
+  );
+
   if ($main->screenshotPath)
   {
     $metaValues["og:image"] = 
-    $metaValues["twitter:image"] = POUET_CONTENT_URL . $main->screenshotPath;
+    $metaValues["twitter:image"] = 
+    $linkedData["image"] = POUET_CONTENT_URL . $main->screenshotPath;
   }
   
+ 
   $form->Process();
 }
 

@@ -126,4 +126,6 @@ $metaValues = array();
 $metaValues["og:type"] = "website";
 
 $RSS = array();
+$linkedData = array();
+$linkedData["@context"] = "https://schema.org/";
 ?>
