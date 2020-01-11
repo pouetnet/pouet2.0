@@ -361,7 +361,7 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
     $a = array();
     $a["prodID"] = $itemID;
     $a["userID"] = $reqData["userID"];
-    $a["role"] = $reqData["userRole"];
+    $a["role"] = trim($reqData["userRole"]);
     SQLLib::InsertRow("credits",$a);
     return array();
   }
@@ -506,7 +506,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
   {
     $a = array();
     $a["userID"] = $reqData["userID"];
-    $a["role"] = $reqData["userRole"];
+    $a["role"] = trim($reqData["userRole"]);
     SQLLib::UpdateRow("credits",$a,"id=".(int)$reqData["creditID"]);
     return array();
   }
