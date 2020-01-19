@@ -2,6 +2,11 @@
 class PouetBoxEditConnectionsBase extends PouetBox
 {
   public static $slug = "None";
+  function __construct()
+  {
+    parent::__construct();
+    $this->allowDelete = true;
+  }  
   function GetRow($id)
   {
     foreach($this->data as $v)
@@ -21,11 +26,18 @@ class PouetBoxEditConnectionsBase extends PouetBox
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
     printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row->id);
-    printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row->id);
+    if ($this->allowDelete)
+    {
+      printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row->id);
+    }
     echo "</td>\n";
   }
   function RenderDeleteRowEnd($row)
   {
+    if (!$this->allowDelete)
+    {
+      return;
+    }
     echo "<td>";
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
@@ -59,7 +71,7 @@ class PouetBoxEditConnectionsBase extends PouetBox
         $this->RenderEditRow($row);
         $this->RenderEditRowEnd($row);
       }
-      else if ($_GET["del" . static::$slug] == $row->id)
+      else if ($_GET["del" . static::$slug] == $row->id && $this->allowDelete)
       {
         $this->RenderNormalRow($row);
         $this->RenderDeleteRowEnd($row);
