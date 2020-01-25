@@ -1044,14 +1044,17 @@ $post = new PouetBoxProdPost($prodid);
 $awardSugBox = NULL;
 if ($main->prod)
 {
-  foreach($AWARDSSUGGESTIONS_EVENTS as $event)
+  if ($currentUser)
   {
-    if (isEventEligible($event,$main->prod))
+    foreach($AWARDSSUGGESTIONS_EVENTS as $event)
     {
-      $awardSugBox = new PouetBoxProdAwardSuggestions($prodid);
-      $awardSugBox->Load();
-      $form->Add( "prodawardsuggest", $awardSugBox );
-      break;
+      if (isEventEligible($event,$main->prod))
+      {
+        $awardSugBox = new PouetBoxProdAwardSuggestions($prodid);
+        $awardSugBox->Load();
+        $form->Add( "prodawardsuggest", $awardSugBox );
+        break;
+      }
     }
   }
   $form->Add( "prodpost", $post );
