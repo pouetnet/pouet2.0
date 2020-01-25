@@ -791,9 +791,11 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
   
   function LoadFromDB() 
   {
+    global $currentUser;
     $s = new BM_Query();
     $s->AddTable("awardssuggestions_votes");
     $s->AddWhere(sprintf_esc("awardssuggestions_votes.prodID='%d'",$this->prodID));
+    $s->AddWhere(sprintf_esc("awardssuggestions_votes.userID='%d'",$currentUser->id));
     $_votes = $s->perform();
     $this->votes = array();
     foreach($_votes as $vote) $this->votes[] = $vote->categoryID;
@@ -843,9 +845,8 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
     global $main;
     global $AWARDSSUGGESTIONS_EVENTS;
     global $AWARDSSUGGESTIONS_CATEGORIES;
-    
-	  echo "<p>it's awards season soon, time to remind the juries about what prods you consider outstanding ! recommend this prod to the juries of the following awards :</p>\n";
-	  
+
+    echo "<p>it's awards season soon, time to remind the juries about what prods you consider outstanding ! recommend this prod to the juries of the following awards :</p>\n";
     echo "<select name='cat[]' multiple='multiple'>";
     foreach($AWARDSSUGGESTIONS_CATEGORIES as $category)
     {
@@ -856,8 +857,7 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
       }
     }
     echo "</select>\n";
-    
-	  echo "<p>(use ctrl+click to select or deselect more than one category ! you can see all your votes on your <a href='account.php#pouetbox_accountawardsug'>accounts page</a> !)</p>\n";    
+    echo "<p>(use ctrl+click to select or deselect more than one category ! you can see all your votes on your <a href='account.php#pouetbox_accountawardsug'>accounts page</a> !)</p>\n";    
   }
   function RenderFooter() {
     echo "  <div class='foot'>\n";
