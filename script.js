@@ -368,21 +368,6 @@ function fireErrorOverlay( errors )
   setTimeout(fadeOverlays,timeWait + timerDensity);
 }
 
-document.observe("dom:loaded",function(){
-  if (location.hash=="#success")
-  {
-    if (history && "pushState" in history)
-    {
-      history.pushState("", document.title, window.location.pathname + window.location.search);
-    }
-    else
-    {
-      location.hash = "";
-    }
-    fireSuccessOverlay();
-  }
-});
-
 function Youtubify( parentElement, detailed )
 {
   parentElement.select("a[rel='external']").each(function(item){
@@ -679,8 +664,7 @@ function CollapsibleHeaders( elements )
     var toggle = new Element("span",{"class":"collapseToggle"});
     header.insert( toggle );
 
-    Cookie.init({name: 'pouetHeadersShown', expires: 365});
-    if (box.id && Cookie.getData(box.id))
+    if (box.id && Cookie.getData('pouetHeadersShown-'+id))
     {
       toggle.update("hide");
       container.show();
@@ -697,14 +681,70 @@ function CollapsibleHeaders( elements )
       {
         toggle.update("hide");
         container.show();
-        if (_box && _box.id) Cookie.setData(_box.id,true);
+        if (_box && _box.id) Cookie.setData('pouetHeadersShown-'+_box.id,true);
       }
       else
       {
         toggle.update("show");
         container.hide();
-        if (_box && _box.id) Cookie.setData(_box.id,false);
+        if (_box && _box.id) Cookie.setData('pouetHeadersShown-'+_box.id,false);
       }
     });      
   });
 }
+
+// Todo: do this from db
+var newsTickers = {
+  "meteoriks2020":
+    {
+      "html": "The Meteoriks 2020 jury now accepts suggestions ! <a href='https://www.pouet.net/topic.php?post=559648'>Read more</a>",
+      "class": "meteoriks",
+      "expires": Date.parse("2020-03-25")
+    },
+};
+
+function checkForNewsTickers()
+{
+  var container = null;
+  $H(newsTickers).each(function(kvp){
+    if(Date.now() > kvp.value.expires)
+    {
+      return;
+    }
+    if (Cookie.getData("newsTickerSupress-"+kvp.key))
+    {
+      return;
+    }
+    if (!container)
+    {
+      container = new Element("ul",{"class":"newsTickers"});
+      document.body.insert(container);
+    }
+    var li = new Element("li",{"class":kvp.value.class}).update("<p>"+kvp.value.html+"</p>");
+    var close = new Element("button",{"class":"close","title":"Close"}).update("&#x274C;");
+    close.observe("click",function(){
+      li.remove();
+      Cookie.setData("newsTickerSupress-"+kvp.key, true);
+    });
+    li.insert(close);
+    container.insert(li);
+  });
+}
+
+// on load scripts - keep this to minimum
+document.observe("dom:loaded",function(){
+  Cookie.init({name: 'pouetSettings', expires: 365});
+  if (location.hash=="#success")
+  {
+    if (history && "pushState" in history)
+    {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+    else
+    {
+      location.hash = "";
+    }
+    fireSuccessOverlay();
+  }
+  checkForNewsTickers();
+});
