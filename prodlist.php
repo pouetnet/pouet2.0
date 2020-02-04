@@ -263,9 +263,20 @@ echo "<div id='content'>\n";
 echo "<form action='prodlist.php' method='get'>\n";
 
 foreach($_GET as $k=>$v)
-  if ($k != "type" && $k != "platform" && $k != "page")
-    echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
-
+{
+  if ($k != "page")
+  {
+    if (is_array($v))
+    {
+      foreach($v as $k2=>$v2)
+      echo "<input type='hidden' name='"._html($k)."[]' value='"._html($v2)."'/>\n";
+    }
+    else
+    {
+      echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
+    }
+  }
+}
 if($q) $q->Render();
 if($p) $p->Render();
 echo "</form>\n";
