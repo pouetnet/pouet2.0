@@ -103,6 +103,7 @@ class PouetBoxProdlist extends PouetBox
       case "avg": $s->AddOrder("prods.voteavg ".$dir); break;
       case "views": $s->AddOrder("prods.views ".$dir); break;
       case "added": $s->AddOrder("prods.addedDate ".$dir); break;
+      case "random": $s->AddOrder("RAND()"); break;
     }
     $s->AddOrder("prods.releaseDate ".$dir);
     $s->AddOrder("prods.addedDate ".$dir);
