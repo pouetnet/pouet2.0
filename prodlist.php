@@ -20,6 +20,8 @@ class PouetBoxProdlist extends PouetBox
 
     $s = new BM_Query("prods");
 
+    // QUERYNAUGHT INCOMING
+    
     if (is_array($_GET["type"]))
     {
       $cond = array();
@@ -41,6 +43,50 @@ class PouetBoxProdlist extends PouetBox
         $s->AddWhere(sprintf_esc("pp.platform in (%s)",implode(",",$platforms)));
       }
     }
+    if (is_array($_GET["group"]))
+    {
+      foreach($_GET["group"] as $v) if ($v)
+      {
+        $s->AddWhere(sprintf_esc("(prods.group1 = %d OR prods.group2 = %d OR prods.group3 = %d)",$v,$v,$v));
+      }
+    }
+    if ($_GET["releaseDateFrom"])
+    {
+      $s->AddWhere(sprintf_esc("prods.releaseDate >= '%s'",$_GET["releaseDateFrom"]));
+    }
+    if ($_GET["releaseDateUntil"])
+    {
+      $s->AddWhere(sprintf_esc("prods.releaseDate <= '%s'",$_GET["releaseDateUntil"]));
+    }
+    if ($_GET["addedDateFrom"])
+    {
+      $s->AddWhere(sprintf_esc("prods.addedDate >= '%s'",$_GET["addedDateFrom"]));
+    }
+    if ($_GET["addedDateUntil"])
+    {
+      $s->AddWhere(sprintf_esc("prods.addedDate <= '%s'",$_GET["addedDateUntil"]));
+    }
+    if ($_GET["party"])
+    {
+      $s->AddWhere(sprintf_esc("party = %d",$_GET["party"]));
+    }
+    if ($_GET["partyYear"])
+    {
+      $s->AddWhere(sprintf_esc("party_year = %d",$_GET["partyYear"]));
+    }
+    if ($_GET["partyRank"])
+    {
+      $s->AddWhere(sprintf_esc("party_place = %d",$_GET["partyRank"]));
+    }
+    if ($_GET["partyRankHigher"])
+    {
+      $s->AddWhere(sprintf_esc("party_place <= %d",$_GET["partyRankHigher"]));
+    }
+    if ($_GET["partyRankLower"])
+    {
+      $s->AddWhere(sprintf_esc("party_place >= %d",$_GET["partyRankLower"]));
+    }
+    
     $dir = "DESC";
     if ($_GET["reverse"])
       $dir = "ASC";
