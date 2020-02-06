@@ -265,7 +265,7 @@ echo "<form action='prodlist.php' method='get'>\n";
 
 foreach($_GET as $k=>$v)
 {
-  if ($k != "page")
+  if ($k != "page" && $k != "type" && $k != "platform") // hidden fields only
   {
     if (is_array($v))
     {
