@@ -32,7 +32,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
   }
 
   function LoadFromDB() {
-    $this->jsonData = json_decode( file_get_contents('http://www.pounds-off.me/?format=json'), true );
+    $this->jsonData = json_decode( file_get_contents('http://pounds-off.me/?format=json'), true );
   }
 
   function RenderBody() {
@@ -53,7 +53,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='http://www.pounds-off.me/'>more at pounds-off</a>...</div>\n";
+    echo "  <div class='foot'><a href='http://pounds-off.me/'>more at pounds-off</a>...</div>\n";
     echo "</div>\n";
   }
 };
