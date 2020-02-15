@@ -121,7 +121,25 @@ class PouetBoxSubmitProd extends PouetBox
 
     $a = array();
     $a["name"] = trim($data["name"]);
-    $a["download"] = trim($data["download"]);
+    
+    
+    $url = trim($data["download"]);
+    $parsedUrl = parse_url($url);
+    if (strstr($parsedUrl["host"],"scene.org")!==false)
+    {
+      $sideload = new Sideload();
+      $response = $sideload->Request("https://files.scene.org/api/resolve/?url=".rawurlencode($url));
+      if ($response)
+      {
+        $responseJSON = json_decode($response,true);
+        if ($responseJSON["success"] && $responseJSON["viewURL"])
+        {
+          $url = $responseJSON["viewURL"];
+        }
+      }
+    }
+    
+    $a["download"] = $url;
 
     $a["addedUser"] = get_login_id();
     $a["addedDate"] = date("Y-m-d H:i:s");
