@@ -2,15 +2,31 @@
 
 class Sideload
 {
-  function RequestCURL( $url )
+  function RequestCURL( $url, $method = "GET", $contentArray = array(), $headerArray = array() )
   {
     $curl = curl_init();
-  
-    $header = array();
+
+    $headers = array();
+    foreach($headerArray as $k=>$v) $headers[] = $k.": ".$v;
+    
+    curl_setopt($curl, CURLOPT_POST, $method == "POST");
+
+    $data = is_array($contentArray) ? http_build_query($contentArray) : $contentArray;
+    if ($data)
+    {
+      if ($method == "GET")
+      {
+        $url .= (strstr($url,"?") === false ? "?" : "&") . $data;
+      }
+      else if ($method == "POST")
+      {
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+      }
+    }
   
     curl_setopt($curl, CURLOPT_URL, $url);
     @curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     if ($this->options["connect_timeout"])
       curl_setopt($curl, CURLOPT_TIMEOUT, (int)$this->options["connect_timeout"]);
@@ -46,10 +62,14 @@ class Sideload
   
     return $html;
   }
-  function RequestFGC( $url )
+  function RequestFGC( $url, $method = "GET", $contentArray = array(), $headerArray = array() )
   {
     $opt = array();
     $param = array();
+
+    $headers = array();
+    foreach($headerArray as $k=>$v) $headers[] = $k.": ".$v;
+
     if ($this->options["connect_timeout"])
     {
       $opt["http"]["timeout"] = $this->options["connect_timeout"];
@@ -66,6 +86,16 @@ class Sideload
     {
       $opt["ssl"]["user_agent"] = $this->options["user_agent"];
     }
+    if ($method == "GET")
+    {
+      $url .= (strstr($url,"?") === false ? "?" : "&") . $data;
+    }
+    $opt["http"] = array(
+      "method" => $method,
+      "header" => implode("\r\n",$headers),
+      "content" => ($method == "GET" ? null : http_build_query($data)),
+    );
+    
     $ctx = stream_context_create($opt);
     if ($this->options["max_length"])
     {
@@ -104,15 +134,15 @@ class Sideload
     
     return $data;
   }
-  function Request( $url )
+  function Request( $url, $method = "GET", $contentArray = array(), $headerArray = array() )
   {
     if (function_exists("curl_init"))
     {
-      return $this->RequestCURL($url);
+      return $this->RequestCURL($url, $method, $contentArray, $headerArray);
     }
     else
     {
-      return $this->RequestFGC($url);
+      return $this->RequestFGC($url, $method, $contentArray, $headerArray);
     }
   }
 }

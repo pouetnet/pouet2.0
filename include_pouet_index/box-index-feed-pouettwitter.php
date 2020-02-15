@@ -41,28 +41,15 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
     return $this->jsonData ? serialize($this->jsonData) : false;
   }
 
-  function Sideload( $url, $data = array(), $headers = array(), $method = "GET" )
-  {
-    if ($method == "GET")
-      $url .= (strstr($url,"?") === false ? "?" : "&") . http_build_query($data);
-    return @file_get_contents( $url, false, stream_context_create( array(
-      'http'=>array(
-        'method'=>$method,
-        'header'=>implode("\r\n",$headers),
-        'content'=>($method == "GET" ? null : http_build_query($data)),
-      ),
-      'ssl' => array(
-        'verify_peer' => false,
-      ),
-    ) ) );
-  }
   function LoadFromDB() 
   {
     if (!defined("TWITTER_CONSUMER_KEY")) return;
     
     $auth = "Basic " . base64_encode( TWITTER_CONSUMER_KEY . ":" . TWITTER_CONSUMER_SECRET );
     
-    $response = $this->Sideload( "https://api.twitter.com/oauth2/token", array("grant_type"=>"client_credentials"), array("Authorization: ".$auth), "POST" );
+    $sideload = new Sideload();
+    
+    $response = $sideload->Request( "https://api.twitter.com/oauth2/token", "POST", array("grant_type"=>"client_credentials"), array("Authorization" => $auth) );
     $authTokens = json_decode( $response );
     if (!$authTokens || !$authTokens->access_token)
     {
@@ -75,7 +62,7 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   
     $statuses = array();
     
-    $response = $this->Sideload( "https://api.twitter.com/1.1/statuses/user_timeline.json", array("screen_name"=>"pouetdotnet","count"=>10), array("Authorization: ".$auth2) );
+    $response = $sideload->Request( "https://api.twitter.com/1.1/statuses/user_timeline.json", "GET", array("screen_name"=>"pouetdotnet","count"=>10), array("Authorization" => $auth2) );
     $data = json_decode( $response );
     if (!$data || !is_array($data))
     {

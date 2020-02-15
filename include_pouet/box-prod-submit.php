@@ -128,7 +128,7 @@ class PouetBoxSubmitProd extends PouetBox
     if (strstr($parsedUrl["host"],"scene.org")!==false)
     {
       $sideload = new Sideload();
-      $response = $sideload->Request("https://files.scene.org/api/resolve/?url=".rawurlencode($url));
+      $response = $sideload->Request("https://files.scene.org/api/resolve/","GET",array("url"=>$url));
       if ($response)
       {
         $responseJSON = json_decode($response,true);

@@ -31,8 +31,16 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     return serialize($this->jsonData);
   }
 
-  function LoadFromDB() {
-    $this->jsonData = json_decode( file_get_contents('http://pounds-off.me/?format=json'), true );
+  function LoadFromDB() 
+  {
+    $this->jsonData = array();
+
+    $sideload = new Sideload();
+    $response = $sideload->Request('http://pounds-off.me/',"GET",array("format"=>"json"));
+    if ($response)
+    {  
+      $this->jsonData = json_decode( $response, true );
+    }
   }
 
   function RenderBody() {
