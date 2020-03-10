@@ -31,6 +31,20 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   {
     printf("  <script type=\"application/ld+json\">%s</script>\n",json_encode($linkedData));
   }
+
+  $newsTickers = handle_db_cache( POUET_ROOT_LOCAL . "/cache/newstickers.cache", function() {
+    $rows = SQLLib::selectRows("SELECT * FROM newstickers WHERE expires > CURDATE()");
+    
+    $tickers = array();
+    foreach($rows as $v)
+    {
+      $v->expires = strtotime($v->expires);
+      $tickers[$v->tickerCode] = $v;
+    }
+    ksort($tickers);
+    return $tickers;
+  });
+  
 ?>  
 
   <script>
@@ -38,6 +52,8 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
     var pixelWidth = screen.width;
     var Pouet = {};
     Pouet.isMobile = <?=POUET_MOBILE?"true":"false"?>;
+    
+    var newsTickers = <?=($newsTickers ? json_encode($newsTickers) : "{}");?>;
   //-->
   </script>
   <script src="./prototype.js"></script>

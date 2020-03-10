@@ -693,21 +693,16 @@ function CollapsibleHeaders( elements )
   });
 }
 
-// Todo: do this from db
-var newsTickers = {
-  "meteoriks2020":
-    {
-      "html": "The Meteoriks 2020 jury now accepts suggestions ! <a href='https://www.pouet.net/topic.php?post=559648'>Read more</a>",
-      "class": "meteoriks",
-      "expires": Date.parse("2020-03-10")
-    },
-};
-
 function checkForNewsTickers()
 {
+  if (!newsTickers)
+  {
+    return;
+  }
+  
   var container = null;
   $H(newsTickers).each(function(kvp){
-    if(Date.now() > kvp.value.expires)
+    if(Date.now() > kvp.value.expires*1000)
     {
       return;
     }
