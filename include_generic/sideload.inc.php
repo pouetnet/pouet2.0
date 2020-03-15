@@ -86,6 +86,7 @@ class Sideload
     {
       $opt["ssl"]["user_agent"] = $this->options["user_agent"];
     }
+    $data = is_array($contentArray) ? http_build_query($contentArray) : $contentArray;
     if ($method == "GET")
     {
       $url .= (strstr($url,"?") === false ? "?" : "&") . $data;
