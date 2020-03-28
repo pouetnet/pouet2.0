@@ -1,8 +1,8 @@
-<?
-require_once("credentials.inc.php");
-
+<?php
+global $SQLLIB_QUERIES;
 $SQLLIB_QUERIES = array();
 
+global $SQLLIB_ARRAYS_CLEANED;
 $SQLLIB_ARRAYS_CLEANED = false;
 
 class SQLLibException extends Exception 
@@ -22,17 +22,18 @@ class SQLLibException extends Exception
   }
 }
 
-class SQLLib {
+class SQLLib
+{
   public static $link;
   public static $debugMode = false;
   public static $charset = "";
 
-  static function Connect() 
+  static function Connect()
   {
-    SQLLib::$link = @mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
+    SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
     if (mysqli_connect_errno(SQLLib::$link))
       die("Unable to connect MySQL: ".mysqli_connect_error());
-      
+
     $charsets = array("utf8mb4","utf8");
     SQLLib::$charset = "";
     foreach($charsets as $c)
@@ -50,11 +51,11 @@ class SQLLib {
   }
 
   static function Disconnect()
-	{
+  {
     mysqli_close(SQLLib::$link);
   }
 
-  static function Query($cmd) 
+  static function Query($cmd)
   {
     global $SQLLIB_QUERIES;
 
@@ -76,12 +77,12 @@ class SQLLib {
     return $r;
   }
 
-  static function Fetch($r) 
+  static function Fetch($r)
   {
     return mysqli_fetch_object($r);
   }
 
-  static function SelectRows($cmd) 
+  static function SelectRows($cmd)
   {
     $r = SQLLib::Query($cmd);
     $a = Array();
@@ -89,16 +90,16 @@ class SQLLib {
     return $a;
   }
 
-  static function SelectRow($cmd) 
+  static function SelectRow($cmd)
   {
-    if (stristr($cmd,"select ")!==false && stristr($cmd," limit ")===false) // not exactly nice but i'll help
+    if (stristr($cmd,"select ")!==false && stristr($cmd," limit ")===false) // not exactly nice but it'll help
       $cmd .= " LIMIT 1";
     $r = SQLLib::Query($cmd);
     $a = SQLLib::Fetch($r);
     return $a;
   }
 
-  static function InsertRow($table,$o) 
+  static function InsertRow($table,$o,$onDup = array())
   {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
@@ -116,13 +117,69 @@ class SQLLib {
 
     $cmd = sprintf("insert %s (%s) values (%s)",
       $table,implode(", ",$keys),implode(", ",$values));
+    if ($onDup)
+    {
+      $cmd .= " ON DUPLICATE KEY UPDATE ";
+      $set = array();
+      if ($onDup)
+      {
+        foreach($onDup as $k=>$v)
+        {
+          if ($v===NULL)
+          {
+            $set[] = sprintf("`%s`=null",mysqli_real_escape_string(SQLLib::$link,$k));
+          }
+          else if ($k{0}=="@")
+          {
+            $set[] = sprintf("`%s`=%s",mysqli_real_escape_string(SQLLib::$link,substr($k,1)),mysqli_real_escape_string(SQLLib::$link,$v));
+          }
+          else
+          {
+            $set[] = sprintf("`%s`='%s'",mysqli_real_escape_string(SQLLib::$link,$k),mysqli_real_escape_string(SQLLib::$link,$v));
+          }
+        }
+      }
+      else
+      {
+        $key = reset(array_keys($o));
+        $set[] = $key . "=" . $key;
+      }
+      $cmd .= implode(", ",$set);
+    }
 
     $r = SQLLib::Query($cmd);
 
     return mysqli_insert_id(SQLLib::$link);
   }
 
-  static function UpdateRow($table,$o,$where) 
+  static function InsertMultiRow($table,$arr)
+  {
+    global $SQLLIB_ARRAYS_CLEANED;
+    if (!$SQLLIB_ARRAYS_CLEANED)
+      trigger_error("Arrays not cleaned before InsertMultiRow!",E_USER_ERROR);
+
+    $keys = Array();
+    $allValues = Array();
+    foreach($arr as $o)
+    {
+      if (is_object($o)) $a = get_object_vars($o);
+      else if (is_array($o)) $a = $o;
+      $keys = Array();
+      $values = Array();
+      foreach($a as $k=>$v) {
+        $keys[]="`".mysqli_real_escape_string(SQLLib::$link,$k)."`";
+        if ($v!==NULL) $values[]="'".mysqli_real_escape_string(SQLLib::$link,$v)."'";
+        else           $values[]="null";
+      }
+      $allValues[] = "(".implode(", ",$values).")";
+    }
+
+    $cmd = sprintf("insert %s (%s) values %s",
+      $table,implode(", ",$keys),implode(", ",$allValues));
+    $r = SQLLib::Query($cmd);
+  }
+
+  static function UpdateRow($table,$o,$where)
   {
     global $SQLLIB_ARRAYS_CLEANED;
     if (!$SQLLIB_ARRAYS_CLEANED)
@@ -132,12 +189,9 @@ class SQLLib {
     else if (is_array($o)) $a = $o;
     $set = Array();
     foreach($a as $k=>$v) {
-      if ($v===NULL)
-      {
+      if ($v===NULL) {
         $set[] = sprintf("`%s`=null",mysqli_real_escape_string(SQLLib::$link,$k));
-      }
-      else
-      {
+      } else {
         $set[] = sprintf("`%s`='%s'",mysqli_real_escape_string(SQLLib::$link,$k),mysqli_real_escape_string(SQLLib::$link,$v));
       }
     }
@@ -148,14 +202,14 @@ class SQLLib {
 
   /*
   UpdateRowMulti allows batched updates on multiple rows at once.
-  
+
   Syntax:
   $tuples = array(
     array( "keyColumn" => 1, "col1" => "abc", "col2" => "def" ),
     array( "keyColumn" => 2, "col1" => "ghi", "col2" => "jkl" ),
   );
   $key = "keyColumn";
-  
+
   NOTE: the first tuple defines keys. If your tuples are uneven, you're on your own.
   */
   static function UpdateRowMulti( $table, $key, $tuples )
@@ -164,11 +218,12 @@ class SQLLib {
       return;
     if (!is_array($tuples[0]))
       throw new Exception("Has to be array!");
-  
+
     $fields = array_keys( $tuples[0] );
-  
+
     $sql = "UPDATE ".$table;
     $keys = array();
+    $cond = "";
     foreach($fields as $field)
     {
       if ($field == $key) continue;
@@ -179,36 +234,36 @@ class SQLLib {
     foreach($tuples as $tuple)
       $keys[] = $tuple[$key];
     $sql .= " WHERE `".$key."` IN (".implode(",",$keys).")";
-  
+
     //echo $sql."\n\n";
     SQLLib::Query($sql);
   }
 
-  static function UpdateOrInsertRow($table,$o,$where) 
+  static function UpdateOrInsertRow($table,$o,$where)
   {
     if (SQLLib::SelectRow(sprintf("SELECT * FROM %s WHERE %s",$table,$where)))
       return SQLLib::UpdateRow($table,$o,$where);
     else
       return SQLLib::InsertRow($table,$o);
   }
-  
-  static function StartTransaction() 
+
+  static function StartTransaction()
   {
     mysqli_autocommit(SQLLib::$link, FALSE);
   }
-  static function FinishTransaction() 
+  static function FinishTransaction()
   {
     mysqli_commit(SQLLib::$link);
     mysqli_autocommit(SQLLib::$link, TRUE);
   }
-  static function CancelTransaction() 
+  static function CancelTransaction()
   {
     mysqli_rollback(SQLLib::$link);
     mysqli_autocommit(SQLLib::$link, TRUE);
   }
 }
 
-class SQLTrans 
+class SQLTrans
 {
   var $rollback;
   function __construct() {
@@ -226,7 +281,7 @@ class SQLTrans
   }
 }
 
-class SQLSelect 
+class SQLSelect
 {
   var $fields;
   var $tables;
@@ -238,7 +293,7 @@ class SQLSelect
   var $offset;
 
   function __construct()
-	{
+  {
     $this->fields = array();
     $this->tables = array();
     $this->conditions = array();
@@ -248,15 +303,15 @@ class SQLSelect
     $this->limit = NULL;
     $this->offset = NULL;
   }
-  function AddTable($s) 
+  function AddTable($s)
   {
     $this->tables[] = $s;
   }
-  function AddField($s) 
+  function AddField($s)
   {
     $this->fields[] = $s;
   }
-  function AddJoin($type,$table,$condition) 
+  function AddJoin($type,$table,$condition)
   {
     $o = new stdClass();
     $o->type = $type;
@@ -264,26 +319,26 @@ class SQLSelect
     $o->condition = $condition;
     $this->joins[] = $o;
   }
-  function AddWhere($s) 
+  function AddWhere($s)
   {
     $this->conditions[] = "(".$s.")";
   }
-  function AddOrder($s) 
+  function AddOrder($s)
   {
     $this->orders[] = $s;
   }
-  function AddGroup($s) 
+  function AddGroup($s)
   {
     $this->groups[] = $s;
   }
-  function SetLimit( $limit, $offset = NULL ) 
+  function SetLimit( $limit, $offset = NULL )
   {
-    $this->limit = (int)$limit;
+    $this->limit = $limit;
     if ($offset !== NULL)
-      $this->offset = (int)$offset;
+      $this->offset = $offset;
   }
   function GetQuery()
-	{
+  {
     if (!count($this->tables))
       throw new Exception("[sqlselect] No tables specified!");
 
@@ -327,7 +382,7 @@ function sprintf_esc()
 }
 
 function nop($s) { return $s; }
-function clearArray($a) 
+function clearArray($a)
 {
   $ar = array();
   $qcb = get_magic_quotes_gpc() ? "stripslashes" : "nop";
@@ -343,5 +398,6 @@ $_POST = clearArray($_POST);
 $_GET = clearArray($_GET);
 $_REQUEST = clearArray($_REQUEST);
 $SQLLIB_ARRAYS_CLEANED = true;
-SQLLib::Connect();
+if (!defined("SQLLIB_SUPPRESSCONNECT"))
+  SQLLib::Connect();
 ?>
