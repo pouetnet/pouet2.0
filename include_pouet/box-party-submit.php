@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PouetBoxSubmitParty extends PouetBox
 {
@@ -102,7 +102,7 @@ document.observe("dom:loaded",function(){
 });
 -->
 </script>
-<?
+<?php
   }
 };
 

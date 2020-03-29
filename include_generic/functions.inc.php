@@ -1,4 +1,4 @@
-<?
+<?php
 function microtime_float()
 {
   return microtime(true);

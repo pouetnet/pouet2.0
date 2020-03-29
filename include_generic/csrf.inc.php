@@ -1,4 +1,4 @@
-<?
+<?php
 class CSRFProtect
 {
   public function __construct()

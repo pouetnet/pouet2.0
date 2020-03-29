@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexCDC extends PouetBoxCachable {
   var $data;
   var $prod;

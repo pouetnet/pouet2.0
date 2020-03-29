@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBox {
   var $title;
   var $uniqueID;

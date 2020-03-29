@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetGroup extends BM_Class
 {
   static function getTable () { return "groups"; }

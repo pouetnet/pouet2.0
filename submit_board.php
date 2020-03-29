@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-board-submit.php");
@@ -35,7 +35,7 @@ document.observe("dom:loaded",function(){
   NameWarning({"ajaxURL":"./ajax_parties.php","linkURL":"party.php?which="});
 });
 </script>
-<?
+<?php
 */
 }
 else

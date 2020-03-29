@@ -1,4 +1,4 @@
-<?
+<?php
 class Rewriter
 {
   private $rules = array();

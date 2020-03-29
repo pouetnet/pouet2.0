@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
   function __construct() {
     parent::__construct();

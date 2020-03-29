@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexTopMonth extends PouetBoxCachable {
   var $data;
   var $prods;

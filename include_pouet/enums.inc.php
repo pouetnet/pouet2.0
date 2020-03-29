@@ -1,4 +1,4 @@
-<?
+<?php
 global $PLATFORMS;
 $PLATFORMS = handle_db_cache( POUET_ROOT_LOCAL . "/cache/enum-platforms.cache", function() {
   $rows = SQLLIB::selectRows("select * from platforms");

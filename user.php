@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 
 class PouetBoxUserMain extends PouetBox

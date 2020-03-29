@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
   function __construct() 
   {

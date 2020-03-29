@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexRandom extends PouetBox {
   var $data;
   var $prod;

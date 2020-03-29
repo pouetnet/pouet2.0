@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-group-submit.php");
@@ -76,7 +76,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 };
 

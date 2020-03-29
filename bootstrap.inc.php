@@ -1,4 +1,4 @@
-<?
+<?php
 error_reporting(E_ALL & ~E_NOTICE);
 
 define("POUET_ROOT_LOCAL",dirname(__FILE__));

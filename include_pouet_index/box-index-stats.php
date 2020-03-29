@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexStats extends PouetBoxCachable {
   var $data;
   var $fields;

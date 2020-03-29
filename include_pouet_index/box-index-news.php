@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexNews extends PouetBox {
   var $data;
   var $prod;

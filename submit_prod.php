@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-prod-submit.php");
@@ -36,7 +36,7 @@ document.observe("dom:loaded",function(){
   PrepareSubmitForm();
 });
 </script>
-<?
+<?php
 
 }
 else

@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexFeedWanted extends PouetBoxCachable {
   function __construct() 
   {

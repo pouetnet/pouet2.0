@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 
 $r = SQLLib::selectRows(sprintf_esc("select name,type,party_year from prods where name like '%%%s%%' order by views desc limit 10",_like($_GET["what"])));

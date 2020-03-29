@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexWatchlist extends PouetBox {
   var $data;
   var $prods;

@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetProd extends BM_Class {
   var $types;
   var $platforms;

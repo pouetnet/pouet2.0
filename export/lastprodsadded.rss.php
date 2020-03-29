@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("../bootstrap.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-latestadded.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");

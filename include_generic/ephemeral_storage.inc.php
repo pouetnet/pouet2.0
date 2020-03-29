@@ -1,4 +1,4 @@
-<?
+<?php
 interface IEphemeralStorage
 {
   static function available();

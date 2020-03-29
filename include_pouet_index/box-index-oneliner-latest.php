@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
   var $data;
   function __construct() {
@@ -103,7 +103,7 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     <script>
     document.observe("dom:loaded",function(){ Youtubify($("pouetbox_latestoneliner")); });
     </script>
-    <?
+    <?php
   }
   function RenderFooter() {
     global $currentUser;
@@ -164,7 +164,7 @@ $("frmIndexOneliner").observe("submit",function(ev){
   }
 });
 </script>
-<?
+<?php
     }
     echo "</div>\n";
   }

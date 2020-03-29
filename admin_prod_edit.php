@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-modalmessage.php");
 require_once("include_pouet/box-prod-submit.php");
@@ -216,7 +216,7 @@ document.observe("dom:loaded",function(){
   });
 });
 </script>
-    <?
+    <?php
   }
 }
 
@@ -314,7 +314,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 }
 
@@ -389,7 +389,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 }
 
@@ -514,7 +514,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 }
 
@@ -607,7 +607,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 }
 
@@ -724,7 +724,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
 }
 
@@ -796,7 +796,7 @@ if ($box->prod)
     PrepareSubmitForm();
   });
   </script>
-  <?
+  <?php
   }
   else
   {

@@ -1,4 +1,4 @@
-<?
+<?php
 $menusetting = !defined("MENU_DONE_ONCE") ? "topbar" : "bottombar";
 define("MENU_DONE_ONCE",true);
 if (get_setting($menusetting))
@@ -6,11 +6,11 @@ if (get_setting($menusetting))
 ?>
 <nav id="<?=$menusetting?>">
   <ul>
-<? if ($currentUser) { ?>
+<?php if ($currentUser) { ?>
    <li><a href="account.php">Account</a></li>
-<? } else { ?>
+<?php } else { ?>
    <li><a href="login.php?return=<?=_html(rootRelativePath())?>">Log in</a></li>
-<? } ?>
+<?php } ?>
    <li><a href="prodlist.php">Prods</a></li>
    <li><a href="groups.php">Groups</a></li>
    <li><a href="parties.php">Parties</a></li>
@@ -21,12 +21,12 @@ if (get_setting($menusetting))
    <li><a href="bbs.php">BBS</a></li>
    <li><a href="faq.php">FAQ</a></li>
    <li><a href="submit.php">Submit</a></li>
-<? if ($currentUser && $currentUser->IsGloperator()) { ?>
+<?php if ($currentUser && $currentUser->IsGloperator()) { ?>
    <li><a href="admin.php" class="adminlink">Admin</a></li>
-<? } ?>
+<?php } ?>
   </ul>
 </nav>
-<?
+<?php
 if (POUET_MOBILE)
 {
   if ($menusetting == "topbar")

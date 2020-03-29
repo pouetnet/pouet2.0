@@ -1,4 +1,4 @@
-<?
+<?php
 include_once("bootstrap.inc.php");
 
 class PouetBoxBoardMain extends PouetBox

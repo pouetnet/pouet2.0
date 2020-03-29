@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_generic/countries.inc.php");
 require_once("include_pouet/box-modalmessage.php");
@@ -611,7 +611,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
 }
 
 require("include_pouet/menu.inc.php");

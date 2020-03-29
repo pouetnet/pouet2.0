@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexLatestParties extends PouetBoxCachable {
   var $data;
   var $prods;

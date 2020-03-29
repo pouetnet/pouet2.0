@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexAffilButton extends PouetBoxCachable {
   var $data;
   function __construct() {

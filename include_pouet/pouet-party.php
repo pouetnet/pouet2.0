@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetParty extends BM_Class {
   static function getTable () { return "parties"; }
   static function getFields() { return array("id","name","web"); }

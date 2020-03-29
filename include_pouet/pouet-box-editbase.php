@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxEditConnectionsBase extends PouetBox
 {
   public static $slug = "None";

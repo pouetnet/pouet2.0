@@ -1,4 +1,4 @@
-<?
+<?php
 //from http://dev.maxmind.com/geoip/legacy/codes/iso3166/
 
 $COUNTRIES = array(

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-post.php");
 
@@ -68,7 +68,7 @@ class PouetBoxOnelinerView extends PouetBox {
     <script>
     document.observe("dom:loaded",function(){ Youtubify($("pouetbox_onelinerview")); });
     </script>
-    <?
+    <?php
   }
   function RenderFooter() {
     echo "</div>\n";

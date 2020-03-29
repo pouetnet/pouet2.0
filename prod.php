@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-login.php");
 
@@ -372,7 +372,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
       echo "</li>\n";
     }
     
@@ -1023,7 +1023,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
     }
   }
 
@@ -1182,7 +1182,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?  
+<?php  
 }
 else
 {

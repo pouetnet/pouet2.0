@@ -1,4 +1,4 @@
-<?
+<?php
 header("Content-type: text/html; charset=utf-8");
 $RSS["export/lastprodsreleased.rss.php"] = "last prods released";
 $RSS["export/lastprodsadded.rss.php"] = "last prods added";
@@ -12,17 +12,17 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
   <link rel="search" type="application/opensearchdescription+xml" href="opensearch_prod.xml" title="pouët.net: prod search" />
   <link rel="canonical" href="http://www.pouet.net<?=_html($_SERVER["REQUEST_URI"])?>"/>
-<?foreach($RSS as $url=>$title){?>
+<?php foreach($RSS as $url=>$title){?>
   <link rel="alternate" href="<?=_html($url)?>" type="application/rss+xml" title="pouët.net: <?=_html($title)?>">
-<?}?>
+<?php }?>
 
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
-  <?if ( POUET_MOBILE ) {?>
+  <?php if ( POUET_MOBILE ) {?>
   <link rel="stylesheet" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0;" />
-  <?}?>
+  <?php }?>
   
-<?
+<?php
   if ($metaValues) foreach ($metaValues as $k=>$v)
   {
     printf("  <meta property=\"%s\" content=\"%s\"/>\n",$k,_html($v));

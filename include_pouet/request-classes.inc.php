@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetRequestClassBase
 {
   // return the type of atomic item this request handles (can be "prod", "group" or "party")

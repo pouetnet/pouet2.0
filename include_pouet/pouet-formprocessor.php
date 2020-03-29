@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(POUET_ROOT_LOCAL . "/include_pouet/box-modalmessage.php");
 
 class PouetFormProcessor

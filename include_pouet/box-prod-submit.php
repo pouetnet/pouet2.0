@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxSubmitProd extends PouetBox
 {
   function __construct()

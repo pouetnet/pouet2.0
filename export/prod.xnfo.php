@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("../bootstrap.inc.php");
 
 header("Content-type: application/xml; charset=utf-8");

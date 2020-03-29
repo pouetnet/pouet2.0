@@ -1,4 +1,4 @@
-<?
+<?php
 class Formifier {
   function __construct()
   {
@@ -61,7 +61,7 @@ document.observe("dom:loaded",function(){
   i.insert({"before":"(","after":")"});
 });
 </script>
-<?          
+<?php          
           echo "    </div>\n";
           break;
         case "avatar":
@@ -160,7 +160,7 @@ document.observe("dom:loaded",function(){
   var frm = $("<?=$confirmFields[0]?>").up("form");
   frm.observe("submit",function(ev){
     var b = false;
-<?
+<?php
   foreach($confirmFields as $v)
   {
     printf("    if ($('%s').checked) b = true;\n",$v);
@@ -173,7 +173,7 @@ document.observe("dom:loaded",function(){
   });
 });
 </script>
-<?          
+<?php          
     }
   }
 };

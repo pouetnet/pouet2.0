@@ -1,4 +1,4 @@
-<?
+<?php
 $DEFAULT_USERSETTINGS = (object)array(
   'topicposts' => 25,
   'bbsbbstopics' => 25,

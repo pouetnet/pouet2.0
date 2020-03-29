@@ -1,4 +1,4 @@
-<?
+<?php
 // recache kelemen
 
 function pouetAdmin_recacheFrontPage()

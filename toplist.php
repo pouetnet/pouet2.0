@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 
 class PouetBoxTopList extends PouetBox {
@@ -184,7 +184,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?    
+<?php    
   }
 };
 

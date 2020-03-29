@@ -1,4 +1,4 @@
-<?
+<?php
 // front page boxes
 $indexAvailableBoxes = array();
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-bbs-latest.php");

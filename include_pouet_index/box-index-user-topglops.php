@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexTopGlops extends PouetBoxCachable {
   var $data;
   var $prods;

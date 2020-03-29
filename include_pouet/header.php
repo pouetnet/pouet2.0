@@ -1,4 +1,4 @@
-<?
+<?php
 $timer["html"]["start"] = microtime_float();
 require_once("header.bare.php");
 
@@ -44,11 +44,11 @@ if (get_setting("logos"))
     <a href="./index.php"><img src="<?=POUET_CONTENT_URL?>logos/<?=$logo->file?>" alt="logo"/></a>
     <p>logo done by <?=$credit?> :: <?=$random_quotes[ array_rand($random_quotes) ]?></p>
   </div>
-<?
+<?php
 } else {
 ?>
   <a href="./index.php">pouët.net</a>
-<?
+<?php
 }
 echo "</header>\n";
 

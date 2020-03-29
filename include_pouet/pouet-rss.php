@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetRSS
 {
   private $xml;

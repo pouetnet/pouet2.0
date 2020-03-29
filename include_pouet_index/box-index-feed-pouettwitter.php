@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   function __construct() 
   {

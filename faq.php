@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 
 class PouetBoxFAQ extends PouetBox {
@@ -85,7 +85,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
 
 require("include_pouet/menu.inc.php");
 require_once("include_pouet/footer.php");

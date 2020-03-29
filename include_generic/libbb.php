@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Nathan Codding - Jan. 12, 2001.
  * Performs [quote][/quote] bbencoding on the given string, and returns the results.

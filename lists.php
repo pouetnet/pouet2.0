@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 
 class PouetBoxListsList extends PouetBox  /* pf lol */
@@ -385,7 +385,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
   function RenderFooter()
   {
@@ -455,7 +455,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
   }
   function RenderFooter()
   {
@@ -524,7 +524,7 @@ document.observe("dom:loaded",function(){
   });
 });
 </script>
-    <?
+    <?php
   }
 }
 

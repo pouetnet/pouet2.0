@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetBoxBBSOpen extends PouetBox {
   var $topic;
   function __construct() {

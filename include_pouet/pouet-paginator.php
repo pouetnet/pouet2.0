@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetPaginator
 {
   function SetData( $url, $total, $perPage, $curPage, $defaultToLast = true )

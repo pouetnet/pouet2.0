@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-open.php");
 require_once("include_pouet/box-login.php");
@@ -139,7 +139,7 @@ class PouetBoxBBSTopicList extends PouetBox
 ?>
 <script>
 <!--
-var threadCategories = $A([<?
+var threadCategories = $A([<?php
 foreach($this->categories as $v) echo "'"._js($v)."',";
 ?>]);
 document.observe("dom:loaded",function(){
@@ -163,7 +163,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?
+<?php
     return $s;
   }
 };

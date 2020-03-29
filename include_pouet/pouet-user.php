@@ -1,4 +1,4 @@
-<?
+<?php
 class PouetUser extends BM_Class {
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
