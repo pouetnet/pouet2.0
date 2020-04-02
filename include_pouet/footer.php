@@ -35,7 +35,7 @@ if (POUET_TEST)
   echo "<!--\n";
   echo "QUERIES:\n";
   $n=1;
-  foreach($SQLLIB_QUERIES as $sql=>$time)
+  foreach(SQLLib::$queries as $sql=>$time)
     printf("%3d. [%8.2f] - %s\n",$n++,$time,_html($sql));
   echo "-->";
 }
