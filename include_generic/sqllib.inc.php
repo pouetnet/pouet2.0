@@ -138,7 +138,7 @@ class SQLLib
           {
             $set[] = sprintf("`%s`=null",mysqli_real_escape_string(SQLLib::$link,$k));
           }
-          else if ($k{0}=="@")
+          else if ($k[0]=="@")
           {
             $set[] = sprintf("`%s`=%s",mysqli_real_escape_string(SQLLib::$link,substr($k,1)),mysqli_real_escape_string(SQLLib::$link,$v));
           }
