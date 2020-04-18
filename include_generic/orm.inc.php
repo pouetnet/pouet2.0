@@ -10,11 +10,12 @@ function BM_AddClass( $class )
   $BM_ORM_CLASSES[ $class::getTable() ] = $class;
 }
 
-class BM_Node {
-  var $id;
-  var $table;
-  var $class;
-  var $attachments;
+class BM_Node 
+{
+  public $id;
+  public $table;
+  public $class;
+  public $attachments;
   function __construct( &$query, $a = array() )
   {
     global $BM_ORM_CLASSES;
@@ -80,8 +81,9 @@ class BM_Node {
   }
 };
 
-class BM_Query extends SQLSelect {
-  var $root;
+class BM_Query extends SQLSelect 
+{
+  public $root;
   function __construct($table = null)
   {
     global $BM_ORM_CLASSES;
@@ -217,7 +219,8 @@ class BM_Query extends SQLSelect {
 
 };
 
-class BM_Class {
+class BM_Class 
+{
   static function getTable () { trigger_error("GetTable not overridden in ".get_class(),E_USER_ERROR); }
   static function getFields() { return array("id"); }
   static function getExtendedFields() { return array_merge(static::getFields(),array()); }

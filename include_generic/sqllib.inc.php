@@ -378,6 +378,7 @@ class SQLSelect
     }
     return $sql;
   }
+  public function & GetFields() { return $this->fields; }
 }
 
 function sprintf_esc()

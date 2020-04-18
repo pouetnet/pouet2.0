@@ -127,7 +127,7 @@ class PouetBoxPartyView extends PouetBox
 
     // this is where it gets nasty; luckily we can fake it relatively elegantly: ORM won't notice if we override some of the field selections
     $s->AddJoin("left","prodotherparty",sprintf_esc("prodotherparty.prod = prods.id and (prodotherparty.party = %d AND prodotherparty.party_year = %d)",$this->party->id,$this->year));
-    foreach($s->fields as &$v)
+    foreach($s->GetFields() as &$v)
     {
       if ($v == "prods.party_compo as prods_party_compo")
       {
