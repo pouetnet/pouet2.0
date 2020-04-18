@@ -111,7 +111,7 @@ class PouetBoxBoardMain extends PouetBox
       $a = array(); $i = 1;
       foreach($this->nfos as $t)
         $a[] = sprintf("<a href='board_nfo.php?which=%d'>%d</a>",$t->id,$i++);
-      echo implode($a," ");
+      echo implode(" ",$a);
 
       echo "</td>\n";
       echo "      </tr>\n";
