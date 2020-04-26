@@ -151,6 +151,60 @@ CREATE TABLE `awardscand_2011` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `awardssuggestions_categories`
+--
+
+DROP TABLE IF EXISTS `awardssuggestions_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `awardssuggestions_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `eventID` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `eventID` (`eventID`),
+  CONSTRAINT `awardssuggestions_categories_ibfk_1` FOREIGN KEY (`eventID`) REFERENCES `awardssuggestions_events` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `awardssuggestions_events`
+--
+
+DROP TABLE IF EXISTS `awardssuggestions_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `awardssuggestions_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `votingStartDate` date NOT NULL,
+  `votingEndDate` date NOT NULL,
+  `eligibleYear` smallint(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `awardssuggestions_votes`
+--
+
+DROP TABLE IF EXISTS `awardssuggestions_votes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `awardssuggestions_votes` (
+  `userID` int(10) NOT NULL,
+  `categoryID` int(11) NOT NULL,
+  `prodID` int(10) NOT NULL,
+  UNIQUE KEY `userID_categoryID_prodID` (`userID`,`categoryID`,`prodID`),
+  KEY `categoryID` (`categoryID`),
+  KEY `prodID` (`prodID`),
+  CONSTRAINT `awardssuggestions_votes_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
+  CONSTRAINT `awardssuggestions_votes_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `awardssuggestions_categories` (`id`),
+  CONSTRAINT `awardssuggestions_votes_ibfk_3` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `bbs_posts`
 --
 
@@ -432,6 +486,7 @@ CREATE TABLE `groups` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `acronym` varchar(8) NOT NULL,
+  `disambiguation` varchar(255) NOT NULL,
   `web` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT 1,
   `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -616,6 +671,23 @@ CREATE TABLE `news` (
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `newstickers`
+--
+
+DROP TABLE IF EXISTS `newstickers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `newstickers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tickerCode` varchar(256) NOT NULL,
+  `html` text NOT NULL,
+  `class` varchar(64) NOT NULL,
+  `expires` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -935,7 +1007,7 @@ CREATE TABLE `sceneorgrecommended` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `prodid` int(10) NOT NULL DEFAULT 0,
   `type` enum('awardwinner','awardnominee','viewingtip','meteorikwinner','meteoriknominee') DEFAULT NULL,
-  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement','High End Demo','High End Intro','High End Graphics','High End Soundtrack','Low End Demo','Low End Intro','Low End Graphics','Low End Soundtrack','New Talent','Interactive','Standalone Graphics','Tiny Intro','Alternative Platforms','Best Art Direction','Best Pixel Graphics in a Low-End Demo or Intro','Best Storytelling / Storyline / Plot','Best High-End Intro','Best High-End Demo','Best Soundtrack','Best Low-End Demo','Best Low-End intro','That''s not Possible on this Platform!','Best High-End 4k Intro','Best Storytelling / Storyline / Plot','Best Freestyle Graphics','Best Low-End Production','Best Small High-End Intro','Best High-End 64k Intro','New Talent','Best Visuals','Best Direction','Outstanding Technical Achievement') DEFAULT NULL,
+  `category` enum('best demo','best intro','best 64k intro','best 4k intro','best effects','best graphics','best soundtrack','best direction','most original concept','breakthrough performance','public choice','viewing tip','best demo on an oldschool platform','best animation','best technical achievement','High End Demo','High End Intro','High End Graphics','High End Soundtrack','Low End Demo','Low End Intro','Low End Graphics','Low End Soundtrack','New Talent','Interactive','Standalone Graphics','Tiny Intro','Alternative Platforms','Best Art Direction','Best Pixel Graphics in a Low-End Demo or Intro','Best Storytelling / Storyline / Plot','Best High-End Intro','Best High-End Demo','Best Low-End Demo','Best Low-End intro','That''s not Possible on this Platform!','Best High-End 4k Intro','Best Freestyle Graphics','Best Low-End Production','Best Small High-End Intro','Best High-End 64k Intro','Best Visuals','Outstanding Technical Achievement','Outstanding Concept') DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `prodid_category` (`prodid`,`category`),
   KEY `prodid` (`prodid`),
@@ -993,8 +1065,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) NOT NULL DEFAULT 0,
   `nickname` varchar(16) NOT NULL,
-  `im_type` enum('','AIM','ICQ','Jabber','MSN','Skype','Xfire','Yahoo') DEFAULT NULL,
-  `im_id` varchar(255) NOT NULL DEFAULT '',
+  `DEPRECATED_im_type` enum('','AIM','ICQ','Jabber','MSN','Skype','Xfire','Yahoo') DEFAULT NULL,
+  `DEPRECATED_im_id` varchar(255) NOT NULL DEFAULT '',
   `level` enum('administrator','moderator','gloperator','user','pr0nstahr','fakeuser','banned') DEFAULT 'user',
   `permissionSubmitItems` tinyint(4) NOT NULL DEFAULT 1,
   `permissionPostBBS` tinyint(4) NOT NULL DEFAULT 1,
@@ -1033,6 +1105,24 @@ CREATE TABLE `users_cdcs` (
   KEY `pcdcc` (`cdc`),
   CONSTRAINT `users_cdcs_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
   CONSTRAINT `users_cdcs_ibfk_2` FOREIGN KEY (`cdc`) REFERENCES `prods` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users_im`
+--
+
+DROP TABLE IF EXISTS `users_im`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_im` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `userID` int(10) NOT NULL,
+  `im_type` enum('','AIM','Discord','Email','Facebook','ICQ','Instagram','Jabber','Mastodon','MSN','Skype','Telegram','Twitter','Xfire','Yahoo') DEFAULT NULL,
+  `im_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `users_im_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1104,4 +1194,4 @@ CREATE TABLE `watchlist` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */; 
