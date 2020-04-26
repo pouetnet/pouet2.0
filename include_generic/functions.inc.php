@@ -20,16 +20,16 @@ function better_wordwrap($str,$cols,$cut){
 	$segment_width = 0;
 
 	for ($i=0; $i<=$str_len; $i++){
-		if ($str{$i} == $tag_open) {
+		if ($str[$i] == $tag_open) {
 			$in_tag++;
-		} elseif ($str{$i} == $tag_close) {
+		} elseif ($str[$i] == $tag_close) {
 			if ($in_tag > 0) {
 				$in_tag--;
 				$segment_width = 0;
 			}
 		} else {
 			if ($in_tag == 0) {
-				if($str{$i} != ' ') {
+				if($str[$i] != ' ') {
 					$segment_width++;
 					if ($segment_width > $cols) {
 						 $str = mb_substr($str,0,$i,$encoding).$cut.mb_substr($str,$i,$str_len,$encoding);
@@ -151,7 +151,7 @@ function has_trait($object,$trait)
 
 function renderHalfDate($date)
 {
-  if (!$date || $date{0}=="0") return "";
+  if (!$date || $date[0]=="0") return "";
   if (substr($date,5,2)=="00")
     return substr($date,0,4);
   return strtolower(date("F Y",strtotime($date)));
