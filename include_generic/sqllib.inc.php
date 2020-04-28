@@ -1,4 +1,5 @@
 <?php
+// version 0.0.1 (2020-04-28)
 
 class SQLLibException extends Exception 
 { 
@@ -26,11 +27,13 @@ class SQLLib
   protected static $link;
   protected static $charset = "";
   
-  public static function Connect()
+  public static function Connect($host = SQL_HOST, $username = SQL_USERNAME, $password = SQL_PASSWORD, $database = SQL_DATABASE)
   {
-    SQLLib::$link = mysqli_connect(SQL_HOST,SQL_USERNAME,SQL_PASSWORD,SQL_DATABASE);
+    SQLLib::$link = @mysqli_connect($host,$username,$password,$database);
     if (mysqli_connect_errno(SQLLib::$link))
-      die("Unable to connect MySQL: ".mysqli_connect_error());
+    {
+      throw new SQLLibException("Unable to connect MySQL: ".mysqli_connect_error());
+    }
 
     $charsets = array("utf8mb4","utf8");
     SQLLib::$charset = "";
@@ -44,13 +47,18 @@ class SQLLib
     }
     if (!SQLLib::$charset)
     {
-      die("Error loading any of the character sets:");
+      throw new SQLLibException("Error loading any of the character sets.");
     }
   }
 
   public static function Disconnect()
   {
     mysqli_close(SQLLib::$link);
+  }
+  
+  public static function GetCharacterSet()
+  {
+    return SQLLib::$charset;
   }
   
   public static function Escape( $str )
