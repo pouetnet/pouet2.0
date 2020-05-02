@@ -29,6 +29,7 @@ class PouetBoxBBSTopicList extends PouetBox
     $s->AddField("bbs_topics.topic as topic");
     $s->AddField("bbs_topics.count as count");
     $s->AddField("bbs_topics.category as category");
+    $s->AddField("bbs_topics.closed as closed");
     $s->AddTable("bbs_topics");
     $s->attach(array("bbs_topics"=>"userfirstpost"),array("users as firstuser"=>"id"));
     $s->attach(array("bbs_topics"=>"userlastpost"),array("users as lastuser"=>"id"));
@@ -86,7 +87,7 @@ class PouetBoxBBSTopicList extends PouetBox
     echo "</tr>\n";
 
     foreach ($this->topics as $p) {
-      echo "<tr>\n";
+      printf("<tr class='%s'>\n",$p->closed?"closed":"");
 
       echo " <td>";
       echo $p->firstpost;
