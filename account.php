@@ -229,13 +229,26 @@ class PouetBoxAccount extends PouetBox
 
     // im bit
 
+    global $IM_TYPES;
     SQLLib::Query(sprintf_esc("delete from users_im where userID = %d",get_login_id()));
     for ($n = 0; $n < count($this->imTypes); $n++)
     {
       $a = array();
       $a["userID"] = get_login_id();
       $a["im_type"] = $data["im_type".$n];
-      $a["im_id"] = $data["im_id".$n];
+      $imUser = $data["im_id".$n];
+      if ($IM_TYPES[$a["im_type"]])
+      {
+        if (preg_match("/".$IM_TYPES[$a["im_type"]]["capture"]."/",$imUser,$m))
+        {
+          $imUser = $m[1];
+        }
+        else
+        {
+          continue;
+        }
+      }
+      $a["im_id"] = $imUser;
       if ($a["im_type"] && $a["im_id"])
       {
         SQLLib::InsertRow("users_im",$a);
@@ -345,6 +358,7 @@ class PouetBoxAccount extends PouetBox
     {
       echo "  <h2>contact details</h2>\n";
       echo "  <div class='accountsection content account-ims'>\n";
+      echo "  <p class='infoAfter'>note: whatever you specify here will be hidden for users who are logged out</p>\n";
       $this->formifier->RenderForm( $this->fieldsIM );
       echo "  </div>\n";
     }
@@ -517,7 +531,7 @@ else
   //if (!get_login_id())
   //  $form->successMessage = "registration complete! a confirmation mail will be sent to your address soon - you can't login until you confirmed your email address!";
     
-  $form->SetSuccessURL( "index.php", false );
+  $form->SetSuccessURL( "user.php?who=".$currentUser->id, true );
   
   $account = new PouetBoxAccount();
   $form->Add( "account", $account );

@@ -66,4 +66,44 @@ $verificationStrings = array(
   "MEDIA-ERROR",
 );
 
+$IM_TYPES = array(
+  "Discord"=>array(
+    "capture"=>"^(.*#\d+)$",
+  ),
+  "Email"=>array(
+    "capture"=>"^(\S*@\S*\.\S*)$",
+    "display"=>function($in) { return sprintf("<a href='mailto:%s'>%s</a>",_html($in),_html($in)); }
+  ),
+  "Facebook"=>array(
+    "capture"=>"(?:facebook\.com\/)?(\w+)\/?$",
+    "display"=>function($in) { return sprintf("<a href='https://facebook.com/%s'>fb.com/%s</a>",_html($in),_html($in)); }
+  ),
+  "Instagram"=>array(
+    "capture"=>"(?:instagram\.com\/)?@?(\w{1,15})\/?$",
+    "display"=>function($in) { return sprintf("<a href='https://instagram.com/%s'>@%s</a>",_html($in),_html($in)); }
+  ),
+  "Jabber"=>array(
+    "capture"=>"^(\S*@\S*\.\S*)$",
+  ),
+  "Mastodon"=>array(
+    "capture"=>"^@?(\S*@\S*\.\S*)$",
+    "display"=>function($in) { 
+      list($user,$domain) = explode("@",$in);
+      return sprintf("<a href='https://%s/@%s'>@%s@%s</a>",$domain,$user,_html($user),_html($domain));
+    }
+  ),
+  "Skype"=>array(
+    "capture"=>"^(?:(?:live\:)?([a-zA-Z][a-zA-Z0-9\.,\-_]{5,31}|\S*@\S*\.\S*))$", // ohoho HAVE FUN DEBUGGING THIS LOL
+    "display"=>function($in) { return sprintf("<a href='skype:%s'>%s</a>",_html($in),_html($in)); }
+  ),
+  "Telegram"=>array(
+    "capture"=>"(?:t\.me\/)?@?(\w{1,15})$",
+    "display"=>function($in) { return sprintf("<a href='https://t.me/%s'>@%s</a>",_html($in),_html($in)); }
+  ),
+  "Twitter"=>array(
+    "capture"=>"(?:twitter\.com\/)?@?(\w{1,15})\/?$",
+    "display"=>function($in) { return sprintf("<a href='https://twitter.com/%s'>@%s</a>",_html($in),_html($in)); }
+  ),
+);
+
 ?>

@@ -464,9 +464,19 @@ class PouetBoxUserMain extends PouetBox
 
     if ($currentUser)
     {
+      global $IM_TYPES;
       foreach($this->ims as $im)
       {
-        $this->AddRow( $im->im_type, $im->im_id );
+        if ($IM_TYPES[$im->im_type] && $IM_TYPES[$im->im_type]["display"] && preg_match("/".$IM_TYPES[$im->im_type]["capture"]."/",$im->im_id))
+        {
+          $func = $IM_TYPES[$im->im_type]["display"];
+          $imID = $func($im->im_id);
+          $this->AddRow( $im->im_type, $imID, true );
+        }
+        else
+        {
+          $this->AddRow( $im->im_type, $im->im_id );
+        }
       }
     }
 
