@@ -100,6 +100,10 @@ $IM_TYPES = array(
     "capture"=>"(?:t\.me\/)?@?(\w{1,15})$",
     "display"=>function($in) { return sprintf("<a href='https://t.me/%s'>@%s</a>",_html($in),_html($in)); }
   ),
+  "Twitch"=>array(
+    "capture"=>"(?:twitch\.tv\/)?@?(\w{1,15})\/?$",
+    "display"=>function($in) { return sprintf("<a href='https://twitch.tv/%s'>@%s</a>",_html($in),_html($in)); }
+  ),
   "Twitter"=>array(
     "capture"=>"(?:twitter\.com\/)?@?(\w{1,15})\/?$",
     "display"=>function($in) { return sprintf("<a href='https://twitter.com/%s'>@%s</a>",_html($in),_html($in)); }
