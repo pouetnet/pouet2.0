@@ -9,41 +9,56 @@ function microtime_float()
  *
  * WARNING - THIS IS LEGACY CODE AND MIGHT CAUSE PROBLEMS  // garg
  */
-function better_wordwrap($str,$cols,$cut){
+function better_wordwrap( $str, $cols = 80, $cut = "\n" )
+{
   $encoding = "utf-8";
 
-	$tag_open = '<';
-	$tag_close = '>';
-	$count = 0;
-	$in_tag = 0;
-	$str_len = mb_strlen($str,$encoding);
-	$segment_width = 0;
+  $tag_open = '<';
+  $tag_close = '>';
+  $count = 0;
+  $in_tag = 0;
+  $str_len = mb_strlen($str,$encoding);
+  $segment_width = 0;
 
-	for ($i=0; $i<=$str_len; $i++){
-		if ($str[$i] == $tag_open) {
-			$in_tag++;
-		} elseif ($str[$i] == $tag_close) {
-			if ($in_tag > 0) {
-				$in_tag--;
-				$segment_width = 0;
-			}
-		} else {
-			if ($in_tag == 0) {
-				if($str[$i] != ' ') {
-					$segment_width++;
-					if ($segment_width > $cols) {
-						 $str = mb_substr($str,0,$i,$encoding).$cut.mb_substr($str,$i,$str_len,$encoding);
-						 $i += mb_strlen($cut,$encoding);
-						 $str_len = mb_strlen($str,$encoding);
-						 $segment_width = 0;
-					}
-				} else {
-					$segment_width = 0;
-				}
-			}
-		}
-	}
-	return $str;
+  for ($i=0; $i<=$str_len; $i++)
+  {
+    //$char = $str[$i];
+    $char = mb_substr($str,$i,1,$encoding);
+    if ($char == $tag_open) 
+    {
+      $in_tag++;
+    }
+    else if ($char == $tag_close) 
+    {
+      if ($in_tag > 0) 
+      {
+        $in_tag--;
+        $segment_width = 0;
+      }
+    } 
+    else 
+    {
+      if ($in_tag == 0) 
+      {
+        if($char != ' ') 
+        {
+          $segment_width++;
+          if ($segment_width > $cols) 
+          {
+            $str = mb_substr($str,0,$i,$encoding) . $cut . mb_substr($str,$i,$str_len,$encoding);
+            $i += mb_strlen($cut,$encoding);
+            $str_len = mb_strlen($str,$encoding);
+            $segment_width = 0;
+          }
+        } 
+        else 
+        {
+          $segment_width = 0;
+        }
+      }
+    }
+  }
+  return $str;
 }
 
 function toObject($array) {
