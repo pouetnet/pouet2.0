@@ -255,6 +255,7 @@ class PouetBoxSubmitProd extends PouetBox
         	" (scene.org links are an exception - <a href='http://www.pouet.net/faq.php#faq37'>read the faq</a> if you're confused)",
         "info"=>" ",
         "required"=>true,
+        "maxlength"=>256,
       ),
       "releaseDate"=>array(
         "name"=>"release date",

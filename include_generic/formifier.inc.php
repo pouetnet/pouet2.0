@@ -133,16 +133,16 @@ document.observe("dom:loaded",function(){
           echo " name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
           break;
         case "url":
-          echo "    <input type='url' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          echo "    <input type='url' name='".$k."' id='".$k."' ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
           break;
         case "email":
-          echo "    <input type='email' name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          echo "    <input type='email' name='".$k."' id='".$k."' ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
           break;
         case "textarea":
           echo "    <textarea name='".$k."' id='".$k."'>"._html($v["value"])."</textarea>\n";
           break;
         default:
-          echo "    <input name='".$k."' id='".$k."'".($v["html"]?" ".$v["html"]:"")." value='"._html($v["value"])."'/>\n";
+          echo "    <input name='".$k."' id='".$k."'".($v["html"]?" ".$v["html"]:"")." ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
           break;
       }
       if ($v["info"])

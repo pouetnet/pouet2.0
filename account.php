@@ -96,7 +96,7 @@ class PouetBoxAccount extends PouetBox
         "info"=>"how do you look on IRC ?",
         "required"=>true,
         "value"=>$this->user->nickname,
-        "html"=>"maxlength='16'",
+        "maxlength"=>16,
       ),
       "avatar"=>array(
         "info"=>"your faaaaaaace is like a song",
@@ -179,6 +179,7 @@ class PouetBoxAccount extends PouetBox
         //"info"=>"buuuuuuuuuuuuuuuu .... hiho !",
         "name"=>"contact address",
         "value"=>$im->im_id,
+        "maxlength"=>255,
       );
       $n++;
     }

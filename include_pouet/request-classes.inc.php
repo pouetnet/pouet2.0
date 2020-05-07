@@ -45,6 +45,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
       "newLink" => array(
         "name"=>"link url",
         "type"=>"url",
+        "maxlength"=>256,
       ),
       "finalStep" => array(
         "type"=>"hidden",
@@ -133,6 +134,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
           "name"=>"link url",
           "type"=>"url",
           "value"=>$l->link,
+          "maxlength"=>256,
         ),
         "reason" => array(
           "name"=>"why should this link be changed",
@@ -615,6 +617,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
         "name"=>"enter new download link",
         "type"=>"url",
         "value"=>$prod->download,
+        "maxlength"=>256,
       ),
       "reason" => array(
         "name"=>"why should this link be changed",
