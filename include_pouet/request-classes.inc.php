@@ -32,7 +32,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
     "/https:\/\/(?:www\.)?demozoo\.org\/productions\/(\d+)/" => "demozoo",
     "/https:\/\/(?:www\.)?csdb\.dk\/release\/\?id=(\d+)/" => "csdb",
   );
-  
+
   static function GetItemType() { return "prod"; }
   static function Describe() { return "add a new extra link to a prod"; }
 
@@ -205,12 +205,12 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
       $s .= _html($data["oldLinkKey"])." - ";
       $s .= "<a href='"._html($data["oldLink"])."' rel='external'>"._html(shortify_cut($data["oldLink"],50))."</a>";
     }
-    
+
     $s .= "<br/>";
     $s .= "<b>new</b>: ";
     $s .= _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."' rel='external'>"._html(shortify_cut($data["newLink"],50))."</a>";
-    
+
     $s .= "<br/>";
     $s .= "<b>reason</b>: ";
     $s .= _html($data["reason"]);
@@ -668,7 +668,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     $s .= "<a href='"._html($data["downloadLink"])."' rel='external'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
     $s .= "<br/><b>reason</b>: ";
     $s .= _html($data["reason"]);
-   
+
     return $s;
   }
 
@@ -677,9 +677,9 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
     $a = array();
     $a["download"] = $reqData["downloadLink"];
     SQLLib::UpdateRow("prods",$a,"id=".(int)$itemID);
-    
+
     SQLLib::Query(sprintf_esc("delete from prods_linkcheck where prodID = %d",$itemID));
-    
+
     return array();
   }
 };
@@ -718,7 +718,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $fields["boardID"] = $prod->boardID;
     $fields["invitationParty"] = $prod->invitation;
     $fields["invitationYear"] = $prod->invitationyear;
-    
+
     return $fields;
   }
   static function GetFields($data,&$fields,&$js)
@@ -744,8 +744,8 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
 
     global $PLATFORMS;
     $plat = array();
-	  foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
-	  uasort($plat,"strcasecmp");
+    foreach($PLATFORMS as $k=>$v) $plat[$k] = $v["name"];
+    uasort($plat,"strcasecmp");
 
     $fields = array(
       "name"=>array(
@@ -847,13 +847,13 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     $js .= "});\n";
   }
 
-  static function ValidateRequest($input,&$output) 
+  static function ValidateRequest($input,&$output)
   {
     if (!trim($input["name"]))
     {
       return array("prod name can't be empty !");
     }
-    
+
     $fields = array();
     static::GetFields(array(),$fields,$js);
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
@@ -868,7 +868,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
       $_in["releaseDate"] = sprintf("%04d-%02d-15",$input["releaseDate_year"],$input["releaseDate_month"]);
     else if ($input["releaseDate_year"])
       $_in["releaseDate"] = sprintf("%04d-00-15",$input["releaseDate_year"]);
-    
+
     if (!$_in["partyID"])
     {
       unset( $_in["partyYear"] );
@@ -881,7 +881,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     {
       $output["type"] = $_in["type"];
     }
-      
+
     if (array_diff( $_in["platform"] ?: array(), $pa["platform"] ))
     {
       $output["platform"] = $_in["platform"];
@@ -892,7 +892,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     return $output ? array() : array("you didn't change anything !");
   }
 
-  static function Display($itemID, $data) 
+  static function Display($itemID, $data)
   {
     global $PLATFORMS;
     global $COMPOTYPES;
@@ -909,7 +909,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
 
     $fields = array();
     static::GetFields(array(),$fields,$js);
-    
+
     $s = "";
     foreach($data as $k=>$v)
     {
@@ -1010,7 +1010,23 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
           $s .= $board ? $board->RenderLink() : "<i>none</i>";
           $s .= "<br/>";
-          break;          
+          break;
+        case "demozooID":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $prod->demozoo ? sprintf("<a href='https://demozoo.org/productions/%d/'>%d</a>",$prod->demozoo,$prod->demozoo) : "<i>none</i>";
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $v ? sprintf("<a href='https://demozoo.org/productions/%d/'>%d</a>",$v,$v) : "<i>none</i>";
+          $s .= "<br/>";
+          break;
+        case "csdbID":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= $prod->csdb ? sprintf("<a href='https://csdb.dk/release/?id=%d'>%d</a>",$prod->csdb,$prod->csdb) : "<i>none</i>";
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= $v ? sprintf("<a href='https://csdb.dk/release/?id=%d'>%d</a>",$v,$v) : "<i>none</i>";
+          $s .= "<br/>";
+          break;
         default:
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= _html($prod->{$k});
@@ -1019,11 +1035,11 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
           $s .= _html($v);
           $s .= "<br/>";
       }
-    }  
+    }
     return $s;
   }
 
-  static function Process($itemID,$reqData) 
+  static function Process($itemID,$reqData)
   {
     $sql = array();
     foreach($reqData as $k=>$v)
@@ -1050,7 +1066,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     {
       SQLLib::UpdateRow("prods",$sql,"id=".(int)$itemID);
     }
-    
+
     if (isset($reqData["platform"]))
     {
       $data["platform"] = array_unique($reqData["platform"]);
@@ -1063,7 +1079,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
         SQLLib::InsertRow("prods_platforms",$a);
       }
     }
-    
+
   }
 };
 
