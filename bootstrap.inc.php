@@ -85,6 +85,10 @@ if (defined("POUET_EXCEPTION_LOG"))
 {
   set_exception_handler( function($ex){
     LOG::Error($ex);
+    if (POUET_TEST)
+    {
+      echo "<pre>"._html($ex)."</pre>";
+    }
   } );
 }
 
