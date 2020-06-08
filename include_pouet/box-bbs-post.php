@@ -23,7 +23,7 @@ class PouetBoxBBSPost extends PouetBox {
     if (!$message)
       return array("not too meaningful, is it...");
 
-    if ($currentUser->glops == 0 && substr($message,"://")!==false)
+    if ($currentUser->glops == 0 && strpos($message,"://")!==false)
       return array("you need at least 1 glöp to post links !");
 
     $topic = SQLLib::SelectRow(sprintf_esc("SELECT * FROM bbs_topics where id=%d",$this->topic));
