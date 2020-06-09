@@ -726,6 +726,122 @@ function checkForNewsTickers()
   });
 }
 
+// trims the post content of a bbs topic message, so it fits the autocomplete list
+function trimPostContent(postContent,query,maxlen)
+{
+  if (postContent.indexOf(query)>=0)  
+  {
+    return postContent.substring(Math.max(0,postContent.indexOf(query)-Math.floor(maxlen/2)),postContent.indexOf(query)+Math.floor(maxlen/2));
+  }
+  else
+  {
+    return postContent.substring(0,maxlen);    
+  }
+}
+
+String.prototype.replaceAll = function(strReplace, strWith) 
+{
+  var esc = strReplace.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  var reg = new RegExp(esc, 'ig');
+  return this.replace(reg, strWith);
+};
+
+// switches between different search types on search page:
+// "prod","group","party","user","bbs"
+function changeSearchType(searchType,pouetContentUrl)
+{
+  var urlArray={"prod":"./ajax_prods.php",
+                "group":"./ajax_groups.php",
+                "party":"./ajax_parties.php",
+                "user":"./ajax_users.php",
+                "bbs":"./ajax_bbspost.php"};
+
+  // empty the search field container
+  var e = document.getElementById("searchInputSpan"); 
+  var child = e.lastElementChild;  
+  while (child) 
+  { 
+    e.removeChild(child); 
+    child = e.lastElementChild; 
+  }   
+
+  // re-add the input field
+  e.innerHTML="<input autocomplete='off' id='pouetSearchInput' type='text' size='25' />";
+
+  if (searchType=="prod")
+  {
+    new Autocompleter(document.getElementById("pouetSearchInput"), 
+    {
+      "dataUrl":urlArray[searchType],
+      "processRow": function(item) {
+        var s = item.name.escapeHTML();
+        if (item.groupName) s += " <small class='group'>" + item.groupName.escapeHTML() + "</small>";
+        return s;
+      },
+      "onClickUrl":"prod.php?which=",
+      "searchBox":true
+    }
+    );
+  }
+  else if (searchType=="group")
+  {
+    new Autocompleter(document.getElementById("pouetSearchInput"), {
+      "dataUrl":urlArray[searchType],
+      "processRow": function(item) {
+      return item.name.escapeHTML() + (item.disambiguation ? " <span class='group-disambig'>" + item.disambiguation.escapeHTML() + "</span>" : "");
+    },
+    "onClickUrl":"groups.php?which=",
+    "searchBox":true
+    });
+  }
+  else if (searchType=="party")
+  {
+    new Autocompleter(document.getElementById("pouetSearchInput"), {
+      "dataUrl":urlArray[searchType],
+      "onClickUrl":"party.php?which=",
+      "searchBox":true
+    });
+  }
+  else if (searchType=="user")
+  {
+    new Autocompleter(document.getElementById("pouetSearchInput"),  {"dataUrl":urlArray[searchType],
+    "processRow": function(item) {
+      return "<img class='avatar' src='"+pouetContentUrl+"avatars/" + item.avatar.escapeHTML() + "'/> " + item.name.escapeHTML() + " <span class='glops'>" + item.glops + " glöps</span>";
+    },
+    "onClickUrl":"user.php?who=",
+    "searchBox":true
+    });
+  }
+  else if (searchType=="bbs")
+  {
+    new Autocompleter(document.getElementById("pouetSearchInput"),  {"dataUrl":urlArray[searchType],
+    "width":500,
+    "processRow": function(item) 
+    {
+      var topicName=item.topic;
+      var postContent=item.post;
+
+      if (topicName.toLowerCase().indexOf(item.searchQuery.toLowerCase())>=0)
+      {
+        topicName=topicName.replaceAll(item.searchQuery,"<span style='background-color:yellow;color:black'>"+item.searchQuery+"</span>")
+      }
+
+      // trim post content to a reasonable size
+      postContent=trimPostContent(postContent.toLowerCase(),item.searchQuery.toLowerCase(),60);
+
+      if (postContent.toLowerCase().indexOf(item.searchQuery.toLowerCase())>=0)
+      {
+        postContent = postContent.replaceAll(item.searchQuery,"<span style='background-color:yellow;color:black'>"+item.searchQuery+"</span>")
+      }
+
+      return "<b>"+topicName+"</b><br/>... "+postContent+" ..." ;
+    },    
+    "onClickUrl":"topic.php?post=",
+    "searchBox":true
+    });
+  }
+}
+
 // on load scripts - keep this to minimum
 document.observe("dom:loaded",function(){
   Cookie.init({name: 'pouetSettings', expires: 365});
