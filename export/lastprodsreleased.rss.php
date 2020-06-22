@@ -3,7 +3,7 @@ require_once("../bootstrap.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-latestreleased.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
 
-$limit = $_GET["howmany"] ? $_GET["howmany"] : 10;
+$limit = $_GET["howmany"] ? (int)$_GET["howmany"] : 10;
 $limit = min($limit,25);
 $limit = max($limit,5);
 
