@@ -89,9 +89,11 @@ class PouetBoxBBSView extends PouetBox {
     foreach ($this->posts as $c) {
       $p = $c->post;
       $p = parse_message($p);
-      echo "<div class='content cite-".$c->user->id."' id='c".$c->id."'>".$p."</div>\n";
-      echo "<div class='foot'><span class='tools' data-cid='".$c->id."'></span> added on the <a href='topic.php?post=".$c->id."'>".$c->added."</a> by ".
+      echo "<div class='bbspost cite-".$c->user->id."".($author?" author":"")."' id='c".$c->id."'>\n";
+      echo "  <div class='content'>".$p."</div>\n";
+      echo "  <div class='foot'><span class='tools' data-cid='".$c->id."'></span> added on the <a href='topic.php?post=".$c->id."'>".$c->added."</a> by ".
         $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar()."</div>\n\n";
+      echo "</div>\n";
     }
 
     if ($this->postcount > $POSTS_PER_PAGE) {
