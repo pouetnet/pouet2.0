@@ -353,7 +353,18 @@ class PouetBoxListsAdd extends PouetBox
         $a["list"] = $this->list->id;
         $a["type"] = $v;
         $a["itemid"] = $post[$v."ID"];
-        SQLLib::InsertRow("list_items",$a);
+        try
+        {
+          SQLLib::InsertRow("list_items",$a);
+        }
+        catch(SQLLibException $e)
+        {
+          if ($e->getCode() == 1062)
+          {
+            return array("that's already added! :o");
+          }
+          else throw $e;
+        }
         $added = true;
       }
     }
