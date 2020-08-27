@@ -371,6 +371,7 @@ function fireErrorOverlay( errors )
 function Youtubify( parentElement, detailed )
 {
   parentElement.select("a[rel='external']").each(function(item){
+/*    
     var ytAPIKey = "AIzaSyDkvecUtjRzQQ9W85E7CzlhA-huSmwmB1s";
     var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
     if (videoID)
@@ -408,7 +409,7 @@ function Youtubify( parentElement, detailed )
       });
       return;
     }
-    
+*/    
     var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
     if (pouetID)
     {
