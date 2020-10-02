@@ -103,7 +103,7 @@ class PouetBoxAccount extends PouetBox
         "required"=>true,
         "value"=>$this->user->avatar,
         "type"=>"avatar",
-        "infoAfter"=>"(<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span> <span id='avatarPicker'></span>",
+        "infoAfter"=>"<span id='avatarCount'></span> (<a href='submit_avatar.php'>upload new</a>) <span id='randomAvatar'></span> <span id='avatarPicker'></span>",
       )
     );
     $this->fieldsOtherSites = array(
@@ -559,9 +559,38 @@ document.observe("dom:loaded",function(){
   if (!$("avatarlist"))
     return;
 
+  var updateAvatarCount = function()
+  {
+    var avatar = $("avatar").options[ $("avatar").selectedIndex ].value;
+    new Ajax.Request("ajax_avatar.php",{
+      "parameters" : {"avatar":avatar},
+      "onException": function(r, e) { throw e; },
+      "onSuccess": function(transport)
+        {
+          if (transport.responseJSON && transport.responseJSON.avatarCount)
+          {
+            var c = parseInt(transport.responseJSON.avatarCount,10);
+            if (c == 0)
+            {
+              $("avatarCount").update("(this avatar is unique !)");
+            }
+            else if (c == 1)
+            {
+              $("avatarCount").update("(only one other person uses this avatar !)");
+            }
+            else
+            {
+              $("avatarCount").update("(this avatar is used by "+c+" other people !)");
+            }
+          }
+        },
+    });
+  }
+  
   var updateAvatar = function()
   {
     $("avatarimg").src = "<?=POUET_CONTENT_URL?>avatars/" + $("avatar").options[ $("avatar").selectedIndex ].value;
+    updateAvatarCount();
   }
 
   var img = new Element("img",{"id":"avatarimg","width":16,"height":16});
