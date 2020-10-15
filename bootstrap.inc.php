@@ -128,6 +128,7 @@ else
 $TITLE = "";
 $metaValues = array();
 $metaValues["og:type"] = "website";
+$metaValues["og:site_name"] = "pou&euml;t.net";
 
 $RSS = array();
 $linkedData = array();
