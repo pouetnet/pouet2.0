@@ -49,6 +49,10 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
   }
 
   function RenderBody() {
+    if (!$this->rssData['items'])
+    {
+      return;
+    }
     echo "<ul class='boxlist'>\n";
     for($i=0; $i < min( count($this->rssData['items']),$this->limit); $i++)
     {
