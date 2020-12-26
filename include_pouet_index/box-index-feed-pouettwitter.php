@@ -75,7 +75,9 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
 
   function RenderBody() {
     if (!$this->jsonData)
+    {
       return;
+    }
     echo "<ul class='boxlist boxlisttable'>\n";
     for($i=0; $i < min( count($this->jsonData),$this->limit); $i++)
     {
@@ -91,7 +93,7 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='http://twitter.com/pouetdotnet'>more at @pouetdotnet !</a>...</div>\n";
+    echo "  <div class='foot'><a href='https://twitter.com/pouetdotnet'>more at @pouetdotnet !</a>...</div>\n";
     echo "</div>\n";
   }
 };

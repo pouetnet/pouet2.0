@@ -36,7 +36,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     $this->jsonData = array();
 
     $sideload = new Sideload();
-    $response = $sideload->Request('http://pounds-off.me/',"GET",array("format"=>"json"));
+    $response = $sideload->Request('https://pounds-off.me/',"GET",array("format"=>"json"));
     if ($response)
     {  
       $this->jsonData = json_decode( $response, true );
@@ -44,7 +44,10 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
   }
 
   function RenderBody() {
-    if (!$this->jsonData) return;
+    if (!$this->jsonData)
+    {
+      return;
+    }
     echo "<ul class='boxlist'>\n";
     for($i=0; $i < min( count($this->jsonData),$this->limit); $i++)
     {
@@ -61,7 +64,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='http://pounds-off.me/'>more at pounds-off</a>...</div>\n";
+    echo "  <div class='foot'><a href='https://pounds-off.me/'>more at pounds-off</a>...</div>\n";
     echo "</div>\n";
   }
 };

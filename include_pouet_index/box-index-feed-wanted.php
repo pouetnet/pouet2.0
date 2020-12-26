@@ -45,7 +45,7 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
   }
 
   function LoadFromDB() {
-    $this->rssData = $this->rss->get('http://wanted.scene.org/rss/?random=weighted');
+    $this->rssData = $this->rss->get('https://wanted.scene.org/rss/?random=weighted');
   }
 
   function RenderBody() {
@@ -68,7 +68,7 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='http://wanted.scene.org/'>more at wanted !</a>...</div>\n";
+    echo "  <div class='foot'><a href='https://wanted.scene.org/'>more at wanted !</a>...</div>\n";
     echo "</div>\n";
   }
 };
