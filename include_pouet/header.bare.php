@@ -66,6 +66,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <!--[if lt IE 9]><script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
+  <meta name="theme-color" content="#396BA5" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="description" content="pouët.net - your online demoscene resource"/>
   <meta name="keywords" content="pouët.net,pouët,pouet.net,pouet,256b,1k,4k,40k,64k,cracktro,demo,dentro,diskmag,intro,invitation,lobster sex,musicdisk,Amiga AGA,Amiga ECS,Amiga PPC,Amstrad CPC,Atari ST,BeOS,Commodore 64,Falcon,MS-Dos,Linux,MacOS,Windows"/>
