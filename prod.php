@@ -637,7 +637,7 @@ class PouetBoxProdComments extends PouetBox {
         
       echo "  <div class='content'>".$p."</div>\n";
       
-      echo "  <div class='foot'>\n";
+      echo "  <div class='foot'>";
       if ($c->rating)
         echo "<span class='vote ".$rating."'>".$rating."</span>";
       if ($main->userCDCs[$c->user->id])
@@ -650,7 +650,7 @@ class PouetBoxProdComments extends PouetBox {
       echo $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar();
 
       echo "</div>\n";
-      echo "</div>\n";
+      echo "</div>\n\n";
       
     }
     $this->paginator->RenderNavbar();
