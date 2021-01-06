@@ -15,50 +15,62 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
 
   $tag_open = '<';
   $tag_close = '>';
-  $count = 0;
-  $in_tag = 0;
-  $str_len = mb_strlen($str,$encoding);
-  $segment_width = 0;
 
-  for ($i=0; $i<=$str_len; $i++)
+  $lines = preg_split("/\n/",$str);
+  $out = array();
+  foreach($lines as $line)
   {
-    //$char = $str[$i];
-    $char = mb_substr($str,$i,1,$encoding);
-    if ($char == $tag_open) 
+    if (mb_strlen($line,$encoding) <= $cols)
     {
-      $in_tag++;
+      $out[] = $line;
+      continue;
     }
-    else if ($char == $tag_close) 
+    
+    $count = 0;
+    $in_tag = 0;
+    $segment_width = 0;
+    $line_len = mb_strlen($line,$encoding);
+    for ($i=0; $i<=$line_len; $i++)
     {
-      if ($in_tag > 0) 
+      //$char = $str[$i];
+      $char = mb_substr($line,$i,1,$encoding);
+      if ($char == $tag_open) 
       {
-        $in_tag--;
-        $segment_width = 0;
+        $in_tag++;
       }
-    } 
-    else 
-    {
-      if ($in_tag == 0) 
+      else if ($char == $tag_close) 
       {
-        if($char != ' ') 
+        if ($in_tag > 0) 
         {
-          $segment_width++;
-          if ($segment_width > $cols) 
+          $in_tag--;
+          $segment_width = 0;
+        }
+      } 
+      else 
+      {
+        if ($in_tag == 0) 
+        {
+          if($char != ' ') 
           {
-            $str = mb_substr($str,0,$i,$encoding) . $cut . mb_substr($str,$i,$str_len,$encoding);
-            $i += mb_strlen($cut,$encoding);
-            $str_len = mb_strlen($str,$encoding);
+            $segment_width++;
+            if ($segment_width > $cols) 
+            {
+              $line = mb_substr($line,0,$i,$encoding) . $cut . mb_substr($line,$i,$str_len,$encoding);
+              $i += mb_strlen($cut,$encoding);
+              $line_len = mb_strlen($line,$encoding);
+              $segment_width = 0;
+            }
+          } 
+          else 
+          {
             $segment_width = 0;
           }
-        } 
-        else 
-        {
-          $segment_width = 0;
         }
       }
     }
+    $out[] = $line;
   }
-  return $str;
+  return implode("\n",$out);
 }
 
 function toObject($array) {
