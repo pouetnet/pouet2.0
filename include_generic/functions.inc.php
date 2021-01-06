@@ -32,7 +32,6 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
     $line_len = mb_strlen($line,$encoding);
     for ($i=0; $i<=$line_len; $i++)
     {
-      //$char = $str[$i];
       $char = mb_substr($line,$i,1,$encoding);
       if ($char == $tag_open) 
       {
@@ -43,7 +42,6 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
         if ($in_tag > 0) 
         {
           $in_tag--;
-          $segment_width = 0;
         }
       } 
       else 
