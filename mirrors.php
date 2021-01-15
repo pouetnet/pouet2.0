@@ -33,12 +33,12 @@ class PouetBoxMirrors extends PouetBox {
 
     $links = array();
 
-    $links["http://files.scene.org/search/?q=".$extensionless.""] = $this->prod->name." on scene.org"; //(works now! [in theory])
-    $links["http://www.google.com/search?q=\"".$extensionless."\""] = $this->prod->name . " on google";
+    $links["https://files.scene.org/search/?q=".$extensionless.""] = $this->prod->name." on scene.org"; //(works now! [in theory])
+    $links["https://www.google.com/search?q=\"".$extensionless."\""] = $this->prod->name . " on google";
 //    $links["http://www.filesearching.com/cgi-bin/s?q=".$extensionless.""] = $this->prod->name . " on filesearching.com";
 //    $links["http://www.filemirrors.com/search.src?file=".$extensionless.""] = $this->prod->name . " on filemirrors";
-    $links["http://hornet.scene.org/cgi-bin/scene-search.cgi?search=".$extensionless.""] = $this->prod->name . " on the hornet archive";
-    $links["http://web.archive.org/web/*/".$this->prod->download] = $this->prod->name." on the wayback machine";
+    $links["https://hornet.org/cgi-bin/scene-search.cgi?search=".$extensionless.""] = $this->prod->name . " on the hornet archive";
+    $links["https://web.archive.org/web/*/".$this->prod->download] = $this->prod->name." on the wayback machine";
     $links["http://pouet-mirror.sesse.net/*/".$this->prod->download] = $this->prod->name." on Sesse's pou\xC3\xABt.net mirror";
 
     $hasAmiga = false;
