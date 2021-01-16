@@ -11,7 +11,11 @@ $sql->AddTable("boards");
 $r = array();
 if ($_POST["search"])
 {
-  $sql->AddWhere(sprintf_esc("name like '%%%s%%'",_like($_POST["search"])));
+  $terms = split_search_terms( $_POST["search"] );
+  foreach($terms as $term)
+  {
+    $sql->AddWhere(sprintf_esc("name like '%%%s%%'",_like($term)));
+  }
   $sql->AddOrder(sprintf_esc("if(name='%s',1,2), name",$_POST["search"]));
   $sql->SetLimit(10);
   $r = SQLLib::selectRows( $sql->GetQuery() );

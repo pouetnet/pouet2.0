@@ -13,7 +13,11 @@ $sql->AddTable("prods");
 $r = array();
 if ($_POST["search"])
 {
-  $sql->AddWhere(sprintf_esc("prods.name like '%%%s%%'",_like($_POST["search"])));
+  $terms = split_search_terms( $_POST["search"] );
+  foreach($terms as $term)
+  {
+    $sql->AddWhere(sprintf_esc("prods.name like '%%%s%%'",_like($term)));
+  }
   $sql->AddOrder(sprintf_esc("if(prods.name='%s',1,2), prods.views desc, prods.name",$_POST["search"]));
   $sql->SetLimit(10);
   $r = SQLLib::selectRows( $sql->GetQuery() );

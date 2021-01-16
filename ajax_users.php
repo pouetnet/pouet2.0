@@ -13,7 +13,11 @@ $sql->AddTable("users");
 $r = array();
 if ($_POST["search"])
 {
-  $sql->AddWhere(sprintf_esc("nickname like '%%%s%%'",_like($_POST["search"])));
+  $terms = split_search_terms( $_POST["search"] );
+  foreach($terms as $term)
+  {
+    $sql->AddWhere(sprintf_esc("nickname like '%%%s%%'",_like($term)));
+  }
   $sql->AddOrder(sprintf_esc("if(nickname='%s',1,2)",$_POST["search"]));
   $sql->AddOrder("nickname");
   $sql->AddOrder("lastLogin DESC");
