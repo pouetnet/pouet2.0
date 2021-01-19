@@ -15,14 +15,12 @@ class PouetBoxBoardMain extends PouetBox
 
   function LoadFromDB() 
   {
-    $this->board = SQLLib::SelectRow(sprintf_esc("select * from boards where id = %d",$this->id));
+    $this->board = PouetBoard::Spawn($this->id);
     if (!$this->board) return;
 
     $a = SQLLib::SelectRows(sprintf_esc("select * from boards_platforms where board = %d",$this->id));
     $this->platforms = array();
     foreach($a as $v) $this->platforms[] = $v->platform;
-
-    $this->addedUser = PouetUser::Spawn($this->board->addedUser);
 
     $this->nfos = SQLLib::SelectRows(sprintf_esc("select * from othernfos where refid = %d",$this->id));
 
@@ -43,7 +41,7 @@ class PouetBoxBoardMain extends PouetBox
     global $currentUser,$PLATFORMS;
     echo "<div id='".$this->uniqueID."' class='pouettbl'>\n";
     echo "<div id='boardname'>\n";
-    echo sprintf("<a href='boards.php?which=%d'>%s</a>",$this->id,_html($this->board->name));
+    echo $this->board->RenderLink();
 
     if ($currentUser && $currentUser->CanEditItems())
     {
@@ -153,7 +151,12 @@ class PouetBoxBoardMain extends PouetBox
     echo "  </div>\n";
     echo "</div>\n";
 
-    echo " <div class='foot'>added on the ".$this->board->addedDate." by ".$this->addedUser->PrintLinkedName()." ".$this->addedUser->PrintLinkedAvatar()."</div>\n";
+    echo " <div class='foot'>added on the ".$this->board->addedDate;
+    if ($this->board->addeduser)
+    {
+      echo " by ".$this->board->addeduser->PrintLinkedName()." ".$this->board->addeduser->PrintLinkedAvatar();
+    }
+    echo "</div>\n";
 
     echo "</div>\n";
     return $s;
