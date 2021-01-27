@@ -1048,7 +1048,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
       {
         case "partyID":    $sql["party"] = nullify($v); break;
         case "partyYear":  $sql["party_year"] = $v; break;
-        case "partyCompo": $sql["party_compo"] = $v; break;
+        case "partyCompo": $sql["party_compo"] = nullify($v); break;
         case "partyRank":  $sql["party_place"] = $v; break;
         case "type":       $sql["type"] = implode(",",$v); break;
         case "platform":   break; // deal with this underneath
