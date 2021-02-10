@@ -1,4 +1,17 @@
 <?php
+class BenchTimer
+{
+  function __construct( $name = "" )
+  {
+    $this->start = microtime_float();
+    $this->name = $name ?: "bench";
+  }
+  function __destruct()
+  {
+    printf("<!-- %s = %.4f sec -->\n",$this->name,microtime_float() - $this->start);
+  }
+};
+
 function microtime_float()
 {
   return microtime(true);
@@ -26,13 +39,12 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
       continue;
     }
     
-    $count = 0;
+    $i = 0;
     $in_tag = 0;
     $segment_width = 0;
-    $line_len = mb_strlen($line,$encoding);
-    for ($i=0; $i<=$line_len; $i++)
+    $chrArray = preg_split('//u', $line, -1, PREG_SPLIT_NO_EMPTY);
+    foreach($chrArray as $char)
     {
-      $char = mb_substr($line,$i,1,$encoding);
       if ($char == $tag_open) 
       {
         $in_tag++;
@@ -65,6 +77,7 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
           }
         }
       }
+      $i++;
     }
     $out[] = $line;
   }
