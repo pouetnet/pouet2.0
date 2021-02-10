@@ -41,7 +41,7 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
   }
 
   function LoadFromDB() {
-    $this->rssData = $this->rss->get('http://feeds.demoparty.net/demoparty/parties');
+    $this->rssData = $this->rss->get('https://www.demoparty.net/demoparties.xml');
   }
 
   function RenderBody() {
