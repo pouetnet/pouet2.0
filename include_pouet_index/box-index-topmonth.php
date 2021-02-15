@@ -32,7 +32,7 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
 
   function LoadFromDB() {
     $s = new BM_Query("prods");
-    $s->AddOrder("(prods.views/((sysdate()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
+    $s->AddOrder("(prods.views/GREATEST((sysdate()-prods.addedDate)/100000, 0.25)+prods.views)*prods.voteavg*prods.voteup DESC");
     $s->AddWhere("prods.addedDate > DATE_SUB(NOW(), INTERVAL 30 DAY)");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
