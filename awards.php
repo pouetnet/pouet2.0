@@ -34,16 +34,17 @@ class PouetBoxAwards extends PouetBox {
     $lastCategory = "";
     foreach ($this->prods as $row)
     {
-      if ($lastYear != substr($row->prod->releaseDate,0,4))
+      $year = substr($row->prod->releaseDate,0,4);
+      if ($lastYear != $year)
       {
-        $lastYear = substr($row->prod->releaseDate,0,4);
+        $lastYear = $year;
         printf("<tr><th colspan='3' class='year'>%d</th></tr>\n",$lastYear);
       }
       $category = $AWARDS_CATEGORIES[$row->categoryID];
       if ($lastCategory != $row->categoryID)
       {
         $lastCategory = $row->categoryID;
-        printf("<tr id='%s'><th colspan='3' class='category'>%s</th></tr>\n",hashify($category->series.$year.$category->category),$category->series." - ".$category->category);
+        printf("<tr id='%s'><th colspan='3' class='category'>%s</th></tr>\n",hashify($category->series." ".$year." ".$category->category),$category->series." - ".$category->category);
       }
       $p = $row->prod;
       if (!$p) continue;

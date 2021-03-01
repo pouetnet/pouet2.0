@@ -113,7 +113,7 @@ class PouetProd extends BM_Class {
   		printf("<li><a class='%s %s' href='awards.php#%s' title='%s'>%s</a></a>",
   		  $category->cssClass,
   		  $a->awardType,
-  		  hashify($category->series.$year.$category->category),
+  		  hashify($category->series." ".$year." ".$category->category),
   		  _html($title),
   		  _html($title));
     /*
