@@ -1,23 +1,22 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxSceneOrgAwards extends PouetBox {
+class PouetBoxAwards extends PouetBox {
   function __construct() {
     parent::__construct();
-    $this->uniqueID = "pouetbox_sceneorgawards";
-    $this->title = "scene.org awards";
+    $this->uniqueID = "pouetbox_awards";
+    $this->title = "awards";
   }
 
   function LoadFromDB()
   {
-    $s = new BM_Query("sceneorgrecommended");
-    $s->AddField("sceneorgrecommended.type");
-    $s->AddField("sceneorgrecommended.category");
-    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
-    $s->AddOrder("sceneorgrecommended.category");
-    $s->AddOrder("sceneorgrecommended.type");
-    $s->AddWhere("sceneorgrecommended.type in ('awardwinner','awardnominee')");
+    $s = new BM_Query("awards");
+    $s->AddField("awards.awardType");
+    $s->AddField("awards.categoryID");
+    $s->attach(array("awards"=>"prodID"),array("prods as prod"=>"id"));
+    $s->AddOrder("date_format(awards_prod.releaseDate,'%Y') DESC");
+    $s->AddOrder("awards.categoryID");
+    $s->AddOrder("awards.awardType");
     $this->prods = $s->perform();
 
     $a = array();
@@ -27,6 +26,8 @@ class PouetBoxSceneOrgAwards extends PouetBox {
 
   function RenderBody()
   {
+    global $AWARDS_CATEGORIES;
+    
     echo "\n\n";
     echo "<table class='boxtable'>\n";
     $lastYear = 0;
@@ -36,97 +37,21 @@ class PouetBoxSceneOrgAwards extends PouetBox {
       if ($lastYear != substr($row->prod->releaseDate,0,4))
       {
         $lastYear = substr($row->prod->releaseDate,0,4);
-        echo "<tr><th colspan='3' class='year'>".$lastYear."</th></tr>\n";
+        printf("<tr><th colspan='3' class='year'>%d</th></tr>\n",$lastYear);
       }
-      if ($lastCategory != $row->category)
+      $category = $AWARDS_CATEGORIES[$row->categoryID];
+      if ($lastCategory != $row->categoryID)
       {
-        $lastCategory = $row->category;
-        echo "<tr id='".hashify($lastYear.$lastCategory)."'><th colspan='3' class='category'>".$lastCategory."</th></tr>\n";
+        $lastCategory = $row->categoryID;
+        printf("<tr id='%s'><th colspan='3' class='category'>%s</th></tr>\n",hashify($category->series.$year.$category->category),$category->series." - ".$category->category);
       }
       $p = $row->prod;
       if (!$p) continue;
       echo "<tr>\n";
       echo "<td>\n";
-      echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";
-      echo $p->RenderTypeIcons();
-      echo "<span class='prod'>".$p->RenderLink()."</span>\n";
-      echo "</td>\n";
-
-      echo "<td>\n";
-      echo $p->RenderGroupsShortProdlist();
-      echo "</td>\n";
-
-      echo "<td>\n";
-      echo $p->RenderPlatformIcons();
-      echo "</td>\n";
-      echo "</tr>\n";
-    }
-    echo "</table>\n";
-  }
-};
-
-class PouetBoxMeteorikAwards extends PouetBoxSceneOrgAwards {
-  function __construct() {
-    parent::__construct();
-    $this->uniqueID = "pouetbox_meteorikawards";
-    $this->title = "meteorik awards";
-  }
-
-  function LoadFromDB()
-  {
-    $s = new BM_Query("sceneorgrecommended");
-    $s->AddField("sceneorgrecommended.type");
-    $s->AddField("sceneorgrecommended.category");
-    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
-    $s->AddOrder("sceneorgrecommended.category");
-    $s->AddOrder("sceneorgrecommended.type");
-    $s->AddWhere("sceneorgrecommended.type in ('meteorikwinner','meteoriknominee')");
-    $this->prods = $s->perform();
-
-    $a = array();
-    foreach($this->prods as $v) $a[] = &$v->prod;
-    PouetCollectPlatforms($a);
-  }
-};
-
-class PouetBoxSceneOrgTips extends PouetBox {
-  function __construct() {
-    parent::__construct();
-    $this->uniqueID = "pouetbox_sceneorgtips";
-    $this->title = "scene.org viewing tips";
-  }
-
-  function LoadFromDB()
-  {
-    $s = new BM_Query("sceneorgrecommended");
-    $s->AddField("sceneorgrecommended.type");
-    $s->attach(array("sceneorgrecommended"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(sceneorgrecommended_prod.releaseDate,'%Y') DESC");
-    $s->AddWhere("sceneorgrecommended.type = 'viewingtip'");
-    $this->sceneorg = $s->perform();
-
-    $a = array();
-    foreach($this->sceneorg as $v) $a[] = &$v->prod;
-    PouetCollectPlatforms($a);
-  }
-
-  function RenderBody()
-  {
-    echo "\n\n";
-    echo "<table class='boxtable'>\n";
-    $lastYear = 0;
-    $lastCategory = "";
-    foreach ($this->sceneorg as $row)
-    {
-      if ($lastYear != substr($row->prod->releaseDate,0,4))
-      {
-        $lastYear = substr($row->prod->releaseDate,0,4);
-        echo "<tr id='".$lastYear."'><th colspan='3' class='year'>".$lastYear."</th></tr>\n";
-      }
-      $p = $row->prod;
-      echo "<tr>\n";
-      echo "<td>\n";
+      
+      //echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";
+      printf( "<span class='icon %s %s'></span>\n",$category->cssClass,$row->awardType);
       echo $p->RenderTypeIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";
       echo "</td>\n";
@@ -151,15 +76,7 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-$box = new PouetBoxMeteorikAwards();
-$box->Load();
-$box->Render();
-
-$box = new PouetBoxSceneOrgAwards();
-$box->Load();
-$box->Render();
-
-$box = new PouetBoxSceneOrgTips();
+$box = new PouetBoxAwards();
 $box->Load();
 $box->Render();
 

@@ -94,24 +94,46 @@ class PouetProd extends BM_Class {
     }
     return implode(" & ",$s);
   }
-  function RenderAwards() {
-    if ($this->cdc)
-      cdcstack( $this->cdc );
+  function RenderAwards()
+  {
+    global $AWARDS_CATEGORIES;
 
-    if ($this->awards)
+    if (!$this->awards)
     {
-      echo "<div class='awards'>";
-      foreach($this->awards as $a)
-      {
-    		printf("<a href='awards.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
-    		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . hashify($a->category),
-    		  _html($a->type),
-    		  _html($a->category),
-    		  _html($a->category));
-  		}
-      echo "</div>";
-		}
+      return;
+    }
 
+    echo "<ul class='awards'>";
+    foreach($this->awards as $a)
+    {
+      $category = $AWARDS_CATEGORIES[$a->categoryID];
+      $year = substr($this->releaseDate,0,4);
+      $title = $category->series." - ".$category->category;
+
+  		printf("<li><a class='%s %s' href='awards.php#%s' title='%s'>%s</a></a>",
+  		  $category->cssClass,
+  		  $a->awardType,
+  		  hashify($category->series.$year.$category->category),
+  		  _html($title),
+  		  _html($title));
+    /*
+  		printf("<li><a href='awards.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
+  		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . hashify($a->category),
+  		  _html($a->type),
+  		  _html($a->category),
+  		  _html($a->category));
+    */
+		}
+    echo "</ul>";
+  }
+  function RenderAccolades()
+  {
+    if ($this->cdc)
+    {
+      cdcstack( $this->cdc );
+    }
+
+    $this->RenderAwards();
   }
   function GetLink( $root = POUET_ROOT_URL) {
     return sprintf( $root . "prod.php?which=%d",$this->id);
@@ -175,7 +197,7 @@ class PouetProd extends BM_Class {
     SQLLib::Query(sprintf_esc("DELETE FROM nfos WHERE prod=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM screenshots WHERE prod=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prods_platforms WHERE prod=%d",$this->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM sceneorgrecommended WHERE prodid=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM awards WHERE prodID=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM users_cdcs WHERE cdc=%d",$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM affiliatedprods WHERE original=%d or derivative=%d",$this->id,$this->id));
     SQLLib::Query(sprintf_esc("DELETE FROM prods_refs WHERE prod=%d",$this->id));
@@ -200,18 +222,18 @@ class PouetProd extends BM_Class {
   function ToAPI()
   {
     $array = $this->ToAPISuper();
-    
+
     $screenshot = find_screenshot( $this->id );
     if ($screenshot)
     {
       $array["screenshot"] = POUET_CONTENT_URL . $screenshot;
     }
-  
+
     global $COMPOTYPES;
     $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
     foreach($this->placings as &$p)
       $p->compo_name = $COMPOTYPES[ $p->compo ];
-    
+
     unset($array["group1"]);
     unset($array["group2"]);
     unset($array["group3"]);
@@ -250,12 +272,12 @@ function PouetCollectAwards( &$prodArray )
   foreach($prodArray as $v) if ($v->id) $ids[] = $v->id;
   if (!$ids) return;
 
-  $rows = SQLLib::selectRows("select * from sceneorgrecommended where prodid in (".implode(",",$ids).") order by type, category");
+  $rows = SQLLib::selectRows("select * from awards where prodID in (".implode(",",$ids).") order by awardType, categoryID");
   foreach($prodArray as &$v)
   {
     foreach($rows as &$r)
     {
-      if ($v->id == $r->prodid)
+      if ($v->id == $r->prodID)
       {
         $v->awards[] = $r;
         unset($r);

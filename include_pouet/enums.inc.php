@@ -43,6 +43,16 @@ $AWARDSSUGGESTIONS_EVENTS = handle_db_cache( POUET_ROOT_LOCAL . "/cache/awardssu
   return $cats;
 });
 
+global $AWARDS_CATEGORIES;
+$AWARDS_CATEGORIES = handle_db_cache( POUET_ROOT_LOCAL . "/cache/awards-categories.cache", function() {
+  $rows = SQLLib::selectRows("select * from awards_categories");
+  
+  $cats = array();
+  foreach($rows as $v) $cats[$v->id] = $v;
+  ksort($cats);
+  return $cats;
+});
+
 $AFFILIATIONS_ORIGINAL = array(
   "remix" => "remixed in",
   "port" => "ported to",

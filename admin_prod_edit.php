@@ -222,53 +222,57 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
+class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
 {
-  public static $slug = "Sceneorg";
+  public static $slug = "Awards";
   function __construct( $prod )
   {
     parent::__construct();
 
-    $this->uniqueID = "pouetbox_prodeditprodsceneorg";
+    $this->uniqueID = "pouetbox_prodeditprodawards";
     $this->prod = $prod;
     $this->id = $prod->id;
-    $this->title = "scene.org recommendations";
+    $this->title = "prod awards";
 
-    $this->data = SQLLib::SelectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d",$this->prod->id));
-    $this->headers = array("type","category");
-
-    $row = SQLLib::selectRow("DESC sceneorgrecommended type");
+    $this->data = SQLLib::SelectRows(sprintf_esc("select * from awards where prodID = %d",$this->prod->id));
+    $this->headers = array("series / category","result");
+    
+    $row = SQLLib::selectRow("DESC awards awardType");
     $this->types = enum2array($row->Type);
 
-    $row = SQLLib::selectRow("DESC sceneorgrecommended category");
-    $this->categories = enum2array($row->Type);
+    global $AWARDS_CATEGORIES;
+    $this->categories = array();
+    foreach($AWARDS_CATEGORIES as $k=>$v)
+    {
+      $this->categories[$k] = sprintf("%s - %s",$v->series,$v->category);
+    }
   }
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delSceneorg"])
+    if ($data["delAwards"])
     {
-      SQLLib::Query("delete from sceneorgrecommended where id=".(int)$data["delSceneorg"]);
-      gloperator_log( "prod", (int)$this->prod->id, "prod_sceneorg_delete" );
+      SQLLib::Query("delete from awards where id=".(int)$data["delAwards"]);
+      gloperator_log( "prod", (int)$this->prod->id, "prod_awards_delete" );
       return array();
     }
 
     $a = array();
-    $a["type"] = $data["type"];
-    $a["category"] = $data["category"];
-    if ($data["editSceneorgID"])
+    $a["awardType"] = $data["awardType"];
+    $a["categoryID"] = $data["awardCategory"];
+    if ($data["editAwardsID"])
     {
-      SQLLib::UpdateRow("sceneorgrecommended",$a,"id=".(int)$data["editSceneorgID"]);
-      $a["id"] = $data["editSceneorgID"];
+      SQLLib::UpdateRow("awards",$a,"id=".(int)$data["editAwardsID"]);
+      $a["id"] = $data["editAwardsID"];
 
-      gloperator_log( "prod", (int)$this->prod->id, "prod_sceneorg_edit", array("id"=>$a["id"]) );
+      gloperator_log( "prod", (int)$this->prod->id, "prod_awards_edit", array("id"=>$a["id"]) );
     }
     else
     {
       $a["prodid"] = $this->prod->id;
-      $a["id"] = SQLLib::InsertRow("sceneorgrecommended",$a);
+      $a["id"] = SQLLib::InsertRow("awards",$a);
 
-      gloperator_log( "prod", (int)$this->prod->id, "prod_sceneorg_add", array("id"=>$a["id"]) );
+      gloperator_log( "prod", (int)$this->prod->id, "prod_awards_add", array("id"=>$a["id"]) );
     }
     if ($data["partial"])
     {
@@ -280,19 +284,22 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row)
   {
-    echo "    <td><select name='type' class='sceneOrgType'>\n";
+    echo "    <td><select name='awardCategory' class='awardCategory'>\n";
+    foreach($this->categories as $k=>$v)
+      printf("<option value='%d'%s>%s</option>",$k,$row->category==$v?" selected='selected'":"",_html($v));
+    echo "</select></td>\n";
+    echo "    <td><select name='awardType' class='awardType'>\n";
     foreach($this->types as $v)
       printf("<option%s>%s</option>",$row->type==$v?" selected='selected'":"",_html($v));
-    echo "</select></td>\n";
-    echo "    <td><select name='category' class='sceneOrgCategory'>\n";
-    foreach($this->categories as $v)
-      printf("<option%s>%s</option>",$row->category==$v?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
   }
   function RenderNormalRow($v)
   {
-    echo "    <td><img src='".POUET_CONTENT_URL."gfx/sceneorg/"._html($v->type).".gif'/> "._html($v->type)."</td>\n";
-    echo "    <td>"._html($v->category)."</td>\n";
+    global $AWARDS_CATEGORIES;
+    
+    $category = $AWARDS_CATEGORIES[$v->categoryID];
+    echo "    <td>"._html($category->series." - ".$category->category)."</td>\n";
+    echo "    <td>"._html($v->awardType)."</td>\n";
   }
   function RenderBody()
   {
@@ -301,15 +308,7 @@ class PouetBoxAdminEditProdSceneorg extends PouetBoxEditConnectionsBase
 <script>
 <!--
 document.observe("dom:loaded",function(){
-  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodsceneorg"), "prodSceneorg",{
-    onRowLoad: function(tr){
-      tr.down(".sceneOrgType").observe("change",function(e){
-        if(e.element().options[ e.element().selectedIndex ].value == "viewingtip")
-        {
-          tr.down(".sceneOrgCategory").selectedIndex = $A(tr.down(".sceneOrgCategory").options).indexOf( $A(tr.down(".sceneOrgCategory").options).detect(function(item){ return item.value == "viewing tip"; }) );
-        }
-      });
-    }
+  InstrumentAdminEditorForAjax( $("pouetbox_prodeditprodawards"), "prodAwards", {
   } );
 });
 //-->
@@ -735,7 +734,7 @@ $boxen = array(
   "PouetBoxAdminEditProdLinks",
   "PouetBoxAdminEditProdCredits",
   "PouetBoxAdminEditProdParties",
-  "PouetBoxAdminEditProdSceneorg",
+  "PouetBoxAdminEditProdAwards",
   "PouetBoxAdminEditProdAffil",
 );
 if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())

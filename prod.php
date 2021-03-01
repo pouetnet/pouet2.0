@@ -48,6 +48,7 @@ class PouetBoxProdMain extends PouetBox {
 
     $a = array(&$this->prod);
     PouetCollectPlatforms( $a );
+    PouetCollectAwards( $a );
 
     if ($this->prod->boardID)
       $this->board = SQLLib::SelectRow(sprintf_esc("SELECT * FROM boards WHERE id = %d",$this->prod->boardID));
@@ -91,8 +92,6 @@ class PouetBoxProdMain extends PouetBox {
     foreach($cdcs as $v)
       $this->userCDCs[$v->user->id] = $v;
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
-
-    $this->awards = SQLLib::selectRows(sprintf_esc("select * from sceneorgrecommended where prodid = %d order by type, category",$this->id));
 
     $s = new BM_Query("credits");
     $s->AddField("credits.role");
@@ -274,14 +273,16 @@ class PouetBoxProdMain extends PouetBox {
     }
     echo "</table>\n";
 
-    if (count($this->prod->placings) > 1) {
+    if (count($this->prod->placings) > 1) 
+    {
       echo "<table id='partytable'>\n";
       echo " <tr>\n";
       echo "  <th>party</th>\n";
       echo "  <th>ranking</th>\n";
       echo "  <th>compo</th>\n";
       $n = 1;
-      foreach ($this->prod->placings as $p) {
+      foreach ($this->prod->placings as $p) 
+      {
         if (!$p->party) continue;
         echo " <tr>\n";
         echo "  <td>".$p->party->PrintLinked($p->year)."</td>\n";
@@ -295,24 +296,16 @@ class PouetBoxProdMain extends PouetBox {
       echo "</table>\n";
     }
   }
-  function RenderPopularity() {
+  function RenderPopularity() 
+  {
     $pop = (int)calculate_popularity( $this->prod->views );
     echo "popularity : ".$pop."%<br/>\n";
     echo progress_bar( $pop, $pop."%" );
 
-    $year = substr($this->prod->releaseDate,0,4);
-    echo "<div class='awards'>";
-    foreach($this->awards as $award)
-    {
-    	printf("<a href='./awards.php#%s'><img src='".POUET_CONTENT_URL."gfx/sceneorg/%s.gif' title='%s' alt='%s'/></a>",
-        $award->type == "viewingtip" ? $year : $year . hashify($award->category),
-        _html($award->type),
-        _html($award->category),
-        _html($award->category));
-    }
-    echo "</div>";
+    $this->prod->RenderAwards();
   }
-  function RenderAverage() {
+  function RenderAverage()
+  {
     $p = "isok";
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
