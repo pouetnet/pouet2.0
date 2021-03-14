@@ -15,8 +15,11 @@ class PouetBoxAwards extends PouetBox {
     $s->AddField("awards.categoryID");
     $s->attach(array("awards"=>"prodID"),array("prods as prod"=>"id"));
     $s->AddOrder("date_format(awards_prod.releaseDate,'%Y') DESC");
-    $s->AddOrder("awards.categoryID");
+    $s->AddJoin("left","awards_categories","awards_categories.id = awards.categoryID");
+    $s->AddOrder("awards_categories.series");
+    $s->AddOrder("awards_categories.category");
     $s->AddOrder("awards.awardType");
+    $s->AddOrder("awards_prod.name");
     $this->prods = $s->perform();
 
     $a = array();
