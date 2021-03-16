@@ -469,6 +469,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
       }
     }
     // exceptions!
+    $this->fieldsSettings["commentshours"]["max"] = 24 * 7;
     $this->fieldsSettings["topicposts"]["min"] = 1;
     //$this->fieldsSettings["indexojnews"]["max"] = 10;
     $this->fieldsSettings["displayimages"]["fields"] = array(0=>"links",1=>"images");
