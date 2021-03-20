@@ -36,7 +36,7 @@ class PouetBoxIndexFeedPoundsOff extends PouetBoxCachable {
     $this->jsonData = array();
 
     $sideload = new Sideload();
-    $response = $sideload->Request('https://pounds-off.me/',"GET",array("format"=>"json"));
+    $response = $sideload->Request('http://pounds-off.me/',"GET",array("format"=>"json"));
     if ($response)
     {  
       $this->jsonData = json_decode( $response, true );
