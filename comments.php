@@ -5,7 +5,7 @@ class PouetBoxLatestComments extends PouetBox {
   function __construct() {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
-    $this->title = "latest comments in the last 24 hours";
+    $this->title = sprintf("latest comments in the last %d hours",get_setting("commentshours"));
   }
 
   function LoadFromDB()
