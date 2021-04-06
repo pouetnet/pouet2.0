@@ -147,7 +147,7 @@ class PouetBoxGroupMain extends PouetBox
         foreach($groups as $g) $a[] = $g->RenderShort();
         echo " (with ".implode(", ",$a).")";
       }
-      echo $p->RenderAwards();
+      echo $p->RenderAccolades();
       echo "</td>\n";
 
       echo "<td>\n";

@@ -237,7 +237,7 @@ class PouetBoxPartyView extends PouetBox
       echo "".$p->RenderLink()." ";
       if ($p->groups)
         echo "by ".$p->RenderGroupsLong()."\n";
-      echo $p->RenderAwards();
+      echo $p->RenderAccolades();
       echo "</td>\n";
 
       echo "<td class='votes'>".$p->voteup."</td>\n";

@@ -131,7 +131,7 @@ class PouetBoxTopList extends PouetBox {
       echo $p->RenderTypeIcons();
       echo $p->RenderPlatformIcons();
       echo $p->RenderSingleRowShort();
-      echo " ".$p->RenderAwards();
+      echo " ".$p->RenderAccolades();
       printf("    </span>");
 
       echo "<span><img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />&nbsp;".$p->voteup."</span>\n";

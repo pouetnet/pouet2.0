@@ -88,7 +88,7 @@ class PouetBoxSearchProd extends PouetBox
       echo $p->RenderTypeIcons();
       echo $p->RenderPlatformIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";
-      echo $p->RenderAwards();
+      echo $p->RenderAccolades();
       echo "</td>\n";
 
       echo "<td>\n";

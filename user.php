@@ -519,7 +519,7 @@ class PouetBoxUserMain extends PouetBox
         echo $p->prod->RenderTypeIcons();
         echo $p->prod->RenderPlatformIcons();
         echo $p->prod->RenderSingleRow()." ";
-        echo $p->prod->RenderAwards();
+        echo $p->prod->RenderAccolades();
         echo " [".$p->role."]";
         echo "</li>";
       }
@@ -572,7 +572,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
@@ -644,7 +644,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
@@ -670,7 +670,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
@@ -700,7 +700,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
@@ -726,7 +726,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
@@ -753,7 +753,7 @@ class PouetBoxUserMain extends PouetBox
           echo $p->RenderTypeIcons();
           echo $p->RenderPlatformIcons();
           echo $p->RenderSingleRow();
-          echo $p->RenderAwards();
+          echo $p->RenderAccolades();
           echo "</li>";
         }
         echo "</ul>";
