@@ -36,6 +36,7 @@ require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-paginator.php");
 if (POUET_TEST)
 {
   SQLLib::$debugMode = true;
+  SQLLib::$telemetry = true;
 }
 else
 {

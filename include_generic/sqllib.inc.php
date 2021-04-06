@@ -1,5 +1,5 @@
 <?php
-// version 0.0.2 (2020-08-22)
+// version 0.0.3 (2021-03-15)
 
 class SQLLibException extends Exception 
 { 
@@ -21,6 +21,7 @@ class SQLLibException extends Exception
 class SQLLib
 {
   public static $debugMode = false;
+  public static $telemetry = false;
   public static $arraysCleaned = false;
   public static $queries = array();
 
@@ -74,13 +75,19 @@ class SQLLib
       $r = @mysqli_query(SQLLib::$link,$cmd);
       if(!$r) throw new SQLLibException(mysqli_error(SQLLib::$link),mysqli_errno(SQLLib::$link),$cmd);
       $end = microtime(true);
-      SQLLib::$queries[$cmd] = $end - $start;
+      if (SQLLib::$telemetry)
+      {
+        SQLLib::$queries[$cmd] = $end - $start;
+      }
     }
     else
     {
       $r = @mysqli_query(SQLLib::$link,$cmd);
       if(!$r) throw new SQLLibException(mysqli_error(SQLLib::$link),mysqli_errno(SQLLib::$link),$cmd);
-      SQLLib::$queries[] = "*";
+      if (SQLLib::$telemetry)
+      {
+        SQLLib::$queries[] = "*";
+      }
     }
 
     return $r;
