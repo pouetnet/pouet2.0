@@ -111,7 +111,7 @@ $IM_TYPES = array(
     "display"=>function($in) { return sprintf("<a href='https://t.me/%s'>@%s</a>",_html($in),_html($in)); }
   ),
   "Twitch"=>array(
-    "capture"=>"(?:twitch\.tv\/)?@?(\w{1,15})\/?$",
+    "capture"=>"(?:twitch\.tv\/)?@?(\w{4,25})\/?$",
     "display"=>function($in) { return sprintf("<a href='https://twitch.tv/%s'>@%s</a>",_html($in),_html($in)); }
   ),
   "Twitter"=>array(
