@@ -153,9 +153,12 @@ function pouetAdmin_createDataDump()
   if (!defined("POUET_DATADUMP_PATH")) return;
   
   $dateStamp = date("Y-m-d H:i:s");
-
+  $ymd = substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8);
+  $dir = "dumps/" . substr($ymd,0,6);
+  @mkdir($dir);
+  
   // prods
-  $filename = "pouetdatadump-prods-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $filename = $dir . "/pouetdatadump-prods-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","prods":[');
   $first = true;
@@ -187,7 +190,7 @@ function pouetAdmin_createDataDump()
   $out[] = sprintf("dumped %d prods into %s",count($rows),$filename);
   
   // groups
-  $filename = "pouetdatadump-groups-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $filename = $dir . "/pouetdatadump-groups-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","groups":[');
   $first = true;
@@ -205,7 +208,7 @@ function pouetAdmin_createDataDump()
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
 
   // parties
-  $filename = "pouetdatadump-parties-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $filename = $dir . "/pouetdatadump-parties-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","parties":[');
   $first = true;
@@ -223,7 +226,7 @@ function pouetAdmin_createDataDump()
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
   
   // boards
-  $filename = "pouetdatadump-boards-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
+  $filename = $dir . "/pouetdatadump-boards-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
   gzwrite($gz, '{"dump_date":"'.$dateStamp.'","boards":[');
   $first = true;
