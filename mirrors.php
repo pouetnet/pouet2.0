@@ -56,7 +56,7 @@ class PouetBoxMirrors extends PouetBox {
     }
     if (array_search("cracktro",$this->prod->types)!==false)
     {
-      $links["http://www.defacto2.net/cracktros-detail.cfm?type=file&value=".$extensionless.""] = $this->prod->name . " on defacto2";
+      $links["https://defacto2.net/search/result?search=files&query=".$extensionless.""] = $this->prod->name . " on defacto2";
     }
     echo "<ul>\n";
     foreach($links as $url=>$desc)
