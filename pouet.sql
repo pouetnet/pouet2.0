@@ -1,10 +1,11 @@
+-- MariaDB dump 10.19  Distrib 10.5.9-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- ------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -50,6 +51,43 @@ CREATE TABLE `affiliatedprods` (
   CONSTRAINT `affiliatedprods_ibfk_1` FOREIGN KEY (`original`) REFERENCES `prods` (`id`),
   CONSTRAINT `affiliatedprods_ibfk_2` FOREIGN KEY (`derivative`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `awards`
+--
+
+DROP TABLE IF EXISTS `awards`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `awards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `prodID` int(10) NOT NULL,
+  `categoryID` int(11) NOT NULL,
+  `awardType` enum('winner','nominee') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `prodID_categoryID` (`prodID`,`categoryID`),
+  KEY `prodID` (`prodID`),
+  KEY `categoryID` (`categoryID`),
+  CONSTRAINT `awards_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`),
+  CONSTRAINT `awards_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `awards_categories` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `awards_categories`
+--
+
+DROP TABLE IF EXISTS `awards_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `awards_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `series` varchar(64) NOT NULL,
+  `category` varchar(64) NOT NULL,
+  `cssClass` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,7 +254,7 @@ CREATE TABLE `bbs_posts` (
   `topic` int(10) NOT NULL DEFAULT 0,
   `post` text NOT NULL,
   `author` int(10) NOT NULL DEFAULT 0,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `topic` (`topic`),
   KEY `idx_author` (`author`),
@@ -236,10 +274,10 @@ CREATE TABLE `bbs_topics` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `topic` varchar(255) NOT NULL,
   `category` enum('general','gfx','code','music','parties','offtopic','residue') DEFAULT NULL,
-  `lastpost` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `lastpost` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `userlastpost` int(10) NOT NULL DEFAULT 0,
   `count` int(10) unsigned NOT NULL DEFAULT 0,
-  `firstpost` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `firstpost` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `userfirstpost` int(10) NOT NULL DEFAULT 0,
   `closed` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
@@ -267,7 +305,7 @@ CREATE TABLE `boards` (
   `phonenumber` varchar(255) NOT NULL,
   `telnetip` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT 0,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `addedUser` (`addedUser`),
   CONSTRAINT `boards_ibfk_1` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
@@ -284,7 +322,7 @@ DROP TABLE IF EXISTS `boards_ads`;
 CREATE TABLE `boards_ads` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `board` int(10) NOT NULL DEFAULT 0,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `adder` int(10) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
@@ -371,7 +409,7 @@ CREATE TABLE `comments` (
   `who` int(10) NOT NULL DEFAULT 0,
   `comment` text NOT NULL,
   `rating` tinyint(2) NOT NULL DEFAULT 0,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `which` (`which`),
   KEY `who` (`who`),
@@ -468,7 +506,7 @@ CREATE TABLE `gloperator_log` (
   `itemid` int(11) NOT NULL,
   `itemType` enum('prod','group','party','topic','board') NOT NULL,
   `additionalData` text NOT NULL,
-  `date` datetime NOT NULL,
+  `date` datetime /* mariadb-5.3 */ NOT NULL,
   PRIMARY KEY (`id`),
   KEY `gloperatorid` (`gloperatorid`),
   CONSTRAINT `gloperator_log_ibfk_1` FOREIGN KEY (`gloperatorid`) REFERENCES `users` (`id`)
@@ -489,7 +527,7 @@ CREATE TABLE `groups` (
   `disambiguation` varchar(255) NOT NULL,
   `web` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT 1,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `views` int(10) unsigned DEFAULT NULL,
   `csdb` int(10) unsigned NOT NULL DEFAULT 0,
   `zxdemo` int(10) unsigned NOT NULL DEFAULT 0,
@@ -524,7 +562,7 @@ CREATE TABLE `links` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
   `comment` varchar(255) NOT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `quand` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -574,7 +612,7 @@ CREATE TABLE `lists` (
   `name` varchar(255) NOT NULL,
   `desc` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT 0,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `owner` int(10) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
@@ -639,12 +677,12 @@ CREATE TABLE `modification_requests` (
   `itemID` int(10) NOT NULL,
   `itemType` enum('prod','group','party') NOT NULL,
   `requestBlob` text NOT NULL,
-  `requestDate` datetime NOT NULL,
+  `requestDate` datetime /* mariadb-5.3 */ NOT NULL,
   `userID` int(10) NOT NULL,
   `gloperatorID` int(10) DEFAULT NULL,
   `approved` tinyint(4) DEFAULT NULL,
   `comment` text NOT NULL DEFAULT '',
-  `approveDate` datetime DEFAULT NULL,
+  `approveDate` datetime /* mariadb-5.3 */ DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `prodid` (`itemID`),
   KEY `approved` (`approved`),
@@ -665,7 +703,7 @@ DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `quand` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `who` int(10) unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
@@ -701,7 +739,7 @@ CREATE TABLE `nfos` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `prod` int(10) NOT NULL DEFAULT 0,
   `user` int(10) NOT NULL DEFAULT 0,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `prod` (`prod`),
   KEY `user` (`user`),
@@ -721,7 +759,7 @@ CREATE TABLE `ojnews` (
   `id` int(10) unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
-  `quand` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `quand` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `authorid` int(11) NOT NULL DEFAULT 0,
   `authornick` varchar(255) NOT NULL,
   `authorgroup` varchar(255) NOT NULL,
@@ -758,7 +796,7 @@ CREATE TABLE `oneliner` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `message` varchar(303) NOT NULL,
   `who` int(10) NOT NULL DEFAULT 0,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `who` (`who`),
   CONSTRAINT `oneliner_ibfk_1` FOREIGN KEY (`who`) REFERENCES `users` (`id`)
@@ -776,7 +814,7 @@ CREATE TABLE `othernfos` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `refid` int(10) unsigned NOT NULL DEFAULT 0,
   `type` enum('group','bbs') DEFAULT NULL,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `adder` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
@@ -794,7 +832,7 @@ CREATE TABLE `parties` (
   `name` varchar(255) NOT NULL,
   `web` varchar(255) NOT NULL,
   `addedUser` int(10) NOT NULL DEFAULT 0,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `added` (`addedUser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
@@ -893,7 +931,7 @@ CREATE TABLE `prods` (
   `releaseDate` date DEFAULT NULL COMMENT 'release date',
   `views` int(10) unsigned DEFAULT 0,
   `addedUser` int(10) unsigned NOT NULL DEFAULT 1,
-  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'addition date',
+  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'addition date',
   `rank` int(11) unsigned NOT NULL DEFAULT 0,
   `type` set('32b','64b','128b','256b','512b','1k','4k','8k','16k','32k','40k','64k','80k','96k','100k','128k','256k','artpack','bbstro','cracktro','demo','demopack','demotool','dentro','diskmag','fastdemo','game','intro','invitation','liveact','musicdisk','procedural graphics','report','slideshow','votedisk','wild') DEFAULT NULL,
   `party` int(10) DEFAULT NULL,
@@ -956,7 +994,7 @@ CREATE TABLE `prods_linkcheck` (
   `protocol` varchar(5) NOT NULL,
   `returnCode` smallint(6) NOT NULL,
   `returnContentType` varchar(255) NOT NULL,
-  `testDate` datetime NOT NULL,
+  `testDate` datetime /* mariadb-5.3 */ NOT NULL,
   PRIMARY KEY (`prodID`),
   CONSTRAINT `prods_linkcheck_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1028,7 +1066,7 @@ CREATE TABLE `screenshots` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `prod` int(10) NOT NULL DEFAULT 0,
   `user` int(10) NOT NULL DEFAULT 0,
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `prod_2` (`prod`),
   KEY `user` (`user`),
@@ -1072,7 +1110,7 @@ CREATE TABLE `users` (
   `permissionPostBBS` tinyint(4) NOT NULL DEFAULT 1,
   `permissionPostOneliner` tinyint(4) NOT NULL DEFAULT 1,
   `avatar` varchar(255) NOT NULL,
-  `registerDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `registerDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `udlogin` varchar(255) NOT NULL DEFAULT '',
   `glops` int(10) unsigned NOT NULL DEFAULT 0,
   `ojuice` int(10) unsigned DEFAULT 0,
@@ -1084,7 +1122,7 @@ CREATE TABLE `users` (
   `lasthost` text DEFAULT NULL,
   `lastlogin` datetime DEFAULT NULL,
   `sceneIDData` text DEFAULT NULL,
-  `sceneIDLastRefresh` datetime DEFAULT NULL,
+  `sceneIDLastRefresh` datetime /* mariadb-5.3 */ DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1118,7 +1156,7 @@ DROP TABLE IF EXISTS `users_im`;
 CREATE TABLE `users_im` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userID` int(10) NOT NULL,
-  `im_type` enum('','AIM','Discord','Email','Facebook','ICQ','Instagram','Jabber','Mastodon','MSN','Skype','Telegram','Twitter','Xfire','Yahoo') DEFAULT NULL,
+  `im_type` enum('','AIM','Discord','Email','Facebook','ICQ','Instagram','Jabber','Mastodon','MSN','Skype','Telegram','Twitch','Twitter','Xfire','Yahoo') DEFAULT NULL,
   `im_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userID` (`userID`),
@@ -1194,4 +1232,4 @@ CREATE TABLE `watchlist` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */; 
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
