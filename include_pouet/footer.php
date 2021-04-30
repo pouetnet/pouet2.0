@@ -14,7 +14,14 @@
 <?php
 $timer["html"]["end"] = microtime_float();
 $timer["page"]["end"] = microtime_float();
-printf("<li>page created in %f seconds with %d queries.</li>\n",$timer["page"]["end"] - $timer["page"]["start"],count(SQLLib::$queries));
+if (SQLLib::$telemetry)
+{
+  printf("<li>page created in %f seconds with %d queries.</li>\n",$timer["page"]["end"] - $timer["page"]["start"],count(SQLLib::$queries));
+}
+else
+{
+  printf("<li>page created in %f seconds.</li>\n",$timer["page"]["end"] - $timer["page"]["start"]);
+}
 
 if (POUET_TEST)
 {
