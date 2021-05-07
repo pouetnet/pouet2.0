@@ -109,21 +109,18 @@ class PouetProd extends BM_Class {
       $category = $AWARDS_CATEGORIES[$a->categoryID];
       $year = substr($this->releaseDate,0,4);
       $title = $category->series." - ".$category->category;
+      if ($a->awardType == "nominee")
+      {
+        $title .= " (Nominee)";
+      }
 
-  		printf("<li><a class='%s %s' href='awards.php#%s' title='%s'>%s</a></a>",
-  		  $category->cssClass,
-  		  $a->awardType,
-  		  hashify($category->series." ".$year." ".$category->category),
-  		  _html($title),
-  		  _html($title));
-    /*
-  		printf("<li><a href='awards.php#%s'><img src=\"".POUET_CONTENT_URL."gfx/sceneorg/%s.gif\" title=\"%s\" alt=\"%s\"></a>",
-  		  $a->type == "viewingtip" ? substr($this->releaseDate,0,4) : substr($this->releaseDate,0,4) . hashify($a->category),
-  		  _html($a->type),
-  		  _html($a->category),
-  		  _html($a->category));
-    */
-		}
+      printf("<li><a class='%s %s' href='awards.php#%s' title='%s'>%s</a></a>",
+        $category->cssClass,
+        $a->awardType,
+        hashify($category->series." ".$year." ".$category->category),
+        _html($title),
+        _html($title));
+    }
     echo "</ul>";
   }
   function RenderAccolades()
