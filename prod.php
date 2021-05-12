@@ -981,9 +981,9 @@ class PouetBoxProdPost extends PouetBox {
       {
         echo " <div id='prodvote'>\n";
         echo " this prod\n";
-        echo " <input type='radio' name='rating' id='ratingrulez' value='rulez'/> <label for='ratingrulez'>rulez</label>\n";
-        echo " <input type='radio' name='rating' id='ratingpig' value='isok' checked='true'/> <label for='ratingpig'>is ok</label>\n";
-        echo " <input type='radio' name='rating' id='ratingsucks' value='sucks'/> <label for='ratingsucks'>sucks</label>\n";
+        echo " <label><input type='radio' name='rating' value='rulez'/> rulez</label>\n";
+        echo " <label><input type='radio' name='rating' value='isok' checked='true'/> is ok</label>\n";
+        echo " <label><input type='radio' name='rating' value='sucks'/> sucks</label>\n";
         echo " </div>\n";
       }
       echo " <textarea name='comment' id='comment'></textarea>\n";

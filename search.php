@@ -19,7 +19,7 @@ class PouetBoxSearchBoxMain extends PouetBox
     $a = array();
     $selected = $_GET["type"] ? $_GET["type"] : "prod";
     foreach($types as $t)
-      $a[] = "<input type='radio' name='type' value='".$t."' id='search".$t."' ".($t==$selected?" checked='checked'":"")." />&nbsp;<label for='search".$t."'>".$t."</label>\n";
+      $a[] = "<label><input type='radio' name='type' value='".$t."' ".($t==$selected?" checked='checked'":"")."/>&nbsp;".$t."</label>\n";
 
     echo implode(" |\n",$a);
 

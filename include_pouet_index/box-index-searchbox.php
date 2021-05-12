@@ -18,18 +18,18 @@ class PouetBoxIndexSearchBox extends PouetBoxCachable {
     $types = array("prod","group","party"/*,"board"*/,"user","bbs");
     $a = array();
     foreach($types as $t)
-      $a[] = "<li><input type='radio' name='type' value='".$t."' id='search".$t."' ".($t=="prod"?" checked='checked'":"")." />&nbsp;<label for='search".$t."'>".$t."</label></li>\n";
+      $a[] = "<li><label><input type='radio' name='type' value='".$t."' ".($t=="prod"?" checked='checked'":"")."/>&nbsp;".$t."</label></li>\n";
 
     echo "<ul id='searchType'>";
     echo implode("\n",$a);
     echo "</ul>";
     /*
-    echo "<input type='radio' name='type' value='prod' id='prod' checked='checked' />&nbsp;<label for='prod'>prod</label>\n";
-    echo "<input type='radio' name='type' value='group' id='group'/>&nbsp;<label for='group'>group</label>\n";
-    echo "<input type='radio' name='type' value='party' id='party'/>&nbsp;<label for='party'>party</label>\n";
-    echo "<input type='radio' name='type' value='board' id='board'/>&nbsp;<label for='board'>board</label>\n";
-    echo "<input type='radio' name='type' value='user' id='user'/>&nbsp;<label for='user'>user</label>\n";
-    echo "<input type='radio' name='type' value='bbs' id='bbs'/>&nbsp;<label for='bbs'>bbs</label>\n";
+    echo "<label><input type='radio' name='type' value='prod' checked='checked'/>&nbsp;prod</label>\n";
+    echo "<label><input type='radio' name='type' value='group'/>&nbsp;group</label>\n";
+    echo "<label><input type='radio' name='type' value='party'/>&nbsp;party</label>\n";
+    echo "<label><input type='radio' name='type' value='board'/>&nbsp;board</label>\n";
+    echo "<label><input type='radio' name='type' value='user'/>&nbsp;user</label>\n";
+    echo "<label><input type='radio' name='type' value='bbs'/>&nbsp;bbs</label>\n";
     */
     echo "</div>\n";
     echo "<div class='foot'><input type='submit' value='Submit' /></div>";
