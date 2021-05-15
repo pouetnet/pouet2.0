@@ -389,11 +389,15 @@ function validateDownloadLink( $url )
     for ($x=1; $x<=5; $x++)
      if(strstr($myurl["host"],"ftp".$x.".untergrund.net"))
       $errormessage[] = "scamp says: link to ftp.untergrund.net not ftp".$x.".untergrund.net!!";
+    /*
+    // [1:04 AM] scamp: @Gargaj https://ftp/... is fine, as if I ever would have/need mirrors again that would work on all of them.
     if ($myurl["scheme"]=="http")
      $errormessage[] = "scamp says: no link to untergrund.net via http please!";
+    */
     if(strstr($myurl["host"],"www.untergrund.net"))
      $errormessage[] = "scamp says: godverdom!! link to ftp.untergrund.net instead!";
   }
+  
   if(!basename($myurl["path"]))
     $errormessage[] = "no file? no prod!";
 
