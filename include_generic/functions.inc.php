@@ -330,7 +330,10 @@ function validateLink( $url )
 
   if(strstr($myurl["host"],"geocities"))
     $errormessage[] = "please get proper hosting (e.g. untergrund or scene.org) without traffic limits";
-  if(strstr($myurl["host"],"docs.google"))
+  if(strstr($myurl["host"],"docs.google") 
+  || strstr($myurl["host"],"drive.google")
+  || strstr($myurl["host"],"dropbox.com")
+  || strstr($myurl["host"],"dropboxusercontent.com"))
     $errormessage[] = "please get proper, permanent hosting";
 
   $shithosts = array(
