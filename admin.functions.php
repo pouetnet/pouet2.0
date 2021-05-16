@@ -155,7 +155,7 @@ function pouetAdmin_createDataDump()
   $dateStamp = date("Y-m-d H:i:s");
   $ymd = substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8);
   $dir = "dumps/" . substr($ymd,0,6);
-  @mkdir($dir);
+  @mkdir(POUET_DATADUMP_PATH . $dir);
   
   // prods
   $filename = $dir . "/pouetdatadump-prods-" . $ymd . ".json.gz";
