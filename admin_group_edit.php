@@ -20,7 +20,7 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 
     $this->group = PouetGroup::Spawn( $this->id );
 
-    $this->title = "edit this group: "._html($this->group->name);
+    $this->title = "edit this group: ". $this->group->RenderLong();
   }
   use PouetForm;
   function Commit($data)

@@ -20,7 +20,7 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
     $this->party = PouetParty::Spawn( $this->id );
 
-    $this->title = sprintf("edit this party: %s %04d",_html($this->party->name),$this->year);
+    $this->title = "edit this party: ". $this->party->PrintLinked( $this->year );
   }
   use PouetForm;
   function Commit($data)
