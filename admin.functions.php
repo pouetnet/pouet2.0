@@ -96,11 +96,19 @@ function pouetAdmin_recacheTopDemos()
 
 function pouetAdmin_recheckLinkProd($prod)
 {
+  if(php_sapi_name() == "cli")
+  {
+    printf("   * %d\n",$prod->id);
+  }
   $sideload = new Sideload();
   $urls = array();
   $url = verysofturlencode($prod->download);
   for ($x=0; $x<10; $x++)
   {
+    if(php_sapi_name() == "cli")
+    {
+      printf("     * try %d: %s\n",$x+1,$url);
+    }
     $sideload->options["max_length"] = 1024; // abort download after 1k
     $sideload->options["verify_peer"] = false;
     $sideload->options["user_agent"] = "Pouet-BrokenLinkCheck/2.0";
@@ -112,6 +120,11 @@ function pouetAdmin_recheckLinkProd($prod)
     if ($lastUrl == $url)
       break;
     $url = $lastUrl;
+  }
+
+  if(php_sapi_name() == "cli")
+  {
+    printf("     * final result: %d, %s\n",$sideload->httpReturnCode, $sideload->httpReturnContentType);
   }
 
   // temporary hack for csdb, they tend to occasionally return 503 for
