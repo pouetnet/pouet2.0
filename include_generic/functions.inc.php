@@ -333,7 +333,9 @@ function validateLink( $url )
   if(strstr($myurl["host"],"docs.google") 
   || strstr($myurl["host"],"drive.google")
   || strstr($myurl["host"],"dropbox.com")
-  || strstr($myurl["host"],"dropboxusercontent.com"))
+  || strstr($myurl["host"],"dropboxusercontent.com")
+  || strstr($myurl["host"],"1drv.ms")
+  || strstr($myurl["host"],"onedrive.live.com"))
     $errormessage[] = "please get proper, permanent hosting";
 
   $shithosts = array(
