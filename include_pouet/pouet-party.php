@@ -12,7 +12,7 @@ class PouetParty extends BM_Class {
     if ($this->id == 0) return "??";
     if ($year)
     {
-      return sprintf("<a href='party.php?which=%d&amp;when=%d'>%s</a> %d",
+      return sprintf("<a href='party.php?which=%d&amp;when=%d'>%s %d</a>",
         $this->id,$year,_html($this->name),$year);
     }
     else
