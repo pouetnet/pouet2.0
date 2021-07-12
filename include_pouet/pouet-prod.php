@@ -220,6 +220,8 @@ class PouetProd extends BM_Class {
   {
     $array = $this->ToAPISuper();
 
+    $array["popularity"] = calculate_popularity($this->views);
+    
     $screenshot = find_screenshot( $this->id );
     if ($screenshot)
     {
