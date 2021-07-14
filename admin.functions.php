@@ -173,12 +173,12 @@ function pouetAdmin_createDataDump()
   // prods
   $filename = $dir . "/pouetdatadump-prods-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
-  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","prods":[');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","prods":['."\n");
   $first = true;
   $rows = SQLLib::SelectRows("select id from prods order by id");
   foreach($rows as $row)
   {
-    if (!$first) gzwrite($gz, ",");
+    if (!$first) gzwrite($gz, ",\n");
     $first = false;
     $item = PouetProd::Spawn($row->id);
     $a = array(&$item);
@@ -197,7 +197,7 @@ function pouetAdmin_createDataDump()
     
     gzwrite($gz, json_encode($item->ToAPI()) );
   }
-  gzwrite($gz, ']}');
+  gzwrite($gz, "\n".']}');
   gzclose($gz);
   rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d prods into %s",count($rows),$filename);
@@ -205,17 +205,17 @@ function pouetAdmin_createDataDump()
   // groups
   $filename = $dir . "/pouetdatadump-groups-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
-  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","groups":[');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","groups":['."\n");
   $first = true;
   $rows = SQLLib::SelectRows("select id from groups order by id");
   foreach($rows as $row)
   {
-    if (!$first) gzwrite($gz, ",");
+    if (!$first) gzwrite($gz, ",\n");
     $first = false;
     $item = PouetGroup::Spawn($row->id);
     gzwrite($gz, json_encode($item->ToAPI()) );
   }
-  gzwrite($gz, ']}');
+  gzwrite($gz, "\n".']}');
   gzclose($gz);
   rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
@@ -223,17 +223,17 @@ function pouetAdmin_createDataDump()
   // parties
   $filename = $dir . "/pouetdatadump-parties-" . $ymd . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
-  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","parties":[');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","parties":['."\n");
   $first = true;
   $rows = SQLLib::SelectRows("select id from parties order by id");
   foreach($rows as $row)
   {
-    if (!$first) gzwrite($gz, ",");
+    if (!$first) gzwrite($gz, ",\n");
     $first = false;
     $item = PouetParty::Spawn($row->id);
     gzwrite($gz, json_encode($item->ToAPI()) );
   }
-  gzwrite($gz, ']}');
+  gzwrite($gz, "\n".']}');
   gzclose($gz);
   rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);
@@ -241,17 +241,17 @@ function pouetAdmin_createDataDump()
   // boards
   $filename = $dir . "/pouetdatadump-boards-" . substr(preg_replace("/[^0-9]+/","",$dateStamp),0,8) . ".json.gz";
   $gz = gzopen(POUET_DATADUMP_PATH . $filename . ".inprogress",'w9');
-  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","boards":[');
+  gzwrite($gz, '{"dump_date":"'.$dateStamp.'","boards":['."\n");
   $first = true;
   $rows = SQLLib::SelectRows("select id from boards order by id");
   foreach($rows as $row)
   {
-    if (!$first) gzwrite($gz, ",");
+    if (!$first) gzwrite($gz, ",\n");
     $first = false;
     $item = PouetBoard::Spawn($row->id);
     gzwrite($gz, json_encode($item->ToAPI()) );
   }
-  gzwrite($gz, ']}');
+  gzwrite($gz, "\n".']}');
   gzclose($gz);
   rename(POUET_DATADUMP_PATH . $filename . ".inprogress", POUET_DATADUMP_PATH . $filename);
   $out[] = sprintf("dumped %d groups into %s",count($rows),$filename);

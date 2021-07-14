@@ -1,5 +1,9 @@
 <?php
-class PouetBoard extends BM_Class {
+class PouetBoard extends BM_Class 
+{
+  var $id;
+  var $name;
+
   static function getTable () { return "boards"; }
   static function getFields() { return array("id","name"); }
   static function getExtendedFields() { return array("sysop","phonenumber","addedDate","addedUser"); }

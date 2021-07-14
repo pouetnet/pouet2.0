@@ -1,5 +1,9 @@
 <?php
-class PouetUser extends BM_Class {
+class PouetUser extends BM_Class 
+{
+  var $id;
+  var $nickname;
+
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
   static function getExtendedFields() { return array("udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }

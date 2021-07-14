@@ -1,5 +1,9 @@
 <?php
-class PouetProd extends BM_Class {
+class PouetProd extends BM_Class 
+{
+  var $id;
+  var $name;
+  var $download;
   var $types;
   var $platforms;
   var $placings;

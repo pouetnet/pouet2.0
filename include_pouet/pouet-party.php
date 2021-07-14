@@ -1,5 +1,10 @@
 <?php
-class PouetParty extends BM_Class {
+class PouetParty extends BM_Class 
+{
+  var $id;
+  var $name;
+  var $web;
+
   static function getTable () { return "parties"; }
   static function getFields() { return array("id","name","web"); }
   static function getExtendedFields() { return array("addedDate","addedUser"); }
