@@ -462,7 +462,7 @@ function calculate_popularity( $views )
     $MAX_PROD_VIEWS_LOG = log10($MAX_PROD_VIEWS);
   }
   
-  return log10(max( 0, $views - $minViews )) / $MAX_PROD_VIEWS_LOG * 100.0;
+  return log10(max( 1, $views - $minViews )) / $MAX_PROD_VIEWS_LOG * 100.0;
 }
 
 function progress_bar( $val, $title = "" )
