@@ -1012,7 +1012,7 @@ document.observe("dom:loaded",function(){
     });
   });
   AddPreviewButton($('prod-post-submit'));
-  PreparePostForm( $$("#pouetbox_prodpost form").first() );
+  PreparePostForm( $("pouetbox_prodpost").up("form") );
 });
 //-->
 </script>
