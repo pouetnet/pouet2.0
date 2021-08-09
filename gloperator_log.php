@@ -48,7 +48,7 @@ class PouetBoxGloperatorLog extends PouetBox {
         {
           default:
             {
-              echo "&nbsp;\n";
+              echo _html($r->additionalData);
             } break;
         }
       }
