@@ -52,7 +52,7 @@ class PouetBoxAdminEditTopic extends PouetBox
     $a["closed"] = (int)($data["closed"]=="on");
     SQLLib::UpdateRow("bbs_topics",$a,"id=".$this->topic->id);
 
-    gloperator_log( "topic", $this->topic->id, "topic_edit" );
+    gloperator_log( "topic", $this->topic->id, "topic_edit", array("category"=>array("old"=>$this->topic->category,"new"=>$a["category"])) );
 
     return array();
   }
