@@ -71,7 +71,7 @@ class PouetBoxAdminEditUser extends PouetBox
         "value" => $this->user->permissionPostBBS,
       ),
       "permissionPostOneliner" => array(
-        "name" => "allow user to post to in the oneliner",
+        "name" => "allow user to post in the oneliner",
         "type" => "checkbox",
         "value" => $this->user->permissionPostOneliner,
       ),      
