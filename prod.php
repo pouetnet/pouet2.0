@@ -310,12 +310,12 @@ class PouetBoxProdMain extends PouetBox {
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
     echo "<ul id='avgstats'>";
-    echo "<li><img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />&nbsp;".sprintf("%.2f",$this->prod->voteavg)."</li>\n";
+    echo "<li class=".$p.">".sprintf("%.2f",$this->prod->voteavg)."</li>\n";
     $cdcs = count($this->userCDCs);
     if ($this->isPouetCDC) $cdcs++;
     if ($cdcs)
     {
-      echo "<li><img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' alt='cdcs' />&nbsp;".$cdcs."</li>\n";
+      echo "<li class='cdc'>".$cdcs."</li>\n";
     }
     
     global $currentUser;
