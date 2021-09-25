@@ -54,7 +54,6 @@ class PouetBoxAwards extends PouetBox {
       echo "<tr>\n";
       echo "<td>\n";
       
-      //echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";
       printf( "<span class='icon %s %s'></span>\n",$category->cssClass,$row->awardType);
       echo $p->RenderTypeIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";

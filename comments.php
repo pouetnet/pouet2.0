@@ -46,12 +46,10 @@ class PouetBoxLatestComments extends PouetBox {
       $rating = $row->rating>0 ? "rulez" : ($row->rating<0 ? "sucks" : "isok");
 
       echo "<td>\n";
-      echo "<img src='".POUET_CONTENT_URL."gfx/".$rating.".gif'/>";
+      echo "<span class='icon ".$rating."' title='".$rating."'>".$rating."</span>";
       echo "</td>\n";
 
       echo "<td>\n";
-//      echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";
-      //echo $p->RenderTypeIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";
       echo "</td>\n";
 

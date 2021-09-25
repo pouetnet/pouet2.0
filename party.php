@@ -244,10 +244,10 @@ class PouetBoxPartyView extends PouetBox
       echo "<td class='votes'>".$p->votepig."</td>\n";
       echo "<td class='votes'>".$p->votedown."</td>\n";
 
-      $i = "isok";
-      if ($p->voteavg < 0) $i = "sucks";
-      if ($p->voteavg > 0) $i = "rulez";
-      echo "<td class='votes'>".sprintf("%.2f",$p->voteavg)."&nbsp;<img src='".POUET_CONTENT_URL."gfx/".$i.".gif' alt='".$i."' /></td>\n";
+      $rating = "isok";
+      if ($p->voteavg < 0) $rating = "sucks";
+      if ($p->voteavg > 0) $rating = "rulez";
+      echo "<td class='votesavg'><span class='".$rating."' title='".$rating."'>".sprintf("%.2f",$p->voteavg)."</span></td>\n";
 
       $pop = (int)calculate_popularity( $p->views );
       echo "<td>".progress_bar_solo( $pop, $pop."%" )."</td>\n";
