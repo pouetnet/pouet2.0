@@ -72,9 +72,7 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
         $p = "isok";
         if ($d->rating < 0) $p = "sucks";
         if ($d->rating > 0) $p = "rulez";
-        echo "<span class='rowvote'>\n";
-        echo "<img src='".POUET_CONTENT_URL."gfx/".$p.".gif' alt='".$p."' />\n";
-        echo "</span>\n";
+        echo "<span class='rowvote ".$p."' title='".$p."'>".$p."</span>\n";
       }
       echo "</li>\n";
       if (++$n == $this->limit) break;
