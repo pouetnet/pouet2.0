@@ -7,7 +7,6 @@ class PouetBoxPaginated extends PouetBox
   
   function GetCurrentPage() { return 1; }
   function CollectAdditionalProdData() { return false; }
-  function CollectAdditionalProdData() { return false; }
   
   function BuildURL( $param ) {
     $query = array_merge($_GET,$param);
@@ -46,9 +45,9 @@ class PouetBoxPaginated extends PouetBox
       "party"=>"release party",
       "release"=>"release",
       "added"=>"added",
-      "thumbup"=>"<img src='http://www.pouet.net/gfx/rulez.gif' alt='rulez' />",
-      "thumbpig"=>"<img src='http://www.pouet.net/gfx/isok.gif' alt='piggie' />",
-      "thumbdown"=>"<img src='http://www.pouet.net/gfx/sucks.gif' alt='sucks' />",
+      "thumbup"=>"<span class='rulez' title='rulez'>rulez</span>",
+      "thumbpig"=>"<span class='isok' title='piggie'>piggie</span>",
+      "thumbdown"=>"<span class='sucks' title='sucks'>sucks</span>",
       "avg"=>"avg",
       "views"=>"popularity",
     );

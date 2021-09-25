@@ -29,7 +29,7 @@ class PouetBoxLatestComments extends PouetBox {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
     echo "<tr>\n";
-    echo "  <th><img src='".POUET_CONTENT_URL."gfx/rulez.gif'/></th>\n";
+    echo "  <th><span class='rulez'>vote</span></th>\n";
     echo "  <th>name</th>\n";
     echo "  <th>group</th>\n";
     echo "  <th>platform</th>\n";

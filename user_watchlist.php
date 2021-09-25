@@ -22,7 +22,6 @@ class PouetBoxUserWatchlist extends PouetBox {
     $sub->AddField("comments.which");
     $sub->AddTable("comments");
     $sub->AddJoin("left","prods","prods.id = comments.which");
-    //$sub->AddOrder("comments.addedDate desc");
     $sub->AddGroup("comments.which");
     $sub->AddWhere( sprintf_esc("prods.id in (%s)",implode(",",$i) ) );
   
@@ -43,11 +42,9 @@ class PouetBoxUserWatchlist extends PouetBox {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
     echo "<tr>\n";
-    //echo "  <th><img src='".POUET_CONTENT_URL."gfx/rulez.gif'/></th>\n";
     echo "  <th>name</th>\n";
     echo "  <th>group</th>\n";
     echo "  <th>platform</th>\n";
-    //echo "  <th>time</th>\n";
     echo "  <th>last comment</th>\n";
     echo "</tr>\n";
 
@@ -56,7 +53,6 @@ class PouetBoxUserWatchlist extends PouetBox {
       echo "<tr>\n";
 
       echo "<td>\n";
-//      echo "<img src='".POUET_CONTENT_URL."gfx/sceneorg/".$row->type.".gif' alt='".$row->type."'/>&nbsp;";
       echo $p->RenderTypeIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";
       echo "</td>\n";
