@@ -321,7 +321,7 @@ class PouetBoxProdMain extends PouetBox {
     global $currentUser;
     if ($currentUser)
     {
-      echo "<li>";
+      echo "<li class='watchlist'>";
       echo "<form action='prod.php?which=".$this->prod->id."' method='post' id='watchlistFrm'>";
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
