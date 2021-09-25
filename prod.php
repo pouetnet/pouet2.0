@@ -373,10 +373,10 @@ document.observe("dom:loaded",function(){
     printf("<div id='alltimerank'>alltime top: %s</div>",$this->prod->rank ? "#".(int)$this->prod->rank : "n/a");
   }
   function RenderThumbs() {
-    echo "<ul>\n";
-    echo "<li><img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />&nbsp;".$this->prod->voteup."</li>\n";
-    echo "<li><img src='".POUET_CONTENT_URL."gfx/isok.gif'  alt='is ok' />&nbsp;".$this->prod->votepig."</li>\n";
-    echo "<li><img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />&nbsp;".$this->prod->votedown."</li>\n";
+    echo "<ul class='prodthumbs'>\n";
+    echo "<li class='rulez'>".$this->prod->voteup."</li>\n";
+    echo "<li class='isok'>".$this->prod->votepig."</li>\n";
+    echo "<li class='sucks'>".$this->prod->votedown."</li>\n";
     echo "</ul>\n";
   }
   function RenderLinks() {

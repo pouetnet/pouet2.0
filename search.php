@@ -68,9 +68,9 @@ class PouetBoxSearchProd extends PouetBox
       "group"=>"group",
       "party"=>"release party",
       "release"=>"release date",
-      "avg"=>"<img src='".POUET_CONTENT_URL."gfx/rulez.gif' alt='rulez' />".
-             "<img src='".POUET_CONTENT_URL."gfx/isok.gif' alt='piggie' />".
-             "<img src='".POUET_CONTENT_URL."gfx/sucks.gif' alt='sucks' />",
+      "avg"=>'<span class="rulez" title="rulez">rulez</span> '.
+             '<span class="isok" title="piggie">piggie</span> '.
+             '<span class="sucks" title="sucks">sucks</span> ',
       "comments"=>"#",
       "views"=>"popularity",
     );
