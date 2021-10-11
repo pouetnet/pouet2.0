@@ -295,6 +295,10 @@ function cp437_to_utf8( $text )
 
 function process_ascii( $text, $enc = null )
 {
+  if (mb_detect_encoding( $text, "utf-8", true ) !== false)
+  {
+    return $text;
+  }
   if ($enc == null)
   {
     $enc = mb_detect_encoding( $text, "utf-8, iso-8859-1" );
