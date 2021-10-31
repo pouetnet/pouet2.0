@@ -155,10 +155,14 @@ class PouetBoxAccount extends PouetBox
           "name" => "coup de coeur ".$x." (".$glop." glöps)",
           "info" => $cdcText[$x], // is this cool?
         );
+        $glop *= 2;
       }
-      $glop *= 2;
+      else
+      {
+        break;
+      }
     }
-
+    $this->fieldsCDC["cdc".($x-1)]["infoAfter"] = sprintf("you currently have %d glöps and need %d more for the next cdc !",$this->user->glops,$glop - $this->user->glops);
 
     $row = SQLLib::SelectRow("DESC users_im im_type");
     $this->imTypes = enum2array($row->Type);
