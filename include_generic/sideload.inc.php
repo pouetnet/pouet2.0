@@ -2,6 +2,14 @@
 
 class Sideload
 {
+  var $options = array(
+    "connect_timeout" => false,
+    "user_agent" => false,
+    "max_length" => false,
+    "verify_peer" => true,
+    "method" => "GET",
+  );
+  
   function RequestCURL( $url, $method = "GET", $contentArray = array(), $headerArray = array() )
   {
     $curl = curl_init();
@@ -43,16 +51,19 @@ class Sideload
       });
     }
     curl_setopt($curl, CURLOPT_NOPROGRESS, true);
-    if ($this->options["verify_peer"])
+    if (isset($this->options["verify_peer"]))
     {
       curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->options["verify_peer"]);
     }
-    if ($this->options["method"] == "GET")
+    if ($method == "GET")
     {
       curl_setopt($curl, CURLOPT_HTTPGET, true);    
     }
   
     $html = curl_exec($curl);
+    
+    $this->errorCode = curl_errno($curl);
+    $this->errorString = curl_error($curl);
     
     $this->httpReturnCode = curl_getinfo($curl,CURLINFO_HTTP_CODE);
     $this->httpReturnContentType = curl_getinfo($curl,CURLINFO_CONTENT_TYPE);
@@ -73,10 +84,6 @@ class Sideload
     if ($this->options["connect_timeout"])
     {
       $opt["http"]["timeout"] = $this->options["connect_timeout"];
-    }
-    if ($this->options["method"])
-    {
-      $opt["http"]["method"] = $this->options["method"];
     }
     if ($this->options["verify_peer"])
     {
@@ -145,6 +152,18 @@ class Sideload
     {
       return $this->RequestFGC($url, $method, $contentArray, $headerArray);
     }
+  }
+  function GetErrorString()
+  {
+    if ($this->httpReturnCode >= 400)
+    {
+      return sprintf("HTTP error %d",$this->httpReturnCode);
+    }
+    return sprintf("(%d) %s",$this->errorCode,$this->errorString);
+  }
+  function WasSuccessful()
+  {
+    return !(400 <= $sideload->httpReturnCode && $sideload->httpReturnCode <= 599);
   }
 }
 ?>
