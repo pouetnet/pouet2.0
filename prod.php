@@ -767,6 +767,23 @@ function isEventEligible($event, $prod)
       return false;
     }
   }
+  if ($event->eligibleTypes)
+  {
+    $types = explode(",",$event->eligibleTypes);
+    $found = false;
+    foreach($types as $v)
+    {
+      if (in_array($v,$prod->types))
+      {
+        $found = true;
+        break;
+      }
+    }
+    if (!$found)
+    {
+      return false;
+    }
+  }
   return true;
 }
 
