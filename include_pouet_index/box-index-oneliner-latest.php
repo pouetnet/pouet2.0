@@ -134,7 +134,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
       //$funnytext = "But seriously.";
       //$funnytext = "It is just a video coming from the demoscene. We use it for the track.";
       //$funnytext = "next meme please";
-      $funnytext = "Okay? Yes!";
+      //$funnytext = "Okay? Yes!";
+      $funnytext = "and this will affect the Demoscene.";
 
       echo "  <div class='foot loggedin'>\n";
       echo "   <span><a href='oneliner.php'>more</a>...</span>\n";
