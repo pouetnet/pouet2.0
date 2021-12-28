@@ -58,6 +58,7 @@ class PouetBoxAdmin extends PouetBox {
     {
       echo "  <li><a href='admin_compotypes_edit.php'>edit compo types</a></li>";
       echo "  <li><a href='admin_faq.php'>edit faq items</a></li>";
+      echo "  <li><a href='admin_cdc.php'>edit cdcs</a></li>";
     }
     echo "</ul>\n";
     echo "</div>\n";

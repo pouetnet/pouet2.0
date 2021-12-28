@@ -25,8 +25,6 @@ class PouetBoxCDCModerator extends PouetBox {
   {
     echo "\n\n";
     echo "<table class='boxtable'>\n";
-    $lastYear = 0;
-    $lastCategory = "";
     foreach ($this->cdcs as $row)
     {
       $p = $row->prod;
