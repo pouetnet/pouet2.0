@@ -92,18 +92,32 @@ function toObject($array) {
   return $obj;
 }
 
+function secToReadable($dif, $toDays)
+{
+  $s = "";
+  if ($toDays)
+  {
+    $dif = $dif / (60 * 60 * 24);
+    $s = ($dif % 30) . "d"      ; $dif = (int)($dif / 30); if (!$dif) return $s;
+    $s = ($dif % 12) . "m " . $s; $dif = (int)($dif / 12); if (!$dif) return $s;
+    $s = $dif . "y " . $s;
+  }
+  else
+  {
+    $s = ($dif % 60) . "s"      ; $dif = (int)($dif / 60); if (!$dif) return $s;
+    $s = ($dif % 60) . "m " . $s; $dif = (int)($dif / 60); if (!$dif) return $s;
+    $s = ($dif % 24) . "h " . $s; $dif = (int)($dif / 24); if (!$dif) return $s;
+    $s = $dif . "d " . $s;
+  }
+  return $s;
+}
+
 function dateDiffReadable( $a, $b )
 {
   if (is_string($a)) $a = strtotime($a);
   if (is_string($b)) $b = strtotime($b);
 
-  $dif = $a - $b;
-
-  $s = ($dif % 60) . "s"      ; $dif = (int)($dif / 60); if (!$dif) return $s;
-  $s = ($dif % 60) . "m " . $s; $dif = (int)($dif / 60); if (!$dif) return $s;
-  $s = ($dif % 24) . "h " . $s; $dif = (int)($dif / 24); if (!$dif) return $s;
-  $s = $dif . "d " . $s;
-  return $s;
+  return secToReadable($a - $b, false);
 }
 
 function dateDiffReadableDays( $a, $b )
@@ -111,12 +125,7 @@ function dateDiffReadableDays( $a, $b )
   if (is_string($a)) $a = strtotime($a);
   if (is_string($b)) $b = strtotime($b);
 
-  $dif = ($a - $b) / (60 * 60 * 24);
-
-  $s = ($dif % 30) . "d"      ; $dif = (int)($dif / 30); if (!$dif) return $s;
-  $s = ($dif % 12) . "m " . $s; $dif = (int)($dif / 12); if (!$dif) return $s;
-  $s = $dif . "y " . $s;
-  return $s;
+  return secToReadable($a - $b, true);
 }
 
 function cdcstack($n) { // by ryg
