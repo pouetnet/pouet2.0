@@ -128,8 +128,16 @@ function dateDiffReadableDays( $a, $b )
   return secToReadable($a - $b, true);
 }
 
-function cdcstack($n) { // by ryg
+function cdcstack($n) 
+{ // by ryg
   if (!$n) return;
+
+  printf("<div class='cdcstack' title='%d CDCs'>",$n);
+  for ($x=0; $x<$n; $x++) echo "<span></span>";
+  echo "</div>";
+
+  /*
+  OLD IMG VERSION
   echo "<div class='cdcstack'>";
   if ($n==1) {
     echo "<img src='".POUET_CONTENT_URL."gfx/titles/coupdecoeur.gif' title='cdc' alt='cdc'>";
@@ -141,6 +149,7 @@ function cdcstack($n) { // by ryg
     echo "<img src='".POUET_CONTENT_URL."gfx/cdcstack_end.gif' title='".$n." cdcs' alt='".$n." cdcs'>";
   }
   echo "</div>";
+  */
 }
 
 function gloperator_log( $itemType, $itemID, $action, $additionalData = array() )
