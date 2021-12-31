@@ -27,6 +27,7 @@ class PouetBoxIndexStats extends PouetBoxCachable {
       $this->data[$v."_24h"] = (int)SQLLib::SelectRow("SELECT count(0) as c FROM ".$v." WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(".$field."))<=3600*24")->c;
     }
     $this->data["usersSeen24h"] = (int)SQLLib::SelectRow("SELECT count(0) as c FROM users WHERE (UNIX_TIMESTAMP()-UNIX_TIMESTAMP(lastLogin))<=3600*24")->c;
+    $this->data["youtube"] = (int)SQLLib::SelectRow("SELECT COUNT(0) AS c FROM prods LEFT JOIN downloadlinks ON downloadlinks.prod = prods.id AND downloadlinks.type LIKE '%youtube%' WHERE downloadlinks.type IS NOT NULL")->c;
   }
 
   function Render() {
@@ -44,6 +45,10 @@ class PouetBoxIndexStats extends PouetBoxCachable {
     }
     echo "<tr>\n";
     echo "  <td class='r".(($n++&1)+1)."'>".$this->data["usersSeen24h"]." users seen in the last 24h</td>\n";
+    echo "  <td class='r".(($n++&1)+1)." stat'>&nbsp;</td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo "  <td class='r".(($n++&1)+1)."'>progress to the youtube singularity: ".sprintf("%.2f",$this->data["youtube"] / $this->data["prods_all"] * 100.0)."%</td>\n";
     echo "  <td class='r".(($n++&1)+1)." stat'>&nbsp;</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
