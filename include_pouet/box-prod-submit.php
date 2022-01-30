@@ -211,9 +211,9 @@ class PouetBoxSubmitProd extends PouetBox
       SQLLib::InsertRow("nfos",$a);
     }
 
-    @unlink("cache/pouetbox_latestadded.cache");
-    @unlink("cache/pouetbox_latestreleased.cache");
-    @unlink("cache/pouetbox_latestparties.cache");
+    flush_cache("pouetbox_latestadded.cache");
+    flush_cache("pouetbox_latestreleased.cache");
+    flush_cache("pouetbox_latestparties.cache");
 
     return array();
   }

@@ -54,6 +54,9 @@ class PouetBoxAdminEditTopic extends PouetBox
 
     gloperator_log( "topic", $this->topic->id, "topic_edit", array("category"=>array("old"=>$this->topic->category,"new"=>$a["category"])) );
 
+    $topicID = $this->topic->id;
+    flush_cache("pouetbox_latestbbs.cache",function($i)use($topicID){ return $i->id == $topicID; } );
+    
     return array();
   }
 

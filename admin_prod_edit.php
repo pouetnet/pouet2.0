@@ -120,6 +120,12 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
     gloperator_log( "prod", (int)$this->id, "prod_edit" );
     
     SQLLib::Query(sprintf_esc("delete from prods_linkcheck where prodID = %d",$this->id));
+    
+    $prodID = $this->id;
+    $partyID = $a["party"];
+    flush_cache("pouetbox_latestadded.cache",function($i)use($prodID){ return $i->id == $prodID; } );
+    flush_cache("pouetbox_latestreleased.cache",function($i)use($prodID){ return $i->id == $prodID; } );
+    flush_cache("pouetbox_latestparties.cache",function($i)use($partyID){ return $i->id == $partyID; } );
 
     return array();
   }

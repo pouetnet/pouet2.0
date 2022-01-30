@@ -535,6 +535,33 @@ function array_diff_meaningful($new,$old)
   return $out;
 }
 
+function flush_cache( $filename, $condition = null )
+{
+  $fullPath = POUET_ROOT_LOCAL . "/cache/" . $filename;
+  
+  if ($condition)
+  {
+    $data = @unserialize(@file_get_contents($fullPath));
+    if ($data)
+    {
+      foreach($data as $v)
+      {
+        if ($condition($v))
+        {
+          @unlink( $fullPath );
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  else
+  {
+    @unlink( $fullPath );
+    return true;
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 function _html( $s )
