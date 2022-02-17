@@ -1077,6 +1077,19 @@ if ($main->prod)
   $metaValues["twitter:card"] = "photo";
   $metaValues["twitter:site"] = "@pouetdotnet";
   
+  $desc = implode(" / ",$main->prod->types);
+  $desc .= " for ". implode(" / ",array_map(function($i){ return $i["name"]; },$main->prod->platforms));
+  if ($main->prod->placings)
+  {
+    $desc .= ", " . strip_tags($main->prod->placings[0]->PrintResult());
+  }
+  else
+  {
+    $desc .= ", released in " . $main->prod->RenderReleaseDate();
+  }
+  $metaValues["og:description"] = 
+  $metaValues["twitter:description"] = $desc;
+  
   $linkedData["@type"] = "CreativeWork"; // https://schema.org/CreativeWork
   $linkedData["name"] = $main->prod->name;
   $linkedData["author"] = $main->prod->RenderGroupsPlain();
