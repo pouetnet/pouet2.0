@@ -1069,12 +1069,14 @@ if ($main->prod)
   }
   $form->Add( "prodpost", $post );
   
+  // OpenGraph docs: https://ogp.me/
+  // Twitter card docs: https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
   $metaValues["og:title"] = 
   $metaValues["twitter:title"] = 
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
 
   $metaValues["og:type"] = "website";
-  $metaValues["twitter:card"] = "photo";
+  $metaValues["twitter:card"] = "summary_large_image";
   $metaValues["twitter:site"] = "@pouetdotnet";
   
   $desc = implode(" / ",$main->prod->types);
