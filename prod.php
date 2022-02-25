@@ -173,7 +173,7 @@ class PouetBoxProdMain extends PouetBox {
     echo " <tr>\n";
     echo "  <td>release date :</td>\n";
     echo "  <td>";
-    if ($this->prod->releaseDate && $this->prod->releaseDate{0}!="0")
+    if ($this->prod->releaseDate && $this->prod->releaseDate[0]!="0")
     {
       echo $this->prod->RenderReleaseDate();
     }
