@@ -41,7 +41,7 @@ class PouetBoxAwards extends PouetBox {
       if ($lastYear != $year)
       {
         $lastYear = $year;
-        printf("<tr><th colspan='3' class='year'>%d</th></tr>\n",$lastYear);
+        printf("<tr><th colspan='3' class='year' id='%d'>%d</th></tr>\n",$lastYear,$lastYear);
       }
       $category = $AWARDS_CATEGORIES[$row->categoryID];
       if ($lastCategory != $row->categoryID)
