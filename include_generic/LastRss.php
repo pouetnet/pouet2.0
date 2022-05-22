@@ -299,7 +299,7 @@ class LastRss
 	 */
 	public function get($url)
 	{
-		$cache_file = $this->cacheDir . '/rsscache_' . md5($url);
+		$cache_file = $this->cacheDir . '/rsscache_' . preg_replace("/[^a-z0-9A-Z_]+/","_",$url);
 		$timedif = @(time() - filemtime($cache_file));
 		if ($timedif > $this->cacheTime) 
 		{

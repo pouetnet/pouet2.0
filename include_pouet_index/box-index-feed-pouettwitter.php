@@ -8,16 +8,6 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
 
     $this->cacheTime = 60*60;
 
-    $this->rss = new lastRSS(array(
-      "cacheTime" => 5 * 60, // in seconds
-      "dateFormat" => "Y-m-d",
-      "stripHtml" => false,
-    ));
-    $this->rss->setItemTags(array(
-      "link",
-      "description",
-    ));
-    
     $this->limit = 5;
   }
 
