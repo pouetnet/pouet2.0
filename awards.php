@@ -13,8 +13,9 @@ class PouetBoxAwards extends PouetBox {
     $s = new BM_Query("awards");
     $s->AddField("awards.awardType");
     $s->AddField("awards.categoryID");
+    $s->AddField("COALESCE(awards_categories.year,date_format(awards_prod.releaseDate,'%Y')) AS year");
     $s->attach(array("awards"=>"prodID"),array("prods as prod"=>"id"));
-    $s->AddOrder("date_format(awards_prod.releaseDate,'%Y') DESC");
+    $s->AddOrder("COALESCE(awards_categories.year,date_format(awards_prod.releaseDate,'%Y')) DESC");
     $s->AddJoin("left","awards_categories","awards_categories.id = awards.categoryID");
     $s->AddOrder("awards_categories.series");
     $s->AddOrder("awards_categories.category");
@@ -37,7 +38,7 @@ class PouetBoxAwards extends PouetBox {
     $lastCategory = "";
     foreach ($this->prods as $row)
     {
-      $year = substr($row->prod->releaseDate,0,4);
+      $year = $row->year;
       if ($lastYear != $year)
       {
         $lastYear = $year;
