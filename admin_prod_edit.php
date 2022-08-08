@@ -292,11 +292,11 @@ class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
   {
     echo "    <td><select name='awardCategory' class='awardCategory'>\n";
     foreach($this->categories as $k=>$v)
-      printf("<option value='%d'%s>%s</option>",$k,$row->category==$v?" selected='selected'":"",_html($v));
+      printf("<option value='%d'%s>%s</option>",$k,$row->categoryID==$k?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
     echo "    <td><select name='awardType' class='awardType'>\n";
     foreach($this->types as $v)
-      printf("<option%s>%s</option>",$row->type==$v?" selected='selected'":"",_html($v));
+      printf("<option%s>%s</option>",$row->awardType==$v?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
   }
   function RenderNormalRow($v)
