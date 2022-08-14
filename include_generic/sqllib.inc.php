@@ -1,5 +1,5 @@
 <?php
-// version 0.0.3 (2021-03-15)
+// version 0.0.4 (2022-08-14)
 
 class SQLLibException extends Exception 
 { 
@@ -31,7 +31,7 @@ class SQLLib
   public static function Connect($host = SQL_HOST, $username = SQL_USERNAME, $password = SQL_PASSWORD, $database = SQL_DATABASE)
   {
     SQLLib::$link = @mysqli_connect($host,$username,$password,$database);
-    if (mysqli_connect_errno(SQLLib::$link))
+    if (mysqli_connect_errno())
     {
       throw new SQLLibException("Unable to connect MySQL: ".mysqli_connect_error());
     }
