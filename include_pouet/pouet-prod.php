@@ -136,6 +136,15 @@ class PouetProd extends BM_Class
 
     $this->RenderAwards();
   }
+  function RenderAvgRaw() {
+    return sprintf("%.2f",$this->voteavg);
+  }
+  function RenderAvg() {
+    $rating = "isok";
+    if ($this->voteavg < 0) $rating = "sucks";
+    if ($this->voteavg > 0) $rating = "rulez";
+    return "<span class='".$rating."' title='".$rating."'>".$this->RenderAvgRaw()."</span>";
+  }
   function GetLink( $root = POUET_ROOT_URL) {
     return sprintf( $root . "prod.php?which=%d",$this->id);
   }

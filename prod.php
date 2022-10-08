@@ -310,7 +310,7 @@ class PouetBoxProdMain extends PouetBox {
     if ($this->prod->voteavg < 0) $p = "sucks";
     if ($this->prod->voteavg > 0) $p = "rulez";
     echo "<ul id='avgstats'>";
-    echo "<li class=".$p.">".sprintf("%.2f",$this->prod->voteavg)."</li>\n";
+    echo "<li class=".$p.">".$this->prod->RenderAvgRaw()."</li>\n";
     $cdcs = count($this->userCDCs);
     if ($this->isPouetCDC) $cdcs++;
     if ($cdcs)
@@ -959,10 +959,11 @@ class PouetBoxProdPost extends PouetBox {
       $total++;
     }
 
-    if ($total!=0)
-      $avg = sprintf("%.2f",(float)($rulez*1+$sucks*-1)/(float)$total);
-    else
-      $avg = "0.00";
+    $avg = 0;
+    if ($total != 0)
+    {
+      $avg = (float)($rulez - $sucks) / (float)$total;
+    }
 
     $a = array();
     $a["voteup"] = $rulez;
