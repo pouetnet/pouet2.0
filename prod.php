@@ -885,11 +885,11 @@ class PouetBoxProdPost extends PouetBox {
     global $currentUser;
     
     parent::__construct();
-    $this->prod = (int)$prod;
+    $this->prodID = (int)$prod;
     $this->uniqueID = "pouetbox_prodpost";
     $this->title = "add a comment";
 
-    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prod));
+    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prodID));
   }
   use PouetForm;
   function Validate($post)
@@ -905,11 +905,11 @@ class PouetBoxProdPost extends PouetBox {
     if (!is_string_meaningful($post["comment"]))
       return array("not too meaningful, is it...");
 
-    $r = SQLLib::SelectRow(sprintf_esc("SELECT id FROM prods where id=%d",$this->prod));
+    $r = SQLLib::SelectRow(sprintf_esc("SELECT id FROM prods where id=%d",$this->prodID));
     if (!$r)
       return array("you sneaky bastard you >_<");
 
-    $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY addedDate DESC LIMIT 1",$this->prod));
+    $r = SQLLib::SelectRow(sprintf_esc("SELECT comment,who,which FROM comments WHERE which = %d ORDER BY addedDate DESC LIMIT 1",$this->prodID));
 
     if ($r && $r->who == get_login_id() && $r->comment == $post["comment"])
       return array("ERROR! DOUBLEPOST == ROB IS JARIG!");
@@ -935,43 +935,13 @@ class PouetBoxProdPost extends PouetBox {
     $a = array();
     $a["addedDate"] = date("Y-m-d H:i:s");
     $a["who"] = get_login_id();
-    $a["which"] = $this->prod;
+    $a["which"] = $this->prodID;
     $a["comment"] = $message;
     $a["rating"] = $vote;
     SQLLib::InsertRow("comments",$a);
 
-    $rulez=0;
-    $piggie=0;
-    $sucks=0;
-    $total=0;
-    $checktable = array();
-
-    $r = SQLLib::SelectRows("SELECT rating,who FROM comments WHERE which=".$this->prod);
-    foreach ($r as $t)
-      if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
-        $checktable[$t->who] = $t->rating;
-
-    foreach($checktable as $k=>$v)
-    {
-      if($v==1) $rulez++;
-      else if($v==-1) $sucks++;
-      else $piggie++;
-      $total++;
-    }
-
-    $avg = 0;
-    if ($total != 0)
-    {
-      $avg = (float)($rulez - $sucks) / (float)$total;
-    }
-
-    $a = array();
-    $a["voteup"] = $rulez;
-    $a["votepig"] = $piggie;
-    $a["votedown"] = $sucks;
-    $a["voteavg"] = $avg;
-    SQLLib::UpdateRow("prods",$a,"id=".$this->prod);
-
+    PouetProd::RecalculateVoteCacheByID($this->prodID);
+    
     @unlink("cache/pouetbox_latestcomments.cache");
     @unlink("cache/pouetbox_topmonth.cache");
     @unlink("cache/pouetbox_stats.cache");

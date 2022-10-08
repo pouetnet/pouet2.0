@@ -226,6 +226,44 @@ class PouetProd extends BM_Class
 
     gloperator_log( "prod", (int)$this->id, "prod_delete", get_object_vars($this) );
   }
+  static function RecalculateVoteCacheByID($prodID)
+  {
+    $rulez=0;
+    $piggie=0;
+    $sucks=0;
+    $total=0;
+    $checktable = array();
+
+    $r = SQLLib::SelectRows("SELECT rating,who FROM comments WHERE which=".$prodID);
+    foreach ($r as $t)
+      if(!array_key_exists($t->who, $checktable) || $t->rating != 0)
+        $checktable[$t->who] = $t->rating;
+
+    foreach($checktable as $k=>$v)
+    {
+      if($v==1) $rulez++;
+      else if($v==-1) $sucks++;
+      else $piggie++;
+      $total++;
+    }
+
+    $avg = 0;
+    if ($total != 0)
+    {
+      $avg = (float)($rulez - $sucks) / (float)$total;
+    }
+
+    $a = array();
+    $a["voteup"] = $rulez;
+    $a["votepig"] = $piggie;
+    $a["votedown"] = $sucks;
+    $a["voteavg"] = $avg;
+    SQLLib::UpdateRow("prods",$a,"id=".$prodID);
+  }
+  function RecalculateVoteCache()
+  {
+    PouetProd::RecalculateVoteCacheByID($this->id);
+  }
 
   use PouetAPI { ToAPI as protected ToAPISuper; }
 
