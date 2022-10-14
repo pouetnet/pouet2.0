@@ -51,7 +51,7 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
     echo "</ul>\n";
   }
   function RenderFooter() {
-    echo "  <div class='foot'><a href='toplist.php?days=30'>more</a>...</div>\n";
+    echo "  <div class='foot'><a href='toplist.php?dateFrom=".date("Y")."-01-01'>top of the year</a> :: <a href='toplist.php?days=30'>more</a>...</div>\n";
     echo "</div>\n";
   }
 };
