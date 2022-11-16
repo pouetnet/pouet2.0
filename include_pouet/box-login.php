@@ -19,6 +19,11 @@ class PouetBoxLogin extends PouetBox
     echo "<div class='content loggedout'>\n";
     printf( "<a href='login.php?return=%s'>login via SceneID</a>",_html(rawurlencode(rootRelativePath())) );
     echo "</div>\n";
+
+    echo "<div class='foot'>\n";
+    echo "<a href='https://id.scene.org/login/'>log in</a> ::\n";
+    echo "<a href='https://id.scene.org/register/'>register</a>\n";
+    echo "</div>";
   }
 };
 
