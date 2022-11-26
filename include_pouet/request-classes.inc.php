@@ -904,6 +904,10 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     for ($x=1; $x<=96; $x++) $ranks[$x] = $x;
 
     $prod = PouetProd::Spawn( $itemID );
+    if (!$prod)
+    {
+      return sprintf("prod %d missing.", $itemID);
+    }
     $a = array(&$prod);
     PouetCollectPlatforms( $a );
 
