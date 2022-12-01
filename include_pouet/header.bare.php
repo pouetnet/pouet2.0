@@ -17,6 +17,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <link rel="alternate" href="<?=_html($url)?>" type="application/rss+xml" title="pouët.net: <?=_html($title)?>">
 <?php }?>
 
+  <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/types.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/types.css")?>" media="screen" />
   <link rel="stylesheet" type="text/css" href="<?=POUET_CONTENT_URL?>styles/001/style.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/style.css")?>" media="screen" />
   <?php if ( POUET_MOBILE ) {?>
   <link rel="stylesheet" href="<?=POUET_CONTENT_URL?>styles/001/mobile.css?<?=filemtime(POUET_CONTENT_LOCAL."styles/001/mobile.css")?>" type="text/css" />
