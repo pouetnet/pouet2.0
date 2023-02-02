@@ -12,7 +12,7 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="alternate icon" href="/favicon.ico" type="image/x-icon"/>
   <link rel="search" type="application/opensearchdescription+xml" href="opensearch_prod.xml" title="pouët.net: prod search" />
-  <link rel="canonical" href="http://www.pouet.net<?=_html($_SERVER["REQUEST_URI"])?>"/>
+  <link rel="canonical" href="https://www.pouet.net<?=_html($_SERVER["REQUEST_URI"])?>"/>
 <?php foreach($RSS as $url=>$title){?>
   <link rel="alternate" href="<?=_html($url)?>" type="application/rss+xml" title="pouët.net: <?=_html($title)?>">
 <?php }?>
