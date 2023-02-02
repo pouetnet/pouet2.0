@@ -1069,6 +1069,7 @@ if ($main->prod)
   $linkedData["aggregateRating"] = array(
     "@type" => "AggregateRating",
     "ratingValue" => $main->prod->voteavg,
+    "ratingCount" => $main->prod->voteup + $main->prod->votedown + $main->prod->votepig,
     "bestRating" => 1,
     "worstRating" => -1
   );
