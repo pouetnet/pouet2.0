@@ -370,6 +370,9 @@ function validateLink( $url )
     "multiupload",
     "tinyurl",
     "bit.ly",
+    "mega.co.nz",
+    "mega.nz",
+    "mega.io",
   );
   foreach ($shithosts as $v)
     if(strstr($myurl["host"],$v))
