@@ -1066,13 +1066,18 @@ if ($main->prod)
   $linkedData["@type"] = "CreativeWork"; // https://schema.org/CreativeWork
   $linkedData["name"] = $main->prod->name;
   $linkedData["author"] = $main->prod->RenderGroupsPlain();
-  $linkedData["aggregateRating"] = array(
-    "@type" => "AggregateRating",
-    "ratingValue" => $main->prod->voteavg,
-    "ratingCount" => $main->prod->voteup + $main->prod->votedown + $main->prod->votepig,
-    "bestRating" => 1,
-    "worstRating" => -1
-  );
+  
+  $ratingCount = $main->prod->voteup + $main->prod->votedown + $main->prod->votepig;
+  if ($ratingCount)
+  {
+    $linkedData["aggregateRating"] = array(
+      "@type" => "AggregateRating",
+      "ratingValue" => $main->prod->voteavg,
+      "ratingCount" => $ratingCount,
+      "bestRating" => 1,
+      "worstRating" => -1
+    );
+  }
 
   if ($main->screenshotPath)
   {
