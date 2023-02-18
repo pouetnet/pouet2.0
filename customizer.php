@@ -190,6 +190,8 @@ class PouetBoxCustomizer extends PouetBox {
       foreach($boxlist as $box)
       {
         $class = "PouetBoxIndex".$box["box"];
+        if (!class_exists($class))
+          continue;
         $p = new $class();
         
         echo "  <div class='customizerBox' data-class='"._html($box["box"])."'>\n";  
