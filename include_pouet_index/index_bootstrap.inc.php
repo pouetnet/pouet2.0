@@ -19,7 +19,6 @@ require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-user-topglops.p
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-oneliner-latest.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-random.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-feed-wanted.php");
-require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-feed-poundsoff.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-feed-pouettwitter.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-login.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-latestlists.php");
