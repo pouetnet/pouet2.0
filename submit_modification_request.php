@@ -50,6 +50,11 @@ class PouetBoxModificationRequest extends PouetBox
       $a["itemID"] = (int)$_REQUEST["prod"];
       $a["itemType"] = "prod";
     }
+    else if($_REQUEST["group"])
+    {
+      $a["itemID"] = (int)$_REQUEST["group"];
+      $a["itemType"] = "group";
+    }
     $a["requestDate"] = date("Y-m-d H:i:s");
     $a["userID"] = get_login_id();
 
@@ -74,7 +79,8 @@ class PouetBoxModificationRequest extends PouetBox
     
     foreach($REQUESTTYPES as $k=>$v)
     {
-      if ($_REQUEST["prod"] && $v::GetItemType()=="prod") $this->fields["requestType"]["fields"][$k] = $v::Describe();
+      if ($_REQUEST["prod"]  && $v::GetItemType()=="prod" ) $this->fields["requestType"]["fields"][$k] = $v::Describe();
+      if ($_REQUEST["group"] && $v::GetItemType()=="group") $this->fields["requestType"]["fields"][$k] = $v::Describe();
     }
     
     foreach($_REQUEST as $k=>$v)
@@ -96,6 +102,12 @@ class PouetBoxModificationRequest extends PouetBox
       if (!$prod) die("no such prod!");
       echo $prod->RenderSingleRowShort();
     }
+    if ($_REQUEST["group"])
+    {
+      $group = PouetGroup::Spawn($_REQUEST["group"]);
+      if (!$group) die("no such group!");
+      echo $group->RenderLong();
+    }
     echo "</h2>\n";
 
     $error = "";
@@ -108,6 +120,8 @@ class PouetBoxModificationRequest extends PouetBox
       foreach($REQUESTTYPES as $k=>$v)
       {
         if ($_REQUEST["prod"] && $v::GetItemType()=="prod")
+          printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html($k),_html($v::Describe()));
+        if ($_REQUEST["group"] && $v::GetItemType()=="group")
           printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html($k),_html($v::Describe()));
       }
       printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html("other"),_html("other request..."));
@@ -168,7 +182,14 @@ $TITLE = "submit a modification request";
 
 if ($_REQUEST["requestType"] == "other")
 {
-  redirect("topic.php?which=".(int)FIXMETHREAD_ID."&from=".(int)$_REQUEST["prod"]."#pouetbox_bbspost");
+  if ($_REQUEST["prod"])
+  {
+    redirect("topic.php?which=".(int)FIXMETHREAD_ID."&fromProd=".(int)$_REQUEST["prod"]."#pouetbox_bbspost");
+  }
+  else if ($_REQUEST["group"])
+  {
+    redirect("topic.php?which=".(int)FIXMETHREAD_ID."&fromGroup=".(int)$_REQUEST["group"]."#pouetbox_bbspost");
+  }
   exit();
 }
 
@@ -185,6 +206,8 @@ $form->successMessage =
 
 if ($_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
+else if ($_REQUEST["group"])
+  $form->SetSuccessURL( "groups.php?which=".(int)$_REQUEST["group"], false );
 else
   $form->SetSuccessURL( "", false );
 

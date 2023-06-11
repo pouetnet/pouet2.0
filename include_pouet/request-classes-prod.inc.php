@@ -1,32 +1,7 @@
 <?php
-class PouetRequestClassBase
-{
-  // return the type of atomic item this request handles (can be "prod", "group" or "party")
-  static function GetItemType() { return ""; }
-
-  // return human-readable description of operation
-  static function Describe() { return ""; }
-
-  // return error string on error, empty string / null / false / etc. on success
-  static function GetFields($data,&$fields,&$js) { return ""; }
-
-  // transform form $input into sql-ish $output
-  // return error array on error, empty array on success
-  static function ValidateRequest($input,&$output) { $output = $input; return array(); }
-
-  // return HTML string describing the changes
-  // - $data is the changeset
-  static function Display($itemID, $data) { return ""; }
-
-  // commit changeset
-  // - $reqData is the changeset
-  // return error array on error, empty array on success
-  static function Process($itemID,$reqData) { return array(); }
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassAddLink extends PouetRequestClassBase
+class PouetRequest_Prod_AddLink extends PouetRequestBase
 {
   static $links = array(
     "/https:\/\/(?:www\.)?demozoo\.org\/productions\/(\d+)/" => "demozoo",
@@ -102,7 +77,7 @@ class PouetRequestClassAddLink extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassChangeLink extends PouetRequestClassBase
+class PouetRequest_Prod_ChangeLink extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change an existing extra link"; }
@@ -230,7 +205,7 @@ class PouetRequestClassChangeLink extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassRemoveLink extends PouetRequestClassBase
+class PouetRequest_Prod_RemoveLink extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "remove an existing extra link"; }
@@ -296,7 +271,7 @@ class PouetRequestClassRemoveLink extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassAddCredit extends PouetRequestClassBase
+class PouetRequest_Prod_AddCredit extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "add a new credit to a prod"; }
@@ -372,7 +347,7 @@ class PouetRequestClassAddCredit extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassChangeCredit extends PouetRequestClassBase
+class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change an existing credit"; }
@@ -516,7 +491,7 @@ class PouetRequestClassChangeCredit extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassRemoveCredit extends PouetRequestClassBase
+class PouetRequest_Prod_RemoveCredit extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "remove an existing credit"; }
@@ -600,7 +575,7 @@ class PouetRequestClassRemoveCredit extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
+class PouetRequest_Prod_ChangeDownloadLink extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change download link"; }
@@ -686,7 +661,7 @@ class PouetRequestClassChangeDownloadLink extends PouetRequestClassBase
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class PouetRequestClassChangeInfo extends PouetRequestClassBase
+class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
 {
   static function GetItemType() { return "prod"; }
   static function Describe() { return "change prod info"; }
@@ -855,6 +830,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     }
 
     $fields = array();
+    $js = "";
     static::GetFields(array(),$fields,$js);
     $prod = PouetProd::Spawn( $_REQUEST["prod"] );
     $a = array(&$prod);
@@ -912,6 +888,7 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
     PouetCollectPlatforms( $a );
 
     $fields = array();
+    $js = "";
     static::GetFields(array(),$fields,$js);
 
     $s = "";
@@ -1087,16 +1064,15 @@ class PouetRequestClassChangeInfo extends PouetRequestClassBase
   }
 };
 
-$REQUESTTYPES = array(
-  "prod_change_info" => "PouetRequestClassChangeInfo",
-  "prod_change_downloadlink" => "PouetRequestClassChangeDownloadLink",
+$REQUESTTYPES["prod_change_info"] = "PouetRequest_Prod_ChangeInfo";
+$REQUESTTYPES["prod_change_downloadlink"] = "PouetRequest_Prod_ChangeDownloadLink";
 
-  "prod_add_link" => "PouetRequestClassAddLink",
-  "prod_change_link" => "PouetRequestClassChangeLink",
-  "prod_remove_link" => "PouetRequestClassRemoveLink",
+$REQUESTTYPES["prod_add_link"] = "PouetRequest_Prod_AddLink";
+$REQUESTTYPES["prod_change_link"] = "PouetRequest_Prod_ChangeLink";
+$REQUESTTYPES["prod_remove_link"] = "PouetRequest_Prod_RemoveLink";
 
-  "prod_add_credit" => "PouetRequestClassAddCredit",
-  "prod_change_credit" => "PouetRequestClassChangeCredit",
-  "prod_remove_credit" => "PouetRequestClassRemoveCredit",
-);
+$REQUESTTYPES["prod_add_credit"] = "PouetRequest_Prod_AddCredit";
+$REQUESTTYPES["prod_change_credit"] = "PouetRequest_Prod_ChangeCredit";
+$REQUESTTYPES["prod_remove_credit"] = "PouetRequest_Prod_RemoveCredit";
+
 ?>
