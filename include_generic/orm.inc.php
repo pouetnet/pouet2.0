@@ -34,7 +34,7 @@ class BM_Node
       }
     }
   }
-  function &attach( &$query, $local, $relations )
+  function &attach( &$query, $local, $relations, $additionalCondition = null )
   {
     global $BM_ORM_CLASSES;
 
@@ -59,7 +59,7 @@ class BM_Node
 
     $prefix = $localTable . "_" . $relationTableAlias;
 
-    $query->AddJoin("LEFT",$relationTableCanonical . " AS " . $prefix, sprintf("%s.%s = %s.%s",$localTable,$localField,$prefix,$relationField) );
+    $query->AddJoin("LEFT",$relationTableCanonical . " AS " . $prefix, sprintf("%s.%s = %s.%s",$localTable,$localField,$prefix,$relationField) . ($additionalCondition?" AND ".$additionalCondition:"") );
 
     $node = new BM_Node( $query, array("id"=>$relationTableAlias,"table"=>$relationTableCanonical,"prefix"=>$prefix) );
     $this->attachments[] = $node;
@@ -100,9 +100,9 @@ class BM_Query extends SQLSelect
       $this->root = new BM_Node( $this );
     }
   }
-  function &attach( $local, $relations )
+  function &attach( $local, $relations, $additionalCondition = null )
   {
-    $v = &$this->root->attach( $this, $local, $relations );
+    $v = &$this->root->attach( $this, $local, $relations, $additionalCondition );
     return $v; // has to be in two lines, php parser is shit
   }
   function addExtendedFields()
