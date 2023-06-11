@@ -69,8 +69,8 @@ class PouetBoxAdminModificationRequests extends PouetBox
     $s->AddField("modification_requests.requestBlob");
     $s->AddField("modification_requests.requestDate");
     $s->Attach(array("modification_requests"=>"userID"),array("users as user"=>"id"));
-    $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
-    $s->Attach(array("modification_requests"=>"itemID"),array("groups as group"=>"id"));
+    $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id")  ,"modification_requests.itemType = 'prod'");
+    $s->Attach(array("modification_requests"=>"itemID"),array("groups as group"=>"id"),"modification_requests.itemType = 'group'");
     $s->AddWhere("approved is null");
     $s->AddOrder("requestDate desc");
     $this->requests = $s->perform();
