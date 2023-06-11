@@ -70,6 +70,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
     $s->AddField("modification_requests.requestDate");
     $s->Attach(array("modification_requests"=>"userID"),array("users as user"=>"id"));
     $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
+    $s->Attach(array("modification_requests"=>"itemID"),array("groups as group"=>"id"));
     $s->AddWhere("approved is null");
     $s->AddOrder("requestDate desc");
     $this->requests = $s->perform();
@@ -97,7 +98,8 @@ class PouetBoxAdminModificationRequests extends PouetBox
       echo "    <td>".$r->itemType.": ";
       switch ($r->itemType)
       {
-        case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
+        case "prod" : if ($r->prod ) echo $r->prod->RenderSingleRowShort(); break;
+        case "group": if ($r->group) echo $r->group->RenderLong(); break;
       }
       echo "</td>\n";
       echo "    <td>".$REQUESTTYPES[$r->requestType]::Describe()."</td>\n";

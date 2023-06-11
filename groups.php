@@ -85,12 +85,16 @@ class PouetBoxGroupMain extends PouetBox
 
     printf(" [<a href='gloperator_log.php?which=%d&amp;what=group'>glöplog</a>]\n",$this->group->id);
 
+    printf("<div id='adminlinks'>");
     if ($currentUser && $currentUser->CanEditItems())
     {
-      printf("<div id='adminlinks'>");
-      printf("[<a href='admin_group_edit.php?which=%d' class='adminlink'>edit</a>]\n",$this->id);
-      printf("</div>");
+      printf("[<a href='admin_group_edit.php?which=%d' class='adminlink'>admin</a>]\n",$this->id);
     }
+    if ($currentUser && $currentUser->CanSubmitItems())
+    {
+      printf("[<a href='submit_modification_request.php?group=%d'>edit</a>]\n",$this->id);
+    }
+    printf("</div>");
 
     echo "</th>\n";
     echo "</tr>\n";

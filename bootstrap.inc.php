@@ -20,7 +20,9 @@ require_once( POUET_ROOT_LOCAL . "/include_generic/sideload.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_generic/logging.inc.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/enums.inc.php");
-require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes-base.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes-prod.inc.php");
+require_once( POUET_ROOT_LOCAL . "/include_pouet/request-classes-group.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-box.php");
 
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-api.php");
