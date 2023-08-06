@@ -78,7 +78,7 @@ $verificationStrings = array(
 
 $IM_TYPES = array(
   "Discord"=>array(
-    "capture"=>"^(.*#\d+)$",
+    "capture"=>"^(.{3,32}#[0-9]{4}|[a-z0-9_\.]{2,32})$", // should support both "yo#1234" and ".yo"
   ),
   "Email"=>array(
     "capture"=>"^(\S*@\S*\.\S*)$",
