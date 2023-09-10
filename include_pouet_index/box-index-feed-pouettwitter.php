@@ -1,4 +1,5 @@
 <?php
+/*
 class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
   function __construct() 
   {
@@ -89,4 +90,5 @@ class PouetBoxIndexFeedPouetTwitter extends PouetBoxCachable {
 };
 
 $indexAvailableBoxes[] = "FeedPouetTwitter";
+*/
 ?>
