@@ -409,6 +409,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
     $s->AddField("modification_requests.comment");
     //$s->Attach(array("modification_requests"=>"gloperatorID"),array("users as gloperator"=>"id"));
     $s->Attach(array("modification_requests"=>"itemID"),array("prods as prod"=>"id"));
+    $s->Attach(array("modification_requests"=>"itemID"),array("groups as group"=>"id"));
     $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
     $s->AddOrder("requestDate desc");
     $s->SetLimit( $_GET["limit"] ?: 10 );
@@ -434,7 +435,8 @@ class PouetBoxAccountModificationRequests extends PouetBox
       echo "    <td>".$r->itemType.": ";
       switch ($r->itemType)
       {
-        case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort();
+        case "prod": if ($r->prod) echo $r->prod->RenderSingleRowShort(); break;
+        case "group": if ($r->group) echo $r->group->RenderLong(); break;
       }
       echo "</td>\n";
       if ($REQUESTTYPES[$r->requestType])
