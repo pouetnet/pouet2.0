@@ -10,7 +10,7 @@ require_once("admin.functions.php");
 
 echo "[".date("Y-m-d H:i:s")."] Cron running: ".$argv[1]."\n";
 
-function cron_CheckLinks( $id = null )
+function cron_CheckLinks( $ids = null )
 {
   $s = new SQLSelect();
   $s->AddField("prods.id");
@@ -18,18 +18,22 @@ function cron_CheckLinks( $id = null )
   $s->AddTable("prods");
   $s->AddJoin("left","prods_linkcheck","prods_linkcheck.prodID = prods.id");
   $s->AddOrder("prods_linkcheck.testDate");
-  $s->AddOrder("RAND()");
-  if ($id)
-    $s->AddWhere(sprintf_esc("prods.id = %d",$id));
+  if ($ids)
+  {
+    $s->AddWhere(sprintf("prods.id in (%s)",implode(",",array_map(function($i){ return (int)$i; },$ids))));
+  }
   else
+  {
     $s->AddWhere("prods_linkcheck.testDate is NULL or datediff(now(),prods_linkcheck.testDate) > 20");
-  $s->SetLimit( 20 );
+    $s->SetLimit( 20 );
+    $s->AddOrder("RAND()");
+  }
   $prods = SQLLib::SelectRows( $s->GetQuery() );
   $out = array();
   foreach($prods as $prod)
   {
     $out[] = pouetAdmin_recheckLinkProd($prod);
-    sleep(2);
+    sleep(0.5);
   }
   return implode(", ",$out);
 }
@@ -43,7 +47,7 @@ switch($argv[1])
       echo " > Recache: ".$v."\n";
     break;
   case "linkCheck":
-    $content = cron_CheckLinks( $argv[2] );
+    $content = cron_CheckLinks( array_slice($argv,2) );
     echo " > linkCheck: ".$content."\n";
     break;
   case "createDataDump":
