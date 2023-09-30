@@ -118,6 +118,10 @@ $IM_TYPES = array(
     "capture"=>"(?:twitter\.com\/)?@?(\w{1,15})\/?$",
     "display"=>function($in) { return sprintf("<a href='https://twitter.com/%s'>@%s</a>",_html($in),_html($in)); }
   ),
+  "Bluesky"=>array(
+    "capture"=>"(?:https:\/\/)?(?:bsky\.app\/profile\/)?([\w\.\-\_]+)$",
+    "display"=>function($in) { return sprintf("<a href='https://bsky.app/profile/%s'>@%s</a>",_html($in),_html($in)); }
+  ),
 );
 
 ?>
