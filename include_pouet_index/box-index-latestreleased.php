@@ -56,7 +56,7 @@ class PouetBoxIndexLatestReleased extends PouetBoxCachable
       if (get_setting("indexwhoaddedprods"))
       {
         echo "<span class='rowuser'>\n";
-        echo $p->addeduser->PrintLinkedAvatar();
+        echo $p->addedUser->PrintLinkedAvatar();
         echo "</span>\n";
       }
       echo "</li>\n";
