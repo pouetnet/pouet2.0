@@ -11,6 +11,7 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminModificationRequests extends PouetBox
 {
+  public $requests;
   function __construct( )
   {
     parent::__construct();
@@ -61,7 +62,8 @@ class PouetBoxAdminModificationRequests extends PouetBox
   }
   function LoadFromDB()
   {
-    $s = new BM_Query("modification_requests");
+    $s = new BM_Query();
+    $s->AddTable("modification_requests");
     $s->AddField("modification_requests.id");
     $s->AddField("modification_requests.requestType");
     $s->AddField("modification_requests.itemID");
@@ -185,7 +187,7 @@ $form->Add( "adminModReq", $box );
 
 if ($currentUser && $currentUser->CanEditItems())
 {
-  if ($_POST["partial"])
+  if (@$_POST["partial"])
   {
     $form->SetSuccessURL( "", false );
     $form->Process();

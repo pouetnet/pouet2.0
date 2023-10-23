@@ -32,21 +32,17 @@ class PouetProd extends BM_Class
   public $group3;
 
   // non-db types
-  public $groups;
-  public $types;
-  public $placings;
-  public $platforms;
-  public $awards;
+  public $groups = array();
+  public $types = array();
+  public $placings = array();
+  public $platforms = array();
+  public $awards = array();
   public $party;
   
   public $cdc;
 
   function __construct()
   {
-    $this->types = array();
-    $this->platforms = array();
-    $this->placings = array();
-    $this->awards = array();
   }
   static function getTable () { return "prods"; }
   static function getFields() { return array("id","name","type","views","addedUser","addedDate","releaseDate",
@@ -59,7 +55,10 @@ class PouetProd extends BM_Class
     if ($this->group2) $this->groups[] = $this->group2; unset($this->group2);
     if ($this->group3) $this->groups[] = $this->group3; unset($this->group3);
 
-    $this->types = explode(",",$this->type?:"");
+    if ($this->type)
+    {
+      $this->types = explode(",",$this->type);
+    }
     if ($this->party && $this->party->id != NO_PARTY_ID)
       $this->placings[] = new PouetPlacing( array("party"=>$this->party,"compo"=>$this->party_compo,"ranking"=>$this->party_place,"year"=>$this->party_year) );
   }

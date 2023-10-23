@@ -1,5 +1,7 @@
 <?php
-class Formifier {
+class Formifier 
+{
+  public $canDeleteFiles;
   function __construct()
   {
     $this->canDeleteFiles = false;
@@ -10,14 +12,14 @@ class Formifier {
     echo "  <div class='formifier'>\n";
     foreach($fields as $k=>$v)
     {
-      if ($v["type"]=="hidden")
+      if (@$v["type"]=="hidden")
       {
         echo "    <input type='hidden' name='".$k."' id='".$k."' value='".$v["value"]."'/>\n";
         continue;
       }
       echo "  <div class='row' id='row_".$k."'>\n";
       echo "    <label for='".$k."'>"._html($v["name"]?$v["name"]:$k).":</label>\n";
-      switch ($v["type"])
+      switch (@$v["type"])
       {
         case "static":
           echo "    <div class='static' id='".$k."'>";
@@ -33,7 +35,7 @@ class Formifier {
           break;
         case "dateMonth":
           $year = $month = null;
-          if ($v["value"])
+          if (@$v["value"])
           {
             list($year,$month,) = sscanf($v["value"],"%d-%d-%d");
           }
@@ -79,19 +81,19 @@ document.observe("dom:loaded",function(){
           echo "    </div>\n";
           break;
         case "select":
-          echo "    <select name='".$k.($v["multiple"]?"[]":"")."' id='".$k."'".($v["multiple"]?" multiple='multiple'":"").">\n";
+          echo "    <select name='".$k.(@$v["multiple"]?"[]":"")."' id='".$k."'".(@$v["multiple"]?" multiple='multiple'":"").">\n";
           foreach($v["fields"] as $k=>$f)
           {
             $sel = "";
             if (isset($v["value"]))
             {
-              $match = $v["assoc"] ? $k : $f;
-              if ($v["multiple"])
-                $sel = (array_search($v["assoc"]?$match:$f,$v["value"])!==false?" selected='selected'":"");
+              $match = @$v["assoc"] ? $k : $f;
+              if (@$v["multiple"])
+                $sel = (array_search(@$v["assoc"]?$match:$f,$v["value"])!==false?" selected='selected'":"");
               else
                 $sel = ($v["value"]==$match?" selected='selected'":"");
             }
-            if ($v["assoc"])
+            if (@$v["assoc"])
             {
                 echo "      <option value='"._html($k)."' ".$sel.">"._html($f)."</option>\n";
             }
@@ -130,25 +132,25 @@ document.observe("dom:loaded",function(){
             echo " max='"._html((int)$v["max"])."'";
             $v["value"] = min((int)$v["value"],(int)$v["max"]);
           }
-          echo " name='".$k."' id='".$k."' value='"._html($v["value"])."'/>\n";
+          echo " name='".$k."' id='".$k."' value='"._html(@$v["value"])."'/>\n";
           break;
         case "url":
-          echo "    <input type='url' name='".$k."' id='".$k."' ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
+          echo "    <input type='url' name='".$k."' id='".$k."' ".(@$v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html(@$v["value"])."'/>\n";
           break;
         case "email":
-          echo "    <input type='email' name='".$k."' id='".$k."' ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
+          echo "    <input type='email' name='".$k."' id='".$k."' ".(@$v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html(@$v["value"])."'/>\n";
           break;
         case "textarea":
-          echo "    <textarea name='".$k."' id='".$k."'>"._html($v["value"])."</textarea>\n";
+          echo "    <textarea name='".$k."' id='".$k."'>"._html(@$v["value"])."</textarea>\n";
           break;
         default:
-          echo "    <input name='".$k."' id='".$k."'".($v["html"]?" ".$v["html"]:"")." ".($v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html($v["value"])."'/>\n";
+          echo "    <input name='".$k."' id='".$k."'".(@$v["html"]?" ".$v["html"]:"")." ".(@$v["maxlength"]?"maxlength='".(int)$v["maxlength"]."' ":"")."value='"._html(@$v["value"])."'/>\n";
           break;
       }
-      if ($v["info"])
+      if (@$v["info"])
         echo "    <span>"._html($v["info"]).($v["required"]?" [<span class='req'>req</span>]":"")."</span>\n";
       echo "  </div>\n";
-      if ($v["infoAfter"])
+      if (@$v["infoAfter"])
         echo "    <p class='infoAfter'>".$v["infoAfter"]."</p>\n";
     }
     echo "  </div>\n";

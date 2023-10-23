@@ -4,6 +4,8 @@ require_once("include_pouet/box-modalmessage.php");
 
 class PouetBoxModificationRequest extends PouetBox
 {
+  public $formifier;
+  public $fields;
   function __construct()
   {
     parent::__construct();
@@ -79,30 +81,35 @@ class PouetBoxModificationRequest extends PouetBox
     
     foreach($REQUESTTYPES as $k=>$v)
     {
-      if ($_REQUEST["prod"]  && $v::GetItemType()=="prod" ) $this->fields["requestType"]["fields"][$k] = $v::Describe();
-      if ($_REQUEST["group"] && $v::GetItemType()=="group") $this->fields["requestType"]["fields"][$k] = $v::Describe();
+      if (@$_REQUEST["prod"]  && $v::GetItemType()=="prod" ) $this->fields["requestType"]["fields"][$k] = $v::Describe();
+      if (@$_REQUEST["group"] && $v::GetItemType()=="group") $this->fields["requestType"]["fields"][$k] = $v::Describe();
     }
     
     foreach($_REQUEST as $k=>$v)
-      if ($this->fields[$k])
+    {
+      if (@$this->fields[$k])
+      {
         $this->fields[$k]["value"] = $v;
+      }
+    }
   }
 
   function Render()
   {
     $error = "";
+    $js = "";
     
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
 
     echo "  <h2>".$this->title.": ";
-    if ($_REQUEST["prod"])
+    if (@$_REQUEST["prod"])
     {
       $prod = PouetProd::Spawn($_REQUEST["prod"]);
       if (!$prod) die("no such prod!");
       echo $prod->RenderSingleRowShort();
     }
-    if ($_REQUEST["group"])
+    if (@$_REQUEST["group"])
     {
       $group = PouetGroup::Spawn($_REQUEST["group"]);
       if (!$group) die("no such group!");
@@ -111,7 +118,7 @@ class PouetBoxModificationRequest extends PouetBox
     echo "</h2>\n";
 
     $error = "";
-    if(!$_REQUEST["requestType"])
+    if(!@$_REQUEST["requestType"])
     {
       echo "  <div class='content'>\n";
       global $REQUESTTYPES;
@@ -119,9 +126,9 @@ class PouetBoxModificationRequest extends PouetBox
       echo "<ul>\n";
       foreach($REQUESTTYPES as $k=>$v)
       {
-        if ($_REQUEST["prod"] && $v::GetItemType()=="prod")
+        if (@$_REQUEST["prod"] && $v::GetItemType()=="prod")
           printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html($k),_html($v::Describe()));
-        if ($_REQUEST["group"] && $v::GetItemType()=="group")
+        if (@$_REQUEST["group"] && $v::GetItemType()=="group")
           printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html($k),_html($v::Describe()));
       }
       printf("  <li><a href='%s&amp;requestType=%s'>%s</a></li>",selfPath(),_html("other"),_html("other request..."));
@@ -139,7 +146,6 @@ class PouetBoxModificationRequest extends PouetBox
       echo "  <div class='content'>\n";
       $fields = array();
       
-      $js = "";
       global $REQUESTTYPES;
       if ($REQUESTTYPES[ $_REQUEST["requestType"] ])
       {
@@ -180,13 +186,13 @@ class PouetBoxModificationRequest extends PouetBox
 
 $TITLE = "submit a modification request";
 
-if ($_REQUEST["requestType"] == "other")
+if (@$_REQUEST["requestType"] == "other")
 {
-  if ($_REQUEST["prod"])
+  if (@$_REQUEST["prod"])
   {
     redirect("topic.php?which=".(int)FIXMETHREAD_ID."&fromProd=".(int)$_REQUEST["prod"]."#pouetbox_bbspost");
   }
-  else if ($_REQUEST["group"])
+  else if (@$_REQUEST["group"])
   {
     redirect("topic.php?which=".(int)FIXMETHREAD_ID."&fromGroup=".(int)$_REQUEST["group"]."#pouetbox_bbspost");
   }
@@ -213,7 +219,7 @@ else
 
 $form->Add( "logo", new PouetBoxModificationRequest() );
 
-if ($currentUser && $currentUser->CanSubmitItems() && (int)$_POST["finalStep"]==1)
+if ($currentUser && $currentUser->CanSubmitItems() && (int)@$_POST["finalStep"]==1)
   $form->Process();
 else
   unset( $_POST[ PouetFormProcessor::fieldName ] );

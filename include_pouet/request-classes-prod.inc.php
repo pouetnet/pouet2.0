@@ -397,7 +397,8 @@ class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
     }
     else
     {
-      $s = new BM_Query("credits");
+      $s = new BM_Query();
+      $s->AddTable("credits");
       $s->AddField("credits.id");
       $s->AddField("credits.role");
       $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -441,7 +442,8 @@ class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
 
   static function Display($itemID, $data)
   {
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -459,7 +461,8 @@ class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
     }
     $out .= " - "._html($row->role);
 
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -498,7 +501,8 @@ class PouetRequest_Prod_RemoveCredit extends PouetRequestBase
 
   static function GetFields($data,&$fields,&$js)
   {
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -545,7 +549,8 @@ class PouetRequest_Prod_RemoveCredit extends PouetRequestBase
 
   static function Display($itemID, $data)
   {
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -807,7 +812,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
         "value"=>1,
       ),
     );
-    if ($data["prod"] && $prod = PouetProd::Spawn( $data["prod"] ))
+    if (@$data["prod"] && $prod = PouetProd::Spawn( $data["prod"] ))
     {
       $a = array(&$prod);
       PouetCollectPlatforms( $a );
@@ -902,7 +907,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           $s .= $prod->RenderTypeIcons();
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $prod->types = $v;
+          $prod->types = $v ?: array();
           $s .= $prod->RenderTypeIcons();
           $s .= "<br/>";
           break;
