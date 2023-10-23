@@ -1,9 +1,11 @@
 <?php
-class PouetBoxIndexStats extends PouetBoxCachable {
+class PouetBoxIndexStats extends PouetBoxCachable
+{
   var $data;
   var $fields;
   var $links;
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_stats";
     $this->title = "some stats";
@@ -11,15 +13,18 @@ class PouetBoxIndexStats extends PouetBoxCachable {
     $this->links = array("prodlist.php", "groups.php", "parties.php", "boards.php", "userlist.php", "comments.php");
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $a = array("prods", "groups", "parties", "boards", "users", "comments");
     foreach($this->fields as $v) {
       $field = $v == "users" ? "registerDate" : "addedDate";
@@ -30,7 +35,8 @@ class PouetBoxIndexStats extends PouetBoxCachable {
     $this->data["youtube"] = (int)SQLLib::SelectRow("SELECT COUNT(0) AS c FROM prods LEFT JOIN downloadlinks ON downloadlinks.prod = prods.id AND downloadlinks.type LIKE '%youtube%' WHERE downloadlinks.type IS NOT NULL")->c;
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table class='boxtable' id='".$this->uniqueID."'>\n";
     $n = 0;
     echo "<tr>\n";

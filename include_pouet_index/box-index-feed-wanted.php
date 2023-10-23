@@ -1,5 +1,9 @@
 <?php
-class PouetBoxIndexFeedWanted extends PouetBoxCachable {
+class PouetBoxIndexFeedWanted extends PouetBoxCachable 
+{
+  public $limit;
+  public $rss;
+  public $rssData;
   function __construct() 
   {
     parent::__construct();

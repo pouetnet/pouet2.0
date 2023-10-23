@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexWatchlist extends PouetBox {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexWatchlist extends PouetBox
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_watchlist";
     $this->title = "your watchlist";
@@ -26,23 +29,24 @@ class PouetBoxIndexWatchlist extends PouetBox {
       "limit"      => array("name"=>"number of prods visible","default"=>5,"min"=>1,"max"=>POUET_CACHE_MAX),
     );
   }
-  
-  function IsVisibleLoggedOut() 
+
+  function IsVisibleLoggedOut()
   {
     return false;
   }
 
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     global $currentUser;
     if (!$currentUser) return;
-    
+
     $ids = SQLLib::SelectRows(sprintf_esc("select prodID from watchlist where userID = %d",$currentUser->id));
     if (!count($ids)) return;
-    
+
     $i = array();
     foreach($ids as $v) $i[] = $v->prodID;
-    
+
     $s = new BM_Query();
     //$s->AddTable(sprintf_esc("(select * from comments where comments.which in (%s) order by comments.addedDate desc) as c ",implode(",",$i)));
     $s->AddTable(sprintf_esc("(select *, max(comments.addedDate) as maxDate from comments where comments.which in (%s) group by comments.which) as c ",implode(",",$i)));
@@ -56,7 +60,8 @@ class PouetBoxIndexWatchlist extends PouetBox {
     $this->data = $s->perform();
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $currentUser;
     if (!$currentUser) return;
 
@@ -84,7 +89,8 @@ class PouetBoxIndexWatchlist extends PouetBox {
       echo "<div class='content'>your watchlist is currently empty</div>";
     }
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     //echo "  <div class='foot'><a href='prodlist.php?order=added'>more</a>...</div>\n";
     echo "</div>\n";
   }

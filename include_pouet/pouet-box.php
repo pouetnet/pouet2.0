@@ -46,7 +46,6 @@ class PouetBox {
     $this->RenderBody();
     $this->RenderFooter();
     $timer[$this->uniqueID." render"]["end"] = microtime_float();
-    return $s;
   }
 
   function RenderBuffered() {
@@ -135,7 +134,7 @@ class PouetBoxCachable extends PouetBox {
   }
 
   function GetCachedData() {
-    return file_get_contents($this->GetCacheFilename(),$s);
+    return file_get_contents($this->GetCacheFilename());
   }
 
   function IsCacheValid() {

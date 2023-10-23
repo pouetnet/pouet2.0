@@ -1,6 +1,11 @@
 <?php
-class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
-  function __construct() {
+class PouetBoxIndexUpcomingParties extends PouetBoxCachable
+{
+  public $rss;
+  public $limit;
+  public $rssData;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_upcomingparties";
     $this->title = "upcoming parties";
@@ -16,7 +21,7 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
       "demopartynet:startDate",
       "demopartynet:endDate",
     ));
-    
+
     $this->limit = 5;
   }
 
@@ -32,19 +37,23 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
     );
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->rssData = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->rssData);
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $this->rssData = $this->rss->get('https://www.demoparty.net/demoparties.xml');
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     for($i=0; $i < min( count($this->rssData['items']),$this->limit); $i++)
     {
@@ -73,7 +82,8 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='http://www.demoparty.net/'>more at demoparty.net</a>...</div>\n";
     echo "</div>\n";
   }

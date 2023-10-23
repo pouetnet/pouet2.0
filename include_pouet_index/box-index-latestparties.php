@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexLatestParties extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexLatestParties extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestparties";
     $this->title = "latest parties";
@@ -10,11 +13,13 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
     $this->limit = 5;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
@@ -30,9 +35,10 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query("parties");
-    $s->AddField("count(*) as c");
+    $s->AddField("count(*) as prod_count");
     $s->AddField("prods.party_year");
     $s->AddJoin("","prods","prods.party=parties.id");
     $s->AddWhere(sprintf_esc("parties.id != %d",NO_PARTY_ID));
@@ -44,7 +50,8 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
     //PouetCollectPlatforms($this->data);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     $n = 0;
     foreach($this->data as $p) {
@@ -54,13 +61,14 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable {
       if(file_exists($p->GetResultsLocalFileName($p->party_year)))
         echo " ".$p->RenderResultsLink( $p->party_year );
       echo " </span>";
-      echo " <span class='releasecount'>".$p->c."</span>";
+      echo " <span class='releasecount'>".$p->prod_count."</span>";
       echo "</li>\n";
       if (++$n == $this->limit) break;
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='parties.php'>more</a>...</div>\n";
     echo "</div>\n";
   }

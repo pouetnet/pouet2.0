@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexTopMonth extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexTopMonth extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_topmonth";
     $this->title = "top of the month";
@@ -10,14 +13,16 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
     $this->limit = 10;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
-  
+
   use PouetFrontPage;
   function SetParameters($data)
   {
@@ -30,7 +35,8 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query("prods");
     $s->AddOrder("(prods.views/GREATEST((sysdate()-prods.addedDate)/100000, 0.25)+prods.views)*prods.voteavg*prods.voteup DESC");
     $s->AddWhere("prods.addedDate > DATE_SUB(NOW(), INTERVAL 30 DAY)");
@@ -39,7 +45,8 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
     PouetCollectPlatforms($this->data);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     $n = 0;
     foreach($this->data as $p) {
@@ -50,7 +57,8 @@ class PouetBoxIndexTopMonth extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='toplist.php?dateFrom=".date("Y")."-01-01'>top of the year</a> :: <a href='toplist.php?days=30'>more</a>...</div>\n";
     echo "</div>\n";
   }

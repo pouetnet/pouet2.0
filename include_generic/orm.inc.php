@@ -16,6 +16,8 @@ class BM_Node
   public $table;
   public $class;
   public $attachments;
+  public $prefix;
+  public $fieldFunc;
   function __construct( &$query, $a = array() )
   {
     global $BM_ORM_CLASSES;

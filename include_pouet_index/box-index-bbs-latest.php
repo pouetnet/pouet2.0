@@ -1,7 +1,11 @@
 <?php
-class PouetBoxIndexLatestBBS extends PouetBoxCachable {
-  var $data;
-  function __construct() {
+class PouetBoxIndexLatestBBS extends PouetBoxCachable
+{
+  public $data;
+  public $limit;
+  public $hideResidue;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestbbs";
     $this->title = "the oldskool pouët.net bbs";
@@ -10,10 +14,12 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
     $this->limit = 10;
     $this->hideResidue = true;
   }
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
@@ -31,7 +37,8 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_query();
     $s->AddField("bbs_topics.id as id");
     $s->AddField("bbs_topics.topic as topic");
@@ -48,7 +55,8 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
     $this->data = $s->perform();
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $THREAD_CATEGORIES;
     echo "<table class='boxtable'>\n";
     $n = 0;
@@ -69,10 +77,10 @@ class PouetBoxIndexLatestBBS extends PouetBoxCachable {
     }
     echo "</table>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='bbs.php'>more</a>...</div>\n";
     echo "</div>\n";
-    return $s;
   }
 };
 

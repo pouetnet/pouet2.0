@@ -1,8 +1,13 @@
 <?php
-class PouetBoxIndexLatestComments extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexLatestComments extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  public $showUser;
+  public $showVote;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
     $this->title = "latest comments added";
@@ -12,11 +17,13 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     $this->showVote = false;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
@@ -36,7 +43,8 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query();
     $s->AddTable("(select * from comments order by comments.addedDate desc limit 25) as c");
     $s->attach(array("c"=>"which"),array("prods as prod"=>"id"));
@@ -52,7 +60,8 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     PouetCollectPlatforms($a);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist boxlisttable'>\n";
     $n = 0;
     foreach($this->data as $d)
@@ -79,7 +88,8 @@ class PouetBoxIndexLatestComments extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='comments.php'>more</a>...</div>\n";
     echo "</div>\n";
   }

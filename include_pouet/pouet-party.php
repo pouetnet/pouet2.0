@@ -1,9 +1,11 @@
 <?php
 class PouetParty extends BM_Class 
 {
-  var $id;
-  var $name;
-  var $web;
+  public $id;
+  public $name;
+  public $web;
+  public $addedDate;
+  public $addedUser;
 
   static function getTable () { return "parties"; }
   static function getFields() { return array("id","name","web"); }
@@ -12,7 +14,8 @@ class PouetParty extends BM_Class
   {
 //    $node->attach( $query, "added", array("users as addeduser"=>"id"));
   }
-  function PrintLinked($year = null) {
+  function PrintLinked($year = null) 
+  {
     //if ($this->id == NO_PARTY_ID) return "";
     if ($this->id == 0) return "??";
     if ($year)
@@ -26,14 +29,16 @@ class PouetParty extends BM_Class
         $this->id,_html($this->name));
     }
   }
-  function PrintShort($year = null) {
+  function PrintShort($year = null) 
+  {
     //if ($this->id == NO_PARTY_ID) return "";
     if ($this->id == 0) return "??";
     $s = shortify_cut($this->name,20);
     return sprintf("<a href='party.php?which=%d&amp;when=%d'>%s %d</a>",
       $this->id,$year,_html($s),$year);
   }
-  function RenderFull($year = null) {
+  function RenderFull($year = null) 
+  {
     $s = $this->PrintLinked($year);
     if ($this->web)
       $s .= sprintf(" [<a href='%s'>web</a>]",_html($this->web));
@@ -53,7 +58,8 @@ class PouetParty extends BM_Class
 
 BM_AddClass("PouetParty");
 
-class PouetPlacing {
+class PouetPlacing 
+{
   var $party;
   var $compo;
   var $ranking;

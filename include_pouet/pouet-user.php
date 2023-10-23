@@ -1,8 +1,26 @@
 <?php
 class PouetUser extends BM_Class 
 {
-  var $id;
-  var $nickname;
+  public $id;
+  public $nickname;
+  public $level;
+  public $permissionSubmitItems;
+  public $permissionPostBBS;
+  public $permissionPostOneliner;
+  public $avatar;
+  public $glops;
+  public $registerDate;
+  public $lastLogin;
+  public $udlogin;
+  public $sceneIDLastRefresh;
+  public $sceneIDData;
+  public $ojuice;
+  public $slengpung;
+  public $csdb;
+  public $zxdemo;
+  public $demozoo;
+  public $lastip;
+  public $lasthost;
 
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }

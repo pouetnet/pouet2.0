@@ -1,6 +1,10 @@
 <?php
-$menusetting = !defined("MENU_DONE_ONCE") ? "topbar" : "bottombar";
-define("MENU_DONE_ONCE",true);
+$menusetting = "bottombar";
+if (!defined("MENU_DONE_ONCE"))
+{
+  $menusetting = "topbar";
+  define("MENU_DONE_ONCE",true);
+}
 if (get_setting($menusetting))
 {
 ?>

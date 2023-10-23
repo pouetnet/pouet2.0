@@ -1,5 +1,6 @@
 <?php
-class PouetBoxIndexNews extends PouetBox {
+class PouetBoxIndexNews extends PouetBox
+{
   var $data;
   var $prod;
   var $link;
@@ -25,12 +26,15 @@ class PouetBoxIndexNews extends PouetBox {
 
 class PouetBoxIndexNewsBoxes extends PouetBoxCachable
 {
+  public $rss;
+  public $limit;
+  public $rssBitfellasNews;
   function __construct()
   {
     parent::__construct();
 
     $this->title = "news!";
-    
+
     $this->cacheTime = 60*15;
 
     $this->uniqueID = "pouetbox_news";
@@ -48,11 +52,13 @@ class PouetBoxIndexNewsBoxes extends PouetBoxCachable
     $this->rssBitfellasNews = $this->rss->get('http://www.bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->rssBitfellasNews = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->rssBitfellasNews);
   }
 

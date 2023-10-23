@@ -595,12 +595,12 @@ function redirect($path)
 
 function get_login_id()
 {
-  return $_SESSION["user"] ? $_SESSION["user"]->id : 0;
+  return @$_SESSION["user"] ? $_SESSION["user"]->id : 0;
 }
 
 function get_login_level()
 {
-  return $_SESSION["user"] ? $_SESSION["user"]->level : false;
+  return @$_SESSION["user"] ? $_SESSION["user"]->level : false;
 }
 
 function get_setting( $s )

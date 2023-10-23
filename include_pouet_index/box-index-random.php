@@ -1,24 +1,29 @@
 <?php
-class PouetBoxIndexRandom extends PouetBox {
+class PouetBoxIndexRandom extends PouetBox
+{
   var $data;
   var $prod;
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_random";
     $this->title = "a random prod";
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $id = SQLLib::SelectRow("SELECT prods.id as id FROM prods ORDER BY RAND() LIMIT 1")->id;
-    
+
     $s = new BM_Query("prods");
     $s->AddWhere(sprintf_esc("prods.id = %d",$id));
     $s->SetLimit(1);
@@ -29,11 +34,13 @@ class PouetBoxIndexRandom extends PouetBox {
     PouetCollectPlatforms($a);
   }
 
-  function RenderContent() {
+  function RenderContent()
+  {
     if ($this->data)
       $this->data->RenderAsEntry();
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "</div>\n";
     return $s;
   }

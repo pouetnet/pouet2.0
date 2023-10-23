@@ -1,13 +1,17 @@
 <?php
-class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
-  var $data;
-  function __construct() {
+class PouetBoxIndexLatestOneliner extends PouetBoxCachable
+{
+  public $data;
+  public $limit;
+  public $showTimestamps;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestoneliner";
     $this->title = "the so famous pouët.net oneliner";
 
     $this->limit = 5;
-    $this->showTimestamps = false;  
+    $this->showTimestamps = false;
   }
   use PouetForm;
   function Validate($post)
@@ -43,13 +47,15 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
 
     return array();
   }
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
-  
+
   use PouetFrontPage;
   function SetParameters($data)
   {
@@ -64,7 +70,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_query();
     $s->AddField("message");
     $s->AddField("addedDate");
@@ -77,7 +84,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     $this->data = array_reverse($this->data);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     $data = array_slice($this->data,-1 * $this->limit,NULL,true);
     foreach ($data as $r) {
@@ -105,7 +113,8 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable {
     </script>
     <?php
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     global $currentUser;
     if (!$currentUser || !$currentUser->CanPostInOneliner())
     {

@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexTopGlops extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexTopGlops extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_topglops";
     $this->title = "top of the glöps";
@@ -10,14 +13,16 @@ class PouetBoxIndexTopGlops extends PouetBoxCachable {
     $this->limit = 10;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
-  
+
   use PouetFrontPage;
   function SetParameters($data)
   {
@@ -30,14 +35,16 @@ class PouetBoxIndexTopGlops extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query("users");
     $s->AddOrder("users.glops desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     $n = 0;
     foreach($this->data as $p) {
@@ -50,7 +57,8 @@ class PouetBoxIndexTopGlops extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='userlist.php'>more</a>...</div>\n";
     echo "</div>\n";
   }

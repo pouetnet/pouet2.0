@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexTopAlltime extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexTopAlltime extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_topalltime";
     $this->title = "all-time top";
@@ -10,14 +13,16 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
     $this->limit = 10;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
-  
+
   use PouetFrontPage;
   function SetParameters($data)
   {
@@ -30,7 +35,8 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query("prods");
     $s->AddOrder("prods.rank");
     $s->AddWhere("prods.rank!=0");
@@ -38,10 +44,12 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
     $this->data = $s->perform();
     PouetCollectPlatforms($this->data);
   }
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist'>\n";
     $n = 0;
-    foreach($this->data as $p) {
+    foreach($this->data as $p)
+    {
       echo "<li>\n";
       $p->RenderAsEntry();
       echo "</li>\n";
@@ -49,7 +57,8 @@ class PouetBoxIndexTopAlltime extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='toplist.php'>more</a>...</div>\n";
     echo "</div>\n";
   }

@@ -1,8 +1,11 @@
 <?php
-class PouetBoxIndexLatestLists extends PouetBoxCachable {
-  var $data;
-  var $prods;
-  function __construct() {
+class PouetBoxIndexLatestLists extends PouetBoxCachable
+{
+  public $data;
+  public $prods;
+  public $limit;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestlists";
     $this->title = "latest added lists";
@@ -10,7 +13,8 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     $this->limit = 10;
   }
 
-  function LoadFromCachedData($data) {
+  function LoadFromCachedData($data)
+  {
     $this->data = unserialize($data);
   }
 
@@ -19,7 +23,8 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     return $this->data;
   }
 
-  function GetCacheableData() {
+  function GetCacheableData()
+  {
     return serialize($this->data);
   }
 
@@ -35,7 +40,8 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     );
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query();
     $s->AddField("lists.id as id");
     $s->AddField("lists.name as name");
@@ -47,7 +53,8 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     PouetCollectPlatforms($this->data);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<ul class='boxlist boxlisttable'>\n";
     $n = 0;
     foreach($this->data as $l)
@@ -60,7 +67,8 @@ class PouetBoxIndexLatestLists extends PouetBoxCachable {
     }
     echo "</ul>\n";
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'><a href='lists.php'>more</a>...</div>\n";
     echo "</div>\n";
   }

@@ -38,6 +38,7 @@ class SessionStorage implements IEphemeralStorage
 // this is better but it's brutally slow :)
 class FileStorage implements IEphemeralStorage
 {
+  public $dir;
   static function available()
   {
     return true;

@@ -1,16 +1,43 @@
 <?php
 class PouetProd extends BM_Class 
 {
-  var $id;
-  var $name;
-  var $download;
-  var $types;
-  var $platforms;
-  var $placings;
-  var $groups;
-  var $group1;
-  var $group2;
-  var $group3;
+  public $id;
+  public $name;
+  public $type;
+  public $views;
+  public $addedUser;
+  public $addedDate;
+  public $releaseDate;
+  public $voteup;
+  public $votepig;
+  public $votedown;
+  public $voteavg;
+  public $download;
+  public $party_compo;
+  public $party_place;
+  public $party_year;
+  
+  public $sceneorg;
+  public $demozoo;
+  public $csdb;
+  public $zxdemo;
+  public $latestip;
+  public $invitation;
+  public $invitationyear;
+  public $boardID;
+  public $rank;
+
+  public $group1;
+  public $group2;
+  public $group3;
+
+  // non-db types
+  public $groups;
+  public $types;
+  public $placings;
+  public $platforms;
+  public $awards;
+  public $party;
 
   function __construct()
   {
@@ -40,7 +67,7 @@ class PouetProd extends BM_Class
     $node->attach( $query, "group2", array("groups as group2"=>"id"));
     $node->attach( $query, "group3", array("groups as group3"=>"id"));
     $node->attach( $query, "party", array("parties as party"=>"id"));
-    $node->attach( $query, "addedUser", array("users as addeduser"=>"id"));
+    $node->attach( $query, "addedUser", array("users as addedUser"=>"id"));
   }
 
   function RenderTypeIcons() {

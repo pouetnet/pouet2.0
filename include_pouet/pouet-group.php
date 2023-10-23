@@ -1,9 +1,16 @@
 <?php
 class PouetGroup extends BM_Class
 {
-  var $id;
-  var $name;
-  var $acronym;
+  public $id;
+  public $name;
+  public $acronym;
+  public $disambiguation;
+  public $web;
+  public $addedUser;
+  public $addedDate;
+  public $csdb;
+  public $zxdemo;
+  public $demozoo;
 
   static function getTable () { return "groups"; }
   static function getFields() { return array("id","name","acronym","disambiguation","web","addedUser","addedDate"); }

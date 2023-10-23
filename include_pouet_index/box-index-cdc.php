@@ -53,7 +53,6 @@ class PouetBoxIndexCDC extends PouetBoxCachable
     }
     echo "  <div class='foot'><a href='awards.php'>awards</a> :: <a href='cdc.php'>more</a>...</div>\n";
     echo "</div>\n";
-    return $s;
   }
 };
 

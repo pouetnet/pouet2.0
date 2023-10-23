@@ -1,14 +1,17 @@
 <?php
-class PouetBoxIndexSearchBox extends PouetBoxCachable {
+class PouetBoxIndexSearchBox extends PouetBoxCachable
+{
   var $data;
   var $prod;
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_search";
     $this->title = "search box";
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<form action='search.php' method='get'>\n";
     echo "<div class='content center'>\n";
     echo "<input type='text' name='what' size='25'/>\n";
