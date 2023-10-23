@@ -5,7 +5,7 @@ require_once("include_pouet/box-modalmessage.php");
 
 $POSTS_PER_PAGE = max(1,get_setting("topicposts"));
 
-if ($_GET["post"]) // setting-independent post lookup
+if (@$_GET["post"]) // setting-independent post lookup
 {
   $topicID = SQLLib::SelectRow(sprintf_esc("select topic from bbs_posts where id = %d",$_GET["post"]))->topic;
   if ($topicID)
@@ -18,20 +18,24 @@ if ($_GET["post"]) // setting-independent post lookup
   }
 }
 
-class PouetBoxBBSView extends PouetBox {
-  var $topic;
-  var $posts;
-  var $id;
-  var $page;
-  var $postcount;
-  function __construct($id) {
+class PouetBoxBBSView extends PouetBox
+{
+  public $topic;
+  public $posts;
+  public $id;
+  public $page;
+  public $postcount;
+  public $paginator;
+  function __construct($id)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbsview";
     $this->title = "comments";
     $this->id = (int)$id;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     global $POSTS_PER_PAGE;
 
     $s = new SQLSelect();
@@ -56,7 +60,7 @@ class PouetBoxBBSView extends PouetBox {
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
 
     $this->paginator = new PouetPaginator();
-    $this->paginator->SetData( "topic.php?which=".$this->id, $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
+    $this->paginator->SetData( "topic.php?which=".$this->id, $this->postcount, $POSTS_PER_PAGE, @$_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
 
     $this->posts = $s->perform();
@@ -64,7 +68,8 @@ class PouetBoxBBSView extends PouetBox {
     $this->title = _html($this->topic->topic);
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $POSTS_PER_PAGE;
     global $THREAD_CATEGORIES;
     global $currentUser;
@@ -80,29 +85,34 @@ class PouetBoxBBSView extends PouetBox {
 
     echo "</div>\n";
 
-    if ($this->postcount > $POSTS_PER_PAGE) {
+    if ($this->postcount > $POSTS_PER_PAGE)
+    {
       echo $this->paginator->RenderNavbar();
-    } else {
+    }
+    else
+    {
       echo "<div class='blank'>&nbsp;</div>\n";
     }
 
-    foreach ($this->posts as $c) {
+    foreach ($this->posts as $c)
+    {
       $p = $c->post;
       $p = parse_message($p);
-      echo "<div class='bbspost cite-".$c->user->id."".($author?" author":"")."' id='c".$c->id."'>\n";
+      echo "<div class='bbspost cite-".$c->user->id."' id='c".$c->id."'>\n";
       echo "  <div class='content'>".$p."</div>\n";
       echo "  <div class='foot'><span class='tools' data-cid='".$c->id."'></span> added on the <a href='topic.php?post=".$c->id."'>".$c->added."</a> by ".
         $c->user->PrintLinkedName()." ".$c->user->PrintLinkedAvatar()."</div>\n";
       echo "</div>\n\n";
     }
 
-    if ($this->postcount > $POSTS_PER_PAGE) {
+    if ($this->postcount > $POSTS_PER_PAGE)
+    {
       echo $this->paginator->RenderNavbar();
     }
   }
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "</div>\n";
-    return $s;
   }
 };
 

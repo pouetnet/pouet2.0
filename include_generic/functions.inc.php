@@ -97,7 +97,7 @@ function secToReadable($dif, $toDays)
   $s = "";
   if ($toDays)
   {
-    $dif = $dif / (60 * 60 * 24);
+    $dif = (int)($dif / (60 * 60 * 24));
     $s = ($dif % 30) . "d"      ; $dif = (int)($dif / 30); if (!$dif) return $s;
     $s = ($dif % 12) . "m " . $s; $dif = (int)($dif / 12); if (!$dif) return $s;
     $s = $dif . "y " . $s;

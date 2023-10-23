@@ -6,6 +6,7 @@ class PouetPaginator
   public $perPage;
   public $numPages;
   public $page;
+  public $query;
   function SetData( $url, $total, $perPage, $curPage, $defaultToLast = true )
   {
     $this->url = parse_url($url);

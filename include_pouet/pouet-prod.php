@@ -59,7 +59,7 @@ class PouetProd extends BM_Class
     if ($this->group2) $this->groups[] = $this->group2; unset($this->group2);
     if ($this->group3) $this->groups[] = $this->group3; unset($this->group3);
 
-    $this->types = explode(",",$this->type);
+    $this->types = explode(",",$this->type?:"");
     if ($this->party && $this->party->id != NO_PARTY_ID)
       $this->placings[] = new PouetPlacing( array("party"=>$this->party,"compo"=>$this->party_compo,"ranking"=>$this->party_place,"year"=>$this->party_year) );
   }

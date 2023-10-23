@@ -60,7 +60,7 @@ class PouetBoxIndexLogin extends PouetBoxLogin
       31337 => "greetings to elitez only !",
       64738 => "maybe it's time to reset your account !",
     );
-    if ($cheevs[$currentUser->glops])
+    if (@$cheevs[$currentUser->glops])
     {
       echo "<div class='content achievements'>\n";
       printf("<p><b>congratulations ! you reached %d glöps !</b></p>",$currentUser->glops);

@@ -42,19 +42,18 @@ class PouetBoxIndexLatestParties extends PouetBoxCachable
     $s->AddField("prods.party_year");
     $s->AddJoin("","prods","prods.party=parties.id");
     $s->AddWhere(sprintf_esc("parties.id != %d",NO_PARTY_ID));
-    //$s->AddWhere(sprintf_esc("prods.id is not null");
-    $s->AddGroup("prods.party,prods.party_year");
+    $s->AddGroup("prods.party, prods.party_year");
     $s->AddOrder("prods.releaseDate desc, prods.id desc");
     $s->SetLimit(POUET_CACHE_MAX);
     $this->data = $s->perform();
-    //PouetCollectPlatforms($this->data);
   }
 
   function RenderBody()
   {
     echo "<ul class='boxlist'>\n";
     $n = 0;
-    foreach($this->data as $p) {
+    foreach($this->data as $p)
+    {
       echo "<li>\n";
       echo " <span>";
       echo $p->PrintShort($p->party_year);
