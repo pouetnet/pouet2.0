@@ -27,7 +27,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
     if ($req->approved !== NULL)
       return array("this request was already processed");
       
-    if ($data["requestDeny"])
+    if (@$data["requestDeny"])
     {
       $a = array();
       $a["gloperatorID"] = $currentUser->id;
@@ -121,6 +121,7 @@ class PouetBoxAdminModificationRequests extends PouetBox
       printf("  <input type='hidden' name='requestID' value='%d'/>",$r->id);
       printf("  <input type='submit' name='requestAccept' value='accept !'/>");
       printf("  <input type='submit' name='requestDeny' value='deny !'/>");
+      printf("  <span class='result'></span>");
       printf("  <input type='hidden' name='%s' value='%s'/>\n",PouetFormProcessor::fieldName,"adminModReq");
       printf("</form>\n\n\n");
       
@@ -158,16 +159,27 @@ document.observe("dom:loaded",function(){
     new Ajax.Request( e.element().action, {
       method: e.element().method,
       parameters: opt,
-      onSuccess: function(transport) {
-        if (transport.responseJSON.success)
+      onException: function(r, e) { throw e; },
+      onSuccess: function(transport) 
+      {
+        if (!transport.responseJSON || !transport.responseJSON.success)
         {
-          e.element().up("tr").remove();
-          fireSuccessOverlay( transport.responseJSON.success == "accepted" ? "request accepted !" : "request denied !");
+          var msg = (transport.responseJSON && transport.responseJSON.errors) ? transport.responseJSON.errors.join("<br/>") : transport.responseText;
+
+          console.error( "[pouet] There's been an error:\n--------------\n" + msg );
+          fireErrorOverlay( "There's been an error:<br/>" + msg );
+          
+          e.element().select("input[type='submit']").invoke("removeAttribute","disabled");
+          
+          var result = e.element().select(".result").first();
+          result.update("&#x26A0;");
+          result.setAttribute("title","There's been an internal error; check console for details.");
+          
+          return;
         }
-        else
-        {
-          fireErrorOverlay( transport.responseJSON.errors.join("<br/>") );
-        }
+
+        e.element().up("tr").remove();
+        fireSuccessOverlay( transport.responseJSON.success == "accepted" ? "request accepted !" : "request denied !");
       }
     });
   });
