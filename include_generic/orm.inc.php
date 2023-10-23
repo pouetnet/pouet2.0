@@ -27,7 +27,7 @@ class BM_Node
     if ($this->table)
       $this->class = $BM_ORM_CLASSES[$this->table];
 
-    if ($BM_ORM_CLASSES[$this->table])
+    if ($this->table && $BM_ORM_CLASSES[$this->table])
     {
       $func = $this->fieldFunc ? $this->fieldFunc : "getFields";
       foreach ($BM_ORM_CLASSES[$this->table]::$func() as $v)

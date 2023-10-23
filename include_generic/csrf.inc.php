@@ -6,7 +6,7 @@ class CSRFProtect
     if(session_id() == '')
       die("Initialize sessions please!");
 
-    if ($_SESSION["CSRFProtect"])
+    if (@$_SESSION["CSRFProtect"])
     {
       // garbage collect
       foreach($_SESSION["CSRFProtect"] as $k=>$v)
@@ -34,7 +34,7 @@ class CSRFProtect
   }
   public function ValidateToken()
   {
-    if ($_SESSION["CSRFProtect"][ $_POST["ProtName"] ] && $_SESSION["CSRFProtect"][ $_POST["ProtName"] ]["token"] == $_POST["ProtValue"])
+    if (@$_SESSION["CSRFProtect"][ $_POST["ProtName"] ] && $_SESSION["CSRFProtect"][ $_POST["ProtName"] ]["token"] == $_POST["ProtValue"])
     {
       unset($_SESSION["CSRFProtect"][ $_POST["ProtName"] ]);
       return true;

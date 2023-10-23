@@ -37,7 +37,7 @@ class PouetFormProcessor
   function Process()
   {
     $this->errors = array();
-    if ($_POST[ self::fieldName ] && $this->objects[$_POST[ self::fieldName ]])
+    if (@$_POST[ self::fieldName ] && $this->objects[$_POST[ self::fieldName ]])
     {
       $csrf = new CSRFProtect();
       if (!$csrf->ValidateToken())
@@ -71,7 +71,7 @@ class PouetFormProcessor
     }
     else
     {
-      if ($_POST[ self::fieldName ] && $this->objects[$_POST[ self::fieldName ]])
+      if (@$_POST[ self::fieldName ] && $this->objects[$_POST[ self::fieldName ]])
       {
         $msg = new PouetBoxModalMessage( true );
         $msg->classes[] = "successbox";

@@ -488,14 +488,12 @@ function calculate_popularity( $views )
 
 function progress_bar( $val, $title = "" )
 {
-  $s .= "<div class='outerbar' title='"._html($title)."'><div class='innerbar' style='width: ".$val."%'>&nbsp;<span>"._html($title)."</span></div></div>\n";
-  return $s;
+  return "<div class='outerbar' title='"._html($title)."'><div class='innerbar' style='width: ".$val."%'>&nbsp;<span>"._html($title)."</span></div></div>\n";
 }
 
 function progress_bar_solo( $val, $title = "" )
 {
-  $s .= "<div class='innerbar_solo' style='width: ".$val."px' title='"._html($title)."'>&nbsp;<span>"._html($title)."</span></div>";
-  return $s;
+  return "<div class='innerbar_solo' style='width: ".$val."px' title='"._html($title)."'>&nbsp;<span>"._html($title)."</span></div>";
 }
 
 function hashify($s) {
@@ -569,7 +567,7 @@ function flush_cache( $filename, $condition = null )
 
 function _html( $s )
 {
-  return htmlspecialchars($s,ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5,"utf-8");
+  return htmlspecialchars($s?:"",ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5,"utf-8");
 }
 function _js( $s )
 {

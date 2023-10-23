@@ -1,6 +1,11 @@
 <?php
 class PouetPaginator
 {
+  public $url;
+  public $itemCount;
+  public $perPage;
+  public $numPages;
+  public $page;
   function SetData( $url, $total, $perPage, $curPage, $defaultToLast = true )
   {
     $this->url = parse_url($url);

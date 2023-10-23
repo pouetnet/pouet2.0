@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-login.php");
 
-if ($_GET["post"]) // setting-independent post lookup
+if (@$_GET["post"]) // setting-independent post lookup
 {
   $prodID = SQLLib::SelectRow(sprintf_esc("select which from comments where id = %d",$_GET["post"]))->which;
   if ($prodID)
@@ -21,20 +21,32 @@ if ($_GET["post"]) // setting-independent post lookup
   }
 }
 
-class PouetBoxProdMain extends PouetBox {
-  var $id;
-  var $data;
-  var $prod;
-  var $votes;
+class PouetBoxProdMain extends PouetBox
+{
+  public $id;
+  public $data;
+  public $prod;
+  public $votes;
+  public $linkCheck;
+  public $screenshot;
+  public $relatedProds;
+  public $userCDCs;
+  public $isPouetCDC;
+  public $credits;
+  public $downloadLinks;
+  public $screenshotPath;
+  public $board;
 
-  function __construct($id) {
+  function __construct($id)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodmain";
     $this->id = (int)$id;
     //$this->title = "some stats";
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $this->prod = PouetProd::spawn( $this->id );
     if(!$this->prod)
       return;
@@ -59,7 +71,8 @@ class PouetBoxProdMain extends PouetBox {
     $s->SetLimit(1);
     $s->attach(array("screenshots"=>"user"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("prod=%d",$this->id));
-    list($this->screenshot) = $s->perform();
+    $scr = $s->perform();
+    $this->screenshot = $scr ? $scr[0] : null;
 
     $s = new BM_Query();
     $s->AddField("prodotherparty.party_compo");
@@ -93,7 +106,8 @@ class PouetBoxProdMain extends PouetBox {
       $this->userCDCs[$v->user->id] = $v;
     $this->isPouetCDC = SQLLib::selectRow(sprintf_esc("select * from cdc where which = %d",$this->id));
 
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.role");
     $s->AddWhere(sprintf("credits.prodID = %d",$this->id));
     $s->Attach(array("credits"=>"userID"),array("users as user"=>"id"));
@@ -139,8 +153,9 @@ class PouetBoxProdMain extends PouetBox {
     $this->screenshotPath = find_screenshot($this->prod->id);
   }
 
-  function RenderScreenshot() {
-    if ($this->screenshotPath)
+  function RenderScreenshot()
+  {
+    if ($this->screenshot && $this->screenshotPath)
     {
       $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
       return "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
@@ -273,7 +288,7 @@ class PouetBoxProdMain extends PouetBox {
     }
     echo "</table>\n";
 
-    if (count($this->prod->placings) > 1) 
+    if (count($this->prod->placings) > 1)
     {
       echo "<table id='partytable'>\n";
       echo " <tr>\n";
@@ -281,7 +296,7 @@ class PouetBoxProdMain extends PouetBox {
       echo "  <th>ranking</th>\n";
       echo "  <th>compo</th>\n";
       $n = 1;
-      foreach ($this->prod->placings as $p) 
+      foreach ($this->prod->placings as $p)
       {
         if (!$p->party) continue;
         echo " <tr>\n";
@@ -296,7 +311,7 @@ class PouetBoxProdMain extends PouetBox {
       echo "</table>\n";
     }
   }
-  function RenderPopularity() 
+  function RenderPopularity()
   {
     $pop = (int)calculate_popularity( $this->prod->views );
     echo "popularity : ".$pop."%<br/>\n";
@@ -317,7 +332,7 @@ class PouetBoxProdMain extends PouetBox {
     {
       echo "<li class='cdc'>".$cdcs."</li>\n";
     }
-    
+
     global $currentUser;
     if ($currentUser)
     {
@@ -325,7 +340,7 @@ class PouetBoxProdMain extends PouetBox {
       echo "<form action='prod.php?which=".$this->prod->id."' method='post' id='watchlistFrm'>";
       $csrf = new CSRFProtect();
       $csrf->PrintToken();
-      
+
       $row = SQLLib::SelectRow(sprintf_esc("select * from watchlist where prodID = %d and userID = %d",$this->prod->id,$currentUser->id));
       if ($row)
       {
@@ -368,23 +383,25 @@ document.observe("dom:loaded",function(){
 <?php
       echo "</li>\n";
     }
-    
+
     echo "</ul>";
     printf("<div id='alltimerank'>alltime top: %s</div>",$this->prod->rank ? "#".(int)$this->prod->rank : "n/a");
   }
-  function RenderThumbs() {
+  function RenderThumbs()
+  {
     echo "<ul class='prodthumbs'>\n";
     echo "<li class='rulez'>".$this->prod->voteup."</li>\n";
     echo "<li class='isok'>".$this->prod->votepig."</li>\n";
     echo "<li class='sucks'>".$this->prod->votedown."</li>\n";
     echo "</ul>\n";
   }
-  function RenderLinks() {
+  function RenderLinks()
+  {
     echo "<ul>\n";
     echo "<li id='mainDownload'>";
     if ($this->linkCheck)
     {
-      if ($this->linkCheck->returnCode == 0 
+      if ($this->linkCheck->returnCode == 0
       || $this->linkCheck->returnCode >= 400 && $this->linkCheck->returnCode <= 599)
       {
         printf("<span class='brokenLink error' title='%s'>Link broken!</span> ",$this->linkCheck->returnCode == 0 ? "server not found" : "server returned ".$this->linkCheck->returnCode );
@@ -399,10 +416,10 @@ document.observe("dom:loaded",function(){
     }
     echo "[<a id='mainDownloadLink' href='"._html($this->prod->download)."'>download</a>]";
     echo "</li>\n";
-    
+
     foreach ($this->downloadLinks as $link)
     {
-      echo "<li".($link->id?" id='".$link->id."'":"").">[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
+      echo "<li".(@$link->id?" id='".$link->id."'":"").">[<a href='"._html($link->link)."'>"._html($link->type)."</a>]</li>\n";
     }
     echo "<li>[<a href='mirrors.php?which=".$this->id."'>mirrors...</a>]</li>\n";
     echo "</ul>\n";
@@ -508,10 +525,10 @@ document.observe("dom:loaded",function(){
     }
 
 
-    if($this->prod->addeduser)
+    if($this->prod->addedUser)
     {
       echo "<tr>\n";
-      echo " <td class='foot' colspan='3'>added on the ".$this->prod->addedDate." by ".$this->prod->addeduser->PrintLinkedName()." ".$this->prod->addeduser->PrintLinkedAvatar()."</td>\n";
+      echo " <td class='foot' colspan='3'>added on the ".$this->prod->addedDate." by ".$this->prod->addedUser->PrintLinkedName()." ".$this->prod->addedUser->PrintLinkedAvatar()."</td>\n";
       echo "</tr>\n";
     }
 
@@ -521,25 +538,28 @@ document.observe("dom:loaded",function(){
 
 };
 
-class PouetBoxProdPopularityHelper extends PouetBox {
+class PouetBoxProdPopularityHelper extends PouetBox
+{
   var $data;
   var $prod;
   var $id;
-  function __construct($prod) {
+  function __construct($prod)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodpopularityhelper";
     $this->title = "popularity helper";
     $this->prod = $prod;
   }
 
-  function RenderContent() {
+  function RenderContent()
+  {
     $url = POUET_ROOT_URL . "prod.php?which=".$this->prod->id;
     echo "<p>increase the popularity of this prod by spreading this URL:</p>\n";
     echo "<input type='text' value='"._html($url)."' size='50' readonly='readonly' />\n";
     echo "<p>or via:\n";
 
     echo "  <a href='https://www.facebook.com/sharer/sharer.php?u="._html(rawurlencode($url))."'>facebook</a>\n";
-    
+
     $text = "You should watch \"".$this->prod->name."\" on @pouetdotnet: ".$url;
     echo "  <a href='https://twitter.com/intent/tweet?text="._html(rawurlencode($text))."'>twitter</a>\n";
 
@@ -550,27 +570,33 @@ class PouetBoxProdPopularityHelper extends PouetBox {
   }
 };
 
-class PouetBoxProdComments extends PouetBox {
-  var $id;
-  var $topic;
-  var $posts;
-  function __construct($id,$main) {
+class PouetBoxProdComments extends PouetBox
+{
+  public $id;
+  public $topic;
+  public $posts;
+  public $credits;
+  public $paginator;
+  public $data;
+  function __construct($id,$main)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodcomments";
     $this->title = "comments";
     $this->id = (int)$id;
-    
+
     $this->credits = array();
     foreach($main->credits as $credit)
     {
       if(!$credit->user) continue;
       $this->credits[] = $credit->user->id;
     }
-    
+
     $this->paginator = new PouetPaginator();
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query();
     $s->AddField("comments.id as id");
     $s->AddField("comments.comment as comment");
@@ -627,13 +653,13 @@ class PouetBoxProdComments extends PouetBox {
         $author = true;
 
       echo "<div class='comment cite-".$c->user->id."".($author?" author":"")."' id='c".$c->id."'>\n";
-        
+
       echo "  <div class='content'>".$p."</div>\n";
-      
+
       echo "  <div class='foot'>";
       if ($c->rating)
         echo "<span class='vote ".$rating."'>".$rating."</span>";
-      if ($main->userCDCs[$c->user->id])
+      if (@$main->userCDCs[$c->user->id])
       {
         echo "<span class='vote cdc'>cdc</span>";
         unset($main->userCDCs[$c->user->id]);
@@ -644,21 +670,23 @@ class PouetBoxProdComments extends PouetBox {
 
       echo "</div>\n";
       echo "</div>\n\n";
-      
+
     }
     $this->paginator->RenderNavbar();
   }
 
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "</div>\n";
   }
 };
 
-class PouetBoxProdLists extends PouetBox 
+class PouetBoxProdLists extends PouetBox
 {
   var $id;
   var $topic;
   var $posts;
+  var $data;
   function __construct($id)
   {
     parent::__construct();
@@ -720,7 +748,7 @@ class PouetBoxProdSneakyCDCs extends PouetBox {
   var $data;
   var $prod;
   var $id;
-  function __construct() 
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodsneakycdcs";
@@ -798,8 +826,8 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
     $this->title = "recommend this prod for an award !";
     $this->prodID = $id;
   }
-  
-  function LoadFromDB() 
+
+  function LoadFromDB()
   {
     global $currentUser;
     $s = new BM_Query();
@@ -810,7 +838,7 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
     $this->votes = array();
     foreach($_votes as $vote) $this->votes[] = $vote->categoryID;
   }
-  
+
   use PouetForm;
   function Validate($post)
   {
@@ -828,14 +856,14 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
     global $main;
     global $AWARDSSUGGESTIONS_EVENTS;
     global $AWARDSSUGGESTIONS_CATEGORIES;
-    
+
     SQLLib::Query(sprintf_esc("delete from awardssuggestions_votes where prodID = %d and userID = %d",$this->prodID,$currentUser->id));
 
     foreach($post["cat"] as $catID)
-    {    
+    {
       $category = $AWARDSSUGGESTIONS_CATEGORIES[$catID];
       $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
-      
+
       if (isEventEligible($event,$main->prod))
       {
         $a = array(
@@ -846,7 +874,7 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
         SQLLib::InsertRow("awardssuggestions_votes",$a);
       }
     }
-    
+
     return array();
   }
 
@@ -862,12 +890,12 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
     {
       $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
       if (isEventEligible($event,$main->prod))
-      {      
+      {
         printf("<option value='%d'%s>%s - %s</option>\n",$category->id,in_array($category->id,$this->votes)?" selected='selected'":"",_html($event->name),_html($category->name));
       }
     }
     echo "</select>\n";
-    echo "<p>(use ctrl+click to select or deselect more than one category ! you can see all your votes on your <a href='account.php#pouetbox_accountawardsug'>accounts page</a> !)</p>\n";    
+    echo "<p>(use ctrl+click to select or deselect more than one category ! you can see all your votes on your <a href='account.php#pouetbox_accountawardsug'>accounts page</a> !)</p>\n";
   }
   function RenderFooter() {
     echo "  <div class='foot'>\n";
@@ -878,18 +906,21 @@ class PouetBoxProdAwardSuggestions extends PouetBox {
 
 };
 
-
-class PouetBoxProdPost extends PouetBox {
-  var $prod;
-  function __construct($prod) {
+class PouetBoxProdPost extends PouetBox
+{
+  public $prod;
+  public $prodID;
+  public $myVote;
+  function __construct($prod)
+  {
     global $currentUser;
-    
+
     parent::__construct();
     $this->prodID = (int)$prod;
     $this->uniqueID = "pouetbox_prodpost";
     $this->title = "add a comment";
 
-    $this->myVote = SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prodID));
+    $this->myVote = $currentUser ? SQLLib::SelectRow(sprintf_esc("SELECT * FROM comments WHERE who=%d AND which=%d AND rating!=0 LIMIT 1",(int)$currentUser->id,$this->prodID)) : 0;
   }
   use PouetForm;
   function Validate($post)
@@ -941,7 +972,7 @@ class PouetBoxProdPost extends PouetBox {
     SQLLib::InsertRow("comments",$a);
 
     PouetProd::RecalculateVoteCacheByID($this->prodID);
-    
+
     @unlink("cache/pouetbox_latestcomments.cache");
     @unlink("cache/pouetbox_topmonth.cache");
     @unlink("cache/pouetbox_stats.cache");
@@ -949,13 +980,17 @@ class PouetBoxProdPost extends PouetBox {
     return array();
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $currentUser;
 
-    if (!$currentUser) {
+    if (!$currentUser)
+    {
       $box = new PouetBoxLogin();
       $box->RenderBody();
-    } else {
+    }
+    else
+    {
       if (!$currentUser->CanPostInProdComments())
         return;
 
@@ -1039,17 +1074,17 @@ if ($main->prod)
     }
   }
   $form->Add( "prodpost", $post );
-  
+
   // OpenGraph docs: https://ogp.me/
   // Twitter card docs: https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
-  $metaValues["og:title"] = 
-  $metaValues["twitter:title"] = 
+  $metaValues["og:title"] =
+  $metaValues["twitter:title"] =
   $TITLE = $main->prod->name.($main->prod->groups ? " by ".$main->prod->RenderGroupsPlain() : "");
 
   $metaValues["og:type"] = "website";
   $metaValues["twitter:card"] = "summary_large_image";
   $metaValues["twitter:site"] = "@pouetdotnet";
-  
+
   $desc = implode(" / ",$main->prod->types);
   $desc .= " for ". implode(" / ",array_map(function($i){ return $i["name"]; },$main->prod->platforms));
   if ($main->prod->placings)
@@ -1060,13 +1095,13 @@ if ($main->prod)
   {
     $desc .= ", released in " . $main->prod->RenderReleaseDate();
   }
-  $metaValues["og:description"] = 
+  $metaValues["og:description"] =
   $metaValues["twitter:description"] = $desc;
-  
+
   $linkedData["@type"] = "CreativeWork"; // https://schema.org/CreativeWork
   $linkedData["name"] = $main->prod->name;
   $linkedData["author"] = $main->prod->RenderGroupsPlain();
-  
+
   $ratingCount = $main->prod->voteup + $main->prod->votedown + $main->prod->votepig;
   if ($ratingCount)
   {
@@ -1081,22 +1116,22 @@ if ($main->prod)
 
   if ($main->screenshotPath)
   {
-    $metaValues["og:image"] = 
-    $metaValues["twitter:image"] = 
+    $metaValues["og:image"] =
+    $metaValues["twitter:image"] =
     $linkedData["image"] = POUET_CONTENT_URL . $main->screenshotPath;
   }
-  
- 
+
+
   $form->Process();
 }
 
 // AJAX
 $csrf = new CSRFProtect();
-if ($_POST["wlAction"] && $currentUser)
+if (@$_POST["wlAction"] && $currentUser)
 {
   if (!$csrf->ValidateToken())
     exit();
-  
+
   if ($_POST["wlAction"]=="removeFromWatchlist")
   {
     SQLLib::Query(sprintf_esc("delete from watchlist where prodID = %d and userID = %d",$prodid,$currentUser->id));
@@ -1175,16 +1210,16 @@ document.observe("dom:loaded",function(){
   {
     var data = $("screenshot").innerHTML;
     $("screenshot").remove();
-    
+
     var td = new Element("td",{"colspan":2,"id":"screenshot"}); td.update(data);
     var tr = new Element("tr"); tr.insert(td);
-    
+
     $("prodheader").parentNode.insertBefore( tr, $("prodheader").nextSibling);
   }
 });
 //-->
 </script>
-<?php  
+<?php
 }
 else
 {

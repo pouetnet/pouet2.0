@@ -1,5 +1,5 @@
 <?php
-class PouetUser extends BM_Class 
+class PouetUser extends BM_Class
 {
   public $id;
   public $nickname;
@@ -37,12 +37,12 @@ class PouetUser extends BM_Class
   function PrintLinkedName()
   {
     $classes = array("user");
-    if ((time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
+    if ($this->lastLogin && (time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
     if ($this->IsBanned()) $classes[] = "banned";
-    //return "<a href='user.php?who=".(int)$this->id."' class='".implode(" ",$classes)."'>"._html($this->nickname)."</a>";
     return sprintf("<a href='user.php?who=%d' class='%s'>%s</a>",$this->id,implode(" ",$classes),_html($this->nickname));
   }
-  function Create() {
+  function Create()
+  {
     $a = array();
     $a["id"] = $this->id;
     $a["nickname"] = $this->nickname;
@@ -211,7 +211,7 @@ class PouetUser extends BM_Class
     unset($array["sceneIDData"]);
     unset($array["permissionSubmitItems"]);
     unset($array["permissionPostBBS"]);
-    unset($array["permissionPostOneliner"]);    
+    unset($array["permissionPostOneliner"]);
     return $array;
   }
 };

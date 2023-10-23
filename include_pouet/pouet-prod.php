@@ -38,6 +38,8 @@ class PouetProd extends BM_Class
   public $platforms;
   public $awards;
   public $party;
+  
+  public $cdc;
 
   function __construct()
   {
