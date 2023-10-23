@@ -155,9 +155,13 @@ class PouetBoxProdMain extends PouetBox
 
   function RenderScreenshot()
   {
-    if ($this->screenshot && $this->screenshotPath)
+    if ($this->screenshotPath)
     {
-      $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
+      $title = "screenshot";
+      if ($this->screenshot)
+      {
+        $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
+      }
       return "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
     }
     else
