@@ -103,6 +103,18 @@ class PouetBoxListsMain extends PouetBox
     $s->Attach(array("list_items"=>"itemid"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("list_items.list=%d",$this->id));
     $s->AddWhere("list_items.type='prod'");
+    
+    $dir = "ASC";
+    if ($_GET["reverse"])
+      $dir = "DESC";
+    switch($_GET["order"])
+    {
+      case "type": $s->AddOrder("list_items_prod.type ".$dir); break;
+      case "name": $s->AddOrder("list_items_prod.name ".$dir); break;    
+      case "party": $s->AddOrder("list_items_prod_party.name ".$dir); break;    
+      case "release date": $s->AddOrder("list_items_prod_releaseDate ".$dir); break;    
+    }
+    
     $this->prods = $s->perform();
 
     $a = array();
@@ -193,29 +205,52 @@ class PouetBoxListsMain extends PouetBox
     if ($this->prods)
     {
       echo "<h2>prods</h2>";
-      echo "<ul class='boxlist boxlisttable'>\n";
+      echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
+
+      $headers = array(
+        "type"=>"type",
+        "name"=>"prodname",
+        "party"=>"release party",
+        "release date"=>"release date"
+      );
+      echo "<tr class='sortable'>\n";
+      foreach($headers as $key=>$text)
+      {
+        $out = sprintf("<th><a href='%s' class='%s%s %s'>%s</a></th>\n",
+          adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
+        if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
+        echo $out;
+      }
+      if ($this->CanEdit())
+      {
+          echo "<th></th>";
+      }
+      echo "</tr>\n";
+
       foreach($this->prods as $d)
       {
-        echo "<li>\n";
-        echo "<span>\n";
+        echo "<tr>\n";
+        echo "<td>\n";
         echo $d->prod->RenderTypeIcons();
         echo $d->prod->RenderPlatformIcons();
         echo $d->prod->RenderSingleRowShort();
-        echo "</span>\n";
-        echo "<span>\n";
+        echo "</td>\n";
+        echo "<td>\n";
         if ($d->prod->placings)
           echo $d->prod->placings[0]->PrintResult($p->year);
-        echo "</span>\n";
-        echo "<span>\n";
+        echo "</td>\n";
+        echo "<td>\n";
         echo $d->prod->RenderReleaseDate();
-        echo "</span>\n";
+        echo "</td>\n";
         if ($this->CanEdit())
         {
-          printf("  <span class='list-delete'><input type='submit' name='listDeleteProd[%d]' value='delete'/></span>",$d->prod->id);
+          printf("  <td class='list-delete'><input type='submit' name='listDeleteProd[%d]' value='delete'/></td>",$d->prod->id);
         }
-        echo "</li>\n";
+        echo "</tr>\n";
       }
-      echo "</ul>\n";
+
+      echo "</table>";
     }
 
     if ($this->parties)
