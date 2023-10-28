@@ -59,7 +59,18 @@ $namesSwitch = array(
 
 class PouetBoxAccount extends PouetBox
 {
-  function __construct( )
+  public $formifier;
+  public $maxCDCs;
+  public $cdcs;
+  public $ims;
+  public $user;
+  public $fieldsPouet;
+  public $fieldsOtherSites;
+  public $fieldsCDC;
+  public $imTypes;
+  public $fieldsIM;
+  public $sceneID;
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_account";
@@ -80,7 +91,8 @@ class PouetBoxAccount extends PouetBox
     $query->AddWhere(sprintf_esc("users.id = %d",get_login_id()));
     $query->SetLimit(1);
 
-    $s = new BM_Query("users_im");
+    $s = new BM_Query();
+    $s->AddTable("users_im");
     $s->AddWhere(sprintf_esc("users_im.userID = %d",get_login_id()));
     $this->ims = $s->perform();
 
@@ -90,7 +102,7 @@ class PouetBoxAccount extends PouetBox
     $rows = SQLLib::SelectRows(sprintf_esc("select cdc from users_cdcs where user=%d",get_login_id()));
     foreach($rows as $r)
       $this->cdcs[] = $r->cdc;
-      
+
     $this->fieldsPouet = array(
       "nickname"=>array(
         "info"=>"how do you look on IRC ?",
@@ -151,9 +163,9 @@ class PouetBoxAccount extends PouetBox
       if ($this->user->glops >= $glop)
       {
         $this->fieldsCDC["cdc".$x] = array(
-          "value" => $this->cdcs[$x-1],
+          "value" => @$this->cdcs[$x-1],
           "name" => "coup de coeur ".$x." (".$glop." glöps)",
-          "info" => $cdcText[$x], // is this cool?
+          //"info" => $cdcText[$x], // is this cool?
         );
         $glop *= 2;
       }
@@ -176,13 +188,13 @@ class PouetBoxAccount extends PouetBox
         //"info"=>"the one you really use",
         "name"=>"contact type",
         "type"=>"select",
-        "value"=>$im->im_type,
+        "value"=>@$im->im_type,
         "fields"=>$this->imTypes,
       );
       $this->fieldsIM["im_id".$n] = array(
         //"info"=>"buuuuuuuuuuuuuuuu .... hiho !",
         "name"=>"contact address",
-        "value"=>$im->im_id,
+        "value"=>@$im->im_id,
         "maxlength"=>255,
       );
       $n++;
@@ -303,7 +315,7 @@ class PouetBoxAccount extends PouetBox
   {
     if (!get_login_id())
       return array("You have to be logged in!");
-      
+
     $errors = array();
 
     $data["nickname"] = strip_tags($data["nickname"]);
@@ -318,7 +330,7 @@ class PouetBoxAccount extends PouetBox
     if (!$errors)
     {
       $this->LoadFromDB();
-      
+
       $errors = $this->ParsePostLoggedIn( $data );
     }
 //    $this->LoadFromDB();
@@ -331,7 +343,7 @@ class PouetBoxAccount extends PouetBox
     echo "\n\n";
     echo "<div class='pouettbl' id='".$this->uniqueID."'>\n";
     echo "  <h2>".$this->title."</h2>\n";
-    
+
     // sceneid
     echo "  <div class='accountsection content'>\n";
     echo "    <div class='formifier'>\n";
@@ -341,11 +353,11 @@ class PouetBoxAccount extends PouetBox
     echo "      </div>\n";
     echo "      <div class=\"row\">\n";
     echo "        <label>first name:</label>\n";
-    echo "        <p><b>"._html($this->sceneID["first_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
+    echo "        <p><b>"._html(@$this->sceneID["first_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
     echo "      </div>\n";
     echo "      <div class=\"row\">\n";
     echo "        <label>last name:</label>\n";
-    echo "        <p><b>"._html($this->sceneID["last_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
+    echo "        <p><b>"._html(@$this->sceneID["last_name"])."</b> (<a href='https://id.scene.org/profile/'>edit</a>)</p>\n";
     echo "      </div>\n";
     echo "      <div class=\"row\">\n";
     echo "        <label>password:</label>\n";
@@ -353,7 +365,7 @@ class PouetBoxAccount extends PouetBox
     echo "      </div>\n";
     echo "    </div>\n";
     echo "  </div>\n";
-    
+
     echo "  <h2>pou&euml;t things</h2>\n";
     echo "  <div class='accountsection content'>\n";
     $this->formifier->RenderForm( $this->fieldsPouet );
@@ -367,7 +379,7 @@ class PouetBoxAccount extends PouetBox
       $this->formifier->RenderForm( $this->fieldsIM );
       echo "  </div>\n";
     }
-    
+
     echo "  <h2>other sites</h2>\n";
     echo "  <div class='accountsection content'>\n";
     $this->formifier->RenderForm( $this->fieldsOtherSites );
@@ -387,6 +399,7 @@ class PouetBoxAccount extends PouetBox
 
 class PouetBoxAccountModificationRequests extends PouetBox
 {
+  public $requests;
   function __construct( )
   {
     parent::__construct();
@@ -397,8 +410,9 @@ class PouetBoxAccountModificationRequests extends PouetBox
   function LoadFromDB()
   {
     global $currentUser;
-    
-    $s = new BM_Query("modification_requests");
+
+    $s = new BM_Query();
+    $s->AddTable("modification_requests");
     $s->AddField("modification_requests.id");
     $s->AddField("modification_requests.requestType");
     $s->AddField("modification_requests.itemID");
@@ -412,7 +426,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
     $s->Attach(array("modification_requests"=>"itemID"),array("groups as group"=>"id"));
     $s->AddWhere(sprintf_esc("userID = %d",$currentUser->id));
     $s->AddOrder("requestDate desc");
-    $s->SetLimit( $_GET["limit"] ?: 10 );
+    $s->SetLimit( @$_GET["limit"] ?: 10 );
     $this->requests = $s->perform();
   }
   function Render()
@@ -456,6 +470,7 @@ class PouetBoxAccountModificationRequests extends PouetBox
 
 class PouetBoxAccountProdAwardSuggestions extends PouetBox
 {
+  public $votes;
   function __construct( )
   {
     parent::__construct();
@@ -470,7 +485,7 @@ class PouetBoxAccountProdAwardSuggestions extends PouetBox
 
     $cats = array();
     $date = date("Y-m-d");
-    
+
     foreach($AWARDSSUGGESTIONS_CATEGORIES as $category)
     {
       $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
@@ -479,9 +494,9 @@ class PouetBoxAccountProdAwardSuggestions extends PouetBox
         $cats[] = (int)$category->id;
       }
     }
-  
+
     global $currentUser;
-    
+
     if ($cats)
     {
       $s = new BM_Query("awardssuggestions_votes");
@@ -534,28 +549,28 @@ else
 {
 
   $form = new PouetFormProcessor();
-  
+
   //if (!get_login_id())
   //  $form->successMessage = "registration complete! a confirmation mail will be sent to your address soon - you can't login until you confirmed your email address!";
-    
+
   $form->SetSuccessURL( "user.php?who=".$currentUser->id, true );
-  
+
   $account = new PouetBoxAccount();
   $form->Add( "account", $account );
   $form->Add( "accountReq", new PouetBoxAccountModificationRequests() );
   $form->Add( "accountAwardSug", new PouetBoxAccountProdAwardSuggestions() );
-  
+
   $form->Process();
-  
+
   $TITLE = "account!";
-  
+
   require_once("include_pouet/header.php");
   require("include_pouet/menu.inc.php");
-  
+
   echo "<div id='content'>\n";
-  
+
   $form->Display();
-  
+
   echo "</div>\n";
 
 ?>
@@ -592,7 +607,7 @@ document.observe("dom:loaded",function(){
         },
     });
   }
-  
+
   var updateAvatar = function()
   {
     $("avatarimg").src = "<?=POUET_CONTENT_URL?>avatars/" + $("avatar").options[ $("avatar").selectedIndex ].value;
@@ -611,10 +626,10 @@ document.observe("dom:loaded",function(){
     $("avatar").selectedIndex = Math.floor( Math.random() * $("avatar").options.length );
     updateAvatar();
   });
-  
+
   var div = new Element("div",{"id":"avatarPickerPalette"})
   $("avatarPicker").parentNode.insert(div);
-  
+
   div.insert( new Element("a",{"href":"#"}).observe("click",function(e){
     regeneratePalette();
   }).update("show more") );
