@@ -3,33 +3,39 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxProdlist extends PouetBox
 {
-  var $id;
-  var $group;
+  public $id;
+  public $group;
+  public $perPage;
+  public $page;
+  public $prods;
+  public $count;
 
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_prodlist";
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $this->perPage = get_setting("prodlistprods");
-    
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("prods");
 
     // QUERYNAUGHT INCOMING
-    
-    if (is_array($_GET["type"]))
+
+    if (is_array(@$_GET["type"]))
     {
       $cond = array();
       foreach($_GET["type"] as $type)
         $cond[] = sprintf_esc("FIND_IN_SET('%s',prods.type)",$type);
       $s->AddWhere(implode(" OR ",$cond));
     }
-    if (is_array($_GET["platform"]))
+    if (is_array(@$_GET["platform"]))
     {
       global $PLATFORMS;
       $platforms = array();
@@ -43,54 +49,54 @@ class PouetBoxProdlist extends PouetBox
         $s->AddWhere(sprintf_esc("pp.platform in (%s)",implode(",",$platforms)));
       }
     }
-    if (is_array($_GET["group"]))
+    if (is_array(@$_GET["group"]))
     {
       foreach($_GET["group"] as $v) if ($v)
       {
         $s->AddWhere(sprintf_esc("(prods.group1 = %d OR prods.group2 = %d OR prods.group3 = %d)",$v,$v,$v));
       }
     }
-    if ($_GET["releaseDateFrom"])
+    if (@$_GET["releaseDateFrom"])
     {
       $s->AddWhere(sprintf_esc("prods.releaseDate >= '%s'",$_GET["releaseDateFrom"]));
     }
-    if ($_GET["releaseDateUntil"])
+    if (@$_GET["releaseDateUntil"])
     {
       $s->AddWhere(sprintf_esc("prods.releaseDate <= '%s'",$_GET["releaseDateUntil"]));
     }
-    if ($_GET["addedDateFrom"])
+    if (@$_GET["addedDateFrom"])
     {
       $s->AddWhere(sprintf_esc("prods.addedDate >= '%s'",$_GET["addedDateFrom"]));
     }
-    if ($_GET["addedDateUntil"])
+    if (@$_GET["addedDateUntil"])
     {
       $s->AddWhere(sprintf_esc("prods.addedDate <= '%s'",$_GET["addedDateUntil"]));
     }
-    if ($_GET["party"])
+    if (@$_GET["party"])
     {
       $s->AddWhere(sprintf_esc("party = %d",$_GET["party"]));
     }
-    if ($_GET["partyYear"])
+    if (@$_GET["partyYear"])
     {
       $s->AddWhere(sprintf_esc("party_year = %d",$_GET["partyYear"]));
     }
-    if ($_GET["partyRank"])
+    if (@$_GET["partyRank"])
     {
       $s->AddWhere(sprintf_esc("party_place = %d",$_GET["partyRank"]));
     }
-    if ($_GET["partyRankHigher"])
+    if (@$_GET["partyRankHigher"])
     {
       $s->AddWhere(sprintf_esc("party_place <= %d",$_GET["partyRankHigher"]));
     }
-    if ($_GET["partyRankLower"])
+    if (@$_GET["partyRankLower"])
     {
       $s->AddWhere(sprintf_esc("party_place >= %d",$_GET["partyRankLower"]));
     }
-    
+
     $dir = "DESC";
-    if ($_GET["reverse"])
+    if (@$_GET["reverse"])
       $dir = "ASC";
-    switch($_GET["order"])
+    switch(@$_GET["order"])
     {
       case "type": $s->AddOrder("prods.type ".$dir); break;
       case "name": $s->AddOrder("prods.name ".$dir); break;
@@ -117,7 +123,8 @@ class PouetBoxProdlist extends PouetBox
     PouetCollectAwards($this->prods);
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "type"=>"type",
@@ -137,14 +144,15 @@ class PouetBoxProdlist extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s %s'>%s</a></th>\n",
-        adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
     }
     echo "</tr>\n";
 
-    foreach ($this->prods as $p) {
+    foreach ($this->prods as $p)
+    {
       echo "<tr>\n";
 
       echo "<td>\n";
@@ -160,7 +168,7 @@ class PouetBoxProdlist extends PouetBox
 
       echo "<td>\n";
       if ($p->placings)
-        echo $p->placings[0]->PrintResult($p->year);
+        echo $p->placings[0]->PrintResult();
       echo "</td>\n";
 
       echo "<td class='date'>".$p->RenderReleaseDate()."</td>\n";
@@ -200,11 +208,14 @@ class PouetBoxProdlist extends PouetBox
 
 class PouetBoxProdlistSelectors extends PouetBox
 {
-  function Load() {
+  public $types;
+  function Load()
+  {
     $row = SQLLib::selectRow("DESC prods type");
     $this->types = enum2array($row->Type);
   }
-  function Render() {
+  function Render()
+  {
     global $PLATFORMS;
     echo "<table id='pouetbox_prodlist_selector' class='boxtable'>\n";
     echo "<tr>\n";

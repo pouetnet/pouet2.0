@@ -3,17 +3,23 @@ include_once("bootstrap.inc.php");
 
 class PouetBoxBoardMain extends PouetBox
 {
-  var $id;
-  var $group;
+  public $id;
+  public $group;
+  public $board;
+  public $groups;
+  public $bbstros;
+  public $platforms;
+  public $nfos;
 
-  function __construct($id) {
+  function __construct($id)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_boardmain";
     $this->id = (int)$id;
 
   }
 
-  function LoadFromDB() 
+  function LoadFromDB()
   {
     $this->board = PouetBoard::Spawn($this->id);
     if (!$this->board) return;
@@ -24,7 +30,8 @@ class PouetBoxBoardMain extends PouetBox
 
     $this->nfos = SQLLib::SelectRows(sprintf_esc("select * from othernfos where refid = %d",$this->id));
 
-    $s = new BM_Query("affiliatedboards");
+    $s = new BM_Query();
+    $s->AddTable("affiliatedboards");
     $s->AddField("affiliatedboards.type");
     $s->Attach(array("affiliatedboards"=>"group"),array("groups as group"=>"id"));
     $s->AddWhere(sprintf_esc("affiliatedboards.board = %d",$this->id));
@@ -90,16 +97,16 @@ class PouetBoxBoardMain extends PouetBox
       echo "      <tr>\n";
       echo "        <td>platforms :</td>\n";
       echo "        <td>";
-  
+
       echo "<ul>";
       foreach($this->platforms as $t)
         echo "<li><a href='prodlist.php?platform[]=".rawurlencode($PLATFORMS[$t]["name"])."'><span class='platform os_".$PLATFORMS[$t]["slug"]."'>".$PLATFORMS[$t]["name"]."</span> ".$PLATFORMS[$t]["name"]."</a></li>\n";
       echo "</ul>";
-  
+
       echo "</td>\n";
       echo "      </tr>\n";
     }
-    
+
     if ($this->nfos)
     {
       echo "      <tr>\n";
@@ -152,21 +159,24 @@ class PouetBoxBoardMain extends PouetBox
     echo "</div>\n";
 
     echo " <div class='foot'>added on the ".$this->board->addedDate;
-    if ($this->board->addeduser)
+    if ($this->board->addedUser)
     {
-      echo " by ".$this->board->addeduser->PrintLinkedName()." ".$this->board->addeduser->PrintLinkedAvatar();
+      echo " by ".$this->board->addedUser->PrintLinkedName()." ".$this->board->addedUser->PrintLinkedAvatar();
     }
     echo "</div>\n";
 
     echo "</div>\n";
-    return $s;
   }
 };
 
 class PouetBoxBoardList extends PouetBox
 {
-  var $letter;
-  function __construct($letter) {
+  public $letter;
+  public $letterselect;
+  public $boards;
+  
+  function __construct($letter)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_boardlist";
 
@@ -197,7 +207,8 @@ class PouetBoxBoardList extends PouetBox
     echo "</div>\n";
   }
 
-  function Load() {
+  function Load()
+  {
     $s = new BM_query("boards");
     $s->AddField("boards.id");
     $s->AddField("boards.sysop");
@@ -228,7 +239,8 @@ class PouetBoxBoardList extends PouetBox
 
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $thread_categories;
     echo "<table class='boxtable'>\n";
     echo "<tr>\n";
@@ -248,12 +260,12 @@ class PouetBoxBoardList extends PouetBox
 };
 ///////////////////////////////////////////////////////////////////////////////
 
-$boardID = (int)$_GET["which"];
+$boardID = (int)@$_GET["which"];
 
 $p = null;
 if (!$boardID)
 {
-  $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
+  $pattern = @$_GET["pattern"] ? @$_GET["pattern"] : chr(rand(ord("a"),ord("z")));
   $p = new PouetBoxBoardList($pattern);
   $p->Load();
   $TITLE = "boards: ".$p->letter;

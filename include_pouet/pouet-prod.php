@@ -139,7 +139,7 @@ class PouetProd extends BM_Class
     foreach($this->awards as $a)
     {
       $category = $AWARDS_CATEGORIES[$a->categoryID];
-      $year = substr($this->releaseDate,0,4);
+      $year = $this->releaseDate ? substr($this->releaseDate,0,4) : "";
       $title = $category->series." - ".$category->category;
       if ($a->awardType == "nominee")
       {

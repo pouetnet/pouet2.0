@@ -1,7 +1,10 @@
 <?php
-class PouetBoxBBSOpen extends PouetBox {
-  var $topic;
-  function __construct() {
+class PouetBoxBBSOpen extends PouetBox
+{
+  public $topic;
+  public $categories;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbsopen";
     $this->title = "open a new bbs thread";
@@ -97,7 +100,5 @@ class PouetBoxBBSOpen extends PouetBox {
     echo "</div>\n";
     echo "</form>\n";
   }
-
 };
-
 ?>

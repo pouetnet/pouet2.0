@@ -5,10 +5,15 @@ require_once("include_pouet/box-login.php");
 
 class PouetBoxBBSTopicList extends PouetBox
 {
-  var $id;
-  var $group;
+  public $id;
+  public $group;
+  public $categories;
+  public $page;
+  public $count;
+  public $topics;
 
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_bbslist";
 
@@ -16,11 +21,12 @@ class PouetBoxBBSTopicList extends PouetBox
     $this->categories = enum2array($row->Type);
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("bbsbbstopics");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_query();
     $s->AddField("bbs_topics.id as id");
@@ -36,10 +42,10 @@ class PouetBoxBBSTopicList extends PouetBox
 
 
     $dir = "DESC";
-    if ($_GET["reverse"])
+    if (@$_GET["reverse"])
       $dir = "ASC";
 
-    switch($_GET["order"])
+    switch(@$_GET["order"])
     {
       case "firstpost": $s->AddOrder("bbs_topics.firstpost ".$dir); break;
       case "userfirstpost": $s->AddOrder("bbs_topics_firstuser.nickname ".$dir); break;
@@ -53,7 +59,7 @@ class PouetBoxBBSTopicList extends PouetBox
     $s->AddOrder("bbs_topics.lastpost ".$dir);
     $s->SetLimit( $perPage, (int)(($this->page - 1) * $perPage) );
 
-    if ($_GET["category"])
+    if (@$_GET["category"])
       $s->AddWhere(sprintf_esc("category='%s'",$_GET["category"]));
     //echo $s->GetQuery();
 
@@ -63,7 +69,8 @@ class PouetBoxBBSTopicList extends PouetBox
     //$this->maxtopics = SQLLib::SelectRow("SELECT MAX(views) as m FROM prods")->m;
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "firstpost"=>"started",
@@ -79,14 +86,15 @@ class PouetBoxBBSTopicList extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th id='th_%s'><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $key,adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
+        $key,adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
     }
     echo "</tr>\n";
 
-    foreach ($this->topics as $p) {
+    foreach ($this->topics as $p)
+    {
       printf("<tr class='%s'>\n",$p->closed?"closed":"");
 
       echo " <td>";
@@ -123,7 +131,7 @@ class PouetBoxBBSTopicList extends PouetBox
     echo "<tr>\n";
     echo "<td class='nav' colspan=".(count($headers)).">\n";
 
-    $this->page = ((int)$_GET["page"] ? $_GET["page"] : 1);
+    $this->page = ((int)@$_GET["page"] ? $_GET["page"] : 1);
     if ($this->page > 1)
       echo "  <div class='prevpage'><a href='".adjust_query(array("page"=>($this->page - 1)))."'>previous page</a></div>\n";
     if ($this->page < ($this->count / $perPage))
@@ -165,7 +173,6 @@ document.observe("dom:loaded",function(){
 //-->
 </script>
 <?php
-    return $s;
   }
 };
 

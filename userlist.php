@@ -3,24 +3,30 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxUserlist extends PouetBox
 {
-  var $id;
-  var $group;
+  public $id;
+  public $group;
+  public $users;
+  public $maxglops;
+  public $page;
+  public $count;
 
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_userlist";
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("userlistusers");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("users");
 
-    $dir = !$_GET["reverse"];
-    switch($_GET["order"])
+    $dir = !@$_GET["reverse"];
+    switch(@$_GET["order"])
     {
       case "nickname": $s->AddOrder("users.nickname ".($dir?"ASC":"DESC")); break;
       case "age": $s->AddOrder("users.registerDate ".($dir?"ASC":"DESC")); break;
@@ -39,7 +45,8 @@ class PouetBoxUserlist extends PouetBox
     $this->maxglops = SQLLib::SelectRow("SELECT MAX(glops) as m FROM users")->m;
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "nickname"=>"nickname",
@@ -51,14 +58,15 @@ class PouetBoxUserlist extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;
     }
     echo "</tr>\n";
 
-    foreach ($this->users as $p) {
+    foreach ($this->users as $p)
+    {
       echo "<tr>\n";
 
       echo "<td>\n";

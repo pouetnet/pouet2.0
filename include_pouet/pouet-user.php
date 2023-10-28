@@ -21,6 +21,9 @@ class PouetUser extends BM_Class
   public $demozoo;
   public $lastip;
   public $lasthost;
+  
+  // non-db fields
+  public $stats = array();
 
   static function getTable () { return "users"; }
   static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
@@ -122,7 +125,7 @@ class PouetUser extends BM_Class
         $sceneID->GetClientCredentialsToken();
       }
       $data = $sceneID->User( $this->id );
-      if ($data["user"])
+      if ($data && $data["user"])
       {
         SQLLib::UpdateRow("users",array(
           "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),

@@ -3,21 +3,23 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxSearchBoxMain extends PouetBox
 {
-  function __construct() {
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchmain";
     $this->title = "search in pou&euml;t.net";
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     echo "<div class='content r1'>\n";
     echo "I'm looking for\n";
-    echo "<input type='text' name='what' size='25' value=\""._html($_GET["what"])."\"/>\n";
+    echo "<input type='text' name='what' size='25' value=\""._html(@$_GET["what"])."\"/>\n";
     echo "and this is a [\n";
 
     $types = array("prod","group","party"/*,"board"*/,"user","bbs");
     $a = array();
-    $selected = $_GET["type"] ? $_GET["type"] : "prod";
+    $selected = @$_GET["type"] ? $_GET["type"] : "prod";
     foreach($types as $t)
       $a[] = "<label><input type='radio' name='type' value='".$t."' ".($t==$selected?" checked='checked'":"")."/>&nbsp;".$t."</label>\n";
 
@@ -31,17 +33,23 @@ class PouetBoxSearchBoxMain extends PouetBox
 
 class PouetBoxSearchProd extends PouetBox
 {
-  function __construct($terms = array()) {
+  public $terms;
+  public $page;
+  public $data;
+  public $count;
+  function __construct($terms = array())
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchprod";
     $this->terms = $terms;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("searchprods");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("prods");
     $s->AddField("cmts.c as commentCount");
@@ -61,7 +69,8 @@ class PouetBoxSearchProd extends PouetBox
     PouetCollectAwards($this->data);
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "name"=>"name",
@@ -81,7 +90,8 @@ class PouetBoxSearchProd extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->data as $p) {
+    foreach ($this->data as $p)
+    {
       echo "<tr>\n";
 
       echo "<td>\n";
@@ -97,7 +107,7 @@ class PouetBoxSearchProd extends PouetBox
 
       echo "<td>\n";
       if ($p->placings)
-        echo $p->placings[0]->PrintResult($p->year);
+        echo $p->placings[0]->PrintResult();
       echo "</td>\n";
 
       echo "<td class='date'>".$p->RenderReleaseDate()."</td>\n";
@@ -139,17 +149,23 @@ class PouetBoxSearchProd extends PouetBox
 
 class PouetBoxSearchGroup extends PouetBox
 {
-  function __construct($terms = array()) {
+  public $terms;
+  public $page;
+  public $data;
+  public $count;
+  function __construct($terms = array())
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchgroup";
     $this->terms = $terms;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("searchprods");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("groups");
     $s->AddField("p1.c as p1c");
@@ -170,7 +186,8 @@ class PouetBoxSearchGroup extends PouetBox
 
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "group"=>"groups",
@@ -232,17 +249,23 @@ class PouetBoxSearchGroup extends PouetBox
 
 class PouetBoxSearchParty extends PouetBox
 {
-  function __construct($terms = array()) {
+  public $terms;
+  public $page;
+  public $data;
+  public $count;
+  function __construct($terms = array())
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchparty";
     $this->terms = $terms;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("searchprods");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("parties");
     $s->AddField("p.c as prods");
@@ -259,7 +282,8 @@ class PouetBoxSearchParty extends PouetBox
 
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "party"=>"party name",
@@ -273,7 +297,8 @@ class PouetBoxSearchParty extends PouetBox
     }
     echo "</tr>\n";
 
-    foreach ($this->data as $p) {
+    foreach ($this->data as $p)
+    {
       echo "<tr>\n";
 
       echo "<td class='name'>";
@@ -319,17 +344,23 @@ class PouetBoxSearchParty extends PouetBox
 
 class PouetBoxSearchUser extends PouetBox
 {
-  function __construct($terms = array()) {
+  public $terms;
+  public $page;
+  public $data;
+  public $count;
+  function __construct($terms = array())
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchuser";
     $this->terms = $terms;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new SQLSelect();
 
     $perPage = get_setting("searchprods");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
 
     $s = new BM_Query("users");
 //    $s->AddField("p.c as prods");
@@ -346,7 +377,8 @@ class PouetBoxSearchUser extends PouetBox
 
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "party"=>"nickname",
@@ -408,7 +440,12 @@ class PouetBoxSearchUser extends PouetBox
 
 class PouetBoxSearchBBS extends PouetBox
 {
-  function __construct($terms = array()) {
+  public $terms;
+  public $page;
+  public $data;
+  public $count;
+  function __construct($terms = array())
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_searchbbs";
     $this->terms = $terms;
@@ -422,15 +459,15 @@ class PouetBoxSearchBBS extends PouetBox
     $this->terms = array_values($this->terms);
   }
 
-  function LoadFromDB() 
+  function LoadFromDB()
   {
     $perPage = get_setting("searchprods");
-    $this->page = (int)max( 1, (int)$_GET["page"] );
+    $this->page = (int)max( 1, (int)@$_GET["page"] );
     $this->data = array();
-    
+
     if (!$this->terms)
       return;
-      
+
     $s = new SQLSelect();
 
     $s = new BM_Query("bbs_posts");
@@ -451,7 +488,8 @@ class PouetBoxSearchBBS extends PouetBox
 
   }
 
-  function Render() {
+  function Render()
+  {
     echo "<table id='".$this->uniqueID."' class='boxtable pagedtable'>\n";
     $headers = array(
       "topic"=>"topic",
@@ -528,12 +566,10 @@ class PouetBoxSearchBBS extends PouetBox
 ///////////////////////////////////////////////////////////////////////////////
 
 $TITLE = "search";
-if ($_GET["what"])
-  $TITLE .= ": ".$_GET["what"];
-
 $results = null;
-if ($_GET["what"])
+if (@$_GET["what"])
 {
+  $TITLE .= ": ".$_GET["what"];
   $terms = split_search_terms( $_GET["what"] );
 
   switch($_GET["type"])

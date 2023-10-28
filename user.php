@@ -3,7 +3,37 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxUserMain extends PouetBox
 {
-  function __construct($id,$show) {
+  public $agreeRulez;
+  public $agreeSucks;
+  public $cdcProds;
+  public $comments;
+  public $credits;
+  public $firstComments;
+  public $groups;
+  public $id;
+  public $ims;
+  public $lists;
+  public $logos;
+  public $nfos;
+  public $paginator;
+  public $parties;
+  public $posts;
+  public $prods;
+  public $requests;
+  public $sceneID;
+  public $shots;
+  public $show;
+  public $topics;
+  public $totalCreditsThumbDown;
+  public $totalCreditsThumbUp;
+  public $totalProds;
+  public $totalRequests;
+  public $user;
+  public $topicCount;
+  public $postcount;
+
+  function __construct($id,$show)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_usermain";
     $this->title = "";
@@ -13,7 +43,8 @@ class PouetBoxUserMain extends PouetBox
     $this->show = $show;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $this->user = PouetUser::Spawn( $this->id );
 
     if (!$this->user) return;
@@ -22,11 +53,13 @@ class PouetBoxUserMain extends PouetBox
 
     $this->sceneID = $this->user->GetSceneIDData();
 
-    $s = new BM_Query("users_im");
+    $s = new BM_Query();
+    $s->AddTable("users_im");
     $s->AddWhere(sprintf_esc("users_im.userID = %d",$this->id));
     $this->ims = $s->perform();
 
-    $s = new BM_Query("users_cdcs");
+    $s = new BM_Query();
+    $s->AddTable("users_cdcs");
     $s->AddWhere(sprintf_esc("users_cdcs.user = %d",$this->id));
     $s->Attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));
     $s->AddOrder("users_cdcs_prod.id");
@@ -107,7 +140,7 @@ class PouetBoxUserMain extends PouetBox
     $this->comments = array();
     if ($this->show=="demoblog")
     {
-      $this->comments = $this->GetDemoblog( $_GET["page"] );
+      $this->comments = $this->GetDemoblog( @$_GET["page"] );
     }
 
     $this->agreeRulez = array();
@@ -123,7 +156,8 @@ class PouetBoxUserMain extends PouetBox
     }
   }
 
-  function AddRow($field, $value, $allowHTML = false) {
+  function AddRow($field, $value, $allowHTML = false)
+  {
     $s = "";
     if ($value) {
       echo "<li>\n";
@@ -159,7 +193,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetLogosAdded( $limit = null )
   {
-    $s = new BM_Query("logos");
+    $s = new BM_Query();
+    $s->AddTable("logos");
     $s->AddField("logos.file");
     $s->AddField("logos.vote_count");
     $s->AddOrder("logos.vote_count DESC");
@@ -179,7 +214,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
     else
     {
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=prods", $this->user->stats["prods"], 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=prods", $this->user->stats["prods"], 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
     $data = $s->perform();
@@ -196,7 +231,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
     else
     {
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=groups", $this->user->stats["groups"], 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=groups", $this->user->stats["groups"], 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
     $data = $s->perform();
@@ -212,7 +247,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
     else
     {
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=parties", $this->user->stats["parties"], 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=parties", $this->user->stats["parties"], 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
     $data = $s->perform();
@@ -229,7 +264,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
     else
     {
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=screenshots", $this->user->stats["screenshots"], 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=screenshots", $this->user->stats["screenshots"], 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
     $data = $s->perform();
@@ -247,7 +282,7 @@ class PouetBoxUserMain extends PouetBox
       $s->SetLimit( $limit );
     else
     {
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=nfos", $this->user->stats["nfos"], 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=nfos", $this->user->stats["nfos"], 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
     $data = $s->perform();
@@ -257,7 +292,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetCredits( $limit = null )
   {
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.role");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
     $s->AddWhere(sprintf("credits.userID = %d",$this->id));
@@ -272,7 +308,8 @@ class PouetBoxUserMain extends PouetBox
     PouetCollectPlatforms($a);
     PouetCollectAwards($a);
 
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("sum(voteup) as up");
     $s->AddField("sum(votedown) as down");
     $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
@@ -326,7 +363,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetBBSTopics( $limit = null )
   {
-    $s = new BM_Query("bbs_topics");
+    $s = new BM_Query();
+    $s->AddTable("bbs_topics");
     $s->AddField("bbs_topics.id");
     $s->AddField("bbs_topics.topic");
     $s->AddField("bbs_topics.category");
@@ -338,7 +376,7 @@ class PouetBoxUserMain extends PouetBox
     {
       $this->topicCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from bbs_topics where bbs_topics.userfirstpost = %d",$this->id) )->c;
 
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=topics", $this->topicCount, 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=topics", $this->topicCount, 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
 
@@ -365,7 +403,7 @@ class PouetBoxUserMain extends PouetBox
     {
       $this->postCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from bbs_posts where bbs_posts.author = %d",$this->id) )->c;
 
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=posts", $this->postCount, 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=posts", $this->postCount, 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
 
@@ -388,7 +426,7 @@ class PouetBoxUserMain extends PouetBox
     {
       $this->listCount = SQLLib::SelectRow( sprintf_esc("select count(*) as c from lists where owner = %d",$this->id) )->c;
 
-      $this->paginator->SetData( "user.php?who=".$this->id."&show=lists", $this->listCount, 50, $_GET["page"], false );
+      $this->paginator->SetData( "user.php?who=".$this->id."&show=lists", $this->listCount, 50, @$_GET["page"], false );
       $this->paginator->SetLimitOnQuery( $s );
     }
 
@@ -398,7 +436,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetModRequests( $limit = null )
   {
-    $s = new BM_Query("modification_requests");
+    $s = new BM_Query();
+    $s->AddTable("modification_requests");
     $s->AddWhere(sprintf("modification_requests.userID = %d",$this->id));
     $s->AddOrder("modification_requests.requestDate desc");
     if ($limit)
@@ -411,12 +450,14 @@ class PouetBoxUserMain extends PouetBox
 
   function GetDemoblog( $page )
   {
-    $s = new BM_Query("comments");
+    $s = new BM_Query();
+    $s->AddTable("comments");
     $s->AddField("count(*) as c");
     $s->AddWhere(sprintf("comments.who = %d",$this->id));
     $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
 
-    $s = new BM_Query("comments");
+    $s = new BM_Query();
+    $s->AddTable("comments");
     $s->AddField("comments.rating");
     $s->AddField("comments.id as commentID");
     $s->AddField("comments.addedDate as commentDate");
@@ -425,15 +466,15 @@ class PouetBoxUserMain extends PouetBox
     //$s->AddJoin("left","comments","prods.id = comments.which");
     $s->Attach(array("comments"=>"which"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("comments.who = %d",$this->id));
-    if ($_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
-    if ($_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
-    if ($_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
+    if (@$_GET["nothumbsup"]) $s->AddWhere("comments.rating != 1");
+    if (@$_GET["nopiggies"]) $s->AddWhere("comments.rating != 0");
+    if (@$_GET["nothumbsdown"]) $s->AddWhere("comments.rating != -1");
 
     $limit = 10;
-    if ($_GET["com"]) $limit = (int)$_GET["com"];
+    if (@$_GET["com"]) $limit = (int)$_GET["com"];
     $limit = min($limit,100);
     $limit = max($limit,1);
-    if ($_GET["com"]==-1) $limit = $this->postcount;
+    if (@$_GET["com"]==-1) $limit = $this->postcount;
 
     $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
@@ -445,7 +486,7 @@ class PouetBoxUserMain extends PouetBox
     return $data;
   }
 
-  function RenderBody() 
+  function RenderBody()
   {
     global $currentUser;
     $s = "";
@@ -458,8 +499,8 @@ class PouetBoxUserMain extends PouetBox
     echo $this->AddRow("level",$this->user->level);
 
     echo "<li class='header'>personal:</li>\n";
-    echo $this->AddRow("first name",$this->sceneID["first_name"]);
-    echo $this->AddRow("last name",$this->sceneID["last_name"]);
+    echo $this->AddRow("first name",@$this->sceneID["first_name"]);
+    echo $this->AddRow("last name",@$this->sceneID["last_name"]);
     //echo $this->AddRow("country",$this->sceneID["country"]);
 
     if ($currentUser)
@@ -467,7 +508,7 @@ class PouetBoxUserMain extends PouetBox
       global $IM_TYPES;
       foreach($this->ims as $im)
       {
-        if ($IM_TYPES[$im->im_type] && $IM_TYPES[$im->im_type]["display"] && preg_match("/".$IM_TYPES[$im->im_type]["capture"]."/",$im->im_id))
+        if ($im->im_type && $IM_TYPES[$im->im_type] && $IM_TYPES[$im->im_type]["display"] && preg_match("/".$IM_TYPES[$im->im_type]["capture"]."/",$im->im_id))
         {
           $func = $IM_TYPES[$im->im_type]["display"];
           $imID = $func($im->im_id);
@@ -900,13 +941,14 @@ class PouetBoxUserMain extends PouetBox
 
   }
 
-  function RenderFooter() {
+  function RenderFooter()
+  {
     echo "  <div class='foot'>account created on the ".$this->user->registerDate."</div>\n";
     echo "</div>\n";
   }
 };
 
-$p = new PouetBoxUserMain( (int)$_GET["who"], $_GET["show"] );
+$p = new PouetBoxUserMain( (int)@$_GET["who"], @$_GET["show"] );
 $p->Load();
 
 if ($p->user)

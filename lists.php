@@ -3,8 +3,11 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxListsList extends PouetBox  /* pf lol */
 {
-  var $letter;
-  function __construct($letter) {
+  public $letter;
+  public $letterselect;
+  public $lists;
+  function __construct($letter)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_listslist";
 
@@ -37,7 +40,8 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
 
   function Load()
   {
-    $s = new BM_query("lists");
+    $s = new BM_query();
+    $s->AddTable("lists");
     $s->AddField("lists.id");
     $s->AddField("lists.name");
     $s->AddField("lists.desc");
@@ -50,7 +54,8 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
     $this->lists = $s->perform();
   }
 
-  function RenderBody() {
+  function RenderBody()
+  {
     global $thread_categories;
     echo "<table class='boxtable'>\n";
     echo "<tr>\n";
@@ -73,7 +78,17 @@ class PouetBoxListsList extends PouetBox  /* pf lol */
 
 class PouetBoxListsMain extends PouetBox
 {
-  function __construct($id) {
+  public $id;
+  public $list;
+  public $prods;
+  public $groups;
+  public $parties;
+  public $users;
+  public $maintainers;
+  public $canEdit;
+  public $canDelete;
+  function __construct($id)
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_listsmain";
     $this->id = (int)$id;
@@ -84,7 +99,8 @@ class PouetBoxListsMain extends PouetBox
 
   function LoadFromDB()
   {
-    $s = new BM_query("lists");
+    $s = new BM_query();
+    $s->AddTable("lists");
     $s->AddField("lists.id");
     $s->AddField("lists.name");
     $s->AddField("lists.desc");
@@ -93,13 +109,14 @@ class PouetBoxListsMain extends PouetBox
     $s->Attach(array("lists"=>"owner"),array("users as owner"=>"id"));
     $s->AddWhere(sprintf_esc("lists.id=%d",$this->id));
     list($this->list) = $s->perform();
-    
+
     if (!$this->list)
     {
       return;
     }
 
-    $s = new BM_query("list_items");
+    $s = new BM_query();
+    $s->AddTable("list_items");
     $s->Attach(array("list_items"=>"itemid"),array("prods as prod"=>"id"));
     $s->AddWhere(sprintf_esc("list_items.list=%d",$this->id));
     $s->AddWhere("list_items.type='prod'");
@@ -109,33 +126,37 @@ class PouetBoxListsMain extends PouetBox
     foreach($this->prods as $p) $a[] = &$p->prod;
     PouetCollectPlatforms($a);
 
-    $s = new BM_query("list_items");
+    $s = new BM_query();
+    $s->AddTable("list_items");
     $s->Attach(array("list_items"=>"itemid"),array("groups as group"=>"id"));
     $s->AddWhere(sprintf_esc("list_items.list=%d",$this->id));
     $s->AddWhere("list_items.type='group'");
     $this->groups = $s->perform();
 
-    $s = new BM_query("list_items");
+    $s = new BM_query();
+    $s->AddTable("list_items");
     $s->Attach(array("list_items"=>"itemid"),array("parties as party"=>"id"));
     $s->AddWhere(sprintf_esc("list_items.list=%d",$this->id));
     $s->AddWhere("list_items.type='party'");
     $this->parties = $s->perform();
 
-    $s = new BM_query("list_items");
+    $s = new BM_query();
+    $s->AddTable("list_items");
     $s->Attach(array("list_items"=>"itemid"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("list_items.list=%d",$this->id));
     $s->AddWhere("list_items.type='user'");
     $this->users = $s->perform();
 
-    $s = new BM_query("list_maintainers");
+    $s = new BM_query();
+    $s->AddTable("list_maintainers");
     $s->Attach(array("list_maintainers"=>"userID"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("list_maintainers.listID = %d",$this->id));
     $this->maintainers = $s->perform();
 
     global $currentUser;
     if ($currentUser)
-    {    
-      if ($currentUser->id == $this->list->owner->id 
+    {
+      if ($currentUser->id == $this->list->owner->id
         || $currentUser->id == $this->list->addedUser->id
         || $currentUser->IsModerator())
       {
@@ -204,7 +225,7 @@ class PouetBoxListsMain extends PouetBox
         echo "</span>\n";
         echo "<span>\n";
         if ($d->prod->placings)
-          echo $d->prod->placings[0]->PrintResult($p->year);
+          echo $d->prod->placings[0]->PrintResult();
         echo "</span>\n";
         echo "<span>\n";
         echo $d->prod->RenderReleaseDate();
@@ -304,6 +325,10 @@ class PouetBoxListsMain extends PouetBox
 
 class PouetBoxListsAdd extends PouetBox
 {
+  public $box;
+  public $list;
+  public $formifier;
+  public $fields;
   function __construct($box)
   {
     parent::__construct();
@@ -334,10 +359,10 @@ class PouetBoxListsAdd extends PouetBox
 
     if (!$currentUser)
       return array("you have to be logged in!");
-      
+
     if (!$this->box->CanEdit())
       return array("not allowed lol !");
-    
+
     return array();
   }
 
@@ -370,7 +395,7 @@ class PouetBoxListsAdd extends PouetBox
     }
     return $added ? array() : array("you didn't add anything ! :(");
   }
-  
+
   function RenderContent()
   {
     $this->formifier->RenderForm( $this->fields );
@@ -411,6 +436,10 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxListsAddMaintainer extends PouetBox
 {
+  public $box;
+  public $list;
+  public $formifier;
+  public $fields;
   function __construct($box)
   {
     parent::__construct();
@@ -432,10 +461,10 @@ class PouetBoxListsAddMaintainer extends PouetBox
 
     if (!$currentUser)
       return array("you have to be logged in!");
-      
+
     if (!$this->box->CanDelete())
       return array("not allowed lol !");
-    
+
     if (!$post["maintainerID"])
       return array("something is missing ?!");
 
@@ -450,7 +479,7 @@ class PouetBoxListsAddMaintainer extends PouetBox
     SQLLib::InsertRow("list_maintainers",$a);
     return array();
   }
-  
+
   function RenderContent()
   {
     $this->formifier->RenderForm( $this->fields );
@@ -481,6 +510,8 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxListsDelete extends PouetBox
 {
+  public $list;
+  public $checkString;
   function __construct( $list )
   {
     parent::__construct();
@@ -539,13 +570,13 @@ document.observe("dom:loaded",function(){
   }
 }
 
-$listID = (int)$_GET["which"];
+$listID = (int)@$_GET["which"];
 
 $form = null;
 $p = null;
 if (!$listID)
 {
-  $pattern = $_GET["pattern"] ? $_GET["pattern"] : chr(rand(ord("a"),ord("z")));
+  $pattern = @$_GET["pattern"] ? @$_GET["pattern"] : chr(rand(ord("a"),ord("z")));
   $p = new PouetBoxListsList($pattern);
   $p->Load();
   $TITLE = "lists: ".$p->letter;
@@ -559,7 +590,7 @@ else
   if ($main->list)
   {
     $TITLE = $main->list->name;
-    
+
     if ($main->CanEdit())
     {
       $form->SetSuccessURL( "lists.php?which=".(int)$listID, true );
@@ -569,7 +600,7 @@ else
         $form->Add( "list_addmaintainer", new PouetBoxListsAddMaintainer($main) );
         $form->Add( "list_delete", new PouetBoxListsDelete($main->list) );
       }
-  
+
       $form->Process();
     }
   }

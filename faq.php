@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxFAQ extends PouetBox {
-  function __construct() {
+class PouetBoxFAQ extends PouetBox
+{
+  public $entries;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_faq";
     $this->title = "the always incomplete pouët.net faq";
@@ -78,7 +81,7 @@ document.observe("dom:loaded",function(){
         ev.stop();
     });
   });
-  
+
   var e = $$("dt#" + location.hash);
   if (e.length) e.first().nextSiblings().first().show();
   var v = location.hash; location.hash = v; // force firefox
