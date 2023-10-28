@@ -112,7 +112,7 @@ document.observe("dom:loaded",function(){
           break;
         case "file":
           echo "    <div>\n";
-          echo "      <input type='file' name='".$k."' id='".$k."'".($v["accept"]?" accept='"._html($v["accept"])."'":"")."/>\n";
+          echo "      <input type='file' name='".$k."' id='".$k."'".(@$v["accept"]?" accept='"._html($v["accept"])."'":"")."/>\n";
           if ($this->canDeleteFiles)
           {
             echo "      <input type='checkbox' name='".$k."_delete' id='".$k."_delete' /> <label for='".$k."_delete'>Delete file</label>\n";
@@ -148,7 +148,7 @@ document.observe("dom:loaded",function(){
           break;
       }
       if (@$v["info"])
-        echo "    <span>"._html($v["info"]).($v["required"]?" [<span class='req'>req</span>]":"")."</span>\n";
+        echo "    <span>"._html($v["info"]).(@$v["required"]?" [<span class='req'>req</span>]":"")."</span>\n";
       echo "  </div>\n";
       if (@$v["infoAfter"])
         echo "    <p class='infoAfter'>".$v["infoAfter"]."</p>\n";

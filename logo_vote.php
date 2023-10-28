@@ -2,8 +2,11 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/box-bbs-post.php");
 
-class PouetBoxLogoVote extends PouetBox {
-  function __construct($logo) {
+class PouetBoxLogoVote extends PouetBox 
+{
+  public $logo;
+  function __construct($logo) 
+  {
     parent::__construct();
     $this->uniqueID = "";
     $this->classes[] = "logovote";
@@ -30,14 +33,17 @@ class PouetBoxLogoVote extends PouetBox {
 };
 
 
-class PouetBoxLogoLama extends PouetBox {
-  function __construct() {
+class PouetBoxLogoLama extends PouetBox 
+{
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_logolama";
     $this->title = "no logo left, you are now a l4m4h";
   }
 
-  function RenderContent() {
+  function RenderContent() 
+  {
     $lama_pictures = array(
       'logos-lamer.jpg',
       'logos-lama.jpg',
@@ -66,7 +72,7 @@ $sel->AddJoin("LEFT","logos_votes",sprintf_esc("logos_votes.logo = logos.id AND 
 $sel->AddWhere("logos_votes.id IS NULL");
 $sel->AddOrder("RAND()");
 
-if (get_login_id() && $_POST["logoID"] && $_POST["submit"])
+if (get_login_id() && @$_POST["logoID"] && @$_POST["submit"])
 {
   $vote = 0;
   if ($_POST["submit"] == "rulez") $vote = 1;

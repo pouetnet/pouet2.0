@@ -2,6 +2,8 @@
 
 class PouetBoxSubmitParty extends PouetBox
 {
+  public $formifier;
+  public $fields;
   function __construct()
   {
     parent::__construct();

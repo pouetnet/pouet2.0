@@ -1,6 +1,7 @@
 <?php
 class PouetBoxEditConnectionsBase extends PouetBox
 {
+  public $id;
   public static $slug = "None";
   function __construct()
   {
@@ -50,8 +51,10 @@ class PouetBoxEditConnectionsBase extends PouetBox
     echo "<td>";
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-    if ($row->id)
+    if (@$row->id)
+    {
       echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
+    }
     echo "<input type='submit' value='Submit'/>";
     echo "</td>\n";
   }
@@ -66,12 +69,12 @@ class PouetBoxEditConnectionsBase extends PouetBox
     foreach($this->data as $row)
     {
       echo "  <tr>\n";
-      if ($_GET["edit" . static::$slug] == $row->id)
+      if (@$_GET["edit" . static::$slug] == $row->id)
       {
         $this->RenderEditRow($row);
         $this->RenderEditRowEnd($row);
       }
-      else if ($_GET["del" . static::$slug] == $row->id && $this->allowDelete)
+      else if (@$_GET["del" . static::$slug] == $row->id && $this->allowDelete)
       {
         $this->RenderNormalRow($row);
         $this->RenderDeleteRowEnd($row);
@@ -83,8 +86,9 @@ class PouetBoxEditConnectionsBase extends PouetBox
       }
       echo "  </tr>\n";
     }
-    if ($_GET["new" . static::$slug])
+    if (@$_GET["new" . static::$slug])
     {
+      // TODO: these should probably be just null
       $this->RenderEditRow( new stdClass() );
       $this->RenderEditRowEnd( new stdClass() );
     }

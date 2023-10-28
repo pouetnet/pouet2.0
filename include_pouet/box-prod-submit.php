@@ -1,6 +1,13 @@
 <?php
 class PouetBoxSubmitProd extends PouetBox
 {
+  public $formifier;
+  public $fields;
+  public $types;
+  public $compos;
+  public $ranks;
+  public $years;
+  public $yearsFuture;
   function __construct()
   {
     parent::__construct();

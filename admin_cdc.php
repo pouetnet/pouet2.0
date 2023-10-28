@@ -12,6 +12,9 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminAddCDC extends PouetBoxEditConnectionsBase
 {
+  public $data;
+  public $allowDelete;
+  public $headers;
   public static $slug = "CDC";
   function __construct( )
   {
@@ -118,20 +121,20 @@ document.observe("dom:loaded",function(){
 $boxen = array(
   "PouetBoxAdminAddCDC",
 );
-if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
+if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
 {
   // ajax responses
   $prod = new stdClass();
   $prod->id = $_GET["which"];
   foreach($boxen as $class)
   {
-    if ($_GET["edit" . $class::$slug])
+    if (@$_GET["edit" . $class::$slug])
     {
       $box = new $class( $prod );
       $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
       $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
     }
-    if ($_GET["new" . $class::$slug])
+    if (@$_GET["new" . $class::$slug])
     {
       $box = new $class( $prod );
       $box->RenderEditRow( new stdClass() );

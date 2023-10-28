@@ -12,6 +12,9 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxCompotypesEditBox extends PouetBoxEditConnectionsBase
 {
+  public $allowDelete;
+  public $headers;
+  public $data;
   public static $slug = "Compo";
   function __construct( )
   {
@@ -57,8 +60,8 @@ class PouetBoxCompotypesEditBox extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row)
   {
-    echo "    <td>"._html($row->id)."</td>\n";
-    echo "    <td><input name='componame' value='"._html($row->componame)."'/></td>\n";
+    echo "    <td>"._html(@$row->id)."</td>\n";
+    echo "    <td><input name='componame' value='"._html(@$row->componame)."'/></td>\n";
   }
   function RenderNormalRow($row)
   {
@@ -83,18 +86,18 @@ document.observe("dom:loaded",function(){
 $boxen = array(
   "PouetBoxCompotypesEditBox",
 );
-if($_GET["partial"] && $currentUser && $currentUser->IsModerator())
+if(@$_GET["partial"] && $currentUser && $currentUser->IsModerator())
 {
   // ajax responses
   foreach($boxen as $class)
   {
-    if ($_GET["edit" . $class::$slug])
+    if (@$_GET["edit" . $class::$slug])
     {
       $box = new $class();
       $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
       $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
     }
-    if ($_GET["new" . $class::$slug])
+    if (@$_GET["new" . $class::$slug])
     {
       $box = new $class();
       $box->RenderEditRow( new stdClass() );

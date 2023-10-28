@@ -11,6 +11,8 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminEditFAQ extends PouetBox
 {
+  public $cateogries;
+  public $fields;
   function __construct( $id )
   {
     parent::__construct();
@@ -75,7 +77,8 @@ class PouetBoxAdminEditFAQ extends PouetBox
   {
     if ($this->id)
     {
-      $s = new BM_Query("faq");
+      $s = new BM_Query();
+      $s->AddTable("faq");
       $s->AddWhere(sprintf_esc("id = %d",$this->id));
       $item = $s->perform();
       $this->item = $item[0];
@@ -111,7 +114,8 @@ class PouetBoxAdminEditFAQ extends PouetBox
 
 class PouetBoxAdminEditFAQList extends PouetBox
 {
-  function __construct( )
+  public $items;
+  function __construct()
   {
     parent::__construct();
     $this->uniqueID = "pouetbox_admineditfaqlist";
@@ -119,7 +123,8 @@ class PouetBoxAdminEditFAQList extends PouetBox
   }
   function LoadFromDB()
   {
-    $s = new BM_Query("faq");
+    $s = new BM_Query();
+    $s->AddTable("faq");
     $s->AddOrder("category, id");
     $this->items = $s->perform();
   }
@@ -156,7 +161,7 @@ class PouetBoxAdminEditFAQList extends PouetBox
 
 $form = new PouetFormProcessor();
 
-if ($_GET["id"] || $_GET["new"]=="add")
+if (@$_GET["id"] || @$_GET["new"]=="add")
   $form->Add( "adminModFaqID", new PouetBoxAdminEditFAQ( $_GET["id"] ) );
 else
   $form->Add( "adminModFaq", new PouetBoxAdminEditFAQList( ) );

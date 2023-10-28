@@ -10,6 +10,9 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitList extends PouetBox
 {
+  public $formifier;
+  public $fields;
+
   function __construct()
   {
     parent::__construct();
