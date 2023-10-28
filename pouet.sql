@@ -1,4 +1,4 @@
--- MariaDB dump 10.19  Distrib 10.5.9-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.11.3-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- ------------------------------------------------------
 
@@ -30,7 +30,7 @@ CREATE TABLE `affiliatedboards` (
   KEY `group` (`group`),
   CONSTRAINT `affiliatedboards_ibfk_1` FOREIGN KEY (`board`) REFERENCES `boards` (`id`),
   CONSTRAINT `affiliatedboards_ibfk_2` FOREIGN KEY (`group`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +50,7 @@ CREATE TABLE `affiliatedprods` (
   KEY `derivative` (`derivative`),
   CONSTRAINT `affiliatedprods_ibfk_1` FOREIGN KEY (`original`) REFERENCES `prods` (`id`),
   CONSTRAINT `affiliatedprods_ibfk_2` FOREIGN KEY (`derivative`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `awards` (
   KEY `categoryID` (`categoryID`),
   CONSTRAINT `awards_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`),
   CONSTRAINT `awards_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `awards_categories` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,8 +86,9 @@ CREATE TABLE `awards_categories` (
   `series` varchar(64) NOT NULL,
   `category` varchar(64) NOT NULL,
   `cssClass` varchar(64) NOT NULL,
+  `year` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +112,7 @@ CREATE TABLE `awardscand_2007` (
   `cat10` int(10) unsigned NOT NULL DEFAULT 0,
   `cat11` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +136,7 @@ CREATE TABLE `awardscand_2008` (
   `cat10` int(10) unsigned NOT NULL DEFAULT 0,
   `cat11` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +161,7 @@ CREATE TABLE `awardscand_2010` (
   `cat11` int(10) unsigned NOT NULL DEFAULT 0,
   `cat12` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +186,7 @@ CREATE TABLE `awardscand_2011` (
   `cat11` int(10) unsigned NOT NULL DEFAULT 0,
   `cat12` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +203,7 @@ CREATE TABLE `awardssuggestions_categories` (
   PRIMARY KEY (`id`),
   KEY `eventID` (`eventID`),
   CONSTRAINT `awardssuggestions_categories_ibfk_1` FOREIGN KEY (`eventID`) REFERENCES `awardssuggestions_events` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,8 +219,9 @@ CREATE TABLE `awardssuggestions_events` (
   `votingStartDate` date NOT NULL,
   `votingEndDate` date NOT NULL,
   `eligibleYear` smallint(6) NOT NULL,
+  `eligibleTypes` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +241,7 @@ CREATE TABLE `awardssuggestions_votes` (
   CONSTRAINT `awardssuggestions_votes_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
   CONSTRAINT `awardssuggestions_votes_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `awardssuggestions_categories` (`id`),
   CONSTRAINT `awardssuggestions_votes_ibfk_3` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -254,13 +256,14 @@ CREATE TABLE `bbs_posts` (
   `topic` int(10) NOT NULL DEFAULT 0,
   `post` text NOT NULL,
   `author` int(10) NOT NULL DEFAULT 0,
-  `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `topic` (`topic`),
   KEY `idx_author` (`author`),
   KEY `idx_added` (`added`),
+  FULLTEXT KEY `post` (`post`),
   CONSTRAINT `bbs_posts_ibfk_1` FOREIGN KEY (`topic`) REFERENCES `bbs_topics` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='the bbs posts';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='the bbs posts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +289,7 @@ CREATE TABLE `bbs_topics` (
   KEY `userfirstpost` (`userfirstpost`),
   CONSTRAINT `bbs_topics_ibfk_1` FOREIGN KEY (`userlastpost`) REFERENCES `users` (`id`),
   CONSTRAINT `bbs_topics_ibfk_2` FOREIGN KEY (`userfirstpost`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='the bbs topics';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='the bbs topics';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -309,7 +312,7 @@ CREATE TABLE `boards` (
   PRIMARY KEY (`id`),
   KEY `addedUser` (`addedUser`),
   CONSTRAINT `boards_ibfk_1` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -325,7 +328,7 @@ CREATE TABLE `boards_ads` (
   `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `adder` int(10) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,7 +346,7 @@ CREATE TABLE `boards_platforms` (
   KEY `bbspl` (`platform`),
   CONSTRAINT `boards_platforms_ibfk_1` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`),
   CONSTRAINT `boards_platforms_ibfk_2` FOREIGN KEY (`board`) REFERENCES `boards` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,7 +359,7 @@ DROP TABLE IF EXISTS `boardsaka`;
 CREATE TABLE `boardsaka` (
   `board1` int(10) unsigned NOT NULL DEFAULT 0,
   `board2` int(10) unsigned NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +377,7 @@ CREATE TABLE `buttons` (
   `alt` varchar(255) NOT NULL,
   `dead` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='les boutons sur pou';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='les boutons sur pou';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,7 +396,7 @@ CREATE TABLE `cdc` (
   KEY `id_2` (`id`,`which`,`addedDate`),
   KEY `which` (`which`),
   CONSTRAINT `cdc_ibfk_1` FOREIGN KEY (`which`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='coups de coeur';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='coups de coeur';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -409,7 +412,7 @@ CREATE TABLE `comments` (
   `who` int(10) NOT NULL DEFAULT 0,
   `comment` text NOT NULL,
   `rating` tinyint(2) NOT NULL DEFAULT 0,
-  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `addedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `which` (`which`),
   KEY `who` (`who`),
@@ -417,9 +420,10 @@ CREATE TABLE `comments` (
   KEY `quand` (`addedDate`),
   KEY `whichwho` (`who`,`which`),
   KEY `which_quand` (`which`,`addedDate`),
+  FULLTEXT KEY `comment` (`comment`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`which`) REFERENCES `prods` (`id`),
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`who`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -433,7 +437,7 @@ CREATE TABLE `compotypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `componame` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,11 +453,11 @@ CREATE TABLE `credits` (
   `userID` int(11) NOT NULL,
   `role` tinytext NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `prodID` (`prodID`),
+  UNIQUE KEY `prodID_userID` (`prodID`,`userID`),
   KEY `userID` (`userID`),
   CONSTRAINT `credits_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`),
   CONSTRAINT `credits_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,13 +470,15 @@ DROP TABLE IF EXISTS `downloadlinks`;
 CREATE TABLE `downloadlinks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `prod` int(10) NOT NULL DEFAULT 0,
-  `type` varchar(255) NOT NULL,
+  `type` varchar(64) NOT NULL,
   `link` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `prod_type` (`prod`,`type`),
+  UNIQUE KEY `prod_link` (`prod`,`link`),
   KEY `dl_prod` (`prod`),
   KEY `dl_prodtype` (`prod`),
   CONSTRAINT `downloadlinks_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -489,7 +495,7 @@ CREATE TABLE `faq` (
   `category` enum('welcome','demos','general','pouet 2.0','syndication','BB Code') NOT NULL DEFAULT 'general',
   `deprecated` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='the pou';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='the pou';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -510,7 +516,7 @@ CREATE TABLE `gloperator_log` (
   PRIMARY KEY (`id`),
   KEY `gloperatorid` (`gloperatorid`),
   CONSTRAINT `gloperator_log_ibfk_1` FOREIGN KEY (`gloperatorid`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,7 +541,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`),
   KEY `added` (`addedUser`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -548,7 +554,7 @@ DROP TABLE IF EXISTS `groupsaka`;
 CREATE TABLE `groupsaka` (
   `group1` int(10) unsigned NOT NULL DEFAULT 0,
   `group2` int(10) unsigned NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -564,7 +570,7 @@ CREATE TABLE `links` (
   `comment` varchar(255) NOT NULL,
   `quand` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -580,7 +586,7 @@ CREATE TABLE `list_items` (
   `type` enum('user','prod','group','party') NOT NULL DEFAULT 'prod',
   UNIQUE KEY `list_itemid_type` (`list`,`itemid`,`type`),
   CONSTRAINT `list_items_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -597,7 +603,7 @@ CREATE TABLE `list_maintainers` (
   KEY `userID` (`userID`),
   CONSTRAINT `list_maintainers_ibfk_1` FOREIGN KEY (`listID`) REFERENCES `lists` (`id`),
   CONSTRAINT `list_maintainers_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -619,7 +625,7 @@ CREATE TABLE `lists` (
   KEY `addedUser` (`addedUser`),
   CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`),
   CONSTRAINT `lists_ibfk_2` FOREIGN KEY (`addedUser`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -640,7 +646,7 @@ CREATE TABLE `logos` (
   KEY `author2` (`author2`),
   CONSTRAINT `logos_ibfk_1` FOREIGN KEY (`author1`) REFERENCES `users` (`id`),
   CONSTRAINT `logos_ibfk_2` FOREIGN KEY (`author2`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -661,7 +667,7 @@ CREATE TABLE `logos_votes` (
   KEY `logo` (`logo`),
   CONSTRAINT `logos_votes_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
   CONSTRAINT `logos_votes_ibfk_2` FOREIGN KEY (`logo`) REFERENCES `logos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='logos ratings given by users';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='logos ratings given by users';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -690,7 +696,7 @@ CREATE TABLE `modification_requests` (
   KEY `gloperatorID` (`gloperatorID`),
   CONSTRAINT `modification_requests_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
   CONSTRAINT `modification_requests_ibfk_2` FOREIGN KEY (`gloperatorID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -708,7 +714,7 @@ CREATE TABLE `news` (
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -725,7 +731,7 @@ CREATE TABLE `newstickers` (
   `class` varchar(64) NOT NULL,
   `expires` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -745,7 +751,7 @@ CREATE TABLE `nfos` (
   KEY `user` (`user`),
   CONSTRAINT `nfos_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
   CONSTRAINT `nfos_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -765,7 +771,7 @@ CREATE TABLE `ojnews` (
   `authorgroup` varchar(255) NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -782,7 +788,7 @@ CREATE TABLE `oldnicks` (
   PRIMARY KEY (`id`),
   KEY `user` (`user`),
   CONSTRAINT `oldnicks_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -800,7 +806,7 @@ CREATE TABLE `oneliner` (
   PRIMARY KEY (`id`),
   KEY `who` (`who`),
   CONSTRAINT `oneliner_ibfk_1` FOREIGN KEY (`who`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -817,7 +823,7 @@ CREATE TABLE `othernfos` (
   `added` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   `adder` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -835,7 +841,7 @@ CREATE TABLE `parties` (
   `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `added` (`addedUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -851,7 +857,7 @@ CREATE TABLE `partiesaka` (
   PRIMARY KEY (`party1`,`party2`),
   KEY `party1` (`party1`),
   KEY `party2` (`party2`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -874,7 +880,7 @@ CREATE TABLE `partylinks` (
   PRIMARY KEY (`id`),
   KEY `party` (`party`),
   CONSTRAINT `partylinks_ibfk_1` FOREIGN KEY (`party`) REFERENCES `parties` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -890,7 +896,7 @@ CREATE TABLE `platforms` (
   `icon` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -914,7 +920,7 @@ CREATE TABLE `prodotherparty` (
   CONSTRAINT `prodotherparty_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
   CONSTRAINT `prodotherparty_ibfk_2` FOREIGN KEY (`party`) REFERENCES `parties` (`id`),
   CONSTRAINT `prodotherparty_ibfk_3` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -931,7 +937,7 @@ CREATE TABLE `prods` (
   `releaseDate` date DEFAULT NULL COMMENT 'release date',
   `views` int(10) unsigned DEFAULT 0,
   `addedUser` int(10) unsigned NOT NULL DEFAULT 1,
-  `addedDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'addition date',
+  `addedDate` datetime DEFAULT NULL COMMENT 'addition date',
   `rank` int(11) unsigned NOT NULL DEFAULT 0,
   `type` set('32b','64b','128b','256b','512b','1k','4k','8k','16k','32k','40k','64k','80k','96k','100k','128k','256k','artpack','bbstro','cracktro','demo','demopack','demotool','dentro','diskmag','fastdemo','game','intro','invitation','liveact','musicdisk','procedural graphics','report','slideshow','votedisk','wild') DEFAULT NULL,
   `party` int(10) DEFAULT NULL,
@@ -949,7 +955,7 @@ CREATE TABLE `prods` (
   `voteup` int(10) unsigned NOT NULL DEFAULT 0,
   `votepig` int(10) unsigned NOT NULL DEFAULT 0,
   `votedown` int(10) unsigned NOT NULL DEFAULT 0,
-  `voteavg` decimal(4,2) NOT NULL DEFAULT 0.00,
+  `voteavg` decimal(6,4) NOT NULL DEFAULT 0.0000,
   `invitation` int(10) DEFAULT NULL,
   `invitationyear` int(10) unsigned DEFAULT 0,
   `boardID` int(11) DEFAULT NULL,
@@ -979,7 +985,7 @@ CREATE TABLE `prods` (
   CONSTRAINT `prods_ibfk_5` FOREIGN KEY (`boardID`) REFERENCES `boards` (`id`),
   CONSTRAINT `prods_ibfk_6` FOREIGN KEY (`invitation`) REFERENCES `parties` (`id`),
   CONSTRAINT `prods_ibfk_7` FOREIGN KEY (`party_compo`) REFERENCES `compotypes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -997,7 +1003,7 @@ CREATE TABLE `prods_linkcheck` (
   `testDate` datetime /* mariadb-5.3 */ NOT NULL,
   PRIMARY KEY (`prodID`),
   CONSTRAINT `prods_linkcheck_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1015,7 +1021,7 @@ CREATE TABLE `prods_platforms` (
   KEY `pltpl` (`platform`),
   CONSTRAINT `prods_platforms_ibfk_1` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`),
   CONSTRAINT `prods_platforms_ibfk_2` FOREIGN KEY (`platform`) REFERENCES `platforms` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1031,7 +1037,7 @@ CREATE TABLE `prods_refs` (
   `referrer` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `pri` (`prod`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1052,7 +1058,7 @@ CREATE TABLE `sceneorgrecommended` (
   KEY `type` (`type`),
   KEY `category` (`category`),
   CONSTRAINT `sceneorgrecommended_ibfk_1` FOREIGN KEY (`prodid`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1072,7 +1078,7 @@ CREATE TABLE `screenshots` (
   KEY `user` (`user`),
   CONSTRAINT `screenshots_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
   CONSTRAINT `screenshots_ibfk_2` FOREIGN KEY (`prod`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='paternite des screenshots';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='paternite des screenshots';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1090,7 +1096,7 @@ CREATE TABLE `ud` (
   `points` int(11) NOT NULL DEFAULT 0,
   `cputime` varchar(14) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='United Devices';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='United Devices';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1103,14 +1109,12 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) NOT NULL DEFAULT 0,
   `nickname` varchar(16) NOT NULL,
-  `DEPRECATED_im_type` enum('','AIM','ICQ','Jabber','MSN','Skype','Xfire','Yahoo') DEFAULT NULL,
-  `DEPRECATED_im_id` varchar(255) NOT NULL DEFAULT '',
   `level` enum('administrator','moderator','gloperator','user','pr0nstahr','fakeuser','banned') DEFAULT 'user',
   `permissionSubmitItems` tinyint(4) NOT NULL DEFAULT 1,
   `permissionPostBBS` tinyint(4) NOT NULL DEFAULT 1,
   `permissionPostOneliner` tinyint(4) NOT NULL DEFAULT 1,
   `avatar` varchar(255) NOT NULL,
-  `registerDate` datetime /* mariadb-5.3 */ NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `registerDate` datetime DEFAULT NULL,
   `udlogin` varchar(255) NOT NULL DEFAULT '',
   `glops` int(10) unsigned NOT NULL DEFAULT 0,
   `ojuice` int(10) unsigned DEFAULT 0,
@@ -1122,9 +1126,11 @@ CREATE TABLE `users` (
   `lasthost` text DEFAULT NULL,
   `lastlogin` datetime DEFAULT NULL,
   `sceneIDData` text DEFAULT NULL,
-  `sceneIDLastRefresh` datetime /* mariadb-5.3 */ DEFAULT NULL,
+  `sceneIDLastRefresh` datetime DEFAULT NULL,
+  `DEPRECATED_im_type` enum('','AIM','ICQ','Jabber','MSN','Skype','Xfire','Yahoo') DEFAULT NULL,
+  `DEPRECATED_im_id` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1143,7 +1149,7 @@ CREATE TABLE `users_cdcs` (
   KEY `pcdcc` (`cdc`),
   CONSTRAINT `users_cdcs_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
   CONSTRAINT `users_cdcs_ibfk_2` FOREIGN KEY (`cdc`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1156,12 +1162,12 @@ DROP TABLE IF EXISTS `users_im`;
 CREATE TABLE `users_im` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `userID` int(10) NOT NULL,
-  `im_type` enum('','AIM','Discord','Email','Facebook','ICQ','Instagram','Jabber','Mastodon','MSN','Skype','Telegram','Twitch','Twitter','Xfire','Yahoo') DEFAULT NULL,
+  `im_type` enum('','AIM','Bluesky','Discord','Email','Facebook','ICQ','Instagram','Jabber','Mastodon','MSN','Skype','Telegram','Twitch','Twitter','Xfire','Yahoo') DEFAULT NULL,
   `im_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userID` (`userID`),
   CONSTRAINT `users_im_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 PACK_KEYS=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1203,7 +1209,7 @@ CREATE TABLE `usersettings` (
   `customizerJSON` text NOT NULL DEFAULT '',
   UNIQUE KEY `id` (`id`),
   CONSTRAINT `usersettings_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1222,7 +1228,7 @@ CREATE TABLE `watchlist` (
   KEY `prodID` (`prodID`),
   CONSTRAINT `watchlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
   CONSTRAINT `watchlist_ibfk_2` FOREIGN KEY (`prodID`) REFERENCES `prods` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
