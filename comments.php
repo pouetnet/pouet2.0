@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxLatestComments extends PouetBox {
-  function __construct() {
+class PouetBoxLatestComments extends PouetBox
+{
+  public $comments;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_latestcomments";
     $this->title = sprintf("latest comments in the last %d hours",get_setting("commentshours"));
@@ -10,7 +13,8 @@ class PouetBoxLatestComments extends PouetBox {
 
   function LoadFromDB()
   {
-    $s = new BM_Query("comments");
+    $s = new BM_Query();
+    $s->AddTable("comments");
     $s->AddField("comments.rating");
     $s->AddField("comments.addedDate");
     $s->attach(array("comments"=>"which"),array("prods as prod"=>"id"));

@@ -5,6 +5,10 @@ require_once(POUET_ROOT_LOCAL . "/include_pouet/pouet-prod.php");
 
 class PouetBoxModalMessage extends PouetBox
 {
+  public $allowHTML;
+  public $enableFooter;
+  public $returnPage;
+  public $message;
   function __construct( $allowHTML = false, $enableFooter = false )
   {
     parent::__construct();
@@ -12,7 +16,7 @@ class PouetBoxModalMessage extends PouetBox
     $this->title = "";
     $this->allowHTML = $allowHTML;
     $this->enableFooter = $enableFooter;
-    $this->returnPage = $_SERVER['HTTP_REFERER'];
+    $this->returnPage = @$_SERVER['HTTP_REFERER'];
   }
 
   function RenderContent() {

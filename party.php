@@ -179,7 +179,7 @@ class PouetBoxPartyView extends PouetBox
         foreach($prods as &$v)
         {
           $v->party_compo = 1; // invit
-          unset($v->placings);
+          $v->placings = array();
         }
 
         $this->prods = array_merge( $this->prods, $prods );
@@ -239,7 +239,7 @@ class PouetBoxPartyView extends PouetBox
       echo "<td>\n";
       if (!$this->sortByCompo)
         echo $COMPOTYPES[$p->party_compo]." ";
-      if ($p->placings[0])
+      if (@$p->placings[0])
         echo $p->placings[0]->PrintRanking();
       echo "</td>\n";
       echo "<td class='prod'>\n";

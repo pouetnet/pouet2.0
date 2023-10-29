@@ -382,7 +382,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
     }
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     echo "    <td><input name='type' value='"._html($row->type)."'/></td>\n";
     echo "    <td><input name='link' value='"._html($row->link)."' type='url'/></td>\n";
@@ -489,7 +489,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
     }
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     echo "    <td><input name='partyID' value='"._html($row->party?$row->party->id:"")."' class='partyID'/></td>\n";
 
@@ -597,7 +597,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
     }
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     echo "    <td><input name='userID' value='"._html($row->user?$row->user->id:"")."' class='userID'/></td>\n";
     echo "    <td><input name='role' value='"._html($row->role)."' class='role'/></td>\n";
@@ -696,7 +696,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
 
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     global $AFFILIATIONS_ORIGINAL;
     global $AFFILIATIONS_INVERSE;
