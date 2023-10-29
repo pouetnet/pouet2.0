@@ -86,7 +86,7 @@ class PouetBoxBBSTopicList extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th id='th_%s'><a href='%s' class='%s%s' id='%s'>%s</a></th>\n",
-        $key,adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
+        $key,adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && @$_GET["reverse"])?" reverse":"","prodlistsort_".$key,$text);
       if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
       if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
       echo $out;

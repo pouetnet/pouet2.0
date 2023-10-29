@@ -11,13 +11,13 @@ $sql->AddJoin("left","groups","groups.id = prods.group1");
 $sql->AddTable("prods");
 
 $r = array();
-if ($_POST["id"] || preg_match("/id=(\d+)/",$_POST["search"],$m))
+if (@$_POST["id"] || preg_match("/id=(\d+)/",@$_POST["search"],$m))
 {
   $sql->AddWhere(sprintf_esc("prods.id = %d",$_POST["id"]?:$m[1]));
   $sql->SetLimit(1);
   $r = SQLLib::selectRows( $sql->GetQuery() );
 }
-else if ($_POST["search"])
+else if (@$_POST["search"])
 {
   $terms = split_search_terms( $_POST["search"] );
   foreach($terms as $term)

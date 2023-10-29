@@ -10,7 +10,7 @@ class PouetPaginator
   function SetData( $url, $total, $perPage, $curPage, $defaultToLast = true )
   {
     $this->url = parse_url($url);
-    parse_str( $this->url["query"], $this->query );
+    parse_str( @$this->url["query"] ?: "", $this->query );
 
     $this->itemCount = $total;
     $this->perPage = $perPage;

@@ -264,7 +264,7 @@ class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delAwards"])
+    if (@$data["delAwards"])
     {
       SQLLib::Query("delete from awards where id=".(int)$data["delAwards"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_awards_delete" );
@@ -296,15 +296,15 @@ class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
     }
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     echo "    <td><select name='awardCategory' class='awardCategory'>\n";
     foreach($this->categories as $k=>$v)
-      printf("<option value='%d'%s>%s</option>",$k,$row->categoryID==$k?" selected='selected'":"",_html($v));
+      printf("<option value='%d'%s>%s</option>",$k,($row&&$row->categoryID==$k)?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
     echo "    <td><select name='awardType' class='awardType'>\n";
     foreach($this->types as $v)
-      printf("<option%s>%s</option>",$row->awardType==$v?" selected='selected'":"",_html($v));
+      printf("<option%s>%s</option>",($row&&$row->awardType==$v)?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
   }
   function RenderNormalRow($v)
@@ -352,7 +352,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delLink"])
+    if (@$data["delLink"])
     {
       SQLLib::Query("delete from downloadlinks where id=".(int)$data["delLink"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_link_del" );
@@ -455,7 +455,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delParty"])
+    if (@$data["delParty"])
     {
       SQLLib::Query("delete from prodotherparty where id=".(int)$data["delParty"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_party_del" );
@@ -565,7 +565,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delCredit"])
+    if (@$data["delCredit"])
     {
       SQLLib::Query("delete from credits where id=".(int)$data["delCredit"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_credits_del" );
@@ -661,7 +661,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delAffil"])
+    if (@$data["delAffil"])
     {
       SQLLib::Query("delete from affiliatedprods where id=".(int)$data["delAffil"]);
       gloperator_log( "prod", (int)$this->prod->id, "prod_rel_del" );
@@ -766,18 +766,8 @@ if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
   $prod->id = $_GET["which"];
   foreach($boxen as $class)
   {
-    if ($_GET["edit" . $class::$slug])
-    {
-      $box = new $class( $prod );
-      $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-      $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-    }
-    if ($_GET["new" . $class::$slug])
-    {
-      $box = new $class( $prod );
-      $box->RenderEditRow( new stdClass() );
-      $box->RenderEditRowEnd( new stdClass() );
-    }
+    $box = new $class( $prod );
+    $box->RenderPartialResponse();
   }
   exit();
 }

@@ -139,7 +139,6 @@ class PouetBoxSearchProd extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
   function GetForwardURL()
   {
@@ -239,7 +238,6 @@ class PouetBoxSearchGroup extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
   function GetForwardURL()
   {
@@ -334,7 +332,6 @@ class PouetBoxSearchParty extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
   function GetForwardURL()
   {
@@ -429,7 +426,6 @@ class PouetBoxSearchUser extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
   function GetForwardURL()
   {
@@ -556,7 +552,6 @@ class PouetBoxSearchBBS extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
   function GetForwardURL()
   {

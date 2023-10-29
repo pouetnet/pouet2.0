@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxGloperatorLog extends PouetBox {
-  function __construct() {
+class PouetBoxGloperatorLog extends PouetBox 
+{
+  public $logs;
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_gloperatorlog";
     $this->title = "edits for this "._html($_GET["what"]).":";

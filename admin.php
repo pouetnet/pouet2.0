@@ -14,7 +14,6 @@ function PouetAdmin_recacheFrontPagePartial_Form()
   echo "<ul>";
   foreach(glob("cache/*") as $v) { echo "<li><input type='checkbox' name='deleteCache["._html(basename($v))."]' id='"._html($v)."'/> <label for='"._html($v)."'>"._html($v)."</label></li>\n"; }
   echo "</ul>";
-  return $content;
 }
 
 class PouetBoxAdmin extends PouetBox {

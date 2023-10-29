@@ -93,7 +93,7 @@ class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delBoardAffil"])
+    if (@$data["delBoardAffil"])
     {
       SQLLib::Query("delete from affiliatedboards where id=".(int)$data["delBoardAffil"]);
       gloperator_log( "group", (int)$this->group->id, "group_affil_del" );
@@ -127,11 +127,11 @@ class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row)
   {
-    echo "    <td><input name='board' value='"._html($row->board->id)."'/></td>\n";
+    echo "    <td><input name='board' value='"._html($row?$row->board->id:"")."'/></td>\n";
 //    echo "    <td><input name='type' value='"._html($row->type)."'/></td>\n";
     echo "    <td><select name='type'>\n";
     foreach($this->types as $v)
-      printf("<option%s>%s</option>",$row->type==$v?" selected='selected'":"",_html($v));
+      printf("<option%s>%s</option>",($row&&$row->type==$v)?" selected='selected'":"",_html($v));
     echo "</select></td>\n";
   }
   function RenderNormalRow($v)
@@ -239,18 +239,8 @@ if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
   $group->id = $_GET["which"];
   foreach($boxen as $class)
   {
-    if ($_GET["edit" . $class::$slug])
-    {
-      $box = new $class( $group );
-      $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-      $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-    }
-    if ($_GET["new" . $class::$slug])
-    {
-      $box = new $class( $group );
-      $box->RenderEditRow( new stdClass() );
-      $box->RenderEditRowEnd( new stdClass() );
-    }
+    $box = new $class( $group );
+    $box->RenderPartialResponse();
   }
   exit();
 }

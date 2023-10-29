@@ -173,7 +173,7 @@ class PouetBoxCustomizer extends PouetBox
     echo " <div class='content addnew'>\n";
     echo "add new box: ";
     echo "<select name='newBox'>";
-    printf("<option value=''>---</option>\n",$v,_html($p->title));
+    printf("<option value=''>---</option>\n");
     global $indexAvailableBoxes;
     foreach($indexAvailableBoxes as $v)
     {

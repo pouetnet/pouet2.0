@@ -4,8 +4,13 @@ require_once("include_pouet/box-bbs-post.php");
 
 $POSTS_PER_PAGE = 25;
 
-class PouetBoxOnelinerView extends PouetBox {
-  function __construct() {
+class PouetBoxOnelinerView extends PouetBox 
+{
+  public $postcount;
+  public $paginator;
+  public $oneliner;
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_onelinerview";
     $this->title = "the so complete pou&euml;t.net oneliner";
@@ -17,7 +22,7 @@ class PouetBoxOnelinerView extends PouetBox {
     $s = new SQLSelect();
     $s->AddField("count(*) as c");
     $s->AddTable("oneliner");
-    if ($_GET["who"])
+    if (@$_GET["who"])
       $s->AddWhere(sprintf_esc("oneliner.who = %d",$_GET["who"]));
     $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
 
@@ -26,18 +31,19 @@ class PouetBoxOnelinerView extends PouetBox {
     $s->AddField("oneliner.message");
     $s->AddField("oneliner.addedDate");
     $s->attach(array("oneliner"=>"who"),array("users as user"=>"id"));
-    if ($_GET["who"])
+    if (@$_GET["who"])
       $s->AddWhere(sprintf_esc("oneliner.who = %d",$_GET["who"]));
     //$s->SetLimit( $POSTS_PER_PAGE, (int)(($this->page - 1)*$POSTS_PER_PAGE) );
 
     $this->paginator = new PouetPaginator();
-    $this->paginator->SetData( ($_GET["who"] ? "oneliner.php?who=".(int)$_GET["who"] : "oneliner.php"), $this->postcount, $POSTS_PER_PAGE, $_GET["page"] );
+    $this->paginator->SetData( (@$_GET["who"] ? "oneliner.php?who=".(int)$_GET["who"] : "oneliner.php"), $this->postcount, $POSTS_PER_PAGE, @$_GET["page"] );
     $this->paginator->SetLimitOnQuery( $s );
 
     $this->oneliner = $s->perform();
   }
 
-  function RenderBody() {
+  function RenderBody() 
+  {
     global $POSTS_PER_PAGE;
 
     echo "<ul class='boxlist'>";
@@ -70,9 +76,9 @@ class PouetBoxOnelinerView extends PouetBox {
     </script>
     <?php
   }
-  function RenderFooter() {
+  function RenderFooter() 
+  {
     echo "</div>\n";
-    return $s;
   }
 };
 

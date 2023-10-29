@@ -3,10 +3,10 @@ require_once("bootstrap.inc.php");
 require_once("include_pouet/pouet-user.php");
 
 //$csrf = new CSRFProtect();
-if ($_GET["error"])
+if (@$_GET["error"])
   redirect("error.php?e=".rawurlencode( $_GET["error_description"] ));
 
-if (!$_GET["code"])
+if (!@$_GET["code"])
 {
   $_SESSION["__return"] = $_GET["return"];
   $sceneID->PerformAuthRedirect();
@@ -28,7 +28,7 @@ try
 
   $SceneIDuser = $sceneID->Me();
 
-  if (!$SceneIDuser["success"] || !$SceneIDuser["user"]["id"])
+  if (!@$SceneIDuser["success"] || !@$SceneIDuser["user"]["id"])
   {
     redirect("error.php?e=".rawurlencode("User not found."));
   }

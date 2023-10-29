@@ -1,7 +1,7 @@
 <?php
 class PouetBoxEditConnectionsBase extends PouetBox
 {
-  public $id;
+  public $id = 0;
   public $headers = array();
   public $data = array();
   public $allowDelete = true;
@@ -16,9 +16,9 @@ class PouetBoxEditConnectionsBase extends PouetBox
     foreach($this->data as $v)
       if ($v->id == $id)
         return $v;
-    return new stdClass();
+    return null;
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
   }
   function RenderNormalRow($row)
@@ -29,10 +29,10 @@ class PouetBoxEditConnectionsBase extends PouetBox
     echo "<td>";
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-    printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row->id);
+    printf("    <a href='%s?which=%d&amp;edit%s=%d' class='edit'>edit</a>",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row ? $row->id : 0);
     if ($this->allowDelete)
     {
-      printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row->id);
+      printf("  | <a href='%s?which=%d&amp;del%s=%d' class='delete'>delete</a>\n",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug,$row ? $row->id : 0);
     }
     echo "</td>\n";
   }
@@ -45,16 +45,16 @@ class PouetBoxEditConnectionsBase extends PouetBox
     echo "<td>";
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-    echo "<input type='hidden' name='del".static::$slug."' value='".$row->id."'/>";
+    echo "<input type='hidden' name='del".static::$slug."' value='".($row ? $row->id : 0)."'/>";
     echo "<input type='submit' value='Delete!'/>";
     echo "</td>\n";
   }
-  function RenderEditRowEnd($row)
+  function RenderEditRowEnd($row = null)
   {
     echo "<td>";
     $csrf = new CSRFProtect();
     $csrf->PrintToken();
-    if (@$row->id)
+    if ($row && $row->id)
     {
       echo "<input type='hidden' name='edit".static::$slug."ID' value='".$row->id."'/>";
     }
@@ -91,14 +91,27 @@ class PouetBoxEditConnectionsBase extends PouetBox
     }
     if (@$_GET["new" . static::$slug])
     {
-      // TODO: these should probably be just null
-      $this->RenderEditRow( new stdClass() );
-      $this->RenderEditRowEnd( new stdClass() );
+      $this->RenderEditRow();
+      $this->RenderEditRowEnd();
     }
     echo "</table>\n";
     echo "<div class='foot'>";
     printf("<a href='%s?which=%d&amp;new%s=true' class='new'>new</a>",$_SERVER["SCRIPT_NAME"],$this->id,static::$slug);
     echo "</div>\n";
+  }
+  function RenderPartialResponse()
+  {
+    if (@$_GET["edit" . static::$slug])
+    {
+      $row = $this->GetRow( @$_GET["edit" . static::$slug] );
+      $this->RenderEditRow( $row );
+      $this->RenderEditRowEnd( $row );
+    }
+    if (@$_GET["new" . static::$slug])
+    {
+      $this->RenderEditRow();
+      $this->RenderEditRowEnd();
+    }
   }
 }
 ?>

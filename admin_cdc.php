@@ -38,7 +38,7 @@ class PouetBoxAdminAddCDC extends PouetBoxEditConnectionsBase
   use PouetForm;
   function Commit($data)
   {
-    if ($data["delAffil"])
+    if (@$data["delAffil"])
     {
       SQLLib::Query("delete from cdc where id=".(int)$data["delCDC"]);
       return array();
@@ -70,10 +70,10 @@ class PouetBoxAdminAddCDC extends PouetBoxEditConnectionsBase
 
     return array();
   }  
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
-    echo "    <td colspan='2'><input name='which' value='"._html( $row->prod->id )."' class='prodID'/></td>\n";
-    echo "    <td><input name='addedDate' value='"._html( $row->addedDate ? $row->addedDate : date("Y-m-d") )."'/></td>\n";
+    echo "    <td colspan='2'><input name='which' value='"._html( $row ? $row->prod->id : "" )."' class='prodID'/></td>\n";
+    echo "    <td><input name='addedDate' value='"._html( $row && $row->addedDate ? $row->addedDate : date("Y-m-d") )."'/></td>\n";
   }
   function RenderNormalRow($v)
   {
@@ -128,18 +128,8 @@ if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
   $prod->id = $_GET["which"];
   foreach($boxen as $class)
   {
-    if (@$_GET["edit" . $class::$slug])
-    {
-      $box = new $class( $prod );
-      $box->RenderEditRow( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-      $box->RenderEditRowEnd( $box->GetRow( $_GET["edit" . $class::$slug] ) );
-    }
-    if (@$_GET["new" . $class::$slug])
-    {
-      $box = new $class( $prod );
-      $box->RenderEditRow( new stdClass() );
-      $box->RenderEditRowEnd( new stdClass() );
-    }
+    $box = new $class( $prod );
+    $box->RenderPartialResponse();
   }
   exit();
 }
