@@ -1,8 +1,14 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxTopList extends PouetBox {
-  function __construct() {
+class PouetBoxTopList extends PouetBox
+{
+  public $types;
+  public $formifier;
+  public $fields;
+  public $prods;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_toplist";
 
@@ -76,17 +82,17 @@ class PouetBoxTopList extends PouetBox {
     }
 
     $s = new BM_Query("prods");
-    if ($_GET["days"])
+    if (@$_GET["days"])
     {
       $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
       $s->AddWhere(sprintf_esc("prods.addedDate > DATE_SUB(NOW(),INTERVAL %d DAY)",$_GET["days"]));
     }
-    else if ($_GET["dateFrom"] || $_GET["dateTo"])
+    else if (@$_GET["dateFrom"] || @$_GET["dateTo"])
     {
       $s->AddOrder("(prods.views/((NOW()-prods.addedDate)/100000)+prods.views)*prods.voteavg*prods.voteup DESC");
-      if ($_GET["dateFrom"])
+      if (@$_GET["dateFrom"])
         $s->AddWhere(sprintf_esc("prods.addedDate >= '%s'",$_GET["dateFrom"]));
-      if ($_GET["dateTo"])
+      if (@$_GET["dateTo"])
         $s->AddWhere(sprintf_esc("prods.addedDate <= '%s'",$_GET["dateTo"]));
     }
     else
@@ -94,15 +100,15 @@ class PouetBoxTopList extends PouetBox {
       $s->AddOrder("prods.rank");
       $s->AddWhere("prods.rank > 0");
     }
-    if ($_GET["type"])
+    if (@$_GET["type"])
     {
       $s->AddWhere(sprintf_esc("FIND_IN_SET('%s',prods.type)>0",$_GET["type"]));
     }
-    if ($_GET["platform"])
+    if (@$_GET["platform"])
     {
       $s->AddJoin("","prods_platforms",sprintf_esc("prods_platforms.prod = prods.id AND prods_platforms.platform=%d",$_GET["platform"]));
     }
-    $limit = (int)($_GET["limit"] ? $_GET["limit"] : 10);
+    $limit = (int)(@$_GET["limit"] ? $_GET["limit"] : 10);
     $limit = min($limit,64);
     $limit = max($limit,10);
     $s->SetLimit($limit);
@@ -184,7 +190,7 @@ document.observe("dom:loaded",function(){
 });
 //-->
 </script>
-<?php    
+<?php
   }
 };
 

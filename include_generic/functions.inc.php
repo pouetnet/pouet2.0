@@ -169,6 +169,10 @@ function gloperator_log( $itemType, $itemID, $action, $additionalData = array() 
 // i'm not even sure how much of this is even valid --garg
 function CheckReferrer( $ref )
 {
+  if (!$ref)
+  {
+    return true;
+  }
   $myurl=parse_url($ref);
   if(strstr($myurl["host"],"farb-rausch.de")) return false;
   if(strstr($myurl["host"],"flipcode.com")) return false;
@@ -440,7 +444,7 @@ function adjust_query_header( $param )
 {
   $query = array_merge(@$_GET,$param);
   unset( $query["reverse"] );
-  if($param["order"] && @$_GET["order"] == $param["order"] && !$_GET["reverse"])
+  if($param["order"] && @$_GET["order"] == $param["order"] && !@$_GET["reverse"])
     $query["reverse"] = 1;
   $url = parse_url($_SERVER["REQUEST_URI"]);
   return _html( $url["path"] . "?" . http_build_query($query));

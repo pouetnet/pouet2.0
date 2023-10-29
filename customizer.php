@@ -5,8 +5,11 @@ require_once("include_pouet/box-login.php");
 
 require_once("include_pouet_index/index_bootstrap.inc.php");
 
-class PouetBoxCustomizer extends PouetBox {
-  function __construct() {
+class PouetBoxCustomizer extends PouetBox 
+{
+  public $boxes;
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_customizer";
     $this->title = "custom\xC3\xB6olobstormaziabletic 7004+ super MK2!";
@@ -220,7 +223,7 @@ class PouetBoxCustomizer extends PouetBox {
             {
               echo "        <div class='row'>\n";
               printf("        <label>%s:</label>\n",_html($values["name"]));
-              switch($values["type"])
+              switch(@$values["type"])
               {
                 case "checkbox":
                   $value = isset($box[$name]) ? $box[$name] : $values["default"];
@@ -386,6 +389,10 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxCustomizerSitewide extends PouetBox
 {
+  public $namesNumeric;
+  public $namesSwitch;
+  public $formifier;
+  public $fieldsSettings;
   function __construct( )
   {
     parent::__construct();
@@ -455,14 +462,14 @@ class PouetBoxCustomizerSitewide extends PouetBox
     {
       $this->fieldsSettings[$k] = array();
       $this->fieldsSettings[$k]["value"] = $currentUserSettings ? $currentUserSettings->$k : $v;
-      if ($this->namesNumeric[$k])
+      if (@$this->namesNumeric[$k])
       {
         $this->fieldsSettings[$k]["name"] = $this->namesNumeric[$k];
         $this->fieldsSettings[$k]["type"] = "number";
         $this->fieldsSettings[$k]["min"] = strpos($k,"index") === 0 ? 0 : 1;
         $this->fieldsSettings[$k]["max"] = POUET_CACHE_MAX;
       }
-      if ($this->namesSwitch[$k])
+      if (@$this->namesSwitch[$k])
       {
         $this->fieldsSettings[$k]["name"] = $this->namesSwitch[$k];
         $this->fieldsSettings[$k]["type"] = "select";

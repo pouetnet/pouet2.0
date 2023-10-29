@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxCDCModerator extends PouetBox {
-  function __construct() {
+class PouetBoxCDCModerator extends PouetBox
+{
+  public $cdcs;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdcmoderator";
     $this->title = "moderators' coup de coeur history";
@@ -10,7 +13,8 @@ class PouetBoxCDCModerator extends PouetBox {
 
   function LoadFromDB()
   {
-    $s = new BM_Query("cdc");
+    $s = new BM_Query();
+    $s->AddTable("cdc");
     $s->AddField("cdc.addedDate");
     $s->attach(array("cdc"=>"which"),array("prods as prod"=>"id"));
     $s->AddOrder("cdc.addedDate desc");
@@ -48,8 +52,11 @@ class PouetBoxCDCModerator extends PouetBox {
   }
 };
 
-class PouetBoxCDCUser extends PouetBox {
-  function __construct() {
+class PouetBoxCDCUser extends PouetBox
+{
+  public $cdcs;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_cdcuser";
     $this->title = "users' coup de coeur toplist";
@@ -57,7 +64,8 @@ class PouetBoxCDCUser extends PouetBox {
 
   function LoadFromDB()
   {
-    $s = new BM_Query("users_cdcs");
+    $s = new BM_Query();
+    $s->AddTable("users_cdcs");
     $s->attach(array("users_cdcs"=>"cdc"),array("prods as prod"=>"id"));
     $s->AddGroup("users_cdcs.cdc");
     $s->AddField("count(*) as c");

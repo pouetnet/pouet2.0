@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxAwards extends PouetBox {
-  function __construct() {
+class PouetBoxAwards extends PouetBox
+{
+  public $prods;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_awards";
     $this->title = "awards";
@@ -10,7 +13,8 @@ class PouetBoxAwards extends PouetBox {
 
   function LoadFromDB()
   {
-    $s = new BM_Query("awards");
+    $s = new BM_Query();
+    $s->AddTable("awards");
     $s->AddField("awards.awardType");
     $s->AddField("awards.categoryID");
     $s->AddField("COALESCE(awards_categories.year,date_format(awards_prod.releaseDate,'%Y')) AS year");
@@ -31,7 +35,7 @@ class PouetBoxAwards extends PouetBox {
   function RenderBody()
   {
     global $AWARDS_CATEGORIES;
-    
+
     echo "\n\n";
     echo "<table class='boxtable'>\n";
     $lastYear = 0;
@@ -54,7 +58,7 @@ class PouetBoxAwards extends PouetBox {
       if (!$p) continue;
       echo "<tr>\n";
       echo "<td>\n";
-      
+
       printf( "<span class='icon %s %s'></span>\n",$category->cssClass,$row->awardType);
       echo $p->RenderTypeIcons();
       echo "<span class='prod'>".$p->RenderLink()."</span>\n";

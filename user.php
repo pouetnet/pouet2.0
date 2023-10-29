@@ -178,7 +178,7 @@ class PouetBoxUserMain extends PouetBox
     echo "<img src='".POUET_CONTENT_URL."avatars/"._html($this->user->avatar)."' alt='avatar'/> ";
     echo "<span>"._html($this->user->nickname)."</span> information";
 
-    if ($currentUser->id ==$this->user->id)
+    if ($currentUser && $currentUser->id ==$this->user->id)
     {
       printf(" [<a href='account.php' class='adminlink'>edit profile</a>]\n");
     }

@@ -51,7 +51,7 @@ class PouetBoxProdMain extends PouetBox
     if(!$this->prod)
       return;
 
-    if($this->prod->latestip != $_SERVER["REMOTE_ADDR"] && CheckReferrer($_SERVER["HTTP_REFERER"]) )
+    if($this->prod->latestip != $_SERVER["REMOTE_ADDR"] && CheckReferrer(@$_SERVER["HTTP_REFERER"]) )
     {
       SQLLib::Query(sprintf_esc("UPDATE prods SET views=views+1, latestip='%s' WHERE id=%d",$_SERVER["REMOTE_ADDR"],$this->id));
     }
@@ -206,7 +206,7 @@ class PouetBoxProdMain extends PouetBox
     }
     echo "</td>\n";
     echo " </tr>\n";
-    if ($this->prod->party->id != NO_PARTY_ID)
+    if ($this->prod->party && $this->prod->party->id != NO_PARTY_ID)
     {
       if (count($this->prod->placings) == 1)
       {

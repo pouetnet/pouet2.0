@@ -106,7 +106,6 @@ class PouetBoxUserlist extends PouetBox
     echo "</td>\n";
     echo "</tr>\n";
     echo "</table>\n";
-    return $s;
   }
 };
 
