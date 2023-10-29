@@ -309,8 +309,8 @@ class PouetProd extends BM_Class
 
     global $COMPOTYPES;
     $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
-    foreach($this->placings as &$p)
-      $p->compo_name = $COMPOTYPES[ $p->compo ];
+    //foreach($array["placings"] as &$p)
+    //  $p->compo_name = $COMPOTYPES[ $p->compo ];
 
     unset($array["group1"]);
     unset($array["group2"]);
