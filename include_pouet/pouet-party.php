@@ -100,9 +100,12 @@ class PouetPlacing
 
   function ToAPI()
   {
-    global $COMPOTYPES;
     $array = $this->ToAPISuper();
-    $array["compo_name"] = $COMPOTYPES[ $this->compo ];
+    if ($this->compo)
+    {
+      global $COMPOTYPES;
+      $array["compo_name"] = $COMPOTYPES[ $this->compo ];
+    }
     return $array;
   }  
 }

@@ -307,8 +307,11 @@ class PouetProd extends BM_Class
       $array["screenshot"] = POUET_CONTENT_URL . $screenshot;
     }
 
-    global $COMPOTYPES;
-    $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
+    if ($this->party_compo)
+    {
+      global $COMPOTYPES;
+      $array["party_compo_name"] = $COMPOTYPES[ $this->party_compo ];
+    }
     //foreach($array["placings"] as &$p)
     //  $p->compo_name = $COMPOTYPES[ $p->compo ];
 
