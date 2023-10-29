@@ -14,6 +14,8 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 {
+  public $id;
+  public $prod;
   function __construct( $id )
   {
     parent::__construct();
@@ -170,6 +172,8 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
 
 class PouetBoxAdminDeleteProd extends PouetBox
 {
+  public $prod;
+  public $checkString;
   function __construct( $prod )
   {
     parent::__construct();
@@ -230,7 +234,11 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
 {
+  public $categories;
+  public $prod;
+  public $types;
   public static $slug = "Awards";
+
   function __construct( $prod )
   {
     parent::__construct();
@@ -327,6 +335,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
 {
+  public $prod;
   public static $slug = "Link";
   function __construct( $prod )
   {
@@ -402,6 +411,10 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
 {
+  public $compos;
+  public $prod;
+  public $ranks;
+  public $years;
   public static $slug = "Party";
   function __construct( $prod )
   {
@@ -528,6 +541,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
 {
+  public $prod;
   public static $slug = "Credit";
   function __construct( $prod )
   {
@@ -540,7 +554,8 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
 
     $this->headers = array("user","role");
 
-    $s = new BM_Query("credits");
+    $s = new BM_Query();
+    $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->AddWhere(sprintf("credits.prodID = %d",$this->prod->id));
@@ -621,6 +636,7 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
 {
+  public $prod;
   public static $slug = "Affil";
   function __construct( $prod )
   {
@@ -743,7 +759,7 @@ $boxen = array(
   "PouetBoxAdminEditProdAwards",
   "PouetBoxAdminEditProdAffil",
 );
-if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
+if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
 {
   // ajax responses
   $prod = new stdClass();

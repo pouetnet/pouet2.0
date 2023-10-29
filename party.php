@@ -3,7 +3,12 @@ require_once("bootstrap.inc.php");
 
 class PouetBoxPartyHeader extends PouetBox
 {
-  function __construct( $partyView ) {
+  public $party;
+  public $partylinks;
+  public $year;
+  public $years;
+  function __construct( $partyView )
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyheader";
 
@@ -39,32 +44,32 @@ class PouetBoxPartyHeader extends PouetBox
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+results</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->download)
+    if($this->partylinks && $this->partylinks->download)
       echo "[<a href='".$this->partylinks->download."'>download</a>]\n";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+download</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->slengpung)
+    if($this->partylinks && $this->partylinks->slengpung)
       echo " [<a href='http://www.slengpung.com/?eventid=".(int)$this->partylinks->slengpung."'>slengpung</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+slengpung</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->csdb)
+    if($this->partylinks && $this->partylinks->csdb)
       echo " [<a href='http://csdb.dk/event/?id=".(int)$this->partylinks->csdb."'>csdb</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+csdb</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->zxdemo)
+    if($this->partylinks && $this->partylinks->zxdemo)
       echo " [<a href='http://zxdemo.org/party.php?id=".(int)$this->partylinks->zxdemo."'>zxdemo</a>]";
     //else if ($currentUser && $currentUser->CanSubmitItems())
     //  printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+zxdemo</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->demozoo)
+    if($this->partylinks && $this->partylinks->demozoo)
       echo " [<a href='http://demozoo.org/parties/".(int)$this->partylinks->demozoo."/'>demozoo</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+demozoo</a>]\n",$this->party->id,$this->year);
 
-    if($this->partylinks->artcity)
+    if($this->partylinks && $this->partylinks->artcity)
       echo " [<a href='http://artcity.bitfellas.org/index.php?a=search&type=tag&text=".rawurlencode($this->partylinks->artcity)."'>artcity</a>]";
     else if ($currentUser && $currentUser->CanSubmitItems())
       printf(" [<a class='submitadditional' href='submit_party_edition_info.php?which=%d&amp;when=%d'>+artcity</a>]\n",$this->party->id,$this->year);
@@ -84,24 +89,30 @@ class PouetBoxPartyHeader extends PouetBox
     foreach($this->years as $v=>$dummy)
       $y[] = "<a href='party.php?which=".rawurlencode($this->party->id)."&amp;when=".$v."'>".$v."</a>";
     echo "  <div class='yearselect'>".implode(" |\n",$y)."</div>\n";
-    echo "  <div class='foot'>added on the ".$this->party->addedDate." by ".$this->party->addeduser->PrintLinkedName()." ".$this->party->addeduser->PrintLinkedAvatar()."</div>\n";
+    echo "  <div class='foot'>added on the ".$this->party->addedDate." by ".$this->party->addedUser->PrintLinkedName()." ".$this->party->addedUser->PrintLinkedAvatar()."</div>\n";
     echo "</div>\n";
   }
 };
 
 class PouetBoxPartyView extends PouetBox
 {
-  function __construct() {
+  public $party;
+  public $year;
+  public $prods;
+  public $sortByCompo;
+  function __construct()
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_partyview";
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $this->party = PouetParty::spawn($_GET["which"]);
     if (!$this->party) return;
 
-    $this->party->addeduser = PouetUser::spawn( $this->party->addedUser );
-    
+    $this->party->addedUser = PouetUser::spawn( $this->party->addedUser );
+
     if (isset($_GET["when"]))
     {
       $this->year = $_GET["when"];
@@ -140,10 +151,10 @@ class PouetBoxPartyView extends PouetBox
     }
 
     $dir = "DESC";
-    if ($_GET["reverse"])
+    if (@$_GET["reverse"])
       $dir = "ASC";
     $this->sortByCompo = false;
-    switch($_GET["order"])
+    switch(@$_GET["order"])
     {
       case "type": $s->AddOrder("prods.type ".$dir); break;
       case "name": $s->AddOrder("prods.name ".$dir); break;
@@ -213,7 +224,7 @@ class PouetBoxPartyView extends PouetBox
         foreach($headers as $key=>$text)
         {
           $out = sprintf("<th><a href='%s' class='%s%s %s'>%s</a></th>\n",
-            adjust_query_header(array("order"=>$key)),$_GET["order"]==$key?"selected":"",($_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+            adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
           if ($key == "compo" && $this->sortByCompo && $p->party_compo && $COMPOTYPES[$p->party_compo]) $out = sprintf("<th id='%s'>%s</th>",hashify($COMPOTYPES[$p->party_compo]),$COMPOTYPES[$p->party_compo]);
@@ -251,15 +262,15 @@ class PouetBoxPartyView extends PouetBox
       echo "</tr>\n";
     }
     echo "</table>\n";
-    return $s;
   }
 };
 
-class PouetBoxPartyLists extends PouetBox 
+class PouetBoxPartyLists extends PouetBox
 {
   var $id;
   var $topic;
   var $posts;
+  var $data;
   function __construct($id)
   {
     parent::__construct();
@@ -268,7 +279,8 @@ class PouetBoxPartyLists extends PouetBox
     $this->id = (int)$id;
   }
 
-  function LoadFromDB() {
+  function LoadFromDB()
+  {
     $s = new BM_Query();
     $s->AddField("lists.id as id");
     $s->AddField("lists.name as name");

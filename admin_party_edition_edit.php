@@ -11,6 +11,10 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 {
+  public $id;
+  public $party;
+  public $year;
+  public $links;
   function __construct( $id, $year )
   {
     parent::__construct();
@@ -62,12 +66,15 @@ class PouetBoxAdminEditPartyEdition extends PouetBoxSubmitPartyEdition
 
     $this->links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
 
-    $this->fields["download"]["value"] = $this->links->download;
-    $this->fields["csdbID"]["value"] = $this->links->csdb;
-    $this->fields["slengpungID"]["value"] = $this->links->slengpung;
-    //$this->fields["zxdemoID"]["value"] = $this->links->zxdemo;
-    $this->fields["demozooID"]["value"] = $this->links->demozoo;
-    $this->fields["artcity"]["value"] = $this->links->artcity;
+    if ($this->links)
+    {
+      $this->fields["download"]["value"] = $this->links->download;
+      $this->fields["csdbID"]["value"] = $this->links->csdb;
+      $this->fields["slengpungID"]["value"] = $this->links->slengpung;
+      //$this->fields["zxdemoID"]["value"] = $this->links->zxdemo;
+      $this->fields["demozooID"]["value"] = $this->links->demozoo;
+      $this->fields["artcity"]["value"] = $this->links->artcity;
+    }
 
     foreach($_POST as $k=>$v)
       if ($this->fields[$k])

@@ -2,6 +2,9 @@
 class PouetBoxEditConnectionsBase extends PouetBox
 {
   public $id;
+  public $headers = array();
+  public $data = array();
+  public $allowDelete = true;
   public static $slug = "None";
   function __construct()
   {

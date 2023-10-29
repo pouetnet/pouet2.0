@@ -12,6 +12,8 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
 {
+  public $id;
+  public $board;
   function __construct( $id )
   {
     parent::__construct();
@@ -67,12 +69,15 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
   {
     parent::LoadFromDB();
 
-    $this->fields["name"]["value"] = $this->board->name;
-    $this->fields["sysop"]["value"] = $this->board->sysop;
-    $this->fields["phonenumber"]["value"] = $this->board->phonenumber;
-    $this->fields["telnetip"]["value"] = $this->board->telnetip;
-    $this->fields["started"]["value"] = $this->board->started;
-    $this->fields["closed"]["value"] = $this->board->closed;
+    if ($this->board)
+    {
+      $this->fields["name"]["value"] = $this->board->name;
+      $this->fields["sysop"]["value"] = $this->board->sysop;
+      $this->fields["phonenumber"]["value"] = $this->board->phonenumber;
+      $this->fields["telnetip"]["value"] = $this->board->telnetip;
+      $this->fields["started"]["value"] = $this->board->started;
+      $this->fields["closed"]["value"] = $this->board->closed;
+    }
 
     $platforms = SQLLib::SelectRows(sprintf_esc("select * from boards_platforms where board = %d",$this->board->id));
     foreach($platforms as $v)
@@ -84,6 +89,10 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
 
 class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
 {
+  public $id;
+  public $board;
+  public $headers;
+  public $types;
   public static $slug = "BoardAffil";
   function __construct( $board )
   {
@@ -181,6 +190,8 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminDeleteBoard extends PouetBox
 {
+  public $board;
+  public $checkString;
   function __construct( $board )
   {
     parent::__construct();
@@ -248,7 +259,7 @@ document.observe("dom:loaded",function(){
 $boxen = array(
   "PouetBoxAdminEditBoardAffil",
 );
-if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
+if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
 {
   // ajax responses
   $group = new stdClass();

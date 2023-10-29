@@ -12,6 +12,8 @@ if ($currentUser && !$currentUser->CanEditItems())
 
 class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 {
+  public $id;
+  public $group;
   function __construct( $id )
   {
     parent::__construct();
@@ -61,6 +63,9 @@ class PouetBoxAdminEditGroup extends PouetBoxSubmitGroup
 
 class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
 {
+  public $id;
+  public $types;
+  public $group;
   public static $slug = "BoardAffil";
   function __construct( $group )
   {
@@ -157,6 +162,8 @@ document.observe("dom:loaded",function(){
 
 class PouetBoxAdminDeleteGroup extends PouetBox
 {
+  public $group;
+  public $checkString;
   function __construct( $group )
   {
     parent::__construct();
@@ -225,7 +232,7 @@ document.observe("dom:loaded",function(){
 $boxen = array(
   "PouetBoxAdminEditGroupAffil",
 );
-if($_GET["partial"] && $currentUser && $currentUser->CanEditItems())
+if(@$_GET["partial"] && $currentUser && $currentUser->CanEditItems())
 {
   // ajax responses
   $group = new stdClass();
