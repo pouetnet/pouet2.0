@@ -221,6 +221,7 @@ class BM_Query extends SQLSelect
 
 };
 
+#[AllowDynamicProperties]
 class BM_Class 
 {
   static function getTable () { trigger_error("GetTable not overridden in ".get_class(),E_USER_ERROR); }

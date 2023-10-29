@@ -225,7 +225,7 @@ class PouetBoxProdlistSelectors extends PouetBox
     echo "  <td>\n";
     echo "  type :\n";
     echo "  <select name='type[]' multiple='multiple' size='10'>\n";
-    if (!$_GET["type"]) $_GET["type"] = array();
+    if (!@$_GET["type"]) $_GET["type"] = array();
 	  foreach($this->types as $v)
 	    echo "  <option".((!is_array($_GET["type"])||array_search($v,$_GET["type"])===false)?"":" selected='selected'").">".$v."</option>\n";
     echo "  </select>\n";
@@ -234,7 +234,7 @@ class PouetBoxProdlistSelectors extends PouetBox
     echo "  <td>\n";
     echo "  platform :\n";
     echo "  <select name='platform[]' multiple='multiple' size='10'>\n";
-    if (!$_GET["platform"]) $_GET["platform"] = array();
+    if (!@$_GET["platform"]) $_GET["platform"] = array();
     $plat = array();
 	  foreach($PLATFORMS as $v) $plat[] = $v["name"];
 	  usort($plat,"strcasecmp");
