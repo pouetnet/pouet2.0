@@ -11,6 +11,7 @@ if ($currentUser && !$currentUser->CanSubmitItems())
 
 class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
 {
+  public $prod;
   function __construct( $id )
   {
     parent::__construct();
@@ -168,11 +169,11 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     {
       unset($this->fields["partyID"]);
       unset($this->fields["partyYear"]);
+	  if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->compo)
+	    unset($this->fields["partyCompo"]);
+	  if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->ranking)
+	    unset($this->fields["partyRank"]);
     }
-    if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->compo)
-      unset($this->fields["partyCompo"]);
-    if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->ranking)
-      unset($this->fields["partyRank"]);
 
     //unset($this->fields["sceneOrgID"]);
     unset($this->fields["zxdemoID"]);

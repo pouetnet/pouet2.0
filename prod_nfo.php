@@ -4,6 +4,8 @@ require_once("include_pouet/pouet-asciiviewer.php");
 
 class PouetBoxProdNfo extends PouetBoxASCIIViewer 
 {
+  public $prod;
+  public $nfo;
   function __construct()
   {
     parent::__construct();
@@ -23,9 +25,10 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
     $s->SetLimit(1);
     $s->attach(array("nfos"=>"user"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("prod=%d",$this->prod->id));
-    list($this->nfo) = $s->perform();
+    $rows = $s->perform();
+	$this->nfo = $rows ? reset($this->nfo) : null;
     
-    $this->preferredEncoding = $this->nfo ? $this->nfo->encoding : null;
+    $this->preferredEncoding = $this->nfo ? @$this->nfo->encoding : null;
   }
   function RenderHeader()
   {
@@ -38,8 +41,11 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
   }
   function RenderBody()
   {
-    $this->asciiFilename = get_local_nfo_path( $_GET["which"] );;
-    $this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
+    $this->asciiFilename = get_local_nfo_path( $_GET["which"] );
+	if ($this->nfo)
+	{
+		$this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
+	}
     
     parent::RenderBody();
   }

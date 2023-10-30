@@ -221,7 +221,7 @@ function array_select( $array, $keys )
 {
   $out = array();
   foreach($keys as $v)
-    if ($array[$v]) $out[$v] = $array[$v];
+    if (@$array[$v]) $out[$v] = $array[$v];
   return $out;
 }
 

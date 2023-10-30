@@ -5,7 +5,6 @@ require_once("include_pouet/pouet-asciiviewer.php");
 class PouetBoxPartyResults extends PouetBoxASCIIViewer
 {
   public $party;
-  public $asciiFilename;
   function __construct() 
   {
     parent::__construct();

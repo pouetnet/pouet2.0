@@ -4,6 +4,7 @@ class PouetBoxASCIIViewer extends PouetBox
   public $preferredEncoding;
   public $fonts;
   public $bodyTitle;
+  public $asciiFilename;
   function __construct()
   {
     parent::__construct();

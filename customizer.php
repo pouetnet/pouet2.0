@@ -18,9 +18,10 @@ class PouetBoxCustomizer extends PouetBox
   function LoadFromDB() 
   {
     global $currentUser;
-    $customizerJSON = SQLLib::selectRow(sprintf_esc("select customizerJSON from usersettings where id = %d",$currentUser->id))->customizerJSON;
+    $row = SQLLib::selectRow(sprintf_esc("select customizerJSON from usersettings where id = %d",$currentUser->id));
+	$customizerJSON = $row ? $row->customizerJSON : null;
     $customizer = $customizerJSON ? json_decode($customizerJSON,true) : array();
-    if (!$customizer["frontpage"])
+    if (!@$customizer["frontpage"])
     {
       require_once("include_pouet/default_usersettings.php");
       $customizer = json_decode($DEFAULT_USERSETTINGS->customizerJSON, true);
@@ -494,7 +495,7 @@ class PouetBoxCustomizerSitewide extends PouetBox
     {
       foreach($_POST as $k=>$v)
       {
-        if ($this->fieldsSettings[$k]) $this->fieldsSettings[$k]["value"] = $v;
+        if (@$this->fieldsSettings[$k]) $this->fieldsSettings[$k]["value"] = $v;
       }
     }    
   }
