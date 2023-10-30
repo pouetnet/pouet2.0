@@ -11,6 +11,12 @@ if ($currentUser && !$currentUser->CanEditBBS())
 
 class PouetBoxAdminEditTopic extends PouetBox
 {
+  public $id;
+  public $party;
+  public $formifier;
+  public $fields;
+  public $categories;
+  public $topic;
   function __construct( $id )
   {
     parent::__construct();

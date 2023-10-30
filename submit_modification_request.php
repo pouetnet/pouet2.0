@@ -210,9 +210,9 @@ $form->successMessage =
   "your request was recorded and will be processed by a glöperator eventually !</a> <br/>". // l33t h4x
   "you can keep track of the status of your requests <a href='account.php#pouetbox_accountreq'>on your accounts page !";
 
-if ($_REQUEST["prod"])
+if (@$_REQUEST["prod"])
   $form->SetSuccessURL( "prod.php?which=".(int)$_REQUEST["prod"], false );
-else if ($_REQUEST["group"])
+else if (@$_REQUEST["group"])
   $form->SetSuccessURL( "groups.php?which=".(int)$_REQUEST["group"], false );
 else
   $form->SetSuccessURL( "", false );

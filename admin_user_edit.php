@@ -10,6 +10,12 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminEditUser extends PouetBox
 {
+  public $id;
+  public $user;
+  public $sceneID;
+  public $formifier;
+  public $fields;
+  public $levels;
   function __construct( $id )
   {
     parent::__construct();
@@ -110,6 +116,8 @@ class PouetBoxAdminEditUser extends PouetBox
 
 class PouetBoxAdminUserNicks extends PouetBox
 {
+  public $id;
+  public $nicks;
   function __construct( $id )
   {
     parent::__construct();

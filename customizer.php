@@ -19,7 +19,7 @@ class PouetBoxCustomizer extends PouetBox
   {
     global $currentUser;
     $customizerJSON = SQLLib::selectRow(sprintf_esc("select customizerJSON from usersettings where id = %d",$currentUser->id))->customizerJSON;
-    $customizer = json_decode($customizerJSON,true);
+    $customizer = $customizerJSON ? json_decode($customizerJSON,true) : array();
     if (!$customizer["frontpage"])
     {
       require_once("include_pouet/default_usersettings.php");

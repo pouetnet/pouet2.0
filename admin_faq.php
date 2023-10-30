@@ -11,8 +11,12 @@ if ($currentUser && !$currentUser->IsModerator())
 
 class PouetBoxAdminEditFAQ extends PouetBox
 {
+  public $id;
+  public $item;
   public $cateogries;
   public $fields;
+  public $formifier;
+  public $categories;
   function __construct( $id )
   {
     parent::__construct();

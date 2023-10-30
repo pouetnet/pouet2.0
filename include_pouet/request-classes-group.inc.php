@@ -44,7 +44,7 @@ class PouetRequest_Group_ChangeInfo extends PouetRequestBase
     {
       foreach(get_object_vars($group) as $k=>$v)
       {
-        if ($fields[$k])
+        if (@$fields[$k])
         {
           $fields[$k]["value"] = $v;    
         }

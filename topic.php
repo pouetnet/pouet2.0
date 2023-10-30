@@ -126,8 +126,11 @@ $view->Load();
 
 $post = new PouetBoxBBSPost($topicid);
 
-$TITLE = $view->topic->topic;
-$RSS["export/lastbbstopicposts.rss.php?topic=".(int)$view->topic->id] = "latest posts in ".$view->topic->topic;
+if ($view->topic)
+{
+  $TITLE = $view->topic->topic;
+  $RSS["export/lastbbstopicposts.rss.php?topic=".(int)$view->topic->id] = "latest posts in ".$view->topic->topic;
+}
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");

@@ -125,7 +125,7 @@ class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
     }
     return array();
   }
-  function RenderEditRow($row)
+  function RenderEditRow($row = null)
   {
     echo "    <td><input name='board' value='"._html($row?$row->board->id:"")."'/></td>\n";
 //    echo "    <td><input name='type' value='"._html($row->type)."'/></td>\n";

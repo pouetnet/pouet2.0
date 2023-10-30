@@ -1,6 +1,9 @@
 <?php
 class PouetBoxASCIIViewer extends PouetBox 
 {
+  public $preferredEncoding;
+  public $fonts;
+  public $bodyTitle;
   function __construct()
   {
     parent::__construct();
@@ -49,11 +52,11 @@ class PouetBoxASCIIViewer extends PouetBox
   function RenderBody()
   {
     echo "<div class='content' title='".$this->bodyTitle."'>\n";
-    $font = $this->fonts[$_GET["font"]] ?: $this->fonts[0];
+    $font = @$this->fonts[$_GET["font"]] ?: $this->fonts["none"];
 
     printf("<pre class='%s'>",_html($font["class"]));
     $text = @file_get_contents( $this->asciiFilename );
-    echo _html( process_ascii( $text, $this->preferredEncoding ?: $font["encoding"] ) );
+    echo _html( process_ascii( $text, $this->preferredEncoding ?: @$font["encoding"] ) );
     printf("</pre>");
 
     echo "</div>\n";
