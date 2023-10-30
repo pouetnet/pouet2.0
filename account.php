@@ -209,9 +209,9 @@ class PouetBoxAccount extends PouetBox
     {
       foreach($_POST as $k=>$v)
       {
-        if ($this->fieldsPouet[$k]) $this->fieldsPouet[$k]["value"] = $v;
-        if ($this->fieldsOtherSites[$k]) $this->fieldsOtherSites[$k]["value"] = $v;
-        if ($this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
+        if (@$this->fieldsPouet[$k]) $this->fieldsPouet[$k]["value"] = $v;
+        if (@$this->fieldsOtherSites[$k]) $this->fieldsOtherSites[$k]["value"] = $v;
+        if (@$this->fieldsCDC[$k]) $this->fieldsCDC[$k]["value"] = $v;
       }
     }
   }
@@ -252,9 +252,9 @@ class PouetBoxAccount extends PouetBox
     {
       $a = array();
       $a["userID"] = get_login_id();
-      $a["im_type"] = $data["im_type".$n];
-      $imUser = $data["im_id".$n];
-      if ($IM_TYPES[$a["im_type"]])
+      $a["im_type"] = @$data["im_type".$n];
+      $imUser = @$data["im_id".$n];
+      if (@$IM_TYPES[$a["im_type"]])
       {
         if (preg_match("/".$IM_TYPES[$a["im_type"]]["capture"]."/",$imUser,$m))
         {
@@ -285,7 +285,7 @@ class PouetBoxAccount extends PouetBox
     }
     foreach ($this->fieldsOtherSites as $k=>$v)
     {
-      $sql[$k] = trim($data[$k]);
+      $sql[$k] = (int)trim($data[$k]);
     }
 
     if (!$sql["avatar"] || !file_exists(POUET_CONTENT_LOCAL . "avatars/".$sql["avatar"]))

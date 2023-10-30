@@ -345,7 +345,7 @@ class PouetBoxSubmitProd extends PouetBox
     if ($_POST)
     {
       foreach($_POST as $k=>$v)
-        if ($this->fields[$k])
+        if (@$this->fields[$k])
           $this->fields[$k]["value"] = $v;
       $this->fields["releaseDate"]["value"] = sprintf("%04d-%02d-15",$_POST["releaseDate_year"],$_POST["releaseDate_month"]);
     }

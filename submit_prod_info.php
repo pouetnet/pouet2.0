@@ -44,7 +44,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
       $errormessage[]="you can't submit a prod released in the future, sorry =)";
     }
 
-    if ($this->fields["partyID"] && $this->fields["partyYear"])
+    if (@$this->fields["partyID"] && @$this->fields["partyYear"])
     {
       if($data["partyYear"] && !$data["partyID"])
         $errormessage[] = "please either select a party AND a year, or neither !";
@@ -102,7 +102,7 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     if ($this->fields["partyCompo"])
       $sql["party_compo"] = nullify($data["partyCompo"]);
     if ($this->fields["partyRank"])
-      $sql["party_place"] = $data["partyRank"];
+      $sql["party_place"] = (int)$data["partyRank"];
 
     if ($sql)
       SQLLib::UpdateRow("prods",$sql,"id=".$prodID);
@@ -165,15 +165,13 @@ class PouetBoxSubmitProdInfo extends PouetBoxSubmitProd
     unset($this->fields["platform"]);
     unset($this->fields["type"]);
 
-    if ($prod->party)
-    {
-      unset($this->fields["partyID"]);
-      unset($this->fields["partyYear"]);
-	  if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->compo)
-	    unset($this->fields["partyCompo"]);
-	  if ($prod->party->id == NO_PARTY_ID || $prod->placings[0]->ranking)
-	    unset($this->fields["partyRank"]);
-    }
+    unset($this->fields["partyID"]);
+    unset($this->fields["partyYear"]);
+    
+    if ((!$prod->party || $prod->party->id == NO_PARTY_ID) || ($prod->placings && $prod->placings[0]->compo))
+      unset($this->fields["partyCompo"]);
+    if ((!$prod->party || $prod->party->id == NO_PARTY_ID) || ($prod->placings && $prod->placings[0]->ranking))
+      unset($this->fields["partyRank"]);
 
     //unset($this->fields["sceneOrgID"]);
     unset($this->fields["zxdemoID"]);

@@ -26,7 +26,7 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
     $s->attach(array("nfos"=>"user"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("prod=%d",$this->prod->id));
     $rows = $s->perform();
-	$this->nfo = $rows ? reset($this->nfo) : null;
+	$this->nfo = $rows ? reset($rows) : null;
     
     $this->preferredEncoding = $this->nfo ? @$this->nfo->encoding : null;
   }

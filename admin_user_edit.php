@@ -146,6 +146,8 @@ class PouetBoxAdminUserNicks extends PouetBox
 
 class PouetBoxAdminUserIPs extends PouetBox
 {
+  public $ip;
+  public $users;
   function __construct( $ip )
   {
     parent::__construct();
@@ -159,12 +161,13 @@ class PouetBoxAdminUserIPs extends PouetBox
     $s = new BM_Query("users");
     $s->AddOrder("users.glops desc");
     $s->AddWhere(sprintf_esc("lastip = '%s'",$this->ip));
-    $this->nicks = $s->perform();
+    $this->users = $s->perform();
   }
   function RenderBody()
   {
     echo "<ul class='boxlist boxlisttable'>\n";
-    foreach($this->nicks as $p) {
+    foreach($this->users as $p)
+	{
       echo "<li>\n";
       echo "<span>\n";
       echo $p->PrintLinkedAvatar()." ";
@@ -185,7 +188,8 @@ class PouetBoxAdminUserIPs extends PouetBox
 
 $form = new PouetFormProcessor();
 
-if (is_numeric($_GET["who"]))
+$box = null;
+if (is_numeric(@$_GET["who"]))
 {
   $form->SetSuccessURL( "user.php?who=".(int)$_GET["who"]."#success", true );
 
@@ -193,7 +197,7 @@ if (is_numeric($_GET["who"]))
   $form->Add( "user", $box );
   $form->Add( "userNicks", new PouetBoxAdminUserNicks( $_GET["who"] ) );
 }
-else if ($_GET["ip"])
+else if (@$_GET["ip"])
 {
   $form->SetSuccessURL( "user.php?ip=".rawurlencode($_GET["ip"])."#success", true );
 
@@ -203,8 +207,15 @@ else if ($_GET["ip"])
 if ($currentUser && $currentUser->IsAdministrator())
   $form->Process();
 
-$TITLE = "edit this user: ".$box->user->nickname;
-
+if ($box && $box->user)
+{	
+  $TITLE = "edit this user: ".$box->user->nickname;
+}
+else
+{	
+  $TITLE = "edit user";
+}
+	
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
 
