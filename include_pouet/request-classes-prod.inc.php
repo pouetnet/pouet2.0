@@ -84,7 +84,7 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
 
   static function GetFields($data,&$fields,&$js)
   {
-    if ($data["linkID"])
+    if (@$data["linkID"])
     {
       $l = SQLLib::SelectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
       $fields = array(
@@ -315,8 +315,8 @@ class PouetRequest_Prod_AddCredit extends PouetRequestBase
 
     $output["userID"] = $input["userID"];
     $output["userRole"] = $input["userRole"];
-    $output["oldUserID"] = $input["oldUserID"];
-    $output["oldUserRole"] = $input["oldUserRole"];
+    $output["oldUserID"] = @$input["oldUserID"];
+    $output["oldUserRole"] = @$input["oldUserRole"];
     return array();
   }
 
@@ -354,7 +354,7 @@ class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
 
   static function GetFields($data,&$fields,&$js)
   {
-    if ($data["creditID"])
+    if (@$data["creditID"])
     {
       $l = SQLLib::SelectRow(sprintf_esc("select * from credits where id = %d",$data["creditID"]));
       $fields = array(
@@ -561,12 +561,12 @@ class PouetRequest_Prod_RemoveCredit extends PouetRequestBase
 
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
     $s = "<b>old</b>: ";
-    if ($row->user)
+    if (@$row->user)
     {
       $s .= $row->user->PrintLinkedAvatar()." ";
       $s .= $row->user->PrintLinkedName();
     }
-    $s .= " - "._html($row->role);
+    $s .= " - "._html(@$row->role);
 
     return $s;
   }
@@ -926,7 +926,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
         case "group2":
           $groupIdx++;
         case "group1":
-          $group = $prod->groups[$groupIdx];
+          $group = @$prod->groups[$groupIdx];
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= $group ? $group->RenderLong() : "<i>none</i>";
           $s .= "<br/>";
@@ -965,10 +965,10 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           break;
         case "partyCompo":
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
-          $s .= $COMPOTYPES[$prod->placings[0]->compo];
+          $s .= @$COMPOTYPES[$prod->placings[0]->compo];
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $s .= $COMPOTYPES[$v];
+          $s .= @$COMPOTYPES[$v];
           $s .= "<br/>";
           break;
         case "partyRank":

@@ -159,7 +159,7 @@ class PouetBoxModificationRequest extends PouetBox
       if ($fields && !$error)
       {
         foreach($_POST as $k=>$v)
-          if ($fields[$k])
+          if (@$fields[$k])
             $fields[$k]["value"] = $v;
         $this->formifier->RenderForm($fields);
       }

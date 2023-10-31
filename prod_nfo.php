@@ -2,7 +2,7 @@
 require_once("bootstrap.inc.php");
 require_once("include_pouet/pouet-asciiviewer.php");
 
-class PouetBoxProdNfo extends PouetBoxASCIIViewer 
+class PouetBoxProdNfo extends PouetBoxASCIIViewer
 {
   public $prod;
   public $nfo;
@@ -26,8 +26,8 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
     $s->attach(array("nfos"=>"user"),array("users as user"=>"id"));
     $s->AddWhere(sprintf_esc("prod=%d",$this->prod->id));
     $rows = $s->perform();
-	$this->nfo = $rows ? reset($rows) : null;
-    
+    $this->nfo = $rows ? reset($rows) : null;
+
     $this->preferredEncoding = $this->nfo ? @$this->nfo->encoding : null;
   }
   function RenderHeader()
@@ -46,13 +46,13 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
 	{
 		$this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
 	}
-    
+
     parent::RenderBody();
   }
   function RenderFooter()
   {
     parent::RenderFooter();
-    
+
     global $currentUser;
     echo "  <div class='foot'>";
     if ($currentUser && $currentUser->IsGloperator())

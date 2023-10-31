@@ -30,7 +30,7 @@ class PouetBoxUserMain extends PouetBox
   public $totalRequests;
   public $user;
   public $topicCount;
-  public $postcount;
+  public $postCount;
 
   function __construct($id,$show)
   {
@@ -386,7 +386,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetBBSPosts( $limit = null )
   {
-    $s = new BM_Query("bbs_posts");
+    $s = new BM_Query();
+	$s->AddTable("bbs_posts");
     $s->AddField("bbs_posts.id as postID");
     $s->AddJoin("left","bbs_topics","bbs_topics.id = bbs_posts.topic");
     $s->AddField("bbs_topics.id");
@@ -454,7 +455,7 @@ class PouetBoxUserMain extends PouetBox
     $s->AddTable("comments");
     $s->AddField("count(*) as c");
     $s->AddWhere(sprintf("comments.who = %d",$this->id));
-    $this->postcount = SQLLib::SelectRow($s->GetQuery())->c;
+    $this->postCount = SQLLib::SelectRow($s->GetQuery())->c;
 
     $s = new BM_Query();
     $s->AddTable("comments");
@@ -474,9 +475,9 @@ class PouetBoxUserMain extends PouetBox
     if (@$_GET["com"]) $limit = (int)$_GET["com"];
     $limit = min($limit,100);
     $limit = max($limit,1);
-    if (@$_GET["com"]==-1) $limit = $this->postcount;
+    if (@$_GET["com"]==-1) $limit = $this->postCount;
 
-    $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postcount, $limit, $page, false );
+    $this->paginator->SetData( "user.php?who=".$this->id."&show=demoblog", $this->postCount, $limit, $page, false );
     $this->paginator->SetLimitOnQuery( $s );
 
     $data = $s->perform();

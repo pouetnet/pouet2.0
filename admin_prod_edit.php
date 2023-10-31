@@ -384,8 +384,8 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row = null)
   {
-    echo "    <td><input name='type' value='"._html($row->type)."'/></td>\n";
-    echo "    <td><input name='link' value='"._html($row->link)."' type='url'/></td>\n";
+    echo "    <td><input name='type' value='"._html($row?$row->type:"")."'/></td>\n";
+    echo "    <td><input name='link' value='"._html($row?$row->link:"")."' type='url'/></td>\n";
   }
   function RenderNormalRow($v)
   {
@@ -491,21 +491,21 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row = null)
   {
-    echo "    <td><input name='partyID' value='"._html($row->party?$row->party->id:"")."' class='partyID'/></td>\n";
+    echo "    <td><input name='partyID' value='"._html($row&&$row->party?$row->party->id:"")."' class='partyID'/></td>\n";
 
     echo "    <td><select name='partyYear'>";
     foreach($this->years as $k=>$v)
-      printf("<option value='%s'%s>%s</option>",_html($k),($k == $row->party_year) ? " selected='selected'" : "",_html($v));
+      printf("<option value='%s'%s>%s</option>",_html($k),($row && $k == $row->party_year) ? " selected='selected'" : "",_html($v));
     echo "</select></td>\n";
 
     echo "    <td><select name='partyCompo'>";
     foreach($this->compos as $k=>$v)
-      printf("<option value='%s'%s>%s</option>",_html($k),($k == $row->party_compo) ? " selected='selected'" : "",_html($v));
+      printf("<option value='%s'%s>%s</option>",_html($k),($row && $k == $row->party_compo) ? " selected='selected'" : "",_html($v));
     echo "</select></td>\n";
 
     echo "    <td><select name='partyPlace'>";
     foreach($this->ranks as $k=>$v)
-      printf("<option value='%s'%s>%s</option>",_html($k),($k == $row->party_place) ? " selected='selected'" : "",_html($v));
+      printf("<option value='%s'%s>%s</option>",_html($k),($row && $k == $row->party_place) ? " selected='selected'" : "",_html($v));
     echo "</select></td>\n";
 
   }
@@ -599,8 +599,8 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
   }
   function RenderEditRow($row = null)
   {
-    echo "    <td><input name='userID' value='"._html($row->user?$row->user->id:"")."' class='userID'/></td>\n";
-    echo "    <td><input name='role' value='"._html($row->role)."' class='role'/></td>\n";
+    echo "    <td><input name='userID' value='"._html($row&&$row->user?$row->user->id:"")."' class='userID'/></td>\n";
+    echo "    <td><input name='role' value='"._html($row?$row->role:"")."' class='role'/></td>\n";
   }
   function RenderNormalRow($v)
   {
@@ -701,17 +701,17 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
     global $AFFILIATIONS_ORIGINAL;
     global $AFFILIATIONS_INVERSE;
 
-    $a = ($this->prod->id == $v->prodOriginal->id ? $AFFILIATIONS_ORIGINAL : $AFFILIATIONS_INVERSE);
+    $a = ($row && $this->prod->id == $row->prodOriginal->id ? $AFFILIATIONS_ORIGINAL : $AFFILIATIONS_INVERSE);
 
     //echo "    <td><input name='type' value='"._html(($this->prod->id == $row->prodOriginal->id ? "o" : "d").":".$row->type)."'/></td>\n";
     echo "<td><select name='type'>";
     foreach($AFFILIATIONS_ORIGINAL as $k=>$v)
-      printf("<option value='o:%s'%s>%s</option>",$k,($this->prod->id == $row->prodOriginal->id && $k == $row->type) ? " selected='selected'" : "",$v);
+      printf("<option value='o:%s'%s>%s</option>",$k,($row && $row->prodOriginal && $this->prod->id == $row->prodOriginal->id && $k == $row->type) ? " selected='selected'" : "",$v);
     foreach($AFFILIATIONS_INVERSE as $k=>$v)
-      printf("<option value='d:%s'%s>%s</option>",$k,($this->prod->id == $row->prodDerivative->id && $k == $row->type) ? " selected='selected'" : "",$v);
+      printf("<option value='d:%s'%s>%s</option>",$k,($row && $row->prodDerivative && $this->prod->id == $row->prodDerivative->id && $k == $row->type) ? " selected='selected'" : "",$v);
     echo "</select></td>\n";
 
-    echo "    <td><input name='prod' value='"._html( $this->prod->id == $row->prodOriginal->id ? $row->prodDerivative->id : $row->prodOriginal->id)."' class='prodID'/></td>\n";
+    echo "    <td><input name='prod' value='"._html( $row && $row->prodOriginal && $row->prodDerivative ? ($this->prod->id == $row->prodOriginal->id ? $row->prodDerivative->id : $row->prodOriginal->id) : "")."' class='prodID'/></td>\n";
   }
   function RenderNormalRow($v)
   {
