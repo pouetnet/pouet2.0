@@ -103,7 +103,7 @@ class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
     $a = array();
     $a["board"] = $data["board"];
     $a["type"] = $data["type"];
-    if ($data["editBoardAffilID"])
+    if (@$data["editBoardAffilID"])
     {
       SQLLib::UpdateRow("affiliatedboards",$a,"id=".(int)$data["editBoardAffilID"]);
       $a["id"] = $data["editBoardAffilID"];
@@ -115,7 +115,7 @@ class PouetBoxAdminEditGroupAffil extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("affiliatedboards",$a);
       gloperator_log( "group", (int)$this->group->id, "group_affil_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->board = PouetBoard::Spawn($a["board"]);

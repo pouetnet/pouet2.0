@@ -124,7 +124,7 @@ class PouetBoxPartyView extends PouetBox
       {
         $r = SQLLib::selectRow(sprintf_esc("select invitationyear as party_year from prods where invitation = %d order by rand() limit 1",$_GET["which"]));
       }
-      $this->year = $r->party_year;
+      $this->year = $r ? $r->party_year : 0;
     }
 
     if ($this->year < 100)

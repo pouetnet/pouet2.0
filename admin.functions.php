@@ -11,7 +11,7 @@ function pouetAdmin_recacheFrontPage()
 function pouetAdmin_recacheFrontPagePartial()
 {
   $content = "<ul>";
-  foreach(glob("cache/*") as $v) if ($_POST["deleteCache"][basename($v)] == "on") { $content .= "<li>deleting '".$v."'</li>\n"; @unlink($v); }
+  foreach(glob("cache/*") as $v) if (@$_POST["deleteCache"][basename($v)] == "on") { $content .= "<li>deleting '".$v."'</li>\n"; @unlink($v); }
   $content .= "</ul>";
   return $content;
 }
@@ -29,7 +29,12 @@ function pouetAdmin_recacheTopDemos()
   $query="SELECT id,name,views FROM prods ORDER BY views DESC";
   $result = SQLLib::Query($query);
   $content = "<ol>";
-  while($tmp = SQLLib::Fetch($result)) {
+  while($tmp = SQLLib::Fetch($result)) 
+  {
+    if (!@$total[$tmp->id])
+    {
+      $total[$tmp->id] = 0;
+    }
     $total[$tmp->id]+=$i;
     $i++;
     if ($i<=5)

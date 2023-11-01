@@ -40,7 +40,7 @@ class PouetBoxCompotypesEditBox extends PouetBoxEditConnectionsBase
     
     $a = array();
     $a["componame"] = trim($data["componame"]);
-    if ($data["editCompoID"])
+    if (@$data["editCompoID"])
     {
       SQLLib::UpdateRow("compotypes",$a,"id=".(int)$data["editCompoID"]);
       $a["id"] = $data["editCompoID"];
@@ -50,7 +50,7 @@ class PouetBoxCompotypesEditBox extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("compotypes",$a);
     }
     @unlink( POUET_ROOT_LOCAL . "/cache/enum-compotypes.cache" );
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $this->RenderNormalRow(toObject($a));
       $this->RenderNormalRowEnd(toObject($a));

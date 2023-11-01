@@ -50,7 +50,7 @@ class PouetBoxAdminEditFAQ extends PouetBox
     if ($_POST)
     {
       foreach($_POST as $k=>$v)
-        if ($this->fields[$k])
+        if (@$this->fields[$k])
           $this->fields[$k]["value"] = $v;
     }
   }
@@ -166,7 +166,7 @@ class PouetBoxAdminEditFAQList extends PouetBox
 $form = new PouetFormProcessor();
 
 if (@$_GET["id"] || @$_GET["new"]=="add")
-  $form->Add( "adminModFaqID", new PouetBoxAdminEditFAQ( $_GET["id"] ) );
+  $form->Add( "adminModFaqID", new PouetBoxAdminEditFAQ( @$_GET["id"] ) );
 else
   $form->Add( "adminModFaq", new PouetBoxAdminEditFAQList( ) );
 

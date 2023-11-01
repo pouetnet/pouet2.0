@@ -108,7 +108,7 @@ document.observe("dom:loaded",function(){
           echo "    <input type='password' name='".$k."' id='".$k."' value='"."'/>\n";
           break;
         case "checkbox":
-          echo "    <input type='checkbox' name='".$k."' id='".$k."' ".($v["value"]?" checked='checked'":"")."/>\n";
+          echo "    <input type='checkbox' name='".$k."' id='".$k."' ".(@$v["value"]?" checked='checked'":"")."/>\n";
           break;
         case "file":
           echo "    <div>\n";

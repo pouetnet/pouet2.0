@@ -73,10 +73,10 @@ class PouetBoxSubmitProd extends PouetBox
       }
     }
 
-    if(!count($data["type"])) {
+    if(!count(@$data["type"]?:array())) {
       $errormessage[] = "you must select at least one type for this prod";
     }
-    if(!count($data["platform"])) {
+    if(!count(@$data["platform"]?:array())) {
       $errormessage[] = "you must select at least one platform";
     }
 

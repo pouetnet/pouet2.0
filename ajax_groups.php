@@ -10,7 +10,7 @@ $sql->AddField("disambiguation");
 $sql->AddTable("groups");
 
 $r = array();
-if ($_POST["search"])
+if (@$_POST["search"])
 {
   $terms = split_search_terms( $_POST["search"] );
   foreach($terms as $term)
@@ -21,7 +21,7 @@ if ($_POST["search"])
   $sql->SetLimit(10);
   $r = SQLLib::selectRows( $sql->GetQuery() );
 }
-else if ($_POST["id"])
+else if (@$_POST["id"])
 {
   $sql->AddWhere(sprintf_esc("id = %d",$_POST["id"]));
   $sql->SetLimit(1);

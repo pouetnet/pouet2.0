@@ -114,7 +114,7 @@ class PouetBoxSubmitBoard extends PouetBox
       ),
     );
     foreach($_POST as $k=>$v)
-      if ($this->fields[$k])
+      if (@$this->fields[$k])
         $this->fields[$k]["value"] = $v;
   }
 

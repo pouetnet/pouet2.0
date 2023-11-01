@@ -84,25 +84,28 @@ class PouetBoxSubmitPartyEditionInfo extends PouetBoxSubmitPartyEdition
 
     $this->links = SQLLib::selectRow(sprintf_esc("select * from partylinks where party = %d and year = %d",$this->id,$this->year));
 
-    if ($this->links->download)
-      unset($this->fields["download"]);
-    if ($this->links->csdb)
-      unset($this->fields["csdbID"]);
-    if ($this->links->slengpung)
-      unset($this->fields["slengpungID"]);
+    if ($this->links)
+    {
+      if ($this->links->download)
+        unset($this->fields["download"]);
+      if ($this->links->csdb)
+        unset($this->fields["csdbID"]);
+      if ($this->links->slengpung)
+        unset($this->fields["slengpungID"]);
 /*
-    if ($this->links->zxdemo)
-      unset($this->fields["zxdemoID"]);
+      if ($this->links->zxdemo)
+        unset($this->fields["zxdemoID"]);
 */
-    if ($this->links->demozoo)
-      unset($this->fields["demozooID"]);
-    if ($this->links->artcity)
-      unset($this->fields["artcity"]);
-    if (file_exists(get_local_partyresult_path($this->id,$this->year)))
-      unset($this->fields["results"]);
+      if ($this->links->demozoo)
+        unset($this->fields["demozooID"]);
+      if ($this->links->artcity)
+        unset($this->fields["artcity"]);
+      if (file_exists(get_local_partyresult_path($this->id,$this->year)))
+        unset($this->fields["results"]);
+    }
 
     foreach($_POST as $k=>$v)
-      if ($this->fields[$k])
+      if (@$this->fields[$k])
         $this->fields[$k]["value"] = $v;
   }
 }

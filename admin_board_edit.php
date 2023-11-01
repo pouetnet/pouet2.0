@@ -49,7 +49,7 @@ class PouetBoxAdminEditBoard extends PouetBoxSubmitBoard
     SQLLib::UpdateRow("boards",$a,"id=".$this->id);
 
     SQLLib::Query(sprintf_esc("delete from boards_platforms where board = %d",(int)$this->id));
-    if ($data["platform"])
+    if (@$data["platform"])
     {
       $data["platform"] = array_unique($data["platform"]);
       foreach($data["platform"] as $v)
@@ -130,7 +130,7 @@ class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
     $a = array();
     $a["group"] = $data["group"];
     $a["type"] = $data["type"];
-    if ($data["editBoardAffilID"])
+    if (@$data["editBoardAffilID"])
     {
       SQLLib::UpdateRow("affiliatedboards",$a,"id=".(int)$data["editBoardAffilID"]);
       $a["id"] = $data["editBoardAffilID"];
@@ -142,7 +142,7 @@ class PouetBoxAdminEditBoardAffil extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("affiliatedboards",$a);
       gloperator_log( "board", (int)$this->board->id, "board_affil_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->group = PouetGroup::Spawn($a["group"]);
