@@ -454,19 +454,19 @@ class PouetRequest_Prod_ChangeCredit extends PouetRequestBase
 
     //$l = SQLLib::SelectRows(sprintf_esc("select credits.id,users.nickname,credits.role from credits left join users on users.id = credits.id where prodID = %d",$data["prod"]));
     $out = "<b>current</b>: ";
-    if ($row->user)
+    if ($row && $row->user)
     {
       $out .= $row->user->PrintLinkedAvatar()." ";
       $out .= $row->user->PrintLinkedName();
     }
-    $out .= " - "._html($row->role);
+    $out .= " - "._html($row ? $row->role : "");
 
     $s = new BM_Query();
     $s->AddTable("credits");
     $s->AddField("credits.id");
     $s->AddField("credits.role");
     $s->attach(array("credits"=>"userID"),array("users as user"=>"id"));
-    $s->AddWhere(sprintf_esc("credits.id = %d",$data["oldUserID"]));
+    $s->AddWhere(sprintf_esc("credits.id = %d",@$data["oldUserID"]?:0));
     $s->SetLimit(1);
     $l = $s->perform();
     $row = reset($l);

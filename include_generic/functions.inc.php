@@ -386,7 +386,7 @@ function validateLink( $url )
     $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
   if(strstr($myurl["host"],"scene.org") && strstr($myurl["query"],"incoming/"))
     $errormessage[] = "the file you submitted is in an incoming path, try to find a real path";
-  if( ((($myurl["port"])!=80) && (($myurl["port"])!=0)) && ((strlen($myurl["user"])>0) || (strlen($myurl["pass"])>0)) )
+  if( (((@$myurl["port"])!=80) && ((@$myurl["port"])!=0)) && ((strlen(@$myurl["user"])>0) || (strlen(@$myurl["pass"])>0)) )
     $errormessage[] = "no private FTP please";
 
   return $errormessage;
