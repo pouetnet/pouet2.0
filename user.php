@@ -31,6 +31,7 @@ class PouetBoxUserMain extends PouetBox
   public $user;
   public $topicCount;
   public $postCount;
+  public $listCount;
 
   function __construct($id,$show)
   {
@@ -414,7 +415,8 @@ class PouetBoxUserMain extends PouetBox
   }
   function GetLists( $limit = null )
   {
-    $s = new BM_Query("lists");
+    $s = new BM_Query();
+    $s->AddTable("lists");
     $s->AddField("lists.id as listID");
     $s->AddField("lists.name");
     $s->AddWhere(sprintf("lists.owner = %d",$this->id));
@@ -509,7 +511,7 @@ class PouetBoxUserMain extends PouetBox
       global $IM_TYPES;
       foreach($this->ims as $im)
       {
-        if ($im->im_type && @$IM_TYPES[$im->im_type] && $IM_TYPES[$im->im_type]["display"] && preg_match("/".$IM_TYPES[$im->im_type]["capture"]."/",$im->im_id))
+        if ($im->im_type && @$IM_TYPES[$im->im_type] && @$IM_TYPES[$im->im_type]["display"] && preg_match("/".$IM_TYPES[$im->im_type]["capture"]."/",$im->im_id))
         {
           $func = $IM_TYPES[$im->im_type]["display"];
           $imID = $func($im->im_id);

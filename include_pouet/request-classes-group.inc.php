@@ -40,7 +40,7 @@ class PouetRequest_Group_ChangeInfo extends PouetRequestBase
       ),
     );
     
-    if ($data["group"] && $group = PouetGroup::Spawn( $data["group"] ))
+    if (@$data["group"] && $group = PouetGroup::Spawn( $data["group"] ))
     {
       foreach(get_object_vars($group) as $k=>$v)
       {

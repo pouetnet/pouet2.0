@@ -466,7 +466,8 @@ class PouetBoxSearchBBS extends PouetBox
 
     $s = new SQLSelect();
 
-    $s = new BM_Query("bbs_posts");
+    $s = new BM_Query();
+    $s->AddTable("bbs_posts");
     $s->AddField("bbs_topics.topic as topic");
     $s->AddField("bbs_topics.id as topicID");
     $s->AddField("bbs_posts.id as postID");

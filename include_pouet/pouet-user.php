@@ -95,7 +95,7 @@ class PouetUser extends BM_Class
   }
   function GetSceneIDData( $cached = true )
   {
-    if ($cached)
+    if ($cached && $this->sceneIDLastRefresh)
     {
       if (time() - strtotime( $this->sceneIDLastRefresh ) < 60 * 60 * 12)
       {

@@ -81,7 +81,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       SQLLib::InsertRow("prods_platforms",$a);
     }
 
-    if ($data["screenshot_delete"])
+    if (@$data["screenshot_delete"])
     {
       SQLLib::Query(sprintf_esc("delete from screenshots where prod = %d",$this->id));
       foreach( array( "jpg","gif","png" ) as $v )
@@ -106,7 +106,7 @@ class PouetBoxAdminEditProd extends PouetBoxSubmitProd
       }
     }    
     
-    if ($data["nfofile_delete"])
+    if (@$data["nfofile_delete"])
     {
       SQLLib::Query(sprintf_esc("delete from nfos where prod = %d",$this->id));
       unlink( get_local_nfo_path( (int)$this->id ) );
@@ -274,7 +274,7 @@ class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
     $a = array();
     $a["awardType"] = $data["awardType"];
     $a["categoryID"] = $data["awardCategory"];
-    if ($data["editAwardsID"])
+    if (@$data["editAwardsID"])
     {
       SQLLib::UpdateRow("awards",$a,"id=".(int)$data["editAwardsID"]);
       $a["id"] = $data["editAwardsID"];
@@ -288,7 +288,7 @@ class PouetBoxAdminEditProdAwards extends PouetBoxEditConnectionsBase
 
       gloperator_log( "prod", (int)$this->prod->id, "prod_awards_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $this->RenderNormalRow(toObject($a));
       $this->RenderNormalRowEnd(toObject($a));
@@ -362,7 +362,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
     $a = array();
     $a["type"] = $data["type"];
     $a["link"] = $data["link"];
-    if ($data["editLinkID"])
+    if (@$data["editLinkID"])
     {
       SQLLib::UpdateRow("downloadlinks",$a,"id=".(int)$data["editLinkID"]);
       $a["id"] = $data["editLinkID"];
@@ -374,7 +374,7 @@ class PouetBoxAdminEditProdLinks extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("downloadlinks",$a);
       gloperator_log( "prod", (int)$this->prod->id, "prod_link_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $this->RenderNormalRow(toObject($a));
       $this->RenderNormalRowEnd(toObject($a));
@@ -467,7 +467,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
     $a["party_year"] = $data["partyYear"];
     $a["party_place"] = $data["partyPlace"];
     $a["party_compo"] = nullify($data["partyCompo"]);
-    if ($data["editPartyID"])
+    if (@$data["editPartyID"])
     {
       SQLLib::UpdateRow("prodotherparty",$a,"id=".(int)$data["editPartyID"]);
       $a["id"] = $data["editPartyID"];
@@ -479,7 +479,7 @@ class PouetBoxAdminEditProdParties extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("prodotherparty",$a);
       gloperator_log( "prod", (int)$this->prod->id, "prod_party_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->party = PouetParty::Spawn($a["party"]);
@@ -575,7 +575,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
     $a = array();
     $a["userID"] = $data["userID"];
     $a["role"] = $data["role"];
-    if ($data["editCreditID"])
+    if (@$data["editCreditID"])
     {
       SQLLib::UpdateRow("credits",$a,"id=".(int)$data["editCreditID"]);
       $a["id"] = $data["editCreditID"];
@@ -587,7 +587,7 @@ class PouetBoxAdminEditProdCredits extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("credits",$a);
       gloperator_log( "prod", (int)$this->prod->id, "prod_credits_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->user = PouetUser::Spawn($a["userID"]);
@@ -673,7 +673,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
     $a["type"] = $type;
     $a["original"]   = $direction == "o" ? $this->prod->id : $data["prod"];
     $a["derivative"] = $direction == "d" ? $this->prod->id : $data["prod"];
-    if ($data["editAffilID"])
+    if (@$data["editAffilID"])
     {
       SQLLib::UpdateRow("affiliatedprods",$a,"id=".(int)$data["editAffilID"]);
       $a["id"] = $data["editAffilID"];
@@ -684,7 +684,7 @@ class PouetBoxAdminEditProdAffil extends PouetBoxEditConnectionsBase
       $a["id"] = SQLLib::InsertRow("affiliatedprods",$a);
       gloperator_log( "prod", (int)$this->prod->id, "prod_rel_add", array("id"=>$a["id"]) );
     }
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->prodOriginal   = PouetProd::Spawn($a["original"]);
