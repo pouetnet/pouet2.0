@@ -58,7 +58,7 @@ class PouetRequest_Group_ChangeInfo extends PouetRequestBase
     {
       return array("Whitespace groupnames are sooo \t       \t        \t.");
     }
-    if ($input["website"])
+    if (@$input["website"])
     {
       $url = parse_url($input["website"]);
       if (($url["scheme"]!="http" && $url["scheme"]!="https") || strstr($data["website"],"://")===false)

@@ -47,12 +47,12 @@ class PouetBoxModificationRequest extends PouetBox
     }
     $a = array();
     $a["requestType"] = $data["requestType"];
-    if($_REQUEST["prod"])
+    if(@$_REQUEST["prod"])
     {
       $a["itemID"] = (int)$_REQUEST["prod"];
       $a["itemType"] = "prod";
     }
-    else if($_REQUEST["group"])
+    else if(@$_REQUEST["group"])
     {
       $a["itemID"] = (int)$_REQUEST["group"];
       $a["itemType"] = "group";

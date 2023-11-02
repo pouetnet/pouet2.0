@@ -532,7 +532,7 @@ function array_diff_meaningful($new,$old)
   foreach($new as $k=>$v)
   {
     // collect values if they are different and either one of them are not 0/null/empty/...
-    if( ($new[$k] != $old[$k]) && ($new[$k] && $old[$k]) || ($new[$k] && !$old[$k]) || (!$new[$k] && $old[$k]) )
+    if( (@$new[$k] != @$old[$k]) && (@$new[$k] && @$old[$k]) || (@$new[$k] && !@$old[$k]) || (!@$new[$k] && @$old[$k]) )
     {
       $out[$k] = $v;
     }    
