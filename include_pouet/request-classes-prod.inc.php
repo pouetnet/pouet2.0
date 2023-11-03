@@ -1038,8 +1038,8 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
         case "partyRank":  $sql["party_place"] = $v; break;
         case "type":       $sql["type"] = implode(",",$v); break;
         case "platform":   break; // deal with this underneath
-        case "demozooID":  $sql["demozoo"] = $v; break;
-        case "csdbID":     $sql["csdb"] = $v; break;
+        case "demozooID":  $sql["demozoo"] = (int)$v; break;
+        case "csdbID":     $sql["csdb"] = (int)$v; break;
         case "invitationParty": $sql["invitation"] = $v; break;
         case "group1":     $sql["group1"] = nullify($v); break;
         case "group2":     $sql["group2"] = nullify($v); break;
