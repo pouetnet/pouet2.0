@@ -51,6 +51,7 @@ class PouetBoxUserMain extends PouetBox
     if (!$this->user) return;
 
     $this->user->UpdateGlops();
+    $this->user->UpdateThumbs();
 
     $this->sceneID = $this->user->GetSceneIDData();
 
@@ -388,7 +389,7 @@ class PouetBoxUserMain extends PouetBox
   function GetBBSPosts( $limit = null )
   {
     $s = new BM_Query();
-	$s->AddTable("bbs_posts");
+    $s->AddTable("bbs_posts");
     $s->AddField("bbs_posts.id as postID");
     $s->AddJoin("left","bbs_topics","bbs_topics.id = bbs_posts.topic");
     $s->AddField("bbs_topics.id");
@@ -552,7 +553,7 @@ class PouetBoxUserMain extends PouetBox
     if ($this->credits && $this->totalProds)
     {
       echo "<div class='contribheader'>contributions to prods ";
-      echo "<span>".$this->totalProds." prods (".$this->totalCreditsThumbUp." thumbs up, ".$this->totalCreditsThumbDown." thumbs down)</span>";
+      echo "<span>".$this->totalProds." prods (".$this->user->thumbups." thumbs up, ".$this->user->thumbdowns." thumbs down)</span>";
       if ($this->show!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";

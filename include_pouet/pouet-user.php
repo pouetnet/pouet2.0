@@ -14,6 +14,8 @@ class PouetUser extends BM_Class
   public $udlogin;
   public $sceneIDLastRefresh;
   public $sceneIDData;
+  public $thumbups;
+  public $thumbdowns;
   public $ojuice;
   public $slengpung;
   public $csdb;
@@ -26,7 +28,7 @@ class PouetUser extends BM_Class
   public $stats = array();
 
   static function getTable () { return "users"; }
-  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin"); }
+  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin","thumbups","thumbdowns"); }
   static function getExtendedFields() { return array("udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
 
   function PrintAvatar()
@@ -88,10 +90,32 @@ class PouetUser extends BM_Class
 
     return $glops;
   }
+  function CalculateThumbs()
+  {
+    $s = new BM_Query();
+    $s->AddTable("credits");
+    $s->AddField("sum(voteup) as up");
+    $s->AddField("sum(votedown) as down");
+    $s->Attach(array("credits"=>"prodID"), array("prods as prod"=>"id"));
+    $s->AddWhere(sprintf("credits.userID = %d",$this->id));
+    $s->AddOrder("credits_prod.addedDate desc");
+    $data = $s->perform();
+
+    return $data[0];
+  }
   function UpdateGlops()
   {
     $this->glops = $this->CalculateGlops();
     SQLLib::UpdateRow("users",array("glops"=>$this->glops),sprintf_esc("id=%d",$this->id));
+  }
+  function UpdateThumbs()
+  {
+    $thumbs = $this->CalculateThumbs();
+    
+    $this->thumbups = (int)$thumbs->up;
+    $this->thumbdowns = (int)$thumbs->down;
+    
+    SQLLib::UpdateRow("users",array("thumbups"=>$this->thumbups,"thumbdowns"=>$this->thumbdowns),sprintf_esc("id=%d",$this->id));
   }
   function GetSceneIDData( $cached = true )
   {
