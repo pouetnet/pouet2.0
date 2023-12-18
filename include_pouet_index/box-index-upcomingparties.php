@@ -10,17 +10,20 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable
     $this->uniqueID = "pouetbox_upcomingparties";
     $this->title = "upcoming parties";
 
-    $this->rss = new lastRSS(array(
+    $this->rss = class_exists("DomDocument") ? new lastRSS(array(
       "cacheTime" => 5 * 60, // in seconds
       "dateFormat" => "Y-m-d",
       "stripHtml" => false,
-    ));
-    $this->rss->setItemTags(array(
-      "link",
-      "demopartynet:title",
-      "demopartynet:startDate",
-      "demopartynet:endDate",
-    ));
+    )) : null;
+    if ($this->rss)
+    {
+      $this->rss->setItemTags(array(
+        "link",
+        "demopartynet:title",
+        "demopartynet:startDate",
+        "demopartynet:endDate",
+      ));
+    }
 
     $this->limit = 5;
   }
@@ -49,11 +52,15 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable
 
   function LoadFromDB()
   {
-    $this->rssData = $this->rss->get('https://www.demoparty.net/demoparties.xml');
+    $this->rssData = $this->rss ? $this->rss->get('https://www.demoparty.net/demoparties.xml') : array();
   }
 
   function RenderBody()
   {
+    if (@!$this->rssData['items'])
+    {
+      return;
+    }
     echo "<ul class='boxlist'>\n";
     for($i=0; $i < min( count($this->rssData['items']),$this->limit); $i++)
     {

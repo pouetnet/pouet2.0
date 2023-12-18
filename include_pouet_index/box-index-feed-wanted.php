@@ -12,18 +12,21 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable
 
     $this->cacheTime = 60*60;
 
-    $this->rss = new lastRSS(array(
+    $this->rss = class_exists("DomDocument") ? new lastRSS(array(
       "cacheTime" => 5 * 60, // in seconds
       "dateFormat" => "Y-m-d",
       "stripHtml" => false,
-    ));
-    $this->rss->setItemTags(array(
-      "link",
-      "title",
-      "pubDate",
-      "wanted:demand",
-      "wanted:area",
-    ));
+    )) : null;
+    if ($this->rss)
+    {
+      $this->rss->setItemTags(array(
+        "link",
+        "title",
+        "pubDate",
+        "wanted:demand",
+        "wanted:area",
+      ));
+    }
     
     $this->limit = 5;
   }
@@ -49,11 +52,11 @@ class PouetBoxIndexFeedWanted extends PouetBoxCachable
   }
 
   function LoadFromDB() {
-    $this->rssData = $this->rss->get('https://wanted.scene.org/rss/?random=weighted');
+    $this->rssData = $this->rss ? $this->rss->get('https://wanted.scene.org/rss/?random=weighted') : array();
   }
 
   function RenderBody() {
-    if (!$this->rssData['items'])
+    if (@!$this->rssData['items'])
     {
       return;
     }
