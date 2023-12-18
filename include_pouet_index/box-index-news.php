@@ -38,18 +38,18 @@ class PouetBoxIndexNewsBoxes extends PouetBoxCachable
     $this->cacheTime = 60*15;
 
     $this->uniqueID = "pouetbox_news";
-    $this->rss = new lastRSS(array(
+    $this->rss = class_exists("DomDocument") ? new lastRSS(array(
       "cacheTime" => 5 * 60, // in seconds
       "dateFormat" => "Y-m-d",
       "stripHtml" => false,
-    ));
+    )) : null;
 
     $this->limit = 5;
   }
 
   function LoadFromDB()
   {
-    $this->rssBitfellasNews = $this->rss->get('http://www.bitfellas.org/e107_plugins/rss_menu/rss.php?1.2');
+    $this->rssBitfellasNews = $this->rss ? $this->rss->get('http://www.bitfellas.org/e107_plugins/rss_menu/rss.php?1.2') : array();
   }
 
   function LoadFromCachedData($data)
