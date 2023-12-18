@@ -42,7 +42,6 @@ class PouetBoxIndexRandom extends PouetBox
   function RenderFooter()
   {
     echo "</div>\n";
-    return $s;
   }
 };
 

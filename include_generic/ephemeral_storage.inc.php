@@ -69,6 +69,7 @@ class FileStorage implements IEphemeralStorage
 
 class RedisStorage implements IEphemeralStorage
 {
+  public $redis;
   static function available()
   {
     return class_exists("Redis");

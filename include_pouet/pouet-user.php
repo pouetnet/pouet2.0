@@ -44,6 +44,14 @@ class PouetUser extends BM_Class
     $classes = array("user");
     if ($this->lastLogin && (time() - strtotime($this->lastLogin)) < 5 * 60) $classes[] = "online";
     if ($this->IsBanned()) $classes[] = "banned";
+    
+    $thumbCount = $this->thumbups - $this->thumbdowns;
+         if ($thumbCount > 10000) $classes[] = "badge-platinum";
+    else if ($thumbCount >  5000) $classes[] = "badge-gold";
+    else if ($thumbCount >  1000) $classes[] = "badge-ruby";
+    else if ($thumbCount >   500) $classes[] = "badge-silver";
+    else if ($thumbCount >   100) $classes[] = "badge-bronze";
+    
     return sprintf("<a href='user.php?who=%d' class='%s'>%s</a>",$this->id,implode(" ",$classes),_html($this->nickname));
   }
   function Create()

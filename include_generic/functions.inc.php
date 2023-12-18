@@ -28,7 +28,8 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
 
   $tag_open = '<';
   $tag_close = '>';
-
+  $str_len = 0;
+  
   $lines = preg_split("/\n/",$str);
   $out = array();
   foreach($lines as $line)

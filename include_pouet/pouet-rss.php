@@ -4,6 +4,10 @@ class PouetRSS
   private $xml;
   function __construct( $opt = array() )
   {
+    if (!class_exists("SimpleXMLElement"))
+    {
+      return;
+    }
     $this->xml = new SimpleXMLElement("<"."?xml version='1.0' encoding='UTF-8'?"."><rss/>");
     $this->dtd = POUET_ROOT_URL . "faq.php#faq12";
     
@@ -25,6 +29,10 @@ class PouetRSS
   }
   function AddItem( $params )
   {
+    if (!class_exists("SimpleXMLElement"))
+    {
+      return;
+    }
     if (!$params["guid"])
       $params["guid"] = $params["link"];
     $node = $this->xml->channel->addChild("item");
@@ -61,6 +69,10 @@ class PouetRSS
   }
   function Render()
   {
+    if (!class_exists("SimpleXMLElement"))
+    {
+      return;
+    }
     header("Content-type: application/rss+xml; charset=utf-8");
     //header("Content-type: text/plain; charset=utf-8");
 
