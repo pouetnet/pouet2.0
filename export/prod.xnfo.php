@@ -6,13 +6,13 @@ header("Content-type: application/xml; charset=utf-8");
 
 $xml = new SimpleXMLElement("<"."?xml version='1.0' encoding='UTF-8'?"."><xnfo/>");
 
-$prod = PouetProd::Spawn( $_GET["which"] );
-
-$a = array(&$prod);
-PouetCollectPlatforms( $a );
+$prod = PouetProd::Spawn( @$_GET["which"] );
 
 if (!$prod)
   die($xml->AsXML());
+
+$a = array(&$prod);
+PouetCollectPlatforms( $a );
 
 $xml->addAttribute("standard","1.1");
 $xml->addAttribute("version","1");

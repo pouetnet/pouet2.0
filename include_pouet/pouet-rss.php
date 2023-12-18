@@ -2,6 +2,8 @@
 class PouetRSS
 {
   private $xml;
+  private $dtd;
+  private $dom;
   function __construct( $opt = array() )
   {
     if (!class_exists("SimpleXMLElement"))
@@ -18,12 +20,12 @@ class PouetRSS
     
     $this->xml->addAttribute("version","2.0");
     $this->xml->addChild("channel");
-    $this->xml->channel->addChild("title",$opt["title"] ?: "pouët.net");
-    $this->xml->channel->addChild("link",$opt["link"] ?: POUET_ROOT_URL);
-    $this->xml->channel->addChild("description",$opt["description"] ?: "your online demoscene resource");
+    $this->xml->channel->addChild("title",@$opt["title"] ?: "pouët.net");
+    $this->xml->channel->addChild("link",@$opt["link"] ?: POUET_ROOT_URL);
+    $this->xml->channel->addChild("description",@$opt["description"] ?: "your online demoscene resource");
 
     $link = $this->xml->channel->addChild("atom:link","","http://www.w3.org/2005/Atom");
-    $link->addAttribute("href",($_SERVER["HTTPS"]=="on"?"https":"http")."://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"] );
+    $link->addAttribute("href",(@$_SERVER["HTTPS"]=="on"?"https":"http")."://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"] );
     $link->addAttribute("rel","self");
     $link->addAttribute("type","application/rss+xml");
   }
@@ -33,7 +35,7 @@ class PouetRSS
     {
       return;
     }
-    if (!$params["guid"])
+    if (!@$params["guid"])
       $params["guid"] = $params["link"];
     $node = $this->xml->channel->addChild("item");
     foreach($params as $k=>$v)

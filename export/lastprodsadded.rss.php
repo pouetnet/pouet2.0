@@ -3,7 +3,7 @@ require_once("../bootstrap.inc.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet_index/box-index-latestadded.php");
 require_once( POUET_ROOT_LOCAL . "/include_pouet/pouet-rss.php");
 
-$limit = $_GET["howmany"] ? (int)$_GET["howmany"] : 10;
+$limit = @$_GET["howmany"] ? (int)$_GET["howmany"] : 10;
 $limit = min($limit,25);
 $limit = max($limit,5);
 
@@ -12,11 +12,11 @@ $s->AddOrder("prods.addedDate DESC");
 $s->attach("addedUser",array("users as user"=>"id"));
 $s->SetLimit($limit);
 
-if ($_GET["type"])
+if (@$_GET["type"])
 {
   $s->AddWhere(sprintf_esc("FIND_IN_SET('%s',prods.type)",$_GET["type"]));
 }
-if ($_GET["platform"])
+if (@$_GET["platform"])
 {
   $platformID = -1;
   foreach($PLATFORMS as $k=>$v)

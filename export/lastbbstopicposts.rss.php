@@ -7,7 +7,7 @@ $limit = 25;
 
 $s = new SQLSelect();
 $s->AddTable("bbs_topics");
-$s->AddWhere("bbs_topics.id=".(int)$_GET["topic"]);
+$s->AddWhere("bbs_topics.id=".(int)@$_GET["topic"]);
 $topic = SQLLib::SelectRow($s->GetQuery());
 if(!$topic) exit();
 
