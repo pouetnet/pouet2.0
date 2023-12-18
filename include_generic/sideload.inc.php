@@ -2,7 +2,12 @@
 
 class Sideload
 {
-  var $options = array(
+  public $errorNumber;
+  public $errorText;
+  public $httpReturnCode;
+  public $httpReturnContentType;
+  public $httpURL;
+  public $options = array(
     "connect_timeout" => false,
     "user_agent" => false,
     "max_length" => false,
