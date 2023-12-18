@@ -76,7 +76,7 @@ class PouetBoxIndexNewsBoxes extends PouetBoxCachable
 
   function Render()
   {
-    if (!$this->rssBitfellasNews['items'])
+    if (@!$this->rssBitfellasNews['items'])
     {
     	printf('Error: Unable to open BitFeed !');
     }
