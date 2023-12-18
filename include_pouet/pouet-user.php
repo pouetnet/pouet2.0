@@ -82,7 +82,10 @@ class PouetUser extends BM_Class
     $this->stats["oneliners"]   = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM oneliner WHERE who=%d",$this->id))->c;
     $this->stats["lists"]       = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM lists WHERE owner=%d",$this->id))->c;
     if($this->udlogin)
-      $this->stats["ud"] = (int)round(SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))->points / 1000);
+    {
+      $ud = SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))
+      $this->stats["ud"] = $ud ? (int)round($ud->points / 1000) : 0;
+    }
     else
       $this->stats["ud"] = 0;
 
