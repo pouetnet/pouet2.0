@@ -83,7 +83,7 @@ class PouetUser extends BM_Class
     $this->stats["lists"]       = SQLLib::SelectRow(sprintf_esc("SELECT count(0) AS c FROM lists WHERE owner=%d",$this->id))->c;
     if($this->udlogin)
     {
-      $ud = SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin))
+      $ud = SQLLib::SelectRow(sprintf_esc("SELECT points FROM ud WHERE login='%s'",$this->udlogin));
       $this->stats["ud"] = $ud ? (int)round($ud->points / 1000) : 0;
     }
     else
