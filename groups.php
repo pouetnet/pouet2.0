@@ -123,7 +123,7 @@ class PouetBoxGroupMain extends PouetBox
     foreach($headers as $key=>$text)
     {
       $out = sprintf("<th><a href='%s' class='%s%s %s'>%s</a></th>\n",
-        adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+        adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && @$_GET["reverse"])?" reverse":"","sort_".$key,$text);
       if ($key == "type") $out = str_replace("</th>","",$out);
       if ($key == "name") { $out = str_replace("<th>"," ",$out); $out = str_replace("</th>"," ",$out); }
       if ($key == "platform") $out = str_replace("<th>"," ",$out);
