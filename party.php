@@ -224,7 +224,7 @@ class PouetBoxPartyView extends PouetBox
         foreach($headers as $key=>$text)
         {
           $out = sprintf("<th><a href='%s' class='%s%s %s'>%s</a></th>\n",
-            adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && $_GET["reverse"])?" reverse":"","sort_".$key,$text);
+            adjust_query_header(array("order"=>$key)),@$_GET["order"]==$key?"selected":"",(@$_GET["order"]==$key && @$_GET["reverse"])?" reverse":"","sort_".$key,$text);
           if ($key == "type" || $key == "name") $out = str_replace("</th>","",$out);
           if ($key == "platform" || $key == "name") $out = str_replace("<th>"," ",$out);
           if ($key == "compo" && $this->sortByCompo && $p->party_compo && $COMPOTYPES[$p->party_compo]) $out = sprintf("<th id='%s'>%s</th>",hashify($COMPOTYPES[$p->party_compo]),$COMPOTYPES[$p->party_compo]);
@@ -238,7 +238,7 @@ class PouetBoxPartyView extends PouetBox
       echo "<tr>\n";
       echo "<td>\n";
       if (!$this->sortByCompo)
-        echo $COMPOTYPES[$p->party_compo]." ";
+        echo @$COMPOTYPES[$p->party_compo]." ";
       if (@$p->placings[0])
         echo $p->placings[0]->PrintRanking();
       echo "</td>\n";
