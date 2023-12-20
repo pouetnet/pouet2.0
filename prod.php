@@ -620,7 +620,7 @@ class PouetBoxProdComments extends PouetBox
 
       $commentCount = SQLLib::SelectRow($sc->GetQuery())->c;
 
-      $this->paginator->SetData( "prod.php?which=".$this->id, $commentCount, $perPage, $_GET["page"] );
+      $this->paginator->SetData( "prod.php?which=".$this->id, $commentCount, $perPage, @$_GET["page"] );
       $this->paginator->SetLimitOnQuery( $s );
       /*
       $this->commentCount =
