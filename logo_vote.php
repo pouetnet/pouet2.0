@@ -64,55 +64,59 @@ class PouetBoxLogoLama extends PouetBox
 
 };
 
-$sel = new SQLSelect();
-$sel->AddField("logos.id as id");
-$sel->AddField("logos.file as file");
-$sel->AddTable("logos");
-$sel->AddJoin("LEFT","logos_votes",sprintf_esc("logos_votes.logo = logos.id AND logos_votes.user = %d",$currentUser->id));
-$sel->AddWhere("logos_votes.id IS NULL");
-$sel->AddOrder("RAND()");
-
-if (get_login_id() && @$_POST["logoID"] && @$_POST["submit"])
+$sel = null;
+if ($currentUser)
 {
-  $vote = 0;
-  if ($_POST["submit"] == "rulez") $vote = 1;
-  if ($_POST["submit"] == "sucks") $vote = -1;
+  $sel = new SQLSelect();
+  $sel->AddField("logos.id as id");
+  $sel->AddField("logos.file as file");
+  $sel->AddTable("logos");
+  $sel->AddJoin("LEFT","logos_votes",sprintf_esc("logos_votes.logo = logos.id AND logos_votes.user = %d",$currentUser->id));
+  $sel->AddWhere("logos_votes.id IS NULL");
+  $sel->AddOrder("RAND()");
 
-  $csrf = new CSRFProtect();
-  if ($vote && $csrf->ValidateToken())
+  if (@$_POST["logoID"] && @$_POST["submit"])
   {
-    SQLLib::Query(sprintf_esc("delete from logos_votes where logo = %d and user = %d",$_POST["logoID"],$currentUser->id));
+    $vote = 0;
+    if ($_POST["submit"] == "rulez") $vote = 1;
+    if ($_POST["submit"] == "sucks") $vote = -1;
 
-    $a = array();
-    $a["logo"] = (int)$_POST["logoID"];
-    $a["user"] = $currentUser->id;
-    $a["vote"] = $vote;
-    SQLLib::InsertRow("logos_votes",$a);
-  }
-
-  SQLLib::Query(sprintf_esc("update logos set vote_count = (select sum(vote) from logos_votes where logo = %d) where id = %d",(int)$_POST["logoID"],(int)$_POST["logoID"]));
-
-  // ajax
-  if ($_POST["partial"]==1)
-  {
-    $s = clone $sel;
-    $visibleLogos = $_POST["visibleLogos"];
-    foreach($visibleLogos as $k=>$v) $visibleLogos[$k] = (int)$v;
-    $s->AddWhere(sprintf_esc("logos.id not in (%s)",implode(",",$visibleLogos)));
-    $s->SetLimit(1);
-    $logo = SQLLib::SelectRow($s->GetQuery());
-
-    if ($logo)
+    $csrf = new CSRFProtect();
+    if ($vote && $csrf->ValidateToken())
     {
-      $box = new PouetBoxLogoVote($logo);
-      $box->Render();
+      SQLLib::Query(sprintf_esc("delete from logos_votes where logo = %d and user = %d",$_POST["logoID"],$currentUser->id));
+
+      $a = array();
+      $a["logo"] = (int)$_POST["logoID"];
+      $a["user"] = $currentUser->id;
+      $a["vote"] = $vote;
+      SQLLib::InsertRow("logos_votes",$a);
     }
-    else
+
+    SQLLib::Query(sprintf_esc("update logos set vote_count = (select sum(vote) from logos_votes where logo = %d) where id = %d",(int)$_POST["logoID"],(int)$_POST["logoID"]));
+
+    // ajax
+    if ($_POST["partial"]==1)
     {
-      $box = new PouetBoxLogoLama();
-      $box->Render();
+      $s = clone $sel;
+      $visibleLogos = $_POST["visibleLogos"];
+      foreach($visibleLogos as $k=>$v) $visibleLogos[$k] = (int)$v;
+      $s->AddWhere(sprintf_esc("logos.id not in (%s)",implode(",",$visibleLogos)));
+      $s->SetLimit(1);
+      $logo = SQLLib::SelectRow($s->GetQuery());
+
+      if ($logo)
+      {
+        $box = new PouetBoxLogoVote($logo);
+        $box->Render();
+      }
+      else
+      {
+        $box = new PouetBoxLogoLama();
+        $box->Render();
+      }
+      exit();
     }
-    exit();
   }
 }
 
@@ -123,7 +127,7 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-if (get_login_id())
+if ($sel)
 {
   $s = clone $sel;
   $s->SetLimit(5);
