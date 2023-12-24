@@ -104,6 +104,7 @@ $_SESSION["keepalive"] = str_pad("",rand(1,10),"x") . rand(1,10000);
 
 $timer["page"]["start"] = microtime_float();
 
+$currentUserSettings = null;
 if ($currentUser)
 {
   if ($ephemeralStorage->has( "settings:".$currentUser->id ))
