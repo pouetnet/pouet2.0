@@ -13,7 +13,7 @@ require("include_pouet/menu.inc.php");
 
 if ($currentUser)
 {
-  if ($_GET["avatar"])
+  if (@$_GET["avatar"])
   {
     $sql = array();
     $sql["avatar"] = basename($_GET["avatar"]);
@@ -99,7 +99,7 @@ document.observe("dom:loaded",function(){
       
       echo " </div>\n";
       
-      if ($_GET["return"])
+      if (@$_GET["return"])
       {
         echo " <h2>:: return</h2>\n";
         echo " <div class='content'>\n";
