@@ -568,7 +568,7 @@ if (@$_GET["what"])
   $TITLE .= ": ".$_GET["what"];
   $terms = split_search_terms( $_GET["what"] );
 
-  switch($_GET["type"])
+  switch(@$_GET["type"])
   {
     case "bbs":
       $results = new PouetBoxSearchBBS($terms);
