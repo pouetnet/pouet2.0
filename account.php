@@ -499,7 +499,8 @@ class PouetBoxAccountProdAwardSuggestions extends PouetBox
 
     if ($cats)
     {
-      $s = new BM_Query("awardssuggestions_votes");
+      $s = new BM_Query();
+      $s->AddTable("awardssuggestions_votes");
       $s->AddField("awardssuggestions_votes.categoryID");
       $s->AddWhere(sprintf("userID = %d and categoryID in (%s)",$currentUser->id,implode(",",$cats)));
       $s->Attach(array("awardssuggestions_votes"=>"prodID"),array("prods as prod"=>"id"));
