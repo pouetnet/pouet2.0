@@ -819,10 +819,13 @@ function isEventEligible($event, $prod)
   return true;
 }
 
-class PouetBoxProdAwardSuggestions extends PouetBox {
-  var $data;
-  var $prod;
-  var $id;
+class PouetBoxProdAwardSuggestions extends PouetBox 
+{
+  public $data;
+  public $prod;
+  public $id;
+  public $prodID;
+  public $votes;
   function __construct($id)
   {
     parent::__construct();
