@@ -794,7 +794,7 @@ function isEventEligible($event, $prod)
   }
   if ($event->eligibleYear)
   {
-    if ($event->eligibleYear != (int)substr($prod->releaseDate,0,4))
+    if (!$prod->releaseDate || $event->eligibleYear != (int)substr($prod->releaseDate,0,4))
     {
       return false;
     }
