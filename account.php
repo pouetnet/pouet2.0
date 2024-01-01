@@ -509,6 +509,7 @@ class PouetBoxAccountProdAwardSuggestions extends PouetBox
   }
   function Render()
   {
+    global $AWARDSSUGGESTIONS_EVENTS;
     global $AWARDSSUGGESTIONS_CATEGORIES;
     if (!$this->votes)
     {
@@ -524,8 +525,11 @@ class PouetBoxAccountProdAwardSuggestions extends PouetBox
     echo "  </tr>\n";
     foreach($this->votes as $v)
     {
+      $category = $AWARDSSUGGESTIONS_CATEGORIES[$v->categoryID];
+      $event = $AWARDSSUGGESTIONS_EVENTS[$category->eventID];
+
       echo "  <tr>\n";
-      echo "    <td>"._html($AWARDSSUGGESTIONS_CATEGORIES[$v->categoryID]->name)."</td>\n";
+      echo "    <td>"._html($event->name)." - "._html($category->name)."</td>\n";
       echo "    <td>".$v->prod->RenderSingleRowShort(). "</td>\n";
       echo "  </tr>\n";
     }
