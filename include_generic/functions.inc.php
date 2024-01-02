@@ -28,7 +28,6 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
 
   $tag_open = '<';
   $tag_close = '>';
-  $str_len = 0;
   
   $lines = preg_split("/\n/",$str);
   $out = array();
@@ -66,7 +65,7 @@ function better_wordwrap( $str, $cols = 80, $cut = "\n" )
             $segment_width++;
             if ($segment_width > $cols) 
             {
-              $line = mb_substr($line,0,$i,$encoding) . $cut . mb_substr($line,$i,$str_len,$encoding);
+              $line = mb_substr($line,0,$i,$encoding) . $cut . mb_substr($line,$i,null,$encoding);
               $i += mb_strlen($cut,$encoding);
               $line_len = mb_strlen($line,$encoding);
               $segment_width = 0;
