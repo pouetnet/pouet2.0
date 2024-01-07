@@ -118,7 +118,7 @@ function bbencode( $text )
   $text = preg_replace("/\[url=(.*?)\](.*?)\[\/url\]/si","<a href='http://$1'>$2</a>",$text);
   
   $text = preg_replace("/\[email\](.*?)\[\/email\]/si","<a href='mailto:$1'>$1</a>",$text);
-  if (get_setting("displayimages") || $_GET["forceimages"])
+  if (get_setting("displayimages") || @$_GET["forceimages"])
     $text = preg_replace("/\[img\](.*?)\[\/img\]/i","<img src='$1' loading='lazy' class='bbimage' alt='BB Image'/>",$text);
   else
     $text = preg_replace("/\[img\](.*?)\[\/img\]/i","<a href='$1'>[image disabled]</a>",$text);
