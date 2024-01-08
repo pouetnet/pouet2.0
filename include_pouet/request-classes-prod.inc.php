@@ -973,10 +973,10 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           break;
         case "partyRank":
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
-          $s .= _html($ranks[$prod->placings[0]->ranking]);
+          $s .= _html(@$ranks[$prod->placings[0]->ranking]);
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
-          $s .= _html($ranks[$v]);
+          $s .= _html(@$ranks[$v]);
           $s .= "<br/>";
           break;
         case "releaseDate":
