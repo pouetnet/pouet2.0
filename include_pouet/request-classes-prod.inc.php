@@ -936,7 +936,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           $s .= "<br/>";
           break;
         case "partyID":
-          $party = PouetParty::Spawn( $prod->party->id );
+          $party = ($prod && $prod->party && $prod->party->id) ? PouetParty::Spawn( $prod->party->id ) : null;
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= $party ? $party->PrintLinked() : "<i>none</i>";
           $s .= "<br/>";
@@ -957,7 +957,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           break;
         case "partyYear":
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
-          $s .= $prod->placings[0]->year;
+          $s .= @$prod->placings[0]->year;
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
           $s .= _html($v);
