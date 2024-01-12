@@ -178,25 +178,26 @@ document.observe("dom:loaded",function(){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-$p = new PouetBoxBBSTopicList();
-$p->Load();
+$list = new PouetBoxBBSTopicList();
+$list->Load();
 
+$openNew = null;
 if ($currentUser)
 {
   if ($currentUser->CanOpenNewBBSTopic())
   {
-    $q = new PouetBoxBBSOpen();
-    $q->Load();
+    $openNew = new PouetBoxBBSOpen();
+    $openNew->Load();
   }
 }
 else
 {
-  $q = new PouetBoxLogin();
+  $openNew = new PouetBoxLogin();
 }
 
 $TITLE = "BBS";
-if ($p->page > 1)
-  $TITLE .= " :: page ".(int)$p->page;
+if ($list->page > 1)
+  $TITLE .= " :: page ".(int)$list->page;
 
 require_once("include_pouet/header.php");
 require("include_pouet/menu.inc.php");
@@ -208,10 +209,10 @@ foreach($_GET as $k=>$v)
   if ($k != "type" && $k != "platform" && $k != "page")
     echo "<input type='hidden' name='"._html($k)."' value='"._html($v)."'/>\n";
 
-if($p) $p->Render();
+if($list) $list->Render();
 echo "</form>\n";
 
-if($q) $q->Render();
+if($openNew) $openNew->Render();
 
 echo "</div>\n";
 
