@@ -5,6 +5,7 @@ class PouetUser extends BM_Class
   public $nickname;
   public $level;
   public $permissionSubmitItems;
+  public $permissionOpenBBS;
   public $permissionPostBBS;
   public $permissionPostOneliner;
   public $avatar;
@@ -28,7 +29,7 @@ class PouetUser extends BM_Class
   public $stats = array();
 
   static function getTable () { return "users"; }
-  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin","thumbups","thumbdowns"); }
+  static function getFields() { return array("id","nickname","level","permissionSubmitItems","permissionPostBBS","permissionOpenBBS","permissionPostOneliner","avatar","glops","registerDate","lastLogin","thumbups","thumbdowns"); }
   static function getExtendedFields() { return array("udlogin","sceneIDLastRefresh","sceneIDData","ojuice","slengpung","csdb","zxdemo","demozoo","lastip","lasthost"); }
 
   function PrintAvatar()
@@ -211,6 +212,10 @@ class PouetUser extends BM_Class
   function CanPostInOneliner()
   {
     return $this->permissionPostOneliner != 0;
+  }
+  function CanOpenNewBBSTopic()
+  {
+    return $this->permissionOpenBBS != 0;
   }
   function CanPostInBBS()
   {

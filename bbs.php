@@ -183,7 +183,7 @@ $p->Load();
 
 if ($currentUser)
 {
-  if ($currentUser->CanPostInBBS())
+  if ($currentUser->CanOpenNewBBSTopic())
   {
     $q = new PouetBoxBBSOpen();
     $q->Load();

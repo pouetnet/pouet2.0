@@ -19,7 +19,7 @@ class PouetBoxBBSOpen extends PouetBox
     if (!$currentUser)
       return "you have to be logged in!";
 
-    if (!$currentUser->CanPostInBBS())
+    if (!$currentUser->CanOpenNewBBSTopic())
       return "not allowed lol.";
 
     $message = trim($post["message"]);
