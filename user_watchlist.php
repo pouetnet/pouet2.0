@@ -1,8 +1,11 @@
 <?php
 require_once("bootstrap.inc.php");
 
-class PouetBoxUserWatchlist extends PouetBox {
-  function __construct() {
+class PouetBoxUserWatchlist extends PouetBox 
+{
+  public $prods;
+  function __construct() 
+  {
     parent::__construct();
     $this->uniqueID = "pouetbox_userwatchlist";
     $this->title = "your watchlist";
