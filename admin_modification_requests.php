@@ -141,6 +141,18 @@ document.observe("dom:loaded",function(){
   $$("#pouetbox_adminreq th[colspan]").first().insert( "]" );
   */
   
+  function fireError( e, msg )
+  {
+    console.error( "[pouet] There's been an error:\n--------------\n" + msg );
+    fireErrorOverlay( "There's been an error:<br/>" + msg );
+    
+    e.element().select("input[type='submit']").invoke("removeAttribute","disabled");
+    
+    var result = e.element().select(".result").first();
+    result.update("&#x26A0;");
+    result.setAttribute("title","There's been an internal error; check console for details.");
+  }
+  
   $$("#pouetbox_adminreq input[type='submit']").invoke("observe","click",function(e){ e.element().setAttribute("clicked","true"); });
   $$("#pouetbox_adminreq form").invoke("observe","submit",function(e){
     e.stop();
@@ -161,21 +173,14 @@ document.observe("dom:loaded",function(){
     new Ajax.Request( e.element().action, {
       method: e.element().method,
       parameters: opt,
-      onException: function(r, e) { throw e; },
+      onException: function(r, ex) { fireError( e, ex ); throw ex; },
       onSuccess: function(transport) 
       {
         if (!transport.responseJSON || !transport.responseJSON.success)
         {
           var msg = (transport.responseJSON && transport.responseJSON.errors) ? transport.responseJSON.errors.join("<br/>") : transport.responseText;
 
-          console.error( "[pouet] There's been an error:\n--------------\n" + msg );
-          fireErrorOverlay( "There's been an error:<br/>" + msg );
-          
-          e.element().select("input[type='submit']").invoke("removeAttribute","disabled");
-          
-          var result = e.element().select(".result").first();
-          result.update("&#x26A0;");
-          result.setAttribute("title","There's been an internal error; check console for details.");
+          fireError( e, msg );
           
           return;
         }
