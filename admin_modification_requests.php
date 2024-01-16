@@ -212,7 +212,7 @@ if ($currentUser && $currentUser->CanEditItems())
     }
     else
     {
-      $response["success"] = $_POST["requestAccept"] ? "accepted" : "denied";
+      $response["success"] = @$_POST["requestAccept"] ? "accepted" : "denied";
     }
     header("Content-type: application/json; charset=utf-8");
     echo json_encode($response);
