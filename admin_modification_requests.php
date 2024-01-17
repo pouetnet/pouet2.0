@@ -133,14 +133,100 @@ class PouetBoxAdminModificationRequests extends PouetBox
 <script>
 <!--
 document.observe("dom:loaded",function(){
-  /*
+<?php 
+if (defined("YOUTUBE_FRONTEND_KEY")) {
+?>
+  function Youtubify( parentElement, detailed )
+  {
+    parentElement.select("a[rel='external']").each(function(item){
+      var ytAPIKey = "<?=YOUTUBE_FRONTEND_KEY?>";
+      var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
+      if (videoID)
+      {
+        new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=" + ytAPIKey + "&part=snippet",{
+          method: "get",
+          onSuccess: function(transport) {
+            if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
+            {
+              var s = transport.responseJSON.items[0].snippet.title.escapeHTML();
+              if (detailed)
+              {
+                s += " <small>("+transport.responseJSON.items[0].snippet.channelTitle.escapeHTML()+")</small>";
+              }
+              item.update( s );
+              item.addClassName("youtube");
+            }
+          },
+        });
+        return;
+      }
+      var playlistID = item.href.match(/youtube\.com\/playlist\?.*list=([a-zA-Z0-9_\-]{34})/);
+      if (playlistID)
+      {
+        new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/playlists?id=" + playlistID[1] + "&key=" + ytAPIKey + "&part=snippet",{
+          method: "get",
+          onSuccess: function(transport) {
+            if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
+            {
+              var s = transport.responseJSON.items[0].snippet.title;
+              item.update( s.escapeHTML() );
+              item.addClassName("youtube");
+            }
+          },
+        });
+        return;
+      }
+      var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
+      if (pouetID)
+      {
+        new Ajax.JSONRequest("https://api.pouet.net/v1/prod/?id="+pouetID[1],{
+          method: "get",
+          onSuccess: function(transport) {
+            if (transport.responseJSON.success)
+            {
+              var s = transport.responseJSON.prod.name;
+              item.update( s.escapeHTML() );
+              item.addClassName("pouet");
+            }
+          },
+        });
+        return;
+      }      
+      var demozooProdID = item.href.match(/demozoo\.org\/productions\/([0-9]+)/);
+      if (demozooProdID)
+      {
+        new Ajax.JSONRequest("https://demozoo.org/api/v1/productions/"+demozooProdID[1]+"/?format=jsonp",{
+          method: "get",
+          onSuccess: function(transport) {
+            if (transport.responseJSON)
+            {
+              var s = transport.responseJSON.title;
+              item.update( s.escapeHTML() );
+              item.addClassName("demozoo");
+            }
+          },
+        });
+        return;
+      }
+    
+      
+      var host = item.href.match(/:\/\/(.*?)\//);
+      if (host)
+      {
+        item.update( host[1].escapeHTML() );
+        return;
+      }
+    });
+  }
+
   $$("#pouetbox_adminreq th[colspan]").first().insert( " [" );
   $$("#pouetbox_adminreq th[colspan]").first().insert( new Element("a",{"href":"#"}).update("resolve youtube links").observe("click",function(){
     Youtubify( $("pouetbox_adminreq").down('tbody'), true );
   }) );
   $$("#pouetbox_adminreq th[colspan]").first().insert( "]" );
-  */
-  
+<?php 
+}
+?>  
   function fireError( e, msg )
   {
     console.error( "[pouet] There's been an error:\n--------------\n" + msg );
