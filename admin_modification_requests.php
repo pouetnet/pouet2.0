@@ -138,44 +138,23 @@ if (defined("YOUTUBE_FRONTEND_KEY")) {
 ?>
   function Youtubify( parentElement, detailed )
   {
-    parentElement.select("a[rel='external']").each(function(item){
-      var ytAPIKey = "<?=YOUTUBE_FRONTEND_KEY?>";
-      var videoID = item.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
+    var videoIDs = {};
+    var playlistIDs = {};
+    var ytAPIKey = "<?=YOUTUBE_FRONTEND_KEY?>";
+    parentElement.select("a[rel='external']").each(function(element){
+      var videoID = element.href.match(/youtu(\.be\/|.*v=)([a-zA-Z0-9_\-]{11})/);
       if (videoID)
       {
-        new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + videoID[2] + "&key=" + ytAPIKey + "&part=snippet",{
-          method: "get",
-          onSuccess: function(transport) {
-            if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
-            {
-              var s = transport.responseJSON.items[0].snippet.title.escapeHTML();
-              if (detailed)
-              {
-                s += " <small>("+transport.responseJSON.items[0].snippet.channelTitle.escapeHTML()+")</small>";
-              }
-              item.update( s );
-              item.addClassName("youtube");
-            }
-          },
-        });
+        videoIDs[videoID[2]] = element;
         return;
       }
-      var playlistID = item.href.match(/youtube\.com\/playlist\?.*list=([a-zA-Z0-9_\-]{34})/);
+      var playlistID = element.href.match(/youtube\.com\/playlist\?.*list=([a-zA-Z0-9_\-]{34})/);
       if (playlistID)
       {
-        new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/playlists?id=" + playlistID[1] + "&key=" + ytAPIKey + "&part=snippet",{
-          method: "get",
-          onSuccess: function(transport) {
-            if (transport.responseJSON.items && transport.responseJSON.items.length >= 1)
-            {
-              var s = transport.responseJSON.items[0].snippet.title;
-              item.update( s.escapeHTML() );
-              item.addClassName("youtube");
-            }
-          },
-        });
+        playlistIDs[playlistID[1]] = element;
         return;
       }
+
       var pouetID = item.href.match(/pouet\.net\/prod\.php.*which=([0-9]+)/);
       if (pouetID)
       {
@@ -208,15 +187,56 @@ if (defined("YOUTUBE_FRONTEND_KEY")) {
         });
         return;
       }
-    
-      
-      var host = item.href.match(/:\/\/(.*?)\//);
-      if (host)
-      {
-        item.update( host[1].escapeHTML() );
-        return;
-      }
+
     });
+    if (Object.keys(videoIDs).length)
+    {
+      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/videos?id=" + Object.keys(videoIDs).join(",") + "&key=" + ytAPIKey + "&part=snippet",{
+        method: "get",
+        onException: function(r, ex) { throw ex; },
+        onSuccess: function(transport) {
+          if (transport.responseJSON.items)
+          {
+            for(var i=0; i<transport.responseJSON.items.length; i++)
+            {
+              var item = transport.responseJSON.items[i];
+              var element  = videoIDs[item.id];
+              var s = item.snippet.title.escapeHTML();
+              if (detailed)
+              {
+                s += " <small>("+item.snippet.channelTitle.escapeHTML()+")</small>";
+              }
+              element.update( s );
+              element.addClassName("youtube");
+            }
+          }
+        },
+      });
+    }
+    if (Object.keys(playlistIDs).length)
+    {
+      new Ajax.JSONRequest("https://www.googleapis.com/youtube/v3/playlists?id=" + Object.keys(playlistIDs).join(",") + "&key=" + ytAPIKey + "&part=snippet",{
+        method: "get",
+        onException: function(r, ex) { throw ex; },
+        onSuccess: function(transport) {
+          if (transport.responseJSON.items)
+          {
+            for(var i=0; i<transport.responseJSON.items.length; i++)
+            {
+              var item = transport.responseJSON.items[i];
+              var element  = playlistIDs[item.id];
+              var s = item.snippet.title.escapeHTML();
+              if (detailed)
+              {
+                s += " <small>("+item.snippet.channelTitle.escapeHTML()+")</small>";
+              }
+              element.update( s );
+              element.addClassName("youtube");
+            }
+          }
+        },
+      });
+    }
   }
 
   $$("#pouetbox_adminreq th[colspan]").first().insert( " [" );
