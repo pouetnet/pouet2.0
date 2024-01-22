@@ -368,6 +368,17 @@ function fireErrorOverlay( errors )
   setTimeout(fadeOverlays,timeWait + timerDensity);
 }
 
+function StubLinksToDomainName( parentElement, detailed )
+{
+  parentElement.select("a[rel='external']").each(function(item){
+    var host = item.href.match(/:\/\/(.*?)\//);
+    if (host)
+    {
+      item.update( host[1].escapeHTML() );
+      return;
+    }
+  });
+}
 
 /* BBCODE helper script by AMcBain */
 

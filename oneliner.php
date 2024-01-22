@@ -70,6 +70,11 @@ class PouetBoxOnelinerView extends PouetBox
     echo "</ul>";
 
     $this->paginator->RenderNavbar();
+   ?>
+    <script>
+    document.observe("dom:loaded",function(){ StubLinksToDomainName($("pouetbox_onelinerview")); });
+    </script>
+    <?php        
   }
   function RenderFooter() 
   {

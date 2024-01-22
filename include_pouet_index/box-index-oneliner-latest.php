@@ -107,6 +107,11 @@ class PouetBoxIndexLatestOneliner extends PouetBoxCachable
 //      if ($n == get_setting("indexoneliner")) break;
     }
     echo "</ul>\n";
+    ?>
+    <script>
+    document.observe("dom:loaded",function(){ StubLinksToDomainName($("pouetbox_latestoneliner")); });
+    </script>
+    <?php    
   }
   function RenderFooter()
   {
