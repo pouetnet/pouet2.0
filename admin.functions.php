@@ -150,9 +150,9 @@ function pouetAdmin_recheckLinkProd($prod)
 
   SQLLib::UpdateOrInsertRow("prods_linkcheck",$a,sprintf_esc("prodID=%d",$prod->id));
   
-  if ($id)
+  if ($prod)
   {
-    $out .= json_encode($a);
+    $out = json_encode($a);
     $out .= "\n[".$prod->id."] " . json_encode($urls) . " >> ". $a["returnCode"];
   }
   else

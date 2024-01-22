@@ -33,7 +33,7 @@ function cron_CheckLinks( $ids = null )
   foreach($prods as $prod)
   {
     $out[] = pouetAdmin_recheckLinkProd($prod);
-    sleep(0.5);
+    usleep(500000);
   }
   return implode(", ",$out);
 }

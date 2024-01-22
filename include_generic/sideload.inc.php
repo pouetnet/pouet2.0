@@ -2,8 +2,8 @@
 
 class Sideload
 {
-  public $errorNumber;
-  public $errorText;
+  public $errorCode;
+  public $errorString;
   public $httpReturnCode;
   public $httpReturnContentType;
   public $httpURL;
