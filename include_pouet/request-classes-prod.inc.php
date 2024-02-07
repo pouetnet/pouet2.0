@@ -921,7 +921,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           $s .= "<br/>";
           $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
           $prod->platforms = array();
-          foreach($v as $a) $prod->platforms[] = $PLATFORMS[$a];
+          if (@$v) foreach($v as $a) $prod->platforms[] = $PLATFORMS[$a];
           $s .= $prod->RenderPlatformIcons();
           $s .= "<br/>";
           break;
