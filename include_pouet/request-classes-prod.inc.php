@@ -126,6 +126,7 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
     else
     {
       $l = SQLLib::SelectRows(sprintf_esc("select * from downloadlinks where prod = %d",$data["prod"]));
+      $links = array();
       foreach($l as $v)
         $links[$v->id] = sprintf("[%s] %s",$v->type,$v->link);
       if (!$links)
