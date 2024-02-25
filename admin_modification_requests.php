@@ -42,7 +42,15 @@ class PouetBoxAdminModificationRequests extends PouetBox
     global $REQUESTTYPES;
     if ($REQUESTTYPES[$req->requestType])
     {
-      $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
+      $errors = null;
+      try
+      {
+        $errors = $REQUESTTYPES[$req->requestType]::Process($req->itemID,$reqData);
+      }
+      catch(Exception $e)
+      {
+        $errors = array((string)$e);
+      }
       if ($errors) return $errors;
 
       gloperator_log( $REQUESTTYPES[$req->requestType]::GetItemType(), $req->itemID, $req->requestType, $reqData );
