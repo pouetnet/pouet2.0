@@ -960,6 +960,14 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
           $s .= $party ? $party->PrintLinked() : "<i>none</i>";
           $s .= "<br/>";
           break;
+        case "invitationYear":
+          $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($prod->invitationyear);
+          $s .= "<br/>";
+          $s .= "<b>new ".$fields[$k]["name"]."</b>: ";
+          $s .= _html($v);
+          $s .= "<br/>";
+          break;
         case "partyYear":
           $s .= "<b>current ".$fields[$k]["name"]."</b>: ";
           $s .= @$prod->placings[0]->year;
