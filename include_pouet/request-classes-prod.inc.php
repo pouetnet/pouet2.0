@@ -848,7 +848,7 @@ class PouetRequest_Prod_ChangeInfo extends PouetRequestBase
     $pa = static::ProdToArray( $prod );
 
     $_in = array();
-    foreach($fields as $k=>$v) $_in[$k] = $input[$k];
+    foreach($fields as $k=>$v) $_in[$k] = @$input[$k];
 
     if( $input["releaseDate_year"] && $input["releaseDate_month"] && checkdate( (int)$input["releaseDate_month"], 15, (int)$input["releaseDate_year"]) )
       $_in["releaseDate"] = sprintf("%04d-%02d-15",$input["releaseDate_year"],$input["releaseDate_month"]);
