@@ -559,7 +559,7 @@ class PouetBoxProdPopularityHelper extends PouetBox
   {
     $url = POUET_ROOT_URL . "prod.php?which=".$this->prod->id;
     echo "<p>increase the popularity of this prod by spreading this URL:</p>\n";
-    echo "<input type='text' value='"._html($url)."' size='50' readonly='readonly' />\n";
+    echo "<input type='text' value='"._html($url)."' readonly='readonly' />\n";
     echo "<p>or via:\n";
 
     echo "  <a href='https://www.facebook.com/sharer/sharer.php?u="._html(rawurlencode($url))."'>facebook</a>\n";
