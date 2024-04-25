@@ -317,7 +317,7 @@ class LastRss
 		}
 		if (@!$result['itemsCount'])
 		{
-			$result = unserialize( file_get_contents($cache_file) );
+			$result = @unserialize( file_get_contents($cache_file) ) ?: array();
 			$result["cached"] = true;
 		}
 		
