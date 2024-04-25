@@ -22,8 +22,8 @@ class LastRss
 	 */
 	private $curlOptions = array(
 		CURLOPT_HEADER => false,
-		CURLOPT_CONNECTTIMEOUT => 15,
-		CURLOPT_TIMEOUT => 15,
+		CURLOPT_CONNECTTIMEOUT => 2,
+		CURLOPT_TIMEOUT => 5,
 //		CURLOPT_FOLLOWLOCATION => true,
 		CURLOPT_MAXREDIRS => 3,
 		CURLOPT_RETURNTRANSFER => 1,
@@ -190,6 +190,10 @@ class LastRss
 	 */
 	private function parse(&$xmlData)
 	{
+		if (!$xmlData)
+		{
+			return false;
+		}
 		$result = array();
 		$doc = new DomDocument();
 		// Try to load XML or return parse error
@@ -305,13 +309,13 @@ class LastRss
 		{
 			$xmlData = $this->loadUrl($url);
 			$result = $this->parse($xmlData);
-			if ($result['itemsCount'] > 0)
+			if ($result && $result['itemsCount'] > 0)
 			{
 				@file_put_contents($cache_file,serialize($result));
-  			$result["cached"] = false;
+				$result["cached"] = false;
 			}
 		}
-		if (!$result['itemsCount'])
+		if (@!$result['itemsCount'])
 		{
 			$result = unserialize( file_get_contents($cache_file) );
 			$result["cached"] = true;
