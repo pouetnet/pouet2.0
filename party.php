@@ -169,7 +169,8 @@ class PouetBoxPartyView extends PouetBox
       {
         $s->AddOrder( "COALESCE(prodotherparty.party_compo,prods.party_compo)" );
         $s->AddOrder( "COALESCE(prodotherparty.party_place,prods.party_place)" );
-        $s->AddOrder( "COALESCE(prodotherparty.name,prods.name)" );
+        $s->AddOrder( "prods.name" );
+        $s->AddOrder( "prods.id" );
         $this->sortByCompo = true;
 
         // include invitations on top
