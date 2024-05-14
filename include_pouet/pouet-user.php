@@ -140,28 +140,12 @@ class PouetUser extends BM_Class
       }
     }
 
-    /*
-
-    if ((int)$rv["returnCode"] == 10)
-    {
-      //if ($cached)
-      return $rv["user"];
-    }
-    else
-    {
-      return NULL;
-    }
-    */
-
     global $sceneID;
     try
     {
-      //if (!get_login_id())
-      {
-        $sceneID->GetClientCredentialsToken();
-      }
+      $sceneID->GetClientCredentialsToken();
       $data = $sceneID->User( $this->id );
-      if ($data && $data["user"])
+      if ($data && @$data["user"])
       {
         SQLLib::UpdateRow("users",array(
           "sceneIDLastRefresh"=>date("Y-m-d H:i:s"),
@@ -175,7 +159,7 @@ class PouetUser extends BM_Class
     catch(SceneID3Exception $e)
     {
       // If there's a failure, just return cached data
-      echo "<!--".$e->getMessage()."-->";
+      LOG::Warning($e->getMessage());
       return unserialize( $this->sceneIDData );
     }
   }

@@ -1,3 +1,5 @@
 [submodule "include_generic/sceneid3"]
 	path = include_generic/sceneid3
-	url = https://bitbucket.org/sceneorg/sceneid3lib-php.git
+	url = https://github.com/sceneorg/sceneid3lib-php.git
+[submodule "sceneid3"]
+	url = https://github.com/sceneorg/sceneid3lib-php.git
