@@ -14,7 +14,7 @@ class Formifier
     {
       if (@$v["type"]=="hidden")
       {
-        echo "    <input type='hidden' name='".$k."' id='".$k."' value='".$v["value"]."'/>\n";
+        echo "    <input type='hidden' name='"._html($k)."' id='"._html($k)."' value='"._html($v["value"])."'/>\n";
         continue;
       }
       echo "  <div class='row' id='row_".$k."'>\n";
@@ -75,7 +75,7 @@ document.observe("dom:loaded",function(){
           foreach($avatars as $path)
           {
             $f = basename($path);
-            echo "      <option".($v["value"]==$f?" selected='selected'":"").">".$f."</option>\n";
+            echo "      <option".($v["value"]==$f?" selected='selected'":"").">"._html($f)."</option>\n";
           }
           echo "    </select>\n";
           echo "    </div>\n";
