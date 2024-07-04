@@ -22,7 +22,7 @@ else if (@$_POST["search"])
   $terms = split_search_terms( $_POST["search"] );
   foreach($terms as $term)
   {
-    $sql->AddWhere(sprintf_esc("prods.name like '%%%s%%'",_like($term)));
+    $sql->AddWhere(sprintf_esc("prods.name like '%%%s%%' or groups.name like '%%%s%%'",_like($term),_like($term)));
   }
   $sql->AddOrder(sprintf_esc("if(prods.name='%s',1,2), prods.views desc, prods.name",$_POST["search"]));
   $sql->SetLimit(10);
