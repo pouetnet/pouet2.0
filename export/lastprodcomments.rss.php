@@ -9,7 +9,8 @@ $limit = max($limit,5);
 $prod = PouetProd::Spawn( @$_GET["prod"] );
 if (!$prod) exit();
 
-$s = new BM_Query("comments");
+$s = new BM_Query();
+$s->AddTable("comments");
 $s->AddField("comments.id");
 $s->AddField("comments.addedDate");
 $s->AddField("comments.comment");
