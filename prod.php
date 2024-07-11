@@ -1052,9 +1052,9 @@ document.observe("dom:loaded",function(){
 
 };
 
-$prodid = (int)$_GET["which"];
+$prodid = (int)@$_GET["which"];
 if (!$prodid)
-  $prodid = rand(1,20000);
+  $prodid = rand(1,90000);
 
 $form = new PouetFormProcessor();
 $form->SetSuccessURL( "prod.php?which=".(int)$prodid, true );
