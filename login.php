@@ -8,7 +8,7 @@ if (@$_GET["error"])
 
 if (!@$_GET["code"])
 {
-  $_SESSION["__return"] = $_GET["return"];
+  $_SESSION["__return"] = @$_GET["return"];
   $sceneID->PerformAuthRedirect();
   exit();
 }
