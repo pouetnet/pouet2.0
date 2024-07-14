@@ -47,7 +47,7 @@ class PouetBoxAdminAddCDC extends PouetBoxEditConnectionsBase
     $a = array();
     $a["which"] = $data["which"];
     $a["addedDate"] = $data["addedDate"];
-    if ($data["editCDCID"])
+    if (@$data["editCDCID"])
     {
       SQLLib::UpdateRow("cdc",$a,"id=".(int)$data["editCDCID"]);
       $a["id"] = $data["editCDCID"];
@@ -59,7 +59,7 @@ class PouetBoxAdminAddCDC extends PouetBoxEditConnectionsBase
     
     @unlink(POUET_ROOT_LOCAL . 'cache/pouetbox_cdc.cache' );
     
-    if ($data["partial"])
+    if (@$data["partial"])
     {
       $o = toObject($a);
       $o->prod = PouetProd::Spawn($a["which"]);
