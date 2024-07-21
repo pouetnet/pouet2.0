@@ -1105,8 +1105,10 @@ if ($main->prod)
   $metaValues["og:description"] =
   $metaValues["twitter:description"] = $desc;
 
-  $linkedData["@type"] = "CreativeWork"; // https://schema.org/CreativeWork
+  $linkedData["@type"] = "MediaObject"; // https://schema.org/CreativeWork
   $linkedData["name"] = $main->prod->name;
+  $linkedData["contentUrl"] = $main->prod->download;
+  $linkedData["uploadDate"] = date("c",strtotime($main->prod->addedDate));
   $linkedData["author"] = $main->prod->RenderGroupsPlain();
 
   $ratingCount = $main->prod->voteup + $main->prod->votedown + $main->prod->votepig;
