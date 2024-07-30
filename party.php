@@ -319,7 +319,7 @@ if (!$partyBox->party)
 }
 if (!$partyBox->prods && isset($_GET["when"]))
 {
-  redirect("party.php?which=".(int)$p->party->id);
+  redirect("party.php?which=".(int)$partyBox->party->id);
 }
 
 $TITLE = $partyBox->party->name." ".$partyBox->year;
