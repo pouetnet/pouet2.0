@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
-if ($_SERVER['PATH_INFO'])
+if (@$_SERVER['PATH_INFO'])
 {
   header("HTTP/1.1 404 Not Found");
   die("Invalid path");
