@@ -18,6 +18,10 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
     parent::LoadFromDB();
 
     $this->prod = PouetProd::spawn( $_GET["which"] );
+    if (!$this->prod)
+    {
+      return;
+    }
 
     $s = new BM_Query();
     $s->AddField("added");

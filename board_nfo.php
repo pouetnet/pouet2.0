@@ -4,6 +4,7 @@ require_once("include_pouet/pouet-asciiviewer.php");
 
 class PouetBoxBoardNfo extends PouetBoxASCIIViewer
 {
+  public $nfo;
   function __construct()
   {
     parent::__construct();
