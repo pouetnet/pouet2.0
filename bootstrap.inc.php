@@ -1,6 +1,12 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
+if ($_SERVER['PATH_INFO'])
+{
+  header("HTTP/1.1 404 Not Found");
+  die("Invalid path");
+}
+
 define("POUET_ROOT_LOCAL",dirname(__FILE__));
 if (!file_exists(POUET_ROOT_LOCAL . "/include_generic/credentials.inc.php"))
   die("Please create an include_generic/credentials.inc.php - you can use the credentials.inc.php.dist as an example");
