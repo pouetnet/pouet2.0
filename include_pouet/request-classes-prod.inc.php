@@ -648,9 +648,12 @@ class PouetRequest_Prod_ChangeDownloadLink extends PouetRequestBase
   static function Display($itemID, $data)
   {
     $prod = PouetProd::Spawn( $itemID );
-    $s = "<b>current</b>: ";
-    $s .= "<a href='"._html($prod->download)."' rel='external'>"._html(shortify_cut($prod->download,50))."</a>";
-    if ($prod->download != $data["oldDownloadLink"])
+    if ($prod)
+    {
+      $s = "<b>current</b>: ";
+      $s .= "<a href='"._html($prod->download)."' rel='external'>"._html(shortify_cut($prod->download,50))."</a>";
+    }
+    if (@$data["oldDownloadLink"] && $prod->download != $data["oldDownloadLink"])
     {
       $s .= "<br/><b>old</b>: ";
       $s .= "<a href='"._html($data["oldDownloadLink"])."' rel='external'>"._html(shortify_cut($data["oldDownloadLink"],50))."</a>";
