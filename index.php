@@ -9,7 +9,7 @@ require("include_pouet/menu.inc.php");
 
 $customizerJSON = get_setting("customizerJSON");
 $customizer = json_decode($customizerJSON,true);
-if (!$customizer["frontpage"])
+if (!@$customizer["frontpage"])
 {
   require_once("include_pouet/default_usersettings.php");
   $customizer = json_decode($DEFAULT_USERSETTINGS->customizerJSON, true);
