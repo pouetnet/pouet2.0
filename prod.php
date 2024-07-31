@@ -4,9 +4,10 @@ require_once("include_pouet/box-login.php");
 
 if (@$_GET["post"]) // setting-independent post lookup
 {
-  $prodID = SQLLib::SelectRow(sprintf_esc("select which from comments where id = %d",$_GET["post"]))->which;
-  if ($prodID)
+  $prod = SQLLib::SelectRow(sprintf_esc("select which from comments where id = %d",$_GET["post"]));
+  if ($prod && $prod->which)
   {
+    $prodID = $prod->which;
     if (get_setting("prodcomments") <= 0)
     {
       redirect(sprintf("prod.php?which=%d#c%d",$prodID,$_GET["post"]));
