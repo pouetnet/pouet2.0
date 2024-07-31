@@ -78,9 +78,12 @@ require("include_pouet/menu.inc.php");
 
 echo "<div id='content'>\n";
 
-$box = new PouetBoxGloperatorLog();
-$box->Load();
-$box->Render();
+if (@$_GET["what"] && @$_GET["which"])
+{
+  $box = new PouetBoxGloperatorLog();
+  $box->Load();
+  $box->Render();
+}
 
 echo "</div>\n";
 
