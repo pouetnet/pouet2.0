@@ -7,9 +7,10 @@ $POSTS_PER_PAGE = max(1,get_setting("topicposts"));
 
 if (@$_GET["post"]) // setting-independent post lookup
 {
-  $topicID = SQLLib::SelectRow(sprintf_esc("select topic from bbs_posts where id = %d",$_GET["post"]))->topic;
-  if ($topicID)
+  $topic = SQLLib::SelectRow(sprintf_esc("select topic from bbs_posts where id = %d",$_GET["post"]));
+  if ($topic && $topic->topic)
   {
+    $topicID = $topic->topic;
     $inner = sprintf_esc("select id, @rowID:=@rowID+1 as rowID from bbs_posts, (SELECT @rowID:=0) as init where topic = %d",$topicID);
     $row = SQLLib::SelectRow(sprintf_esc("select * from (".$inner.") as t where id = %d",$_GET["post"]));
 
@@ -42,7 +43,10 @@ class PouetBoxBBSView extends PouetBox
     $s->AddTable("bbs_topics");
     $s->AddWhere("bbs_topics.id=".$this->id);
     $this->topic = SQLLib::SelectRow($s->GetQuery());
-    if(!$this->topic) return false;
+    if(!$this->topic)
+    {
+      return false;
+    }
 
     $s = new SQLSelect();
     $s->AddField("count(*) as c");
