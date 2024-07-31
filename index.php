@@ -9,7 +9,7 @@ require("include_pouet/menu.inc.php");
 
 $customizerJSON = get_setting("customizerJSON");
 $customizer = json_decode($customizerJSON,true);
-if (!@$customizer["frontpage"])
+if (!$customizer || !$customizer["frontpage"])
 {
   require_once("include_pouet/default_usersettings.php");
   $customizer = json_decode($DEFAULT_USERSETTINGS->customizerJSON, true);
@@ -26,13 +26,19 @@ foreach($boxes as $bar=>$boxlist)
   {
     $class = "PouetBoxIndex".$box["box"];
     if (!class_exists($class))
+    {
       continue;
+    }
     $p = new $class();
     
     if (!$currentUser && !$p->IsVisibleLoggedOut())
+    {
       continue;
+    }
     if (has_trait($p,"PouetFrontPage"))
+    {
       $p->SetParameters($box);
+    }
     $p->Load(true);
     $p->Render();
   }

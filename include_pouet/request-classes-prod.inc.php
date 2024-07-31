@@ -180,7 +180,7 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
       $s .= "<a href='"._html($row->link)."' rel='external'>"._html(shortify_cut($row->link,50))."</a>";
     }
 
-    if ($data["oldLinkKey"] && (!$row || $row->link != $data["oldLink"]))
+    if (@$data["oldLinkKey"] && (!$row || $row->link != $data["oldLink"]))
     {
       $s .= "<br/>";
       $s .= "<b>old</b>: ";
@@ -660,8 +660,11 @@ class PouetRequest_Prod_ChangeDownloadLink extends PouetRequestBase
     }
     $s .= "<br/><b>new</b>: ";
     $s .= "<a href='"._html($data["downloadLink"])."' rel='external'>"._html(shortify_cut($data["downloadLink"],50))."</a>";
-    $s .= "<br/><b>reason</b>: ";
-    $s .= _html($data["reason"]);
+    if (@$data["reason"])
+    {
+      $s .= "<br/><b>reason</b>: ";
+      $s .= _html($data["reason"]);
+    }
 
     return $s;
   }
