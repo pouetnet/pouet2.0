@@ -45,11 +45,11 @@ class PouetBoxProdNfo extends PouetBoxASCIIViewer
   }
   function RenderBody()
   {
-    $this->asciiFilename = get_local_nfo_path( $_GET["which"] );
-	if ($this->nfo)
-	{
-		$this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
-	}
+    $this->asciiFilename = get_local_nfo_path( (int)$_GET["which"] );
+    if ($this->nfo)
+    {
+      $this->bodyTitle = "nfo added by "._html($this->nfo->user->nickname)." on "._html($this->nfo->added);
+    }
 
     parent::RenderBody();
   }

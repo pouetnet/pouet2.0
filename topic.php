@@ -120,7 +120,7 @@ class PouetBoxBBSView extends PouetBox
   }
 };
 
-if (!$_GET["which"])
+if (!@$_GET["which"])
 {
   redirect("bbs.php");
 }

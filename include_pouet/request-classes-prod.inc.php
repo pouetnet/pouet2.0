@@ -193,9 +193,12 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
     $s .= _html($data["newLinkKey"])." - ";
     $s .= "<a href='"._html($data["newLink"])."' rel='external'>"._html(shortify_cut($data["newLink"],50))."</a>";
 
-    $s .= "<br/>";
-    $s .= "<b>reason</b>: ";
-    $s .= _html($data["reason"]);
+    if (@$data["reason"])
+    {
+      $s .= "<br/>";
+      $s .= "<b>reason</b>: ";
+      $s .= _html($data["reason"]);
+    }
     return $s;
   }
 
