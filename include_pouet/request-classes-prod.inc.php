@@ -170,9 +170,12 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
   static function Display($itemID, $data)
   {
     $row = SQLLib::selectRow(sprintf_esc("select * from downloadlinks where id = %d",$data["linkID"]));
+
+    $s = "";
+    
     if ($row)
     {
-      $s = "<b>current</b>: ";
+      $s .= "<b>current</b>: ";
       $s .= _html($row->type)." - ";
       $s .= "<a href='"._html($row->link)."' rel='external'>"._html(shortify_cut($row->link,50))."</a>";
     }
