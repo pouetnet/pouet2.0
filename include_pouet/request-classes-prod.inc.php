@@ -180,7 +180,7 @@ class PouetRequest_Prod_ChangeLink extends PouetRequestBase
       $s .= "<a href='"._html($row->link)."' rel='external'>"._html(shortify_cut($row->link,50))."</a>";
     }
 
-    if (!$row || $row->link != $data["oldLink"])
+    if ($data["oldLinkKey"] && (!$row || $row->link != $data["oldLink"]))
     {
       $s .= "<br/>";
       $s .= "<b>old</b>: ";
