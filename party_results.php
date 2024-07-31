@@ -15,8 +15,15 @@ class PouetBoxPartyResults extends PouetBoxASCIIViewer
   {
     parent::LoadFromDB();
     
+    if (!@$_GET["when"])
+    {
+      return;
+    }
     $this->party = PouetParty::spawn( $_GET["which"] );
-    if (!$this->party) return;
+    if (!$this->party) 
+    {
+      return;
+    }
     $this->title = $this->party->name." ".(int)$_GET["when"]." results";
   }
   function RenderHeader()
@@ -58,7 +65,9 @@ require("include_pouet/menu.inc.php");
 echo "<div id='content'>\n";
 
 if ($box->party)
+{
   $box->Render();
+}
 
 echo "</div>\n";
 
