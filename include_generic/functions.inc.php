@@ -613,6 +613,7 @@ function get_setting( $s )
 
 function find_screenshot( $id )
 {
+  $id = (int)$id;
   $extensions = array("jpg","gif","png");
   foreach ($extensions as $ext) 
   {
@@ -625,12 +626,14 @@ function find_screenshot( $id )
 
 function get_local_screenshot_path( $id, $ext )
 {
+  $id = (int)$id;
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
   return $newPath;
 }
 
 function get_local_nfo_path( $id )
 {
+  $id = (int)$id;
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfos/%05d/%08d.txt",(int)($id/1000),$id);
   return $newPath;
 }
@@ -643,17 +646,20 @@ function get_local_partyresult_path( $id, $year )
 
 function get_local_boardnfo_path( $id )
 {
+  $id = (int)$id;
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/nfo_bbs/%05d/%08d.txt",(int)($id/1000),$id);
   return $newPath;
 }
 
 function get_screenshot_url( $id, $ext )
 {
+  $id = (int)$id;
   return sprintf(POUET_CONTENT_URL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
 }
 
 function get_nfo_url( $id )
 {
+  $id = (int)$id;
   return sprintf(POUET_CONTENT_URL . "files/nfos/%05d/%08d.txt",(int)($id/1000),$id);
 }
 
@@ -664,6 +670,7 @@ function get_partyresult_url( $id, $year )
 
 function get_boardnfo_url( $id )
 {
+  $id = (int)$id;
   return sprintf(POUET_CONTENT_URL . "files/nfo_bbs/%05d/%08d.txt",(int)($id/1000),$id);
 }
 
