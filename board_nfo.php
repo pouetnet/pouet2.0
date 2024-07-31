@@ -27,7 +27,7 @@ class PouetBoxBoardNfo extends PouetBoxASCIIViewer
     $s->GetQuery();
     list($this->nfo) = $s->perform();
     
-    $this->preferredEncoding = $this->nfo ? $this->nfo->encoding : null;
+    $this->preferredEncoding = $this->nfo ? @$this->nfo->encoding : null;
   }
   function RenderHeader()
   {
