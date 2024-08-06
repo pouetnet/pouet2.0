@@ -1151,7 +1151,7 @@ if (@$_POST["wlAction"] && $currentUser)
     $a = array("prodID"=>$prodid,"userID"=>$currentUser->id);
     SQLLib::InsertRow("watchlist",$a);
   }
-  if ($_POST["partial"])
+  if (@$_POST["partial"])
   {
     $csrf->PrintToken();
     if ($_POST["wlAction"]=="addToWatchlist")
