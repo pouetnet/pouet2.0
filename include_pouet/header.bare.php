@@ -3,6 +3,9 @@ header("Content-type: text/html; charset=utf-8");
 $RSS["export/lastprodsreleased.rss.php"] = "last prods released";
 $RSS["export/lastprodsadded.rss.php"] = "last prods added";
 $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
+
+$REQUEST_SCHEME = (@$_SERVER['HTTPS']=="on"?"https":"http");
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -12,7 +15,8 @@ $RSS["export/lastbbsposts.rss.php"] = "last bbs posts";
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="alternate icon" href="/favicon.ico" type="image/x-icon"/>
   <link rel="search" type="application/opensearchdescription+xml" href="opensearch_prod.xml" title="pouët.net: prod search" />
-  <link rel="canonical" href="<?=rtrim(POUET_ROOT_URL,'/')._html($_SERVER["REQUEST_URI"])?>"/>
+  <link rel="canonical" href="<?=rtrim($REQUEST_SCHEME.'://'.POUET_WEB_HOSTNAME,'/')._html($_SERVER["REQUEST_URI"])?>"/>
+  <link rel="alternate" media="only screen and (max-width: 640px)" href="<?=rtrim($REQUEST_SCHEME.'://'.POUET_MOBILE_HOSTNAME,'/')._html($_SERVER["REQUEST_URI"])?>">
 <?php foreach($RSS as $url=>$title){?>
   <link rel="alternate" href="<?=_html($url)?>" type="application/rss+xml" title="pouët.net: <?=_html($title)?>">
 <?php }?>
