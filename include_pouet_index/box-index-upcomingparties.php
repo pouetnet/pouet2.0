@@ -9,6 +9,7 @@ class PouetBoxIndexUpcomingParties extends PouetBoxCachable
     parent::__construct();
     $this->uniqueID = "pouetbox_upcomingparties";
     $this->title = "upcoming parties";
+    $this->cacheTime = 60*60*6; // update every 6 hours (4 times a day should be reasonable)
 
     $this->rss = class_exists("DomDocument") ? new lastRSS(array(
       "cacheTime" => 5 * 60, // in seconds
