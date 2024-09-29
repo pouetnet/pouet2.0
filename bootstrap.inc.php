@@ -89,6 +89,10 @@ else if (class_exists("SceneID3"))
   ) );
 }
 
+// Set the scope to also be able to retrieve the user's email.
+// Without this, we can't contact anyone for notifications or moderation events.
+$sceneID->SetScope(array("basic", "user:email"));
+
 $currentUser = NULL;
 if (get_login_id())
 {

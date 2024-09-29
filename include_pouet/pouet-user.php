@@ -144,7 +144,17 @@ class PouetUser extends BM_Class
     try
     {
       $sceneID->GetClientCredentialsToken();
-      $data = $sceneID->User( $this->id );
+
+      // If the current user is the same as the PouetUser, get more info from SceneID
+      if (get_login_id() == $this->id)
+      {
+        $data = $sceneID->Me();
+      }
+      else
+      {
+        $data = $sceneID->User( $this->id );
+      }
+
       if ($data && @$data["user"])
       {
         SQLLib::UpdateRow("users",array(
