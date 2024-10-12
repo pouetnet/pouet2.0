@@ -36,6 +36,7 @@ class PouetBoxProdMain extends PouetBox
   public $credits;
   public $downloadLinks;
   public $screenshotPath;
+  public $screenshotPathLarge;
   public $board;
 
   function __construct($id)
@@ -152,18 +153,25 @@ class PouetBoxProdMain extends PouetBox
     }
     $this->downloadLinks = array_merge($this->downloadLinks,SQLLib::selectRows(sprintf_esc("select type, link from downloadlinks where prod = %d order by type",$this->id)));
     $this->screenshotPath = find_screenshot($this->prod->id);
+    $this->screenshotPathLarge = find_screenshot_large($this->prod->id);
   }
 
   function RenderScreenshot()
   {
     if ($this->screenshotPath)
     {
-      $title = "screenshot";
-      if ($this->screenshot)
+      $title = $this->screenshot ? "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added) : "";
+      if ($this->screenshotPathLarge)
       {
-        $title = "screenshot added by "._html($this->screenshot->user->nickname)." on "._html($this->screenshot->added);
+        $s = "<a href='".POUET_CONTENT_URL.$this->screenshotPathLarge."' id='screenshotLink'>";
+        $s .= "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+        $s .= "</a>\n";
       }
-      return "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+      else
+      {
+        $s = "<img src='".POUET_CONTENT_URL.$this->screenshotPath."' alt='".$title."' title='".$title."'/>\n";
+      }
+      return $s;
     }
     else
     {
@@ -1228,6 +1236,26 @@ document.observe("dom:loaded",function(){
     var tr = new Element("tr"); tr.insert(td);
 
     $("prodheader").parentNode.insertBefore( tr, $("prodheader").nextSibling);
+  }
+  else
+  {
+    if ($("screenshotLink"))
+    {
+      var overlay = new Element("div",{"id":"largescreenshot-overlay"});
+      overlay.insert(new Element("img",{"src":$("screenshotLink").getAttribute("href")}));
+      overlay.hide();
+      document.body.insert(overlay);
+
+      overlay.observe("click",function(ev){
+        overlay.hide();
+        ev.stop();
+      });
+
+      $("screenshotLink").observe("click",function(ev){
+        overlay.show();
+        ev.stop();
+      });
+    }    
   }
 });
 //-->

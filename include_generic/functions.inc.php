@@ -624,10 +624,30 @@ function find_screenshot( $id )
   return NULL;
 }
 
+function find_screenshot_large( $id )
+{
+  $id = (int)$id;
+  $extensions = array("jpg","gif","png");
+  foreach ($extensions as $ext) 
+  {
+    $newPath = sprintf("files/screenshots.large/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+    if (file_exists(POUET_CONTENT_LOCAL . $newPath))
+      return $newPath;
+  }
+  return NULL;
+}
+
 function get_local_screenshot_path( $id, $ext )
 {
   $id = (int)$id;
   $newPath = sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+  return $newPath;
+}
+
+function get_local_screenshot_large_path( $id, $ext )
+{
+  $id = (int)$id;
+  $newPath = sprintf(POUET_CONTENT_LOCAL . "files/screenshots/%05d.large/%08d.%s",(int)($id/1000),$id,$ext);
   return $newPath;
 }
 
@@ -655,6 +675,12 @@ function get_screenshot_url( $id, $ext )
 {
   $id = (int)$id;
   return sprintf(POUET_CONTENT_URL . "files/screenshots/%05d/%08d.%s",(int)($id/1000),$id,$ext);
+}
+
+function get_screenshot_large_url( $id, $ext )
+{
+  $id = (int)$id;
+  return sprintf(POUET_CONTENT_URL . "files/screenshots.large/%05d/%08d.%s",(int)($id/1000),$id,$ext);
 }
 
 function get_nfo_url( $id )
