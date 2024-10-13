@@ -571,6 +571,12 @@ class PouetBoxProdPopularityHelper extends PouetBox
     echo "  <a href='http://pinterest.com/pin/create/button/?url="._html(rawurlencode($url))."'>pinterest</a>\n";
 
     echo "  <a href='http://tumblr.com/widgets/share/tool?canonicalUrl="._html(rawurlencode($url))."&amp;posttype=link'>tumblr</a>\n";
+
+    $text = "You should watch \"".$this->prod->name."\" on Pou\xC3\xABt: ".$url;
+    echo "  <a href='https://bsky.app/intent/compose/?text="._html(rawurlencode($text))."'>bluesky</a>\n";
+    
+    echo "  <a href='https://www.threads.net/intent/post?text="._html(rawurlencode($text))."'>threads</a>\n";
+
     echo "</p>\n";
   }
 };
