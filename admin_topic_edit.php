@@ -58,7 +58,16 @@ class PouetBoxAdminEditTopic extends PouetBox
     $a["closed"] = (int)($data["closed"]=="on");
     SQLLib::UpdateRow("bbs_topics",$a,"id=".$this->topic->id);
 
-    gloperator_log( "topic", $this->topic->id, "topic_edit", array("category"=>array("old"=>$this->topic->category,"new"=>$a["category"])) );
+    $stateChange = array();
+    foreach($a as $k=>$v)
+    {
+      if ($this->topic->$k == $v)
+      {
+        continue;
+      }
+      $stateChange[$k] = array("old"=>$this->topic->$k,"new"=>$v);
+    }
+    gloperator_log( "topic", $this->topic->id, "topic_edit", $stateChange);
 
     $topicID = $this->topic->id;
     flush_cache("pouetbox_latestbbs.cache",function($i)use($topicID){ return $i->id == $topicID; } );
