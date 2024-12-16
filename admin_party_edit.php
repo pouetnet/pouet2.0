@@ -74,13 +74,7 @@ class PouetBoxAdminDeleteParty extends PouetBox
   }
   function Commit($data)
   {
-    SQLLib::Query(sprintf_esc("UPDATE prods SET party=null, party_year=0, party_compo=0, party_place=0 WHERE party=%d",$this->party->id));
-    SQLLib::Query(sprintf_esc("UPDATE prods SET invitation=0, invitationyear=0 WHERE invitation=%d",$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM partiesaka WHERE party1=%d OR party1=%d",$this->party->id,$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE party=%d",$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM partylinks WHERE party=%d",$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE itemid=%d AND type='party'",$this->party->id));
-    SQLLib::Query(sprintf_esc("DELETE FROM parties WHERE id=%d",$this->party->id));
+    $this->party->Delete();
     
     gloperator_log( "party", (int)$this->party->id, "party_delete", get_object_vars($this->party) );
 

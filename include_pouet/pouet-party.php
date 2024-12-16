@@ -14,6 +14,20 @@ class PouetParty extends BM_Class
   {
 //    $node->attach( $query, "added", array("users as addeduser"=>"id"));
   }
+  function Delete()
+  {
+    global $currentUser;
+    if (!($currentUser && $currentUser->CanDeleteItems()))
+      return;
+
+    SQLLib::Query(sprintf_esc("UPDATE prods SET party=null, party_year=0, party_compo=0, party_place=0 WHERE party=%d",$this->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET invitation=0, invitationyear=0 WHERE invitation=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM partiesaka WHERE party1=%d OR party1=%d",$this->id,$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM prodotherparty WHERE party=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM partylinks WHERE party=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE itemid=%d AND type='party'",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM parties WHERE id=%d",$this->id));
+  }
   function PrintLinked($year = null) 
   {
     //if ($this->id == NO_PARTY_ID) return "";

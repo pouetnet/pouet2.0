@@ -19,6 +19,21 @@ class PouetGroup extends BM_Class
   static function onAttach( &$node, &$query )
   {
   }
+  
+  function Delete()
+  {
+    global $currentUser;
+    if (!($currentUser && $currentUser->CanDeleteItems()))
+      return;
+
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group1=NULL WHERE group1=%d",$this->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group2=NULL WHERE group2=%d",$this->id));
+    SQLLib::Query(sprintf_esc("UPDATE prods SET group3=NULL WHERE group3=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM groupsaka WHERE group1=%d OR group2=%d",$this->id,$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM affiliatedboards WHERE `group`=%d",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM list_items WHERE itemid=%d AND type='group'",$this->id));
+    SQLLib::Query(sprintf_esc("DELETE FROM groups WHERE id=%d",$this->id));
+  }
 
   function RenderShort()
   {
