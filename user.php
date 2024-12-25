@@ -557,7 +557,7 @@ class PouetBoxUserMain extends PouetBox
       if ($this->show!="credits")
         echo " [<a href='user.php?who=".$this->id."&amp;show=credits'>show all</a>]";
       echo "</div>\n";
-      echo "<ul class='boxlist'>";
+      echo "<ul class='boxlist' id='contriblist'>";
       foreach($this->credits as $p)
       {
         echo "<li>";
