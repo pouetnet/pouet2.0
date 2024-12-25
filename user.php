@@ -561,6 +561,10 @@ class PouetBoxUserMain extends PouetBox
       foreach($this->credits as $p)
       {
         echo "<li>";
+        if ($p->prod->releaseDate)
+        {
+          echo "<span class='releaseYear'>".substr($p->prod->releaseDate,0,4)."</span> ";
+        }
         echo $p->prod->RenderTypeIcons();
         echo $p->prod->RenderPlatformIcons();
         echo $p->prod->RenderSingleRow()." ";
