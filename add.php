@@ -21,33 +21,35 @@ if (!$currentUser) {
   $message->message = "You got logged out somehow...";
 
 } else {
+  if (isset($array['type'])) {
 
-  switch ($_POST["type"]) {
-    case "oneliner":
-      {
-        $box = new PouetBoxIndexLatestOneliner();
-        $thing = "oneline";
-        $data = $_POST["message"];
-        $message->returnPage = "index.php";
-      } break;
-    case "post":
-      {
-        $box = new PouetBoxBBSPost($_POST["which"]);
-        $thing = "BBS post";
-        $data = $_POST["message"];
-        $message->returnPage = "topic.php?which=".(int)$_POST["which"];
-      } break;
-    case "bbs":
-      {
-        $box = new PouetBoxBBSOpen();
-        $thing = "bbs";
-        $data = $_POST["message"];
-        $message->returnPage = "index.php";
-      } break;
-    default:
-      {
-        $message->message = "not implemented!";
-      } break;
+    switch ($_POST["type"]) {
+      case "oneliner":
+        {
+          $box = new PouetBoxIndexLatestOneliner();
+          $thing = "oneline";
+          $data = $_POST["message"];
+          $message->returnPage = "index.php";
+        } break;
+      case "post":
+        {
+          $box = new PouetBoxBBSPost($_POST["which"]);
+          $thing = "BBS post";
+          $data = $_POST["message"];
+          $message->returnPage = "topic.php?which=".(int)$_POST["which"];
+        } break;
+      case "bbs":
+        {
+          $box = new PouetBoxBBSOpen();
+          $thing = "bbs";
+          $data = $_POST["message"];
+          $message->returnPage = "index.php";
+        } break;
+      default:
+        {
+          $message->message = "not implemented!";
+        } break;
+    }
   }
 }
 if ($box) {
