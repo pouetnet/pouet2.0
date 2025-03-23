@@ -3,6 +3,13 @@ Pouët 2.0
 
 The next generation of trumpets. Now with 10% more whining sound.
 
+Archived Repository
+-------------------
+
+This repository was created as a fork of the original source code.
+
+In order to maintain the full history, this repository and its commits have been merged into the original one https://github.com/pouetnet/www.pouet.net and have been archived.
+
 Installation notes
 ------------------
 
